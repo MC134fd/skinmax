@@ -1,0 +1,179 @@
+import Foundation
+
+protocol FoodAnalysisServiceProtocol {
+    func analyzeFood(image: Data, foodName: String) async throws -> FoodScan
+}
+
+enum FoodAnalysisError: LocalizedError {
+    case networkError
+    case invalidResponse
+    case rateLimited
+    case invalidAPIKey
+
+    var errorDescription: String? {
+        switch self {
+        case .networkError: return "Check your connection and try again."
+        case .invalidResponse: return "Couldn't analyze this food, try a clearer photo."
+        case .rateLimited: return "Too many requests, try again in a moment."
+        case .invalidAPIKey: return "API configuration error."
+        }
+    }
+}
+
+final class FoodAnalysisService: FoodAnalysisServiceProtocol {
+    private let apiKey: String
+    private let endpoint = "https://api.openai.com/v1/chat/completions"
+
+    init(apiKey: String = Config.openAIAPIKey) {
+        self.apiKey = apiKey
+    }
+
+    func analyzeFood(image: Data, foodName: String) async throws -> FoodScan {
+        let base64Image = image.base64EncodedString()
+
+        let systemPrompt = """
+        You are a nutrition and skin health expert. The user has taken a photo of their meal and identified it as "\(foodName)".
+
+        Analyze this food image and provide a detailed assessment of its impact on skin health.
+
+        Return ONLY valid JSON in this exact format:
+        {
+          "food_name": "Confirmed or corrected food name",
+          "skin_impact_score": 7.5,
+          "calories": 480,
+          "protein": 35.0,
+          "fat": 22.0,
+          "carbs": 38.0,
+          "benefits": [
+            "Omega-3 fatty acids (reduces inflammation and redness)",
+            "Vitamin E (supports skin cell repair)",
+            "Healthy fats (boosts skin hydration)"
+          ],
+          "skin_effects": [
+            {
+              "metric_type": "hydration",
+              "direction": "improved",
+              "description": "Rich in healthy fats that support skin moisture barrier"
+            },
+            {
+              "metric_type": "redness",
+              "direction": "improved",
+              "description": "Omega-3s have anti-inflammatory properties"
+            }
+          ],
+          "ai_tip": "Pair with citrus for better vitamin C absorption, which boosts collagen production."
+        }
+
+        Scoring guide for skin_impact_score (1-10):
+          9-10: Superfoods for skin (salmon, avocado, berries, leafy greens, nuts)
+          7-8: Good for skin (eggs, sweet potato, olive oil, yogurt, whole grains)
+          5-6: Neutral (chicken breast, rice, pasta, bread, most fruits)
+          3-4: Mildly bad (fried foods, white sugar, processed snacks)
+          1-2: Bad for skin (candy, soda, alcohol, excessive dairy, fast food)
+
+        For skin_effects, use these metric_type values only: hydration, acne, dark_spots, redness, texture, pores, wrinkles
+        For direction, use only: improved, worsened
+
+        Be accurate with nutrition estimates. If the food photo doesn't match the name, use what you see in the photo. Always provide at least 2 benefits and 2 skin_effects. Return ONLY valid JSON, no markdown.
+        """
+
+        let requestBody: [String: Any] = [
+            "model": "gpt-4o",
+            "messages": [
+                ["role": "system", "content": systemPrompt],
+                ["role": "user", "content": [
+                    ["type": "text", "text": "I'm eating: \(foodName). Please analyze this meal."],
+                    ["type": "image_url", "image_url": [
+                        "url": "data:image/jpeg;base64,\(base64Image)",
+                        "detail": "low"
+                    ]]
+                ] as [Any]]
+            ],
+            "max_tokens": 1000,
+            "temperature": 0.3
+        ]
+
+        let jsonData = try JSONSerialization.data(withJSONObject: requestBody)
+
+        var request = URLRequest(url: URL(string: endpoint)!)
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = jsonData
+
+        let (data, response): (Data, URLResponse)
+        do {
+            (data, response) = try await URLSession.shared.data(for: request)
+        } catch {
+            throw FoodAnalysisError.networkError
+        }
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw FoodAnalysisError.invalidResponse
+        }
+
+        switch httpResponse.statusCode {
+        case 200: break
+        case 401: throw FoodAnalysisError.invalidAPIKey
+        case 429: throw FoodAnalysisError.rateLimited
+        default: throw FoodAnalysisError.networkError
+        }
+
+        return try parseResponse(data, imageData: image)
+    }
+
+    private func parseResponse(_ data: Data, imageData: Data) throws -> FoodScan {
+        guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let choices = json["choices"] as? [[String: Any]],
+              let firstChoice = choices.first,
+              let message = firstChoice["message"] as? [String: Any],
+              let content = message["content"] as? String else {
+            throw FoodAnalysisError.invalidResponse
+        }
+
+        let cleaned = content
+            .replacingOccurrences(of: "```json", with: "")
+            .replacingOccurrences(of: "```", with: "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard let analysisData = cleaned.data(using: .utf8),
+              let analysis = try JSONSerialization.jsonObject(with: analysisData) as? [String: Any] else {
+            throw FoodAnalysisError.invalidResponse
+        }
+
+        guard let foodName = analysis["food_name"] as? String,
+              let skinImpactScore = analysis["skin_impact_score"] as? Double,
+              let benefits = analysis["benefits"] as? [String] else {
+            throw FoodAnalysisError.invalidResponse
+        }
+
+        let calories = (analysis["calories"] as? Int) ?? Int(analysis["calories"] as? Double ?? 0)
+        let protein = analysis["protein"] as? Double ?? 0
+        let fat = analysis["fat"] as? Double ?? 0
+        let carbs = analysis["carbs"] as? Double ?? 0
+        let aiTip = analysis["ai_tip"] as? String
+
+        let skinEffectsArray = analysis["skin_effects"] as? [[String: Any]] ?? []
+        let skinEffects: [SkinEffect] = skinEffectsArray.compactMap { dict in
+            guard let typeStr = dict["metric_type"] as? String,
+                  let metricType = SkinMetricType(rawValue: typeStr),
+                  let dirStr = dict["direction"] as? String,
+                  let direction = Trend(rawValue: dirStr) else { return nil }
+            let description = dict["description"] as? String ?? ""
+            return SkinEffect(metricType: metricType, direction: direction, description: description)
+        }
+
+        return FoodScan(
+            name: foodName,
+            skinImpactScore: skinImpactScore,
+            calories: max(0, calories),
+            protein: max(0, protein),
+            fat: max(0, fat),
+            carbs: max(0, carbs),
+            benefits: benefits,
+            skinEffects: skinEffects,
+            photoData: imageData,
+            aiTip: aiTip
+        )
+    }
+}

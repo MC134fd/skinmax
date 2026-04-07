@@ -5,3 +5,4 @@ DerivedData/
 xcuserdata/
 *.xccheckout
 .env
+Config.swift
