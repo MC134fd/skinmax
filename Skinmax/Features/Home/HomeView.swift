@@ -3,12 +3,32 @@ import Charts
 
 struct HomeView: View {
     @Environment(DataStore.self) private var dataStore
+    @Environment(AnalysisCoordinator.self) private var coordinator
     @State private var viewModel = HomeViewModel()
+
+    var onViewFaceResult: (SkinScan) -> Void = { _ in }
+    var onViewFoodResult: (FoodScan) -> Void = { _ in }
 
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 18) {
                 header
+
+                // Analysis in progress card
+                if coordinator.isActive {
+                    AnalysisHomeCard(
+                        coordinator: coordinator,
+                        onViewFaceResult: onViewFaceResult,
+                        onViewFoodResult: onViewFoodResult,
+                        onDismiss: {
+                            coordinator.dismiss()
+                        }
+                    )
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .top).combined(with: .opacity),
+                        removal: .opacity
+                    ))
+                }
 
                 if viewModel.hasData {
                     glowScoreCard
@@ -28,6 +48,7 @@ struct HomeView: View {
             }
             .padding(.horizontal, SkinmaxSpacing.screenPadding)
             .padding(.bottom, 100)
+            .animation(.spring(response: 0.3, dampingFraction: 0.8), value: coordinator.isActive)
         }
         .background(SkinmaxColors.creamBG.ignoresSafeArea())
         .onAppear {
@@ -47,7 +68,7 @@ struct HomeView: View {
                 .fill(SkinmaxColors.peachLight)
                 .frame(width: 36, height: 36)
                 .overlay(
-                    Text("👩")
+                    Text("\u{1F469}")
                         .font(.system(size: 18))
                 )
         }
@@ -200,7 +221,7 @@ struct HomeView: View {
     // MARK: - Today Food Summary
     private var todayFoodSummary: some View {
         HStack {
-            Text("🍽")
+            Text("\u{1F37D}")
                 .font(.system(size: 16))
 
             if viewModel.todayFoodCount > 0 {
@@ -230,7 +251,7 @@ struct HomeView: View {
     // MARK: - Insight Card
     private var insightCard: some View {
         InsightCard(
-            emoji: "💡",
+            emoji: "\u{1F4A1}",
             title: "Today's Insight",
             message: viewModel.todayInsight
         )

@@ -3,7 +3,7 @@ import UIKit
 import Vision
 
 @Observable
-final class CameraManager: NSObject {
+final class CameraManager: NSObject, @unchecked Sendable {
     var isFaceDetected = false
     var isSessionRunning = false
     var permissionGranted = false
@@ -99,9 +99,17 @@ final class CameraManager: NSObject {
 
     func capturePhoto() async -> UIImage? {
         await withCheckedContinuation { continuation in
-            self.photoContinuation = continuation
-            let settings = AVCapturePhotoSettings()
-            self.photoOutput.capturePhoto(with: settings, delegate: self)
+            sessionQueue.async { [weak self] in
+                guard let self else {
+                    continuation.resume(returning: nil)
+                    return
+                }
+                // Cancel any in-flight capture
+                self.photoContinuation?.resume(returning: nil)
+                self.photoContinuation = continuation
+                let settings = AVCapturePhotoSettings()
+                self.photoOutput.capturePhoto(with: settings, delegate: self)
+            }
         }
     }
 
@@ -122,14 +130,17 @@ final class CameraManager: NSObject {
 // MARK: - Photo Capture Delegate
 extension CameraManager: AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        guard let data = photo.fileDataRepresentation(),
-              let image = UIImage(data: data) else {
-            photoContinuation?.resume(returning: nil)
-            photoContinuation = nil
-            return
+        sessionQueue.async { [weak self] in
+            guard let self else { return }
+            guard let data = photo.fileDataRepresentation(),
+                  let image = UIImage(data: data) else {
+                self.photoContinuation?.resume(returning: nil)
+                self.photoContinuation = nil
+                return
+            }
+            self.photoContinuation?.resume(returning: image)
+            self.photoContinuation = nil
         }
-        photoContinuation?.resume(returning: image)
-        photoContinuation = nil
     }
 }
 

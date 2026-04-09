@@ -38,7 +38,6 @@ class CachedFoodScan {
     var id: UUID
     var date: Date
     var foodName: String
-    var photoData: Data?
     var skinImpactScore: Double
     var calories: Int
     var protein: Double
@@ -52,7 +51,6 @@ class CachedFoodScan {
         self.id = scan.id
         self.date = scan.createdAt
         self.foodName = scan.name
-        self.photoData = scan.photoData
         self.skinImpactScore = scan.skinImpactScore
         self.calories = scan.calories
         self.protein = scan.protein
@@ -76,7 +74,7 @@ class CachedFoodScan {
             carbs: carbs,
             benefits: benefits,
             skinEffects: skinEffects,
-            photoData: photoData,
+            photoData: nil,
             aiTip: aiTip,
             createdAt: date
         )

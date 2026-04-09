@@ -13,22 +13,13 @@ struct FoodRowView: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            // Photo thumbnail
-            if let photoData = foodScan.photoData, let uiImage = UIImage(data: photoData) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 40, height: 40)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-            } else {
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(SkinmaxColors.peachWash)
-                    .frame(width: 40, height: 40)
-                    .overlay(
-                        Text("🍽")
-                            .font(.system(size: 18))
-                    )
-            }
+            RoundedRectangle(cornerRadius: 10)
+                .fill(SkinmaxColors.peachWash)
+                .frame(width: 40, height: 40)
+                .overlay(
+                    Text("\u{1F37D}")
+                        .font(.system(size: 18))
+                )
 
             // Info
             VStack(alignment: .leading, spacing: 2) {

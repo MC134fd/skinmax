@@ -5,43 +5,31 @@ import Observation
 final class FoodLogSheetViewModel {
     var foodName = ""
     var selectedImage: UIImage?
-    var isAnalyzing = false
+    var isPreparing = false
     var errorMessage: String?
-    var result: FoodScan?
-
-    private let analysisService: FoodAnalysisServiceProtocol
-
-    init(analysisService: FoodAnalysisServiceProtocol = FoodAnalysisService()) {
-        self.analysisService = analysisService
-    }
+    var preparedImageData: Data?
 
     var canAnalyze: Bool {
-        !foodName.trimmingCharacters(in: .whitespaces).isEmpty && selectedImage != nil && !isAnalyzing
+        !foodName.trimmingCharacters(in: .whitespaces).isEmpty && selectedImage != nil && !isPreparing
     }
 
-    func analyze() async {
+    @MainActor
+    func prepareForAnalysis() async {
         guard let image = selectedImage else { return }
 
-        isAnalyzing = true
+        isPreparing = true
         errorMessage = nil
         HapticManager.impact(.medium)
 
-        guard let imageData = await ImageProcessor.processForAnalysis(image) else {
+        guard let imageData = await ImageProcessor.processForFoodAnalysis(image) else {
             errorMessage = "Failed to process image. Try again."
-            isAnalyzing = false
+            isPreparing = false
             return
         }
 
-        do {
-            let scan = try await analysisService.analyzeFood(image: imageData, foodName: foodName)
-            result = scan
-        } catch let error as FoodAnalysisError {
-            errorMessage = error.errorDescription
-        } catch {
-            errorMessage = "Couldn't analyze this food, try a clearer photo."
-        }
-
-        isAnalyzing = false
+        // Signal that image is ready — the view will hand off to coordinator
+        preparedImageData = imageData
+        isPreparing = false
     }
 
     func removePhoto() {
@@ -51,8 +39,8 @@ final class FoodLogSheetViewModel {
     func reset() {
         foodName = ""
         selectedImage = nil
-        isAnalyzing = false
+        isPreparing = false
         errorMessage = nil
-        result = nil
+        preparedImageData = nil
     }
 }

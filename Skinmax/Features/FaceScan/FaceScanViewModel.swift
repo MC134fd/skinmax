@@ -5,17 +5,16 @@ enum FaceScanState: Equatable {
     case idle
     case faceDetected
     case capturing
-    case processing
-    case complete(SkinScan)
+    case captured(Data) // Image data ready for analysis
     case error(String)
 
     static func == (lhs: FaceScanState, rhs: FaceScanState) -> Bool {
         switch (lhs, rhs) {
         case (.idle, .idle), (.faceDetected, .faceDetected),
-             (.capturing, .capturing), (.processing, .processing):
+             (.capturing, .capturing):
             return true
-        case (.complete(let a), .complete(let b)):
-            return a.id == b.id
+        case (.captured(let a), .captured(let b)):
+            return a == b
         case (.error(let a), .error(let b)):
             return a == b
         default:
@@ -27,22 +26,15 @@ enum FaceScanState: Equatable {
 @Observable
 final class FaceScanViewModel {
     var state: FaceScanState = .idle
-    var scanResult: SkinScan?
 
     let cameraManager = CameraManager()
-    private let analysisService: SkinAnalysisServiceProtocol
-
-    init(analysisService: SkinAnalysisServiceProtocol = SkinAnalysisService()) {
-        self.analysisService = analysisService
-    }
 
     var statusText: String {
         switch state {
         case .idle: return "Position your face"
         case .faceDetected: return "Hold still..."
         case .capturing: return "Capturing..."
-        case .processing: return "Analyzing your skin..."
-        case .complete: return "Done!"
+        case .captured: return "Done!"
         case .error(let msg): return msg
         }
     }
@@ -51,7 +43,7 @@ final class FaceScanViewModel {
         switch state {
         case .idle: return "Good lighting for best results"
         case .faceDetected: return "Tap the button to capture"
-        case .processing: return "This takes a few seconds"
+        case .capturing: return "Processing your photo..."
         default: return ""
         }
     }
@@ -60,7 +52,7 @@ final class FaceScanViewModel {
         cameraManager.requestPermission()
     }
 
-    func captureAndAnalyze() async {
+    func captureAndPrepare() async {
         state = .capturing
         HapticManager.impact(.medium)
 
@@ -69,28 +61,17 @@ final class FaceScanViewModel {
             return
         }
 
-        state = .processing
-
         guard let imageData = await ImageProcessor.processForAnalysis(image) else {
             state = .error("Failed to process image. Try again.")
             return
         }
 
-        do {
-            let scan = try await analysisService.analyzeSkin(image: imageData)
-            scanResult = scan
-            state = .complete(scan)
-            HapticManager.notification(.success)
-        } catch let error as SkinAnalysisError {
-            state = .error(error.errorDescription ?? "Unknown error")
-        } catch {
-            state = .error("Analysis failed. Try again with better lighting.")
-        }
+        // Hand off image data — the view will pass it to AnalysisCoordinator
+        state = .captured(imageData)
     }
 
     func retry() {
         state = .idle
-        scanResult = nil
     }
 
     func tearDown() {

@@ -218,71 +218,97 @@ struct InsightCard: View {
 struct GlassTabBar: View {
     @Binding var selectedTab: TabItem
     @Binding var showScanPopup: Bool
+    @Namespace private var tabAnimation
 
     var body: some View {
-        HStack(spacing: 0) {
-            ForEach(TabItem.allCases, id: \.self) { tab in
-                Button {
-                    if tab == .scan {
-                        HapticManager.impact(.medium)
-                        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                            showScanPopup.toggle()
-                        }
-                    } else {
+        HStack(spacing: 10) {
+            // Tab bar with 3 tabs
+            HStack(spacing: 0) {
+                ForEach(TabItem.allCases, id: \.self) { tab in
+                    Button {
                         HapticManager.selection()
                         showScanPopup = false
-                        selectedTab = tab
-                    }
-                } label: {
-                    VStack(spacing: 4) {
-                        Image(systemName: tab.systemIcon)
-                            .font(.system(size: 20))
-                        Text(tab.title)
-                            .font(SkinmaxFonts.tabLabel())
-                    }
-                    .foregroundStyle(selectedTab == tab || (tab == .scan && showScanPopup) ? SkinmaxColors.coral : SkinmaxColors.mutedTan)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
-                    .background(
-                        Group {
-                            if selectedTab == tab {
-                                RoundedRectangle(cornerRadius: 14)
-                                    .fill(Color(hex: "F4C7B0").opacity(0.35))
-                            }
+                        withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
+                            selectedTab = tab
                         }
+                    } label: {
+                        VStack(spacing: 4) {
+                            Image(systemName: tab.systemIcon)
+                                .font(.system(size: 20))
+                            Text(tab.title)
+                                .font(SkinmaxFonts.tabLabel())
+                        }
+                        .foregroundStyle(selectedTab == tab ? SkinmaxColors.coral : SkinmaxColors.mutedTan)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                        .background(
+                            Group {
+                                if selectedTab == tab {
+                                    RoundedRectangle(cornerRadius: 14)
+                                        .fill(Color(hex: "F4C7B0").opacity(0.35))
+                                        .matchedGeometryEffect(id: "activeTab", in: tabAnimation)
+                                }
+                            }
+                        )
+                        .contentShape(Rectangle())
+                    }
+                }
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 6)
+            .background(
+                RoundedRectangle(cornerRadius: SkinmaxSpacing.tabBarCornerRadius)
+                    .fill(.ultraThinMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: SkinmaxSpacing.tabBarCornerRadius)
+                            .fill(Color.white.opacity(0.45))
                     )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: SkinmaxSpacing.tabBarCornerRadius)
+                            .stroke(Color.white.opacity(0.5), lineWidth: 1)
+                    )
+                    .shadow(color: .black.opacity(0.06), radius: 15, x: 0, y: 4)
+            )
+
+            // Floating scan circle
+            Button {
+                HapticManager.impact(.medium)
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                    showScanPopup.toggle()
+                }
+            } label: {
+                ZStack {
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [SkinmaxColors.peachLight, SkinmaxColors.coral],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 56, height: 56)
+                        .shadow(color: SkinmaxColors.coral.opacity(0.35), radius: 8, x: 0, y: 4)
+
+                    Image(systemName: "camera.fill")
+                        .font(.system(size: 22))
+                        .foregroundStyle(.white)
+                        .rotationEffect(.degrees(showScanPopup ? 45 : 0))
                 }
             }
         }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 6)
-        .background(
-            RoundedRectangle(cornerRadius: SkinmaxSpacing.tabBarCornerRadius)
-                .fill(.ultraThinMaterial)
-                .overlay(
-                    RoundedRectangle(cornerRadius: SkinmaxSpacing.tabBarCornerRadius)
-                        .fill(Color.white.opacity(0.45))
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: SkinmaxSpacing.tabBarCornerRadius)
-                        .stroke(Color.white.opacity(0.5), lineWidth: 1)
-                )
-                .shadow(color: .black.opacity(0.06), radius: 15, x: 0, y: 4)
-        )
         .padding(.horizontal, SkinmaxSpacing.tabBarInset)
     }
 }
 
 // MARK: - Tab Item
 enum TabItem: Int, CaseIterable {
-    case home, analytics, account, scan
+    case home, analytics, account
 
     var title: String {
         switch self {
         case .home: return "Home"
         case .analytics: return "Analytics"
         case .account: return "Account"
-        case .scan: return "Scan"
         }
     }
 
@@ -291,7 +317,6 @@ enum TabItem: Int, CaseIterable {
         case .home: return "house.fill"
         case .analytics: return "chart.bar.fill"
         case .account: return "person.fill"
-        case .scan: return "camera.fill"
         }
     }
 }

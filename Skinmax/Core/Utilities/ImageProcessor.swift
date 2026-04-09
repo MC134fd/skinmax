@@ -31,6 +31,15 @@ enum ImageProcessor {
         }
     }
 
+    static func processForFoodAnalysis(_ image: UIImage) async -> Data? {
+        await withCheckedContinuation { continuation in
+            DispatchQueue.global(qos: .userInitiated).async {
+                let resized = resize(image, maxWidth: 800)
+                continuation.resume(returning: compressImage(resized))
+            }
+        }
+    }
+
     private static func cropToFace(image: UIImage, faceBounds: CGRect) -> UIImage {
         let imageSize = image.size
         // Vision coordinates are normalized with origin at bottom-left

@@ -39,7 +39,7 @@ final class HomeViewModel {
 
     var weeklyScores: [(day: String, score: Double)] {
         guard let dataStore else { return [] }
-        let calendar = Calendar.current
+        let     calendar = Calendar.current
         let scores = dataStore.dailySkinScores(last: 7)
         let formatter = DateFormatter()
         formatter.dateFormat = "EEE"

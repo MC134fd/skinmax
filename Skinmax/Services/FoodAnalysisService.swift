@@ -78,7 +78,7 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
         """
 
         let requestBody: [String: Any] = [
-            "model": "gpt-4o",
+            "model": "gpt-4.1",
             "messages": [
                 ["role": "system", "content": systemPrompt],
                 ["role": "user", "content": [
@@ -90,7 +90,8 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
                 ] as [Any]]
             ],
             "max_tokens": 1000,
-            "temperature": 0.3
+            "temperature": 0.3,
+            "response_format": ["type": "json_object"]
         ]
 
         let jsonData = try JSONSerialization.data(withJSONObject: requestBody)
@@ -123,11 +124,24 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
     }
 
     private func parseResponse(_ data: Data, imageData: Data) throws -> FoodScan {
-        guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let choices = json["choices"] as? [[String: Any]],
+        let json: [String: Any]
+        do {
+            guard let parsed = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+                throw FoodAnalysisError.invalidResponse
+            }
+            json = parsed
+        } catch {
+            throw FoodAnalysisError.invalidResponse
+        }
+
+        guard let choices = json["choices"] as? [[String: Any]],
               let firstChoice = choices.first,
               let message = firstChoice["message"] as? [String: Any],
               let content = message["content"] as? String else {
+            if let error = json["error"] as? [String: Any],
+               let errorMessage = error["message"] as? String {
+                print("[FoodAnalysis] API error: \(errorMessage)")
+            }
             throw FoodAnalysisError.invalidResponse
         }
 
@@ -136,21 +150,38 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
             .replacingOccurrences(of: "```", with: "")
             .trimmingCharacters(in: .whitespacesAndNewlines)
 
-        guard let analysisData = cleaned.data(using: .utf8),
-              let analysis = try JSONSerialization.jsonObject(with: analysisData) as? [String: Any] else {
+        let analysis: [String: Any]
+        do {
+            guard let parsed = try JSONSerialization.jsonObject(with: cleaned.data(using: .utf8) ?? Data()) as? [String: Any] else {
+                print("[FoodAnalysis] Failed to parse JSON from content: \(cleaned.prefix(200))")
+                throw FoodAnalysisError.invalidResponse
+            }
+            analysis = parsed
+        } catch is FoodAnalysisError {
+            throw FoodAnalysisError.invalidResponse
+        } catch {
+            print("[FoodAnalysis] Failed to parse JSON from content: \(cleaned.prefix(200))")
             throw FoodAnalysisError.invalidResponse
         }
 
-        guard let foodName = analysis["food_name"] as? String,
-              let skinImpactScore = analysis["skin_impact_score"] as? Double,
-              let benefits = analysis["benefits"] as? [String] else {
-            throw FoodAnalysisError.invalidResponse
+        let foodName = analysis["food_name"] as? String ?? "Unknown food"
+        let skinImpactScore = (analysis["skin_impact_score"] as? Double)
+            ?? (analysis["skin_impact_score"] as? Int).map(Double.init)
+            ?? 5.0
+        let benefits = analysis["benefits"] as? [String] ?? []
+
+        let calories: Int
+        if let c = analysis["calories"] as? Int {
+            calories = c
+        } else if let c = analysis["calories"] as? Double {
+            calories = Int(c)
+        } else {
+            calories = 0
         }
 
-        let calories = (analysis["calories"] as? Int) ?? Int(analysis["calories"] as? Double ?? 0)
-        let protein = analysis["protein"] as? Double ?? 0
-        let fat = analysis["fat"] as? Double ?? 0
-        let carbs = analysis["carbs"] as? Double ?? 0
+        let protein = (analysis["protein"] as? Double) ?? (analysis["protein"] as? Int).map(Double.init) ?? 0
+        let fat = (analysis["fat"] as? Double) ?? (analysis["fat"] as? Int).map(Double.init) ?? 0
+        let carbs = (analysis["carbs"] as? Double) ?? (analysis["carbs"] as? Int).map(Double.init) ?? 0
         let aiTip = analysis["ai_tip"] as? String
 
         let skinEffectsArray = analysis["skin_effects"] as? [[String: Any]] ?? []
@@ -172,7 +203,7 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
             carbs: max(0, carbs),
             benefits: benefits,
             skinEffects: skinEffects,
-            photoData: imageData,
+            photoData: nil,
             aiTip: aiTip
         )
     }

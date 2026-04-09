@@ -4,40 +4,33 @@ import PhotosUI
 struct FoodLogSheet: View {
     @State private var viewModel = FoodLogSheetViewModel()
     @Environment(\.dismiss) private var dismiss
+    @Environment(DataStore.self) private var dataStore
+    @Environment(AnalysisCoordinator.self) private var coordinator
     @State private var showCamera = false
-    @State private var showPhotoPicker = false
     @State private var photosPickerItem: PhotosPickerItem?
-    var onResult: (FoodScan) -> Void
 
     var body: some View {
         NavigationStack {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 18) {
-                    // Title
                     Text("Log a Meal")
                         .font(SkinmaxFonts.h2())
                         .foregroundStyle(SkinmaxColors.darkBrown)
                         .padding(.top, 8)
 
-                    // Food name input
                     foodNameField
-
-                    // Photo options
                     photoSection
 
-                    // Photo thumbnail
                     if viewModel.selectedImage != nil {
                         photoThumbnail
                     }
 
-                    // Error message
                     if let error = viewModel.errorMessage {
                         Text(error)
                             .font(SkinmaxFonts.caption())
                             .foregroundStyle(SkinmaxColors.redAlert)
                     }
 
-                    // CTA button
                     analyzeButton
                 }
                 .padding(.horizontal, SkinmaxSpacing.screenPadding)
@@ -62,7 +55,7 @@ struct FoodLogSheet: View {
         }
         .onChange(of: photosPickerItem) { _, newItem in
             if let newItem {
-                Task {
+                Task { @MainActor in
                     if let data = try? await newItem.loadTransferable(type: Data.self),
                        let image = UIImage(data: data) {
                         viewModel.selectedImage = image
@@ -71,10 +64,16 @@ struct FoodLogSheet: View {
                 }
             }
         }
-        .onChange(of: viewModel.result) { _, result in
-            if let result {
+        .onChange(of: viewModel.preparedImageData) { _, imageData in
+            if let imageData {
+                // Hand off to coordinator and dismiss
+                coordinator.startFoodScan(
+                    imageData: imageData,
+                    foodName: viewModel.foodName,
+                    analysisService: FoodAnalysisService(),
+                    dataStore: dataStore
+                )
                 dismiss()
-                onResult(result)
             }
         }
     }
@@ -88,6 +87,7 @@ struct FoodLogSheet: View {
 
             TextField("e.g. Salmon bowl, Pizza...", text: $viewModel.foodName)
                 .font(SkinmaxFonts.body())
+                .foregroundStyle(SkinmaxColors.darkBrown)
                 .padding(14)
                 .background(SkinmaxColors.white)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -106,7 +106,6 @@ struct FoodLogSheet: View {
                 .foregroundStyle(SkinmaxColors.mutedTan)
 
             HStack(spacing: 10) {
-                // Take Photo
                 Button {
                     showCamera = true
                 } label: {
@@ -126,7 +125,6 @@ struct FoodLogSheet: View {
                     )
                 }
 
-                // Choose Photo
                 PhotosPicker(selection: $photosPickerItem, matching: .images) {
                     HStack(spacing: 6) {
                         Image(systemName: "photo.fill")
@@ -175,15 +173,15 @@ struct FoodLogSheet: View {
     private var analyzeButton: some View {
         Button {
             Task {
-                await viewModel.analyze()
+                await viewModel.prepareForAnalysis()
             }
         } label: {
             HStack(spacing: 8) {
-                if viewModel.isAnalyzing {
+                if viewModel.isPreparing {
                     ProgressView()
                         .tint(.white)
                 } else {
-                    Text("Analyze with AI ✨")
+                    Text("Analyze with AI \u{2728}")
                 }
             }
             .font(.custom("Nunito-SemiBold", size: 14))

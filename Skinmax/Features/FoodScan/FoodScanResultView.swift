@@ -7,8 +7,6 @@ struct FoodScanResultView: View {
     @State private var animatedScore: Double = 0
     @State private var showNutrition = false
     @State private var showBenefits = false
-    @State private var saved = false
-    @State private var showSaveToast = false
 
     private var scoreColor: Color {
         switch scan.skinImpactScore {
@@ -38,10 +36,9 @@ struct FoodScanResultView: View {
         NavigationStack {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 18) {
-                    foodPhoto
                     foodNameSection
                     skinImpactCard
-                    nutritionRow
+                    nutritionGrid
                     benefitsSection
                     skinEffectsSection
                     aiTipCard
@@ -63,38 +60,12 @@ struct FoodScanResultView: View {
                         .foregroundStyle(SkinmaxColors.coral)
                     }
                 }
-
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        saveScan()
-                    } label: {
-                        Text(saved ? "Saved" : "Save")
-                            .font(SkinmaxFonts.h3())
-                            .foregroundStyle(saved ? SkinmaxColors.warmGray : SkinmaxColors.coral)
-                    }
-                    .disabled(saved)
-                }
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden()
         }
-        .overlay {
-            if showSaveToast {
-                VStack {
-                    Spacer()
-                    Text("Meal saved!")
-                        .font(SkinmaxFonts.h3())
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 10)
-                        .background(SkinmaxColors.greenGood)
-                        .clipShape(Capsule())
-                        .padding(.bottom, 40)
-                        .transition(.move(edge: .bottom).combined(with: .opacity))
-                }
-            }
-        }
         .onAppear {
+            dataStore.saveFoodScan(scan)
             withAnimation(.easeOut(duration: 0.8)) {
                 animatedScore = scan.skinImpactScore
             }
@@ -110,19 +81,6 @@ struct FoodScanResultView: View {
         }
     }
 
-    // MARK: - Food Photo
-    private var foodPhoto: some View {
-        Group {
-            if let photoData = scan.photoData, let uiImage = UIImage(data: photoData) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(maxWidth: .infinity, maxHeight: 220)
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-            }
-        }
-    }
-
     // MARK: - Food Name
     private var foodNameSection: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -130,54 +88,65 @@ struct FoodScanResultView: View {
                 .font(SkinmaxFonts.h2())
                 .foregroundStyle(SkinmaxColors.darkBrown)
 
-            Text("AI Identified · \(scan.createdAt.formatted(date: .omitted, time: .shortened))")
+            Text("AI Identified \u{00B7} \(scan.createdAt.formatted(date: .omitted, time: .shortened))")
                 .font(SkinmaxFonts.caption())
                 .foregroundStyle(SkinmaxColors.mutedTan)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    // MARK: - Skin Impact Score Card
+    // MARK: - Skin Impact Score Card (Circular Ring)
     private var skinImpactCard: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 14) {
             Text("SKIN IMPACT")
                 .font(SkinmaxFonts.caption())
-                .foregroundStyle(SkinmaxColors.mutedTan)
+                .foregroundStyle(.white.opacity(0.6))
                 .tracking(1)
 
-            Text(String(format: "%.1f", animatedScore))
-                .font(SkinmaxFonts.scoreDisplay())
-                .foregroundStyle(scoreColor)
+            ZStack {
+                Circle()
+                    .stroke(Color.white.opacity(0.15), lineWidth: 8)
+                    .frame(width: 110, height: 110)
 
-            // Progress bar
-            GeometryReader { geo in
-                ZStack(alignment: .leading) {
-                    RoundedRectangle(cornerRadius: 4)
-                        .fill(SkinmaxColors.lightTan)
-                        .frame(height: 8)
+                Circle()
+                    .trim(from: 0, to: animatedScore / 10.0)
+                    .stroke(
+                        scoreColor,
+                        style: StrokeStyle(lineWidth: 8, lineCap: .round)
+                    )
+                    .frame(width: 110, height: 110)
+                    .rotationEffect(.degrees(-90))
+                    .animation(.spring(response: 0.6, dampingFraction: 0.8), value: animatedScore)
 
-                    RoundedRectangle(cornerRadius: 4)
-                        .fill(scoreColor)
-                        .frame(width: geo.size.width * (animatedScore / 10.0), height: 8)
-                        .animation(.spring(response: 0.6, dampingFraction: 0.8), value: animatedScore)
-                }
+                Text(String(format: "%.1f", animatedScore))
+                    .font(.custom("Nunito-Bold", size: 36))
+                    .foregroundStyle(scoreColor)
             }
-            .frame(height: 8)
 
             Text(scoreLabel)
-                .font(SkinmaxFonts.body())
-                .foregroundStyle(SkinmaxColors.warmGray)
+                .font(SkinmaxFonts.h3())
+                .foregroundStyle(.white.opacity(0.8))
+                .multilineTextAlignment(.center)
         }
-        .padding(SkinmaxSpacing.cardPadding)
         .frame(maxWidth: .infinity)
-        .background(SkinmaxColors.white)
-        .clipShape(RoundedRectangle(cornerRadius: 20))
-        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+        .padding(.vertical, 28)
+        .padding(.horizontal, SkinmaxSpacing.cardPadding)
+        .background(
+            LinearGradient(
+                colors: [SkinmaxColors.darkSurface, SkinmaxColors.darkMid],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 22))
     }
 
-    // MARK: - Nutrition Row
-    private var nutritionRow: some View {
-        HStack(spacing: 8) {
+    // MARK: - Nutrition Grid (2x2)
+    private var nutritionGrid: some View {
+        LazyVGrid(columns: [
+            GridItem(.flexible(), spacing: 8),
+            GridItem(.flexible(), spacing: 8),
+        ], spacing: 8) {
             ForEach(Array(nutritionItems.enumerated()), id: \.offset) { index, item in
                 VStack(spacing: 4) {
                     Text(item.value)
@@ -190,7 +159,7 @@ struct FoodScanResultView: View {
                         .textCase(.uppercase)
                 }
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
+                .padding(.vertical, 14)
                 .background(SkinmaxColors.white)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
                 .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
@@ -252,7 +221,7 @@ struct FoodScanResultView: View {
 
             FlowLayout(spacing: 8) {
                 ForEach(scan.skinEffects) { effect in
-                    let arrow = effect.direction == .improved ? "↑" : "↓"
+                    let arrow = effect.direction == .improved ? "\u{2191}" : "\u{2193}"
                     let tint = effect.direction == .improved ? SkinmaxColors.greenGood : SkinmaxColors.redAlert
 
                     HStack(spacing: 4) {
@@ -283,7 +252,7 @@ struct FoodScanResultView: View {
         Group {
             if let tip = scan.aiTip {
                 HStack(alignment: .top, spacing: 10) {
-                    Text("💡")
+                    Text("\u{1F4A1}")
                         .font(.system(size: 20))
 
                     Text(tip)
@@ -296,19 +265,6 @@ struct FoodScanResultView: View {
                 .background(SkinmaxColors.peachWash)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
             }
-        }
-    }
-
-    // MARK: - Save
-    private func saveScan() {
-        dataStore.saveFoodScan(scan)
-        HapticManager.notification(.success)
-        saved = true
-        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-            showSaveToast = true
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            withAnimation { showSaveToast = false }
         }
     }
 }

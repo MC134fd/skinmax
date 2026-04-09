@@ -14,11 +14,13 @@
 		1BA73256C51F0077A202FC41 /* FoodLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F758F2CF96DBEB782C5D7EAD /* FoodLogView.swift */; };
 		1F7BEDDB0AA0E8477F11567C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8C92E9FC2E6EC29C11296D /* ContentView.swift */; };
 		252A7ED2E9F3AAA9105419F0 /* TrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2A99409E3B0A1A53B08420 /* TrendsView.swift */; };
+		26E2327AF0850BC97B7EC21A /* AnalysisHomeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B798A683F2075CD0B72EB980 /* AnalysisHomeCard.swift */; };
 		32243F2CD354716E2C3B773D /* AnalyticsContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB45A0EC14BB78679326126 /* AnalyticsContainerView.swift */; };
 		36E480F7A356D96EB64BE34B /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB665B5506616422E8D8E8 /* DataStore.swift */; };
 		3EB2F1633F80401D6CEB5931 /* ImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D66257683CC044466A99F3C /* ImageProcessor.swift */; };
 		4881D1DD545F96F4873EBA8A /* SkinmaxFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = D91D03E3C062377D78130775 /* SkinmaxFonts.swift */; };
 		4C7EB9EEF16C799DF79042C1 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2322698B4CE43808BF519A13 /* Config.swift */; };
+		537CF4CA6CDBD1FDB47B35F1 /* AnalysisCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FAC2EF0B4C651CE05CC52C /* AnalysisCoordinator.swift */; };
 		5E0F9D46E2E85FE7007973D2 /* FoodLogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF45D3C22D5A27B1B00ABDA2 /* FoodLogViewModel.swift */; };
 		5EF83ED54BBCCD0785E5E6EC /* FoodAnalysisService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE36B60B9F8806215B9D59E8 /* FoodAnalysisService.swift */; };
 		66CA29CAF0CAB7F5DB3A3C20 /* FaceScanResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69524F1357C461D6FED5EBA8 /* FaceScanResultView.swift */; };
@@ -61,6 +63,7 @@
 		071559B623555A0978937FBE /* InsightEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightEngine.swift; sourceTree = "<group>"; };
 		088143F0EF0A7F3A18D4B0F7 /* ProgressView_.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView_.swift; sourceTree = "<group>"; };
 		0DA4111435F1A7F5B55A8626 /* ScanHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanHistoryView.swift; sourceTree = "<group>"; };
+		11FAC2EF0B4C651CE05CC52C /* AnalysisCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisCoordinator.swift; sourceTree = "<group>"; };
 		1C91D6F3C5059158E53AE742 /* Nunito-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-SemiBold.ttf"; sourceTree = "<group>"; };
 		1E68B8A2590204BE7F1BE953 /* FaceScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceScanView.swift; sourceTree = "<group>"; };
 		1F0DD8F2FE49B6697BE3B793 /* SkinmaxSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinmaxSpacing.swift; sourceTree = "<group>"; };
@@ -90,6 +93,7 @@
 		A028B16977384E6719862F4D /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		ADCFE13834F0B06D66981B73 /* FoodLogSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLogSheetViewModel.swift; sourceTree = "<group>"; };
 		AE36B60B9F8806215B9D59E8 /* FoodAnalysisService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalysisService.swift; sourceTree = "<group>"; };
+		B798A683F2075CD0B72EB980 /* AnalysisHomeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisHomeCard.swift; sourceTree = "<group>"; };
 		B9609A8F232A1CDC4D15E713 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
 		BFE30112AD5A47636A9E6360 /* Nunito-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Bold.ttf"; sourceTree = "<group>"; };
 		C012FA3DE75DD4EC6F889FA4 /* FoodLogSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLogSheet.swift; sourceTree = "<group>"; };
@@ -158,6 +162,7 @@
 		28168C7BE12AE66A5BAD495C /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				B798A683F2075CD0B72EB980 /* AnalysisHomeCard.swift */,
 				22B148AF975ECA6186AA7F85 /* HomeView.swift */,
 				2AF50994FDF6BCB906DE8ED8 /* HomeViewModel.swift */,
 			);
@@ -242,6 +247,7 @@
 		BC0F3D6AB59FFAC524A6C530 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				11FAC2EF0B4C651CE05CC52C /* AnalysisCoordinator.swift */,
 				A028B16977384E6719862F4D /* CameraManager.swift */,
 				28515B96C7709727306F9B3E /* Config.example.swift */,
 				2322698B4CE43808BF519A13 /* Config.swift */,
@@ -360,6 +366,10 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
+					3B8263276AD3AB57A3A1056F = {
+						DevelopmentTeam = 6G9QKGZ3ZQ;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = 3E15B4BB9D22DCF1A01E9B63 /* Build configuration list for PBXProject "Skinmax" */;
@@ -407,6 +417,8 @@
 			files = (
 				CAED5FEE4D41BAC59C27A4F1 /* AboutView.swift in Sources */,
 				A8226DB2BC35CF531FB1F2BD /* AccountView.swift in Sources */,
+				537CF4CA6CDBD1FDB47B35F1 /* AnalysisCoordinator.swift in Sources */,
+				26E2327AF0850BC97B7EC21A /* AnalysisHomeCard.swift in Sources */,
 				32243F2CD354716E2C3B773D /* AnalyticsContainerView.swift in Sources */,
 				D4D52C3A0F78D79916D63CD9 /* AppStoreMetadata.swift in Sources */,
 				AC72180E5342A7EAE3B6AAF6 /* CameraManager.swift in Sources */,
@@ -504,6 +516,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -564,6 +577,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -581,9 +595,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
+				DEVELOPMENT_TEAM = 6G9QKGZ3ZQ;
+				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Skinmax/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Skinmax;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -591,9 +607,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.skinmax.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.marcuschien.skinmax.app;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -601,9 +617,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
+				DEVELOPMENT_TEAM = 6G9QKGZ3ZQ;
+				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Skinmax/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Skinmax;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -611,9 +629,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.skinmax.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.marcuschien.skinmax.app;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};

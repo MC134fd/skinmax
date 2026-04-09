@@ -45,9 +45,11 @@ struct SkinMetric: Codable, Identifiable {
     let severity: String
     let trend: String
     let description: String
+    let confidence: Double
+    let evidence: [String]
     let createdAt: Date
 
-    init(id: UUID = UUID(), type: SkinMetricType, score: Double, label: String = "", severity: String = "minimal", trend: String = "stable", description: String = "", createdAt: Date = Date()) {
+    init(id: UUID = UUID(), type: SkinMetricType, score: Double, label: String = "", severity: String = "minimal", trend: String = "stable", description: String = "", confidence: Double = 1.0, evidence: [String] = [], createdAt: Date = Date()) {
         self.id = id
         self.type = type
         self.score = score
@@ -55,6 +57,8 @@ struct SkinMetric: Codable, Identifiable {
         self.severity = severity
         self.trend = trend
         self.description = description
+        self.confidence = max(0, min(1, confidence))
+        self.evidence = evidence
         self.createdAt = createdAt
     }
 

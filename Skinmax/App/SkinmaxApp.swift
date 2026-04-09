@@ -5,6 +5,7 @@ import SwiftData
 struct SkinmaxApp: App {
     let container: ModelContainer
     let dataStore: DataStore
+    @State private var analysisCoordinator = AnalysisCoordinator()
 
     init() {
         let schema = Schema([CachedSkinScan.self, CachedFoodScan.self])
@@ -18,6 +19,7 @@ struct SkinmaxApp: App {
         WindowGroup {
             ContentView()
                 .environment(dataStore)
+                .environment(analysisCoordinator)
                 .modelContainer(container)
         }
     }

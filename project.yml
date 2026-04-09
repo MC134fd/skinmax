@@ -12,6 +12,7 @@ settings:
     TARGETED_DEVICE_FAMILY: "1"
     INFOPLIST_KEY_UILaunchScreen_Generation: YES
     INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+    INFOPLIST_KEY_UIRequiresFullScreen: YES
 
 targets:
   Skinmax:
@@ -25,11 +26,15 @@ targets:
       base:
         INFOPLIST_FILE: Skinmax/Resources/Info.plist
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-        PRODUCT_BUNDLE_IDENTIFIER: com.skinmax.app
+        PRODUCT_BUNDLE_IDENTIFIER: com.marcuschien.skinmax.app
+        TARGETED_DEVICE_FAMILY: "1"
         MARKETING_VERSION: "1.0.0"
         CURRENT_PROJECT_VERSION: "1"
-        GENERATE_INFOPLIST_FILE: YES
+        GENERATE_INFOPLIST_FILE: NO
         INFOPLIST_KEY_CFBundleDisplayName: Skinmax
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_IDENTITY: "Apple Development"
+        DEVELOPMENT_TEAM: 6G9QKGZ3ZQ
     dependencies:
       - package: Supabase
       - package: Kingfisher

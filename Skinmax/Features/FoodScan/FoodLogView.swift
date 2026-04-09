@@ -4,7 +4,6 @@ struct FoodLogView: View {
     @Environment(DataStore.self) private var dataStore
     @State private var viewModel = FoodLogViewModel()
     @State private var showFoodLogSheet = false
-    @State private var showFoodResult = false
     @State private var selectedFoodScan: FoodScan?
 
     var body: some View {
@@ -27,19 +26,11 @@ struct FoodLogView: View {
         .onAppear {
             viewModel.dataStore = dataStore
         }
-        .sheet(isPresented: $showFoodLogSheet) {
-            FoodLogSheet { result in
-                selectedFoodScan = result
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    showFoodResult = true
-                }
-            }
-            .presentationDetents([.large])
+        .fullScreenCover(isPresented: $showFoodLogSheet) {
+            FoodLogSheet()
         }
-        .fullScreenCover(isPresented: $showFoodResult) {
-            if let scan = selectedFoodScan {
-                FoodScanResultView(scan: scan)
-            }
+        .fullScreenCover(item: $selectedFoodScan) { scan in
+            FoodScanResultView(scan: scan)
         }
     }
 
@@ -161,7 +152,6 @@ struct FoodLogView: View {
                     ForEach(scans) { scan in
                         Button {
                             selectedFoodScan = scan
-                            showFoodResult = true
                         } label: {
                             FoodRowView(foodScan: scan)
                         }
