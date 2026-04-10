@@ -2,6 +2,7 @@ import Foundation
 import Observation
 
 @Observable
+@MainActor
 final class FoodLogViewModel {
     var selectedDate: Date = .now
     var selectedMonth: Date = .now

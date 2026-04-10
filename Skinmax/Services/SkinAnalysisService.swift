@@ -1,4 +1,5 @@
 import Foundation
+import os
 
 protocol SkinAnalysisServiceProtocol {
     func analyzeSkin(image: Data) async throws -> SkinScan
@@ -25,6 +26,7 @@ enum SkinAnalysisError: LocalizedError {
 final class SkinAnalysisService: SkinAnalysisServiceProtocol {
     private let apiKey: String
     private let endpoint = "https://api.openai.com/v1/chat/completions"
+    private let log = SkinmaxLog.skinAPI
 
     // All metric types the prompt must return, matching the app enum
     private static let requiredMetricTypes: Set<String> = [
@@ -176,8 +178,9 @@ final class SkinAnalysisService: SkinAnalysisServiceProtocol {
     }
 
     func analyzeSkin(image: Data) async throws -> SkinScan {
+        log.info("Image prepared, size=\(image.count) bytes")
+
         let base64Image = image.base64EncodedString()
-        print("[SkinAnalysis] Image size: \(image.count) bytes, base64 length: \(base64Image.count)")
 
         let requestBody: [String: Any] = [
             "model": "gpt-4.1",
@@ -199,9 +202,9 @@ final class SkinAnalysisService: SkinAnalysisServiceProtocol {
         let jsonData: Data
         do {
             jsonData = try JSONSerialization.data(withJSONObject: requestBody)
-            print("[SkinAnalysis] Request JSON serialized: \(jsonData.count) bytes")
+            log.info("Request serialized, payloadSize=\(jsonData.count) bytes")
         } catch {
-            print("[SkinAnalysis] Failed to serialize request: \(error)")
+            log.error("Failed to serialize request: \(error.localizedDescription)")
             throw SkinAnalysisError.invalidResponse
         }
 
@@ -214,24 +217,23 @@ final class SkinAnalysisService: SkinAnalysisServiceProtocol {
 
         let (data, response): (Data, URLResponse)
         do {
-            print("[SkinAnalysis] Sending request to OpenAI...")
+            log.info("Request dispatched to OpenAI")
             (data, response) = try await URLSession.shared.data(for: request)
-            print("[SkinAnalysis] Got response: \(data.count) bytes")
+            log.info("Response received, size=\(data.count) bytes")
         } catch {
-            print("[SkinAnalysis] Network error: \(error)")
+            log.error("Network error: \(error.localizedDescription)")
             throw SkinAnalysisError.networkError
         }
 
         guard let httpResponse = response as? HTTPURLResponse else {
-            print("[SkinAnalysis] Response is not HTTPURLResponse")
+            log.error("Response is not HTTPURLResponse")
             throw SkinAnalysisError.invalidResponse
         }
 
-        print("[SkinAnalysis] HTTP status: \(httpResponse.statusCode)")
+        log.info("HTTP status=\(httpResponse.statusCode)")
 
         if httpResponse.statusCode != 200 {
-            let responseBody = String(data: data, encoding: .utf8) ?? "unreadable"
-            print("[SkinAnalysis] Error response: \(responseBody)")
+            log.error("Non-200 response, status=\(httpResponse.statusCode)")
         }
 
         switch httpResponse.statusCode {
@@ -247,10 +249,10 @@ final class SkinAnalysisService: SkinAnalysisServiceProtocol {
     // MARK: - Response Parsing & Validation
 
     private func parseResponse(_ data: Data) throws -> SkinScan {
-        print("[SkinAnalysis] Parsing response...")
+        log.info("Parsing response")
 
         let content = try extractContent(from: data)
-        print("[SkinAnalysis] GPT content: \(String(content.prefix(300)))")
+        log.info("Content extracted, length=\(content.count)")
 
         let cleaned = content
             .replacingOccurrences(of: "```json", with: "")
@@ -259,11 +261,11 @@ final class SkinAnalysisService: SkinAnalysisServiceProtocol {
 
         guard let contentData = cleaned.data(using: .utf8),
               let analysis = try JSONSerialization.jsonObject(with: contentData) as? [String: Any] else {
-            print("[SkinAnalysis] Failed to parse GPT content as JSON")
+            log.error("Failed to parse content as JSON")
             throw SkinAnalysisError.invalidResponse
         }
 
-        print("[SkinAnalysis] Parsed analysis keys: \(analysis.keys)")
+        log.info("Parsed analysis, keys=\(Array(analysis.keys).sorted())")
 
         let glowScore = try validateGlowScore(analysis)
         let metrics = try validateMetrics(analysis)
@@ -272,11 +274,13 @@ final class SkinAnalysisService: SkinAnalysisServiceProtocol {
 
         // Log quality info (not persisted but useful for debugging)
         if let quality = analysis["image_quality"] as? String {
-            print("[SkinAnalysis] Image quality: \(quality)")
+            log.info("Image quality=\(quality)")
         }
         if let flags = analysis["quality_flags"] as? [String], !flags.isEmpty {
-            print("[SkinAnalysis] Quality flags: \(flags)")
+            log.info("Quality flags=\(flags)")
         }
+
+        log.info("Response parsed successfully, glowScore=\(glowScore), metricCount=\(metrics.count)")
 
         return SkinScan(
             glowScore: Double(glowScore),
@@ -296,7 +300,7 @@ final class SkinAnalysisService: SkinAnalysisServiceProtocol {
         } catch is SkinAnalysisError {
             throw SkinAnalysisError.invalidResponse
         } catch {
-            print("[SkinAnalysis] JSON parse error: \(error)")
+            log.error("JSON parse error: \(error.localizedDescription)")
             throw SkinAnalysisError.invalidResponse
         }
 
@@ -304,9 +308,10 @@ final class SkinAnalysisService: SkinAnalysisServiceProtocol {
               let firstChoice = choices.first,
               let message = firstChoice["message"] as? [String: Any],
               let content = message["content"] as? String else {
-            print("[SkinAnalysis] Failed to extract content from choices. Keys: \(json.keys)")
-            if let error = json["error"] as? [String: Any] {
-                print("[SkinAnalysis] API error: \(error)")
+            log.error("Failed to extract content from choices, keys=\(Array(json.keys))")
+            if let error = json["error"] as? [String: Any],
+               let msg = error["message"] as? String {
+                log.error("API error message: \(msg)")
             }
             throw SkinAnalysisError.invalidResponse
         }
@@ -321,12 +326,12 @@ final class SkinAnalysisService: SkinAnalysisServiceProtocol {
         } else if let g = analysis["glow_score"] as? Double {
             score = Int(g)
         } else {
-            print("[SkinAnalysis] Missing or invalid glow_score")
+            log.error("Missing or invalid glow_score")
             throw SkinAnalysisError.malformedAnalysis("Missing glow_score")
         }
 
         guard (0...100).contains(score) else {
-            print("[SkinAnalysis] glow_score out of range: \(score)")
+            log.error("glow_score out of range: \(score)")
             throw SkinAnalysisError.malformedAnalysis("glow_score \(score) out of range 0-100")
         }
 
@@ -335,7 +340,7 @@ final class SkinAnalysisService: SkinAnalysisServiceProtocol {
 
     private func validateRequiredString(_ analysis: [String: Any], key: String) throws -> String {
         guard let value = analysis[key] as? String, !value.isEmpty else {
-            print("[SkinAnalysis] Missing or empty required field: \(key)")
+            log.error("Missing or empty required field: \(key)")
             throw SkinAnalysisError.malformedAnalysis("Missing \(key)")
         }
         return value
@@ -343,7 +348,7 @@ final class SkinAnalysisService: SkinAnalysisServiceProtocol {
 
     private func validateMetrics(_ analysis: [String: Any]) throws -> [SkinMetric] {
         guard let metricsArray = analysis["metrics"] as? [[String: Any]] else {
-            print("[SkinAnalysis] Missing metrics array")
+            log.error("Missing metrics array")
             throw SkinAnalysisError.malformedAnalysis("Missing metrics array")
         }
 
@@ -355,7 +360,7 @@ final class SkinAnalysisService: SkinAnalysisServiceProtocol {
             let typeStr = metric.type.rawValue
 
             guard !seenTypes.contains(typeStr) else {
-                print("[SkinAnalysis] Duplicate metric type: \(typeStr)")
+                log.error("Duplicate metric type: \(typeStr)")
                 throw SkinAnalysisError.malformedAnalysis("Duplicate metric: \(typeStr)")
             }
             seenTypes.insert(typeStr)
@@ -365,7 +370,7 @@ final class SkinAnalysisService: SkinAnalysisServiceProtocol {
         // Verify all required types are present
         let missingTypes = Self.requiredMetricTypes.subtracting(seenTypes)
         guard missingTypes.isEmpty else {
-            print("[SkinAnalysis] Missing metric types: \(missingTypes)")
+            log.error("Missing metric types: \(missingTypes.sorted())")
             throw SkinAnalysisError.malformedAnalysis("Missing metrics: \(missingTypes.sorted().joined(separator: ", "))")
         }
 

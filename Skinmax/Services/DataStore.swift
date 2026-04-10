@@ -1,10 +1,12 @@
 import Foundation
 import SwiftData
 import Observation
+import os
 
 @Observable
 final class DataStore {
     private let modelContext: ModelContext
+    private let log = SkinmaxLog.dataStore
 
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
@@ -14,13 +16,23 @@ final class DataStore {
     func saveSkinScan(_ scan: SkinScan) {
         let cached = CachedSkinScan(from: scan)
         modelContext.insert(cached)
-        try? modelContext.save()
+        do {
+            try modelContext.save()
+            log.info("Skin scan saved, id=\(scan.id)")
+        } catch {
+            log.error("Failed to save skin scan, id=\(scan.id): \(error.localizedDescription)")
+        }
     }
 
     func saveFoodScan(_ scan: FoodScan) {
         let cached = CachedFoodScan(from: scan)
         modelContext.insert(cached)
-        try? modelContext.save()
+        do {
+            try modelContext.save()
+            log.info("Food scan saved, id=\(scan.id), name=\(scan.name)")
+        } catch {
+            log.error("Failed to save food scan, id=\(scan.id): \(error.localizedDescription)")
+        }
     }
 
     // MARK: - Skin Scan Queries
@@ -161,7 +173,12 @@ final class DataStore {
         let descriptor = FetchDescriptor<CachedSkinScan>(predicate: predicate)
         if let results = try? modelContext.fetch(descriptor) {
             for item in results { modelContext.delete(item) }
-            try? modelContext.save()
+            do {
+                try modelContext.save()
+                log.info("Deleted skin scan, id=\(id)")
+            } catch {
+                log.error("Failed to delete skin scan, id=\(id): \(error.localizedDescription)")
+            }
         }
     }
 
@@ -170,7 +187,45 @@ final class DataStore {
             try modelContext.delete(model: CachedSkinScan.self)
             try modelContext.delete(model: CachedFoodScan.self)
             try modelContext.save()
-        } catch {}
+            log.info("All data deleted")
+        } catch {
+            log.error("Failed to delete all data: \(error.localizedDescription)")
+        }
+    }
+
+    // MARK: - Cache Retention (7-day policy)
+
+    /// Deletes cached skin and food scans older than 7 days.
+    /// Safe to call at app launch; logs counts before and after.
+    func pruneExpiredCache() {
+        let cutoff = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
+        let skinCountBefore = totalSkinScans()
+        let foodCountBefore = totalFoodScans()
+
+        let skinPredicate = #Predicate<CachedSkinScan> { scan in
+            scan.date < cutoff
+        }
+        let foodPredicate = #Predicate<CachedFoodScan> { scan in
+            scan.date < cutoff
+        }
+
+        do {
+            let staleSkin = try modelContext.fetch(FetchDescriptor<CachedSkinScan>(predicate: skinPredicate))
+            let staleFood = try modelContext.fetch(FetchDescriptor<CachedFoodScan>(predicate: foodPredicate))
+
+            for item in staleSkin { modelContext.delete(item) }
+            for item in staleFood { modelContext.delete(item) }
+
+            if !staleSkin.isEmpty || !staleFood.isEmpty {
+                try modelContext.save()
+            }
+
+            let skinCountAfter = totalSkinScans()
+            let foodCountAfter = totalFoodScans()
+            log.info("Cache pruned, cutoff=\(cutoff), skin=\(skinCountBefore)->\(skinCountAfter) (-\(staleSkin.count)), food=\(foodCountBefore)->\(foodCountAfter) (-\(staleFood.count))")
+        } catch {
+            log.error("Cache prune failed: \(error.localizedDescription)")
+        }
     }
 
     // MARK: - Streak

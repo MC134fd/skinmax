@@ -1,4 +1,5 @@
 import Foundation
+import os
 
 protocol FoodAnalysisServiceProtocol {
     func analyzeFood(image: Data, foodName: String) async throws -> FoodScan
@@ -23,12 +24,15 @@ enum FoodAnalysisError: LocalizedError {
 final class FoodAnalysisService: FoodAnalysisServiceProtocol {
     private let apiKey: String
     private let endpoint = "https://api.openai.com/v1/chat/completions"
+    private let log = SkinmaxLog.foodAPI
 
     init(apiKey: String = Config.openAIAPIKey) {
         self.apiKey = apiKey
     }
 
     func analyzeFood(image: Data, foodName: String) async throws -> FoodScan {
+        log.info("Image prepared, size=\(image.count) bytes, foodName=\(foodName)")
+
         let base64Image = image.base64EncodedString()
 
         let systemPrompt = """
@@ -95,6 +99,7 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
         ]
 
         let jsonData = try JSONSerialization.data(withJSONObject: requestBody)
+        log.info("Request serialized, payloadSize=\(jsonData.count) bytes")
 
         var request = URLRequest(url: URL(string: endpoint)!)
         request.httpMethod = "POST"
@@ -104,14 +109,20 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
 
         let (data, response): (Data, URLResponse)
         do {
+            log.info("Request dispatched to OpenAI")
             (data, response) = try await URLSession.shared.data(for: request)
+            log.info("Response received, size=\(data.count) bytes")
         } catch {
+            log.error("Network error: \(error.localizedDescription)")
             throw FoodAnalysisError.networkError
         }
 
         guard let httpResponse = response as? HTTPURLResponse else {
+            log.error("Response is not HTTPURLResponse")
             throw FoodAnalysisError.invalidResponse
         }
+
+        log.info("HTTP status=\(httpResponse.statusCode)")
 
         switch httpResponse.statusCode {
         case 200: break
@@ -124,6 +135,8 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
     }
 
     private func parseResponse(_ data: Data, imageData: Data) throws -> FoodScan {
+        log.info("Parsing response")
+
         let json: [String: Any]
         do {
             guard let parsed = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
@@ -131,6 +144,7 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
             }
             json = parsed
         } catch {
+            log.error("Failed to parse API response JSON")
             throw FoodAnalysisError.invalidResponse
         }
 
@@ -140,7 +154,7 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
               let content = message["content"] as? String else {
             if let error = json["error"] as? [String: Any],
                let errorMessage = error["message"] as? String {
-                print("[FoodAnalysis] API error: \(errorMessage)")
+                log.error("API error: \(errorMessage)")
             }
             throw FoodAnalysisError.invalidResponse
         }
@@ -153,14 +167,14 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
         let analysis: [String: Any]
         do {
             guard let parsed = try JSONSerialization.jsonObject(with: cleaned.data(using: .utf8) ?? Data()) as? [String: Any] else {
-                print("[FoodAnalysis] Failed to parse JSON from content: \(cleaned.prefix(200))")
+                log.error("Failed to parse content JSON")
                 throw FoodAnalysisError.invalidResponse
             }
             analysis = parsed
         } catch is FoodAnalysisError {
             throw FoodAnalysisError.invalidResponse
         } catch {
-            print("[FoodAnalysis] Failed to parse JSON from content: \(cleaned.prefix(200))")
+            log.error("Failed to parse content JSON")
             throw FoodAnalysisError.invalidResponse
         }
 
@@ -193,6 +207,8 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
             let description = dict["description"] as? String ?? ""
             return SkinEffect(metricType: metricType, direction: direction, description: description)
         }
+
+        log.info("Response parsed, foodName=\(foodName), score=\(skinImpactScore), benefitCount=\(benefits.count)")
 
         return FoodScan(
             name: foodName,

@@ -13,6 +13,9 @@ struct SkinmaxApp: App {
         let container = try! ModelContainer(for: schema, configurations: config)
         self.container = container
         self.dataStore = DataStore(modelContext: container.mainContext)
+
+        Config.validateAPIKey()
+        dataStore.pruneExpiredCache()
     }
 
     var body: some Scene {

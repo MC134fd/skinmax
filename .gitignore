@@ -6,3 +6,4 @@ xcuserdata/
 *.xccheckout
 .env
 Config.swift
+Secrets.plist

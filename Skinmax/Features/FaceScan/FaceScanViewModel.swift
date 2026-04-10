@@ -24,6 +24,7 @@ enum FaceScanState: Equatable {
 }
 
 @Observable
+@MainActor
 final class FaceScanViewModel {
     var state: FaceScanState = .idle
 
