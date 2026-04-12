@@ -7,6 +7,7 @@ struct HomeView: View {
     @State private var selectedScanResult: SkinScan?
     @State private var selectedFoodResult: FoodScan?
     @State private var showFoodLog = false
+    @State private var currentMetricPage: Int? = 0
 
     var onViewFaceResult: (SkinScan) -> Void = { _ in }
     var onViewFoodResult: (FoodScan) -> Void = { _ in }
@@ -166,23 +167,55 @@ struct HomeView: View {
         .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
     }
 
-    // MARK: - Metric Carousel
+    // MARK: - Metric Carousel (3 per page, paged with dots)
+
+    private var metricPages: [[SkinMetric]] {
+        let metrics = viewModel.allMetrics
+        return stride(from: 0, to: metrics.count, by: 3).map {
+            Array(metrics[$0..<min($0 + 3, metrics.count)])
+        }
+    }
 
     private var metricCarousel: some View {
         Group {
             if viewModel.allMetrics.isEmpty {
                 metricEmptyState
             } else {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 12) {
-                        ForEach(viewModel.allMetrics) { metric in
-                            metricCarouselCard(metric)
-                                .frame(width: 110)
+                VStack(spacing: 10) {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        LazyHStack(spacing: 0) {
+                            ForEach(Array(metricPages.enumerated()), id: \.offset) { index, page in
+                                HStack(spacing: 8) {
+                                    ForEach(page) { metric in
+                                        metricCarouselCard(metric)
+                                    }
+                                    if page.count < 3 {
+                                        ForEach(0..<(3 - page.count), id: \.self) { _ in
+                                            Color.clear.frame(maxWidth: .infinity)
+                                        }
+                                    }
+                                }
+                                .containerRelativeFrame(.horizontal)
+                            }
+                        }
+                        .scrollTargetLayout()
+                    }
+                    .scrollTargetBehavior(.viewAligned)
+
+                    if metricPages.count > 1 {
+                        HStack(spacing: 6) {
+                            ForEach(0..<metricPages.count, id: \.self) { index in
+                                Circle()
+                                    .fill(SkinmaxColors.lightTan)
+                                    .frame(width: 6, height: 6)
+                            }
                         }
                     }
-                    .padding(.horizontal, 2)
                 }
             }
+        }
+        .onChange(of: viewModel.selectedDate) {
+            currentMetricPage = 0
         }
     }
 
@@ -192,11 +225,12 @@ struct HomeView: View {
                 label: metric.type.displayName,
                 score: metric.score,
                 icon: metric.type.icon,
-                size: 70
+                size: 60
             )
         }
+        .frame(maxWidth: .infinity)
         .padding(.vertical, 14)
-        .padding(.horizontal, 8)
+        .padding(.horizontal, 4)
         .background(SkinmaxColors.white)
         .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadiusSmall))
         .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
