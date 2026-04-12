@@ -241,62 +241,74 @@ struct CircleMetricCard: View {
     }
 }
 
-// MARK: - Week Day Strip (shared horizontal day picker)
+// MARK: - Week Day Strip (paged 7-day picker, Mon–Sun)
 struct WeekDayStrip: View {
     let days: [Date]
     let selectedDate: Date
     let daysWithData: Set<Int>
     let onSelectDay: (Date) -> Void
+    let onSwipeForward: () -> Void
+    let onSwipeBack: () -> Void
 
     private let calendar = Calendar.current
 
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                ForEach(days, id: \.self) { date in
-                    let dayNum = calendar.component(.day, from: date)
-                    let hasData = daysWithData.contains(dayNum)
-                    let isSelected = calendar.isDate(date, inSameDayAs: selectedDate)
-                    let isToday = calendar.isDateInToday(date)
-                    let isFuture = date > Date()
+        HStack(spacing: 0) {
+            ForEach(days, id: \.self) { date in
+                let dayNum = calendar.component(.day, from: date)
+                let hasData = daysWithData.contains(dayNum)
+                let isSelected = calendar.isDate(date, inSameDayAs: selectedDate)
+                let isToday = calendar.isDateInToday(date)
+                let isFuture = calendar.startOfDay(for: date) > calendar.startOfDay(for: Date())
 
-                    Button {
-                        onSelectDay(date)
-                    } label: {
-                        VStack(spacing: 4) {
-                            Text(dayAbbreviation(date))
-                                .font(SkinmaxFonts.small())
+                Button {
+                    onSelectDay(date)
+                } label: {
+                    VStack(spacing: 4) {
+                        Text(dayAbbreviation(date))
+                            .font(SkinmaxFonts.small())
 
-                            Text("\(calendar.component(.day, from: date))")
-                                .font(.custom("Nunito-SemiBold", size: 14))
+                        Text("\(dayNum)")
+                            .font(.custom("Nunito-SemiBold", size: 14))
 
-                            Circle()
-                                .fill(SkinmaxColors.coral)
-                                .frame(width: 4, height: 4)
-                                .opacity(hasData ? 1 : 0)
-                        }
-                        .foregroundStyle(
-                            isSelected ? .white :
-                            isFuture ? SkinmaxColors.mutedTan.opacity(0.5) :
-                            SkinmaxColors.warmGray
-                        )
-                        .frame(width: 44, height: 64)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(isSelected ? SkinmaxColors.coral : Color.clear)
-                        )
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(
-                                    isToday && !isSelected ? SkinmaxColors.lightTan : Color.clear,
-                                    lineWidth: 1.5
-                                )
-                        )
+                        Circle()
+                            .fill(SkinmaxColors.coral)
+                            .frame(width: 4, height: 4)
+                            .opacity(hasData ? 1 : 0)
                     }
-                    .disabled(isFuture)
+                    .foregroundStyle(
+                        isSelected ? .white :
+                        isFuture ? SkinmaxColors.mutedTan.opacity(0.5) :
+                        SkinmaxColors.warmGray
+                    )
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 64)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(isSelected ? SkinmaxColors.coral : Color.clear)
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(
+                                isToday && !isSelected ? SkinmaxColors.coral.opacity(0.5) : Color.clear,
+                                style: StrokeStyle(lineWidth: 1.5, dash: [4, 3])
+                            )
+                    )
                 }
+                .disabled(isFuture)
             }
         }
+        .contentShape(Rectangle())
+        .gesture(
+            DragGesture(minimumDistance: 30, coordinateSpace: .local)
+                .onEnded { value in
+                    if value.translation.width < -30 {
+                        onSwipeForward()
+                    } else if value.translation.width > 30 {
+                        onSwipeBack()
+                    }
+                }
+        )
     }
 
     private func dayAbbreviation(_ date: Date) -> String {

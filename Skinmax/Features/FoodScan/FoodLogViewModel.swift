@@ -18,10 +18,11 @@ final class FoodLogViewModel {
         dataStore?.averageFoodScore(for: selectedDate)
     }
 
-    var monthDays: [Date] {
-        guard let monthInterval = calendar.dateInterval(of: .month, for: selectedMonth) else { return [] }
-        let count = calendar.dateComponents([.day], from: monthInterval.start, to: monthInterval.end).day ?? 0
-        return (0..<count).compactMap { calendar.date(byAdding: .day, value: $0, to: monthInterval.start) }
+    var weekDays: [Date] {
+        let weekday = calendar.component(.weekday, from: selectedDate)
+        let daysSinceMonday = (weekday + 5) % 7
+        guard let monday = calendar.date(byAdding: .day, value: -daysSinceMonday, to: calendar.startOfDay(for: selectedDate)) else { return [] }
+        return (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: monday) }
     }
 
     var monthTitle: String {
@@ -37,11 +38,37 @@ final class FoodLogViewModel {
         return formatter.string(from: selectedDate)
     }
 
-    func daysWithData(in month: Date) -> Set<Int> {
-        guard let monthInterval = calendar.dateInterval(of: .month, for: month),
-              let dataStore else { return [] }
-        let scans = dataStore.allFoodScans(from: monthInterval.start, to: monthInterval.end)
-        return Set(scans.map { calendar.component(.day, from: $0.createdAt) })
+    func daysWithData() -> Set<Int> {
+        guard let dataStore else { return [] }
+        var result = Set<Int>()
+        for day in weekDays {
+            if !dataStore.foodScans(for: day).isEmpty {
+                result.insert(calendar.component(.day, from: day))
+            }
+        }
+        return result
+    }
+
+    func previousWeek() {
+        guard let newDate = calendar.date(byAdding: .day, value: -7, to: selectedDate) else { return }
+        selectedDate = newDate
+        selectedMonth = newDate
+    }
+
+    func nextWeek() {
+        guard let newDate = calendar.date(byAdding: .day, value: 7, to: selectedDate) else { return }
+        let today = calendar.startOfDay(for: Date())
+        let target = calendar.startOfDay(for: newDate)
+        if target > today {
+            let weekday = calendar.component(.weekday, from: newDate)
+            let daysSinceMonday = (weekday + 5) % 7
+            guard let monday = calendar.date(byAdding: .day, value: -daysSinceMonday, to: target) else { return }
+            if monday > today { return }
+            selectedDate = today
+        } else {
+            selectedDate = newDate
+        }
+        selectedMonth = selectedDate
     }
 
     func previousMonth() {

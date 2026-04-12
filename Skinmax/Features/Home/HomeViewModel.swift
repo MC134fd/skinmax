@@ -11,12 +11,14 @@ final class HomeViewModel {
 
     private let calendar = Calendar.current
 
-    // MARK: - Date Navigation
+    // MARK: - Date Navigation (Monday-start week)
 
-    var monthDays: [Date] {
-        guard let monthInterval = calendar.dateInterval(of: .month, for: selectedMonth) else { return [] }
-        let count = calendar.dateComponents([.day], from: monthInterval.start, to: monthInterval.end).day ?? 0
-        return (0..<count).compactMap { calendar.date(byAdding: .day, value: $0, to: monthInterval.start) }
+    var weekDays: [Date] {
+        let weekday = calendar.component(.weekday, from: selectedDate)
+        // Mon=0, Tue=1, … Sun=6
+        let daysSinceMonday = (weekday + 5) % 7
+        guard let monday = calendar.date(byAdding: .day, value: -daysSinceMonday, to: calendar.startOfDay(for: selectedDate)) else { return [] }
+        return (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: monday) }
     }
 
     var monthTitle: String {
@@ -39,6 +41,29 @@ final class HomeViewModel {
         selectedMonth = date
     }
 
+    func previousWeek() {
+        guard let newDate = calendar.date(byAdding: .day, value: -7, to: selectedDate) else { return }
+        selectedDate = newDate
+        selectedMonth = newDate
+    }
+
+    func nextWeek() {
+        guard let newDate = calendar.date(byAdding: .day, value: 7, to: selectedDate) else { return }
+        let today = calendar.startOfDay(for: Date())
+        let target = calendar.startOfDay(for: newDate)
+        if target > today {
+            // Check if Monday of that week is still reachable
+            let weekday = calendar.component(.weekday, from: newDate)
+            let daysSinceMonday = (weekday + 5) % 7
+            guard let monday = calendar.date(byAdding: .day, value: -daysSinceMonday, to: target) else { return }
+            if monday > today { return }
+            selectedDate = today
+        } else {
+            selectedDate = newDate
+        }
+        selectedMonth = selectedDate
+    }
+
     func previousMonth() {
         guard let newMonth = calendar.date(byAdding: .month, value: -1, to: selectedMonth) else { return }
         selectedMonth = newMonth
@@ -57,7 +82,7 @@ final class HomeViewModel {
     func daysWithSkinData() -> Set<Int> {
         guard let dataStore else { return [] }
         var result = Set<Int>()
-        for day in monthDays {
+        for day in weekDays {
             if !dataStore.skinScans(for: day).isEmpty {
                 result.insert(calendar.component(.day, from: day))
             }

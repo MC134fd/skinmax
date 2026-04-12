@@ -17,11 +17,17 @@ struct HomeView: View {
                 header
                 monthNavigation
                 WeekDayStrip(
-                    days: viewModel.monthDays,
+                    days: viewModel.weekDays,
                     selectedDate: viewModel.selectedDate,
                     daysWithData: viewModel.daysWithSkinData(),
                     onSelectDay: { date in
                         viewModel.selectDay(date)
+                    },
+                    onSwipeForward: {
+                        viewModel.nextWeek()
+                    },
+                    onSwipeBack: {
+                        viewModel.previousWeek()
                     }
                 )
 
