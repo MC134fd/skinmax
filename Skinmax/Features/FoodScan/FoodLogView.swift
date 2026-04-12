@@ -28,9 +28,11 @@ struct FoodLogView: View {
         }
         .fullScreenCover(isPresented: $showFoodLogSheet) {
             FoodLogSheet()
+                .environment(dataStore)
         }
         .fullScreenCover(item: $selectedFoodScan) { scan in
             FoodScanResultView(scan: scan)
+                .environment(dataStore)
         }
     }
 

@@ -19,14 +19,16 @@ struct ContentView: View {
             Group {
                 switch selectedTab {
                 case .home:
-                    HomeView(
-                        onViewFaceResult: { scan in
-                            faceResultScan = scan
-                        },
-                        onViewFoodResult: { scan in
-                            foodResultScan = scan
-                        }
-                    )
+                    NavigationStack {
+                        HomeView(
+                            onViewFaceResult: { scan in
+                                faceResultScan = scan
+                            },
+                            onViewFoodResult: { scan in
+                                foodResultScan = scan
+                            }
+                        )
+                    }
                 case .analytics:
                     AnalyticsContainerView()
                 case .account:

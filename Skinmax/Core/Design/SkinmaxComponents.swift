@@ -38,6 +38,118 @@ struct ScoreCard: View {
     }
 }
 
+// MARK: - Score Ring (large progress ring for banner)
+struct ScoreRing: View {
+    let score: Double
+    let size: CGFloat
+    let lineWidth: CGFloat
+
+    init(score: Double, size: CGFloat = 140, lineWidth: CGFloat = 10) {
+        self.score = score
+        self.size = size
+        self.lineWidth = lineWidth
+    }
+
+    private var progress: Double { min(score / 100.0, 1.0) }
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .stroke(Color.white.opacity(0.15), lineWidth: lineWidth)
+                .frame(width: size, height: size)
+
+            Circle()
+                .trim(from: 0, to: progress)
+                .stroke(
+                    LinearGradient(
+                        colors: [SkinmaxColors.coral, SkinmaxColors.peachLight],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    style: StrokeStyle(lineWidth: lineWidth, lineCap: .round)
+                )
+                .frame(width: size, height: size)
+                .rotationEffect(.degrees(-90))
+
+            Text(String(format: "%.0f", score))
+                .font(.custom("Nunito-Bold", size: 42))
+                .foregroundStyle(SkinmaxColors.peachLight)
+        }
+    }
+}
+
+// MARK: - Dismissible Insight Card
+struct DismissibleInsightCard: View {
+    let emoji: String
+    let title: String
+    let message: String
+    let onDismiss: () -> Void
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Circle()
+                .fill(SkinmaxColors.peachWash)
+                .frame(width: 40, height: 40)
+                .overlay(
+                    Text(emoji)
+                        .font(.system(size: 18))
+                )
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(SkinmaxFonts.h3())
+                    .foregroundStyle(SkinmaxColors.darkBrown)
+
+                Text(message)
+                    .font(SkinmaxFonts.body())
+                    .foregroundStyle(SkinmaxColors.warmGray)
+                    .lineSpacing(3)
+            }
+
+            Spacer(minLength: 0)
+
+            Button(action: onDismiss) {
+                Image(systemName: "xmark")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(SkinmaxColors.mutedTan)
+            }
+        }
+        .padding(SkinmaxSpacing.cardPadding)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(SkinmaxColors.white)
+        .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
+        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+    }
+}
+
+// MARK: - Compact Metric Chip (horizontal strip card)
+struct MetricChip: View {
+    let emoji: String
+    let value: String
+    let label: String
+    let color: Color
+
+    var body: some View {
+        VStack(spacing: 6) {
+            Text(emoji)
+                .font(.system(size: 18))
+
+            Text(value)
+                .font(.custom("Nunito-Bold", size: 16))
+                .foregroundStyle(color)
+
+            Text(label.uppercased())
+                .font(.custom("Nunito-Medium", size: 9))
+                .foregroundStyle(SkinmaxColors.mutedTan)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 12)
+        .background(SkinmaxColors.white)
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+    }
+}
+
 // MARK: - Metric Card (white bg, label, value, progress bar)
 struct MetricCard: View {
     let label: String

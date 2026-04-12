@@ -15,7 +15,7 @@ struct FoodRowView: View {
         HStack(spacing: 12) {
             RoundedRectangle(cornerRadius: 10)
                 .fill(SkinmaxColors.peachWash)
-                .frame(width: 40, height: 40)
+                .frame(width: 48, height: 48)
                 .overlay(
                     Text("\u{1F37D}")
                         .font(.system(size: 18))

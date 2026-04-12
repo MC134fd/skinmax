@@ -14,6 +14,15 @@ final class DataStore {
 
     // MARK: - Save
     func saveSkinScan(_ scan: SkinScan) {
+        let scanID = scan.id
+        let predicate = #Predicate<CachedSkinScan> { cached in
+            cached.id == scanID
+        }
+        let existing = (try? modelContext.fetch(FetchDescriptor<CachedSkinScan>(predicate: predicate))) ?? []
+        if !existing.isEmpty {
+            log.info("Skin scan already exists, skipping save, id=\(scan.id)")
+            return
+        }
         let cached = CachedSkinScan(from: scan)
         modelContext.insert(cached)
         do {
@@ -25,6 +34,15 @@ final class DataStore {
     }
 
     func saveFoodScan(_ scan: FoodScan) {
+        let scanID = scan.id
+        let predicate = #Predicate<CachedFoodScan> { cached in
+            cached.id == scanID
+        }
+        let existing = (try? modelContext.fetch(FetchDescriptor<CachedFoodScan>(predicate: predicate))) ?? []
+        if !existing.isEmpty {
+            log.info("Food scan already exists, skipping save, id=\(scan.id)")
+            return
+        }
         let cached = CachedFoodScan(from: scan)
         modelContext.insert(cached)
         do {
