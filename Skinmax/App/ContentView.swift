@@ -15,7 +15,7 @@ struct ContentView: View {
         ZStack {
             SkinmaxColors.creamBG.ignoresSafeArea()
 
-            // Main content
+            // Main content — no animation on content swap to prevent dark flash
             Group {
                 switch selectedTab {
                 case .home:
@@ -32,11 +32,10 @@ struct ContentView: View {
                 case .analytics:
                     AnalyticsContainerView()
                 case .account:
-                    NavigationStack {
-                        AccountView()
-                    }
+                    AccountView()
                 }
             }
+            .animation(nil, value: selectedTab)
 
             // Tab bar
             VStack {

@@ -32,7 +32,7 @@ struct SkinAnalyticsView: View {
 
     // MARK: - 2x2 Metrics Grid
     private var metricsGrid: some View {
-        let metrics = viewModel.topMetrics
+        let metrics = viewModel.allMetrics
         return LazyVGrid(columns: [
             GridItem(.flexible(), spacing: SkinmaxSpacing.metricGridSpacing),
             GridItem(.flexible(), spacing: SkinmaxSpacing.metricGridSpacing),

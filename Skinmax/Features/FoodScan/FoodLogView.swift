@@ -69,54 +69,14 @@ struct FoodLogView: View {
 
     // MARK: - Day Picker
     private var dayPicker: some View {
-        let daysWithData = viewModel.daysWithData(in: viewModel.selectedMonth)
-
-        return ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                ForEach(viewModel.weekDays, id: \.self) { date in
-                    let dayNum = Calendar.current.component(.day, from: date)
-                    let hasData = daysWithData.contains(dayNum)
-                    let isSelected = viewModel.isSelected(date)
-                    let isToday = viewModel.isToday(date)
-                    let isFuture = viewModel.isFuture(date)
-
-                    Button {
-                        viewModel.selectDay(date)
-                    } label: {
-                        VStack(spacing: 4) {
-                            Text(viewModel.dayAbbreviation(date))
-                                .font(SkinmaxFonts.small())
-
-                            Text(viewModel.dayNumber(date))
-                                .font(.custom("Nunito-SemiBold", size: 14))
-
-                            Circle()
-                                .fill(SkinmaxColors.coral)
-                                .frame(width: 4, height: 4)
-                                .opacity(hasData ? 1 : 0)
-                        }
-                        .foregroundStyle(
-                            isSelected ? .white :
-                            isFuture ? SkinmaxColors.mutedTan.opacity(0.5) :
-                            SkinmaxColors.warmGray
-                        )
-                        .frame(width: 44, height: 64)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(isSelected ? SkinmaxColors.coral : Color.clear)
-                        )
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(
-                                    isToday && !isSelected ? SkinmaxColors.lightTan : Color.clear,
-                                    lineWidth: 1.5
-                                )
-                        )
-                    }
-                    .disabled(isFuture)
-                }
+        WeekDayStrip(
+            days: viewModel.weekDays,
+            selectedDate: viewModel.selectedDate,
+            daysWithData: viewModel.daysWithData(in: viewModel.selectedMonth),
+            onSelectDay: { date in
+                viewModel.selectDay(date)
             }
-        }
+        )
     }
 
     // MARK: - Daily Summary

@@ -38,16 +38,20 @@ struct ScoreCard: View {
     }
 }
 
-// MARK: - Score Ring (large progress ring for banner)
+// MARK: - Score Ring (progress ring, adapts to light/dark bg)
 struct ScoreRing: View {
     let score: Double
     let size: CGFloat
     let lineWidth: CGFloat
+    let trackColor: Color
+    let showLabel: Bool
 
-    init(score: Double, size: CGFloat = 140, lineWidth: CGFloat = 10) {
+    init(score: Double, size: CGFloat = 140, lineWidth: CGFloat = 10, trackColor: Color = SkinmaxColors.lightTan, showLabel: Bool = false) {
         self.score = score
         self.size = size
         self.lineWidth = lineWidth
+        self.trackColor = trackColor
+        self.showLabel = showLabel
     }
 
     private var progress: Double { min(score / 100.0, 1.0) }
@@ -55,7 +59,7 @@ struct ScoreRing: View {
     var body: some View {
         ZStack {
             Circle()
-                .stroke(Color.white.opacity(0.15), lineWidth: lineWidth)
+                .stroke(trackColor, lineWidth: lineWidth)
                 .frame(width: size, height: size)
 
             Circle()
@@ -71,9 +75,11 @@ struct ScoreRing: View {
                 .frame(width: size, height: size)
                 .rotationEffect(.degrees(-90))
 
-            Text(String(format: "%.0f", score))
-                .font(.custom("Nunito-Bold", size: 42))
-                .foregroundStyle(SkinmaxColors.peachLight)
+            if showLabel {
+                Text(String(format: "%.0f", score))
+                    .font(.custom("Nunito-Bold", size: size * 0.3))
+                    .foregroundStyle(SkinmaxColors.darkBrown)
+            }
         }
     }
 }
@@ -232,6 +238,71 @@ struct CircleMetricCard: View {
                 .foregroundStyle(SkinmaxColors.warmGray)
                 .multilineTextAlignment(.center)
         }
+    }
+}
+
+// MARK: - Week Day Strip (shared horizontal day picker)
+struct WeekDayStrip: View {
+    let days: [Date]
+    let selectedDate: Date
+    let daysWithData: Set<Int>
+    let onSelectDay: (Date) -> Void
+
+    private let calendar = Calendar.current
+
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(days, id: \.self) { date in
+                    let dayNum = calendar.component(.day, from: date)
+                    let hasData = daysWithData.contains(dayNum)
+                    let isSelected = calendar.isDate(date, inSameDayAs: selectedDate)
+                    let isToday = calendar.isDateInToday(date)
+                    let isFuture = date > Date()
+
+                    Button {
+                        onSelectDay(date)
+                    } label: {
+                        VStack(spacing: 4) {
+                            Text(dayAbbreviation(date))
+                                .font(SkinmaxFonts.small())
+
+                            Text("\(calendar.component(.day, from: date))")
+                                .font(.custom("Nunito-SemiBold", size: 14))
+
+                            Circle()
+                                .fill(SkinmaxColors.coral)
+                                .frame(width: 4, height: 4)
+                                .opacity(hasData ? 1 : 0)
+                        }
+                        .foregroundStyle(
+                            isSelected ? .white :
+                            isFuture ? SkinmaxColors.mutedTan.opacity(0.5) :
+                            SkinmaxColors.warmGray
+                        )
+                        .frame(width: 44, height: 64)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(isSelected ? SkinmaxColors.coral : Color.clear)
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(
+                                    isToday && !isSelected ? SkinmaxColors.lightTan : Color.clear,
+                                    lineWidth: 1.5
+                                )
+                        )
+                    }
+                    .disabled(isFuture)
+                }
+            }
+        }
+    }
+
+    private func dayAbbreviation(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEE"
+        return formatter.string(from: date).uppercased()
     }
 }
 

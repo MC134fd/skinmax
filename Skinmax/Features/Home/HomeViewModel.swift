@@ -1,70 +1,104 @@
 import SwiftUI
 import Observation
 
-// MARK: - Recent Activity Item (mixed skin + food)
-enum RecentActivityItem: Identifiable {
-    case skin(SkinScan)
-    case food(FoodScan)
-
-    var id: UUID {
-        switch self {
-        case .skin(let scan): return scan.id
-        case .food(let scan): return scan.id
-        }
-    }
-
-    var date: Date {
-        switch self {
-        case .skin(let scan): return scan.createdAt
-        case .food(let scan): return scan.createdAt
-        }
-    }
-}
-
 @Observable
 @MainActor
 final class HomeViewModel {
     var dataStore: DataStore?
     var insightDismissed = false
+    var selectedDate: Date = .now
+    var selectedMonth: Date = .now
 
     private let calendar = Calendar.current
 
-    // MARK: - Glow Score (latest)
+    // MARK: - Date Navigation
+
+    var weekDays: [Date] {
+        guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: selectedDate) else { return [] }
+        return (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: weekInterval.start) }
+    }
+
+    var monthTitle: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM yyyy"
+        return formatter.string(from: selectedMonth)
+    }
+
+    var selectedDayName: String {
+        if calendar.isDateInToday(selectedDate) { return "Today" }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE"
+        return formatter.string(from: selectedDate)
+    }
+
+    func selectDay(_ date: Date) {
+        guard date <= Date() else { return }
+        selectedDate = date
+        selectedMonth = date
+    }
+
+    func previousMonth() {
+        guard let newMonth = calendar.date(byAdding: .month, value: -1, to: selectedMonth) else { return }
+        selectedMonth = newMonth
+        if let firstDay = calendar.date(from: calendar.dateComponents([.year, .month], from: newMonth)) {
+            selectedDate = firstDay
+        }
+    }
+
+    func nextMonth() {
+        guard let newMonth = calendar.date(byAdding: .month, value: 1, to: selectedMonth) else { return }
+        let newComps = calendar.dateComponents([.year, .month], from: newMonth)
+        let nowComps = calendar.dateComponents([.year, .month], from: Date())
+        if (newComps.year!, newComps.month!) > (nowComps.year!, nowComps.month!) { return }
+        selectedMonth = newMonth
+        if let firstDay = calendar.date(from: calendar.dateComponents([.year, .month], from: newMonth)) {
+            selectedDate = min(firstDay, Date())
+        }
+    }
+
+    func daysWithSkinData() -> Set<Int> {
+        guard let dataStore else { return [] }
+        var result = Set<Int>()
+        for day in weekDays {
+            if !dataStore.skinScans(for: day).isEmpty {
+                result.insert(calendar.component(.day, from: day))
+            }
+        }
+        return result
+    }
+
+    // MARK: - Selected Date Data
+
+    var selectedDateScan: SkinScan? {
+        dataStore?.skinScans(for: selectedDate).first
+    }
+
+    var selectedDateScans: [SkinScan] {
+        dataStore?.skinScans(for: selectedDate) ?? []
+    }
+
+    // MARK: - Glow Score (selected date)
 
     var latestScan: SkinScan? {
         dataStore?.latestSkinScan()
     }
 
     var glowScore: Double {
-        latestScan?.glowScore ?? 0
+        selectedDateScan?.glowScore ?? 0
     }
 
     var hasData: Bool {
-        latestScan != nil
+        selectedDateScan != nil
     }
 
     var overallMessage: String {
-        latestScan?.overallMessage ?? "Take your first scan!"
+        selectedDateScan?.overallMessage ?? "No scan for \(selectedDayName)"
     }
 
-    // MARK: - Top 4 Metrics
+    // MARK: - All Metrics (for carousel, selected date)
 
-    var topMetrics: [SkinMetric] {
-        guard let scan = latestScan else { return [] }
-        let priority: [SkinMetricType] = [.hydration, .acne, .texture, .redness]
-        var result: [SkinMetric] = []
-        for type in priority {
-            if let metric = scan.metrics.first(where: { $0.type == type }) {
-                result.append(metric)
-            }
-        }
-        if result.count < 4 {
-            for metric in scan.metrics where !result.contains(where: { $0.type == metric.type }) {
-                result.append(metric)
-                if result.count >= 4 { break }
-            }
-        }
-        return result
+    var allMetrics: [SkinMetric] {
+        selectedDateScan?.metrics ?? []
     }
 
     // MARK: - Trend
@@ -89,19 +123,6 @@ final class HomeViewModel {
         let scores = dataStore.dailySkinScores(last: 7)
         guard scores.count >= 2 else { return true }
         return scores.last!.score >= scores.first!.score
-    }
-
-    // MARK: - Recent Activity (mixed skin + food, last 7 days)
-
-    var recentActivity: [RecentActivityItem] {
-        guard let dataStore else { return [] }
-        let skinScans = dataStore.skinScans(last: 7)
-        let foodScans = dataStore.foodScans(last: 7)
-        var items: [RecentActivityItem] = []
-        items.append(contentsOf: skinScans.map { .skin($0) })
-        items.append(contentsOf: foodScans.map { .food($0) })
-        items.sort { $0.date > $1.date }
-        return items
     }
 
     // MARK: - Today Insight
