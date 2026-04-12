@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0103CA69767DC34AFA987CBF /* Nunito-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1C91D6F3C5059158E53AE742 /* Nunito-SemiBold.ttf */; };
+		8077974BF65C4C84BEC03267 /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = AE3CA0E406A749B99E5FBA21 /* Secrets.plist */; };
 		13F632E415EF817E2E220577 /* Nunito-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2D87C9F11F459C410B8D0A0E /* Nunito-Medium.ttf */; };
 		16A45C326274D00833C7D30E /* FoodLogSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C012FA3DE75DD4EC6F889FA4 /* FoodLogSheet.swift */; };
 		18526CAFEF5EB56A1DDCC2A1 /* SkinmaxComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FF0AC04361F74E7E940E898 /* SkinmaxComponents.swift */; };
@@ -16,6 +17,7 @@
 		252A7ED2E9F3AAA9105419F0 /* TrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2A99409E3B0A1A53B08420 /* TrendsView.swift */; };
 		26E2327AF0850BC97B7EC21A /* AnalysisHomeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B798A683F2075CD0B72EB980 /* AnalysisHomeCard.swift */; };
 		32243F2CD354716E2C3B773D /* AnalyticsContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB45A0EC14BB78679326126 /* AnalyticsContainerView.swift */; };
+		A5255C49A77F479FBA1B9B4B /* SkinAnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DDA111E2F464C23AB3F072F /* SkinAnalyticsView.swift */; };
 		36E480F7A356D96EB64BE34B /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB665B5506616422E8D8E8 /* DataStore.swift */; };
 		3EB2F1633F80401D6CEB5931 /* ImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D66257683CC044466A99F3C /* ImageProcessor.swift */; };
 		4881D1DD545F96F4873EBA8A /* SkinmaxFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = D91D03E3C062377D78130775 /* SkinmaxFonts.swift */; };
@@ -84,6 +86,7 @@
 		69524F1357C461D6FED5EBA8 /* FaceScanResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceScanResultView.swift; sourceTree = "<group>"; };
 		6D66257683CC044466A99F3C /* ImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessor.swift; sourceTree = "<group>"; };
 		7EB45A0EC14BB78679326126 /* AnalyticsContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsContainerView.swift; sourceTree = "<group>"; };
+		2DDA111E2F464C23AB3F072F /* SkinAnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinAnalyticsView.swift; sourceTree = "<group>"; };
 		839D4C1B23EF45B6040248C8 /* AppStoreMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreMetadata.swift; sourceTree = "<group>"; };
 		84CE6CB81C125B88E2656A92 /* FaceScanViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceScanViewModel.swift; sourceTree = "<group>"; };
 		8D939DFD2FCB97DAC14A877D /* SkinAnalysisService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinAnalysisService.swift; sourceTree = "<group>"; };
@@ -103,6 +106,7 @@
 		DB2A99409E3B0A1A53B08420 /* TrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendsView.swift; sourceTree = "<group>"; };
 		DF45D3C22D5A27B1B00ABDA2 /* FoodLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLogViewModel.swift; sourceTree = "<group>"; };
 		DF46C6DFAD8C399295A4F5FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		AE3CA0E406A749B99E5FBA21 /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
 		DF94BD712BEA9A2282A01ED5 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
 		E1188B1A9C8C2C5DCE2C386F /* LocalCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCache.swift; sourceTree = "<group>"; };
 		E461395F6A57AD71DD3C33E6 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
@@ -200,6 +204,7 @@
 				839D4C1B23EF45B6040248C8 /* AppStoreMetadata.swift */,
 				968B3542EFA9211278FEDF5F /* Assets.xcassets */,
 				DF46C6DFAD8C399295A4F5FD /* Info.plist */,
+				AE3CA0E406A749B99E5FBA21 /* Secrets.plist */,
 				03452A6165030EEBEE888CA4 /* Fonts */,
 			);
 			path = Resources;
@@ -242,6 +247,7 @@
 			isa = PBXGroup;
 			children = (
 				7EB45A0EC14BB78679326126 /* AnalyticsContainerView.swift */,
+				2DDA111E2F464C23AB3F072F /* SkinAnalyticsView.swift */,
 			);
 			path = Analytics;
 			sourceTree = "<group>";
@@ -408,6 +414,7 @@
 				13F632E415EF817E2E220577 /* Nunito-Medium.ttf in Resources */,
 				9E6901CCE6AC4486460E9CB8 /* Nunito-Regular.ttf in Resources */,
 				0103CA69767DC34AFA987CBF /* Nunito-SemiBold.ttf in Resources */,
+				8077974BF65C4C84BEC03267 /* Secrets.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -423,6 +430,7 @@
 				537CF4CA6CDBD1FDB47B35F1 /* AnalysisCoordinator.swift in Sources */,
 				26E2327AF0850BC97B7EC21A /* AnalysisHomeCard.swift in Sources */,
 				32243F2CD354716E2C3B773D /* AnalyticsContainerView.swift in Sources */,
+				A5255C49A77F479FBA1B9B4B /* SkinAnalyticsView.swift in Sources */,
 				D4D52C3A0F78D79916D63CD9 /* AppStoreMetadata.swift in Sources */,
 				AC72180E5342A7EAE3B6AAF6 /* CameraManager.swift in Sources */,
 				A5EB32042878CE05283EA447 /* CameraPreviewView.swift in Sources */,

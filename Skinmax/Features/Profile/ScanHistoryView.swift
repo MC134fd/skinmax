@@ -3,7 +3,6 @@ import SwiftUI
 struct ScanHistoryView: View {
     @Environment(DataStore.self) private var dataStore
     @State private var selectedScan: SkinScan?
-    @State private var showResult = false
 
     private var scans: [SkinScan] { dataStore.allSkinScans() }
 
@@ -16,7 +15,6 @@ struct ScanHistoryView: View {
                     ForEach(scans) { scan in
                         ScanHistoryRow(scan: scan) {
                             selectedScan = scan
-                            showResult = true
                         }
                         .contextMenu {
                             Button(role: .destructive) {
@@ -35,10 +33,9 @@ struct ScanHistoryView: View {
         .background(SkinmaxColors.creamBG.ignoresSafeArea())
         .navigationTitle("Scan History")
         .navigationBarTitleDisplayMode(.inline)
-        .fullScreenCover(isPresented: $showResult) {
-            if let scan = selectedScan {
-                FaceScanResultView(scan: scan)
-            }
+        .fullScreenCover(item: $selectedScan) { scan in
+            FaceScanResultView(scan: scan)
+                .environment(dataStore)
         }
     }
 

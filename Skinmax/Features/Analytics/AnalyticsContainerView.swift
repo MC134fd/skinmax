@@ -5,6 +5,7 @@ struct AnalyticsContainerView: View {
 
     enum AnalyticsTab: String, CaseIterable {
         case foodLog = "Food Log"
+        case skin = "Skin"
         case trends = "Trends"
     }
 
@@ -43,6 +44,8 @@ struct AnalyticsContainerView: View {
                 switch selectedTab {
                 case .foodLog:
                     FoodLogView()
+                case .skin:
+                    SkinAnalyticsView()
                 case .trends:
                     TrendsView()
                 }

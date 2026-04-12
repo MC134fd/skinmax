@@ -5,6 +5,100 @@ import Observation
 @MainActor
 final class HomeViewModel {
     var dataStore: DataStore?
+    var selectedDate: Date = .now
+    var selectedMonth: Date = .now
+
+    private let calendar = Calendar.current
+
+    // MARK: - Day Picker
+
+    var weekDays: [Date] {
+        guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: selectedDate) else { return [] }
+        return (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: weekInterval.start) }
+    }
+
+    var monthTitle: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM yyyy"
+        return formatter.string(from: selectedMonth)
+    }
+
+    var selectedDayName: String {
+        if calendar.isDateInToday(selectedDate) { return "Today" }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE"
+        return formatter.string(from: selectedDate)
+    }
+
+    func daysWithSkinData(in month: Date) -> Set<Int> {
+        guard let monthInterval = calendar.dateInterval(of: .month, for: month),
+              let dataStore else { return [] }
+        let scans = dataStore.skinScans(last: 30)
+        return Set(scans
+            .filter { $0.createdAt >= monthInterval.start && $0.createdAt < monthInterval.end }
+            .map { calendar.component(.day, from: $0.createdAt) })
+    }
+
+    func selectDay(_ date: Date) {
+        guard date <= Date() else { return }
+        selectedDate = date
+        selectedMonth = date
+    }
+
+    func previousMonth() {
+        guard let newMonth = calendar.date(byAdding: .month, value: -1, to: selectedMonth) else { return }
+        selectedMonth = newMonth
+        if let firstDay = calendar.date(from: calendar.dateComponents([.year, .month], from: newMonth)) {
+            selectedDate = firstDay
+        }
+    }
+
+    func nextMonth() {
+        guard let newMonth = calendar.date(byAdding: .month, value: 1, to: selectedMonth) else { return }
+        if newMonth > Date() { return }
+        selectedMonth = newMonth
+        if let firstDay = calendar.date(from: calendar.dateComponents([.year, .month], from: newMonth)) {
+            selectedDate = min(firstDay, Date())
+        }
+    }
+
+    func isSelected(_ date: Date) -> Bool {
+        calendar.isDate(date, inSameDayAs: selectedDate)
+    }
+
+    func isToday(_ date: Date) -> Bool {
+        calendar.isDateInToday(date)
+    }
+
+    func isFuture(_ date: Date) -> Bool {
+        date > Date()
+    }
+
+    func dayAbbreviation(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEE"
+        return formatter.string(from: date).uppercased()
+    }
+
+    func dayNumber(_ date: Date) -> String {
+        "\(calendar.component(.day, from: date))"
+    }
+
+    // MARK: - Selected Day Data
+
+    var skinScansForSelectedDate: [SkinScan] {
+        dataStore?.skinScans(for: selectedDate) ?? []
+    }
+
+    var glowScoreForSelectedDate: Double? {
+        skinScansForSelectedDate.first?.glowScore
+    }
+
+    var hasDataForSelectedDate: Bool {
+        !skinScansForSelectedDate.isEmpty
+    }
+
+    // MARK: - Latest / Overall Data (used by analytics)
 
     var latestScan: SkinScan? {
         dataStore?.latestSkinScan()
@@ -20,7 +114,6 @@ final class HomeViewModel {
 
     var topMetrics: [SkinMetric] {
         guard let scan = latestScan else { return [] }
-        // Pick 4 key metrics: hydration, acne, texture, redness (or whatever is available)
         let priority: [SkinMetricType] = [.hydration, .acne, .texture, .redness]
         var result: [SkinMetric] = []
         for type in priority {
@@ -28,7 +121,6 @@ final class HomeViewModel {
                 result.append(metric)
             }
         }
-        // Fill remaining slots from other metrics
         if result.count < 4 {
             for metric in scan.metrics where !result.contains(where: { $0.type == metric.type }) {
                 result.append(metric)
@@ -40,7 +132,6 @@ final class HomeViewModel {
 
     var weeklyScores: [(day: String, score: Double)] {
         guard let dataStore else { return [] }
-        let     calendar = Calendar.current
         let scores = dataStore.dailySkinScores(last: 7)
         let formatter = DateFormatter()
         formatter.dateFormat = "EEE"
