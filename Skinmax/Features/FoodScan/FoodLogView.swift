@@ -70,7 +70,7 @@ struct FoodLogView: View {
     // MARK: - Day Picker
     private var dayPicker: some View {
         WeekDayStrip(
-            days: viewModel.weekDays,
+            days: viewModel.monthDays,
             selectedDate: viewModel.selectedDate,
             daysWithData: viewModel.daysWithData(in: viewModel.selectedMonth),
             onSelectDay: { date in

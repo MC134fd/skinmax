@@ -17,7 +17,7 @@ struct HomeView: View {
                 header
                 monthNavigation
                 WeekDayStrip(
-                    days: viewModel.weekDays,
+                    days: viewModel.monthDays,
                     selectedDate: viewModel.selectedDate,
                     daysWithData: viewModel.daysWithSkinData(),
                     onSelectDay: { date in

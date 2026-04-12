@@ -411,9 +411,7 @@ struct GlassTabBar: View {
                     Button {
                         HapticManager.selection()
                         showScanPopup = false
-                        withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
-                            selectedTab = tab
-                        }
+                        selectedTab = tab
                     } label: {
                         VStack(spacing: 4) {
                             Image(systemName: tab.systemIcon)
@@ -439,6 +437,7 @@ struct GlassTabBar: View {
             }
             .padding(.horizontal, 8)
             .padding(.vertical, 6)
+            .animation(.spring(response: 0.35, dampingFraction: 0.75), value: selectedTab)
             .background(
                 RoundedRectangle(cornerRadius: SkinmaxSpacing.tabBarCornerRadius)
                     .fill(.ultraThinMaterial)

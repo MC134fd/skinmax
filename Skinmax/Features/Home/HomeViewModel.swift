@@ -13,9 +13,10 @@ final class HomeViewModel {
 
     // MARK: - Date Navigation
 
-    var weekDays: [Date] {
-        guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: selectedDate) else { return [] }
-        return (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: weekInterval.start) }
+    var monthDays: [Date] {
+        guard let monthInterval = calendar.dateInterval(of: .month, for: selectedMonth) else { return [] }
+        let count = calendar.dateComponents([.day], from: monthInterval.start, to: monthInterval.end).day ?? 0
+        return (0..<count).compactMap { calendar.date(byAdding: .day, value: $0, to: monthInterval.start) }
     }
 
     var monthTitle: String {
@@ -32,7 +33,8 @@ final class HomeViewModel {
     }
 
     func selectDay(_ date: Date) {
-        guard date <= Date() else { return }
+        let today = calendar.startOfDay(for: Date())
+        guard calendar.startOfDay(for: date) <= today else { return }
         selectedDate = date
         selectedMonth = date
     }
@@ -40,9 +42,7 @@ final class HomeViewModel {
     func previousMonth() {
         guard let newMonth = calendar.date(byAdding: .month, value: -1, to: selectedMonth) else { return }
         selectedMonth = newMonth
-        if let firstDay = calendar.date(from: calendar.dateComponents([.year, .month], from: newMonth)) {
-            selectedDate = firstDay
-        }
+        selectedDate = preservedDate(in: newMonth)
     }
 
     func nextMonth() {
@@ -51,20 +51,31 @@ final class HomeViewModel {
         let nowComps = calendar.dateComponents([.year, .month], from: Date())
         if (newComps.year!, newComps.month!) > (nowComps.year!, nowComps.month!) { return }
         selectedMonth = newMonth
-        if let firstDay = calendar.date(from: calendar.dateComponents([.year, .month], from: newMonth)) {
-            selectedDate = min(firstDay, Date())
-        }
+        selectedDate = preservedDate(in: newMonth)
     }
 
     func daysWithSkinData() -> Set<Int> {
         guard let dataStore else { return [] }
         var result = Set<Int>()
-        for day in weekDays {
+        for day in monthDays {
             if !dataStore.skinScans(for: day).isEmpty {
                 result.insert(calendar.component(.day, from: day))
             }
         }
         return result
+    }
+
+    // MARK: - Private Helpers
+
+    private func preservedDate(in month: Date) -> Date {
+        let targetDay = calendar.component(.day, from: selectedDate)
+        let range = calendar.range(of: .day, in: .month, for: month)!
+        let clampedDay = min(targetDay, range.upperBound - 1)
+        var comps = calendar.dateComponents([.year, .month], from: month)
+        comps.day = clampedDay
+        let date = calendar.date(from: comps)!
+        let today = calendar.startOfDay(for: Date())
+        return date > today ? today : date
     }
 
     // MARK: - Selected Date Data

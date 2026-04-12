@@ -18,9 +18,10 @@ final class FoodLogViewModel {
         dataStore?.averageFoodScore(for: selectedDate)
     }
 
-    var weekDays: [Date] {
-        guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: selectedDate) else { return [] }
-        return (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: weekInterval.start) }
+    var monthDays: [Date] {
+        guard let monthInterval = calendar.dateInterval(of: .month, for: selectedMonth) else { return [] }
+        let count = calendar.dateComponents([.day], from: monthInterval.start, to: monthInterval.end).day ?? 0
+        return (0..<count).compactMap { calendar.date(byAdding: .day, value: $0, to: monthInterval.start) }
     }
 
     var monthTitle: String {
@@ -46,47 +47,35 @@ final class FoodLogViewModel {
     func previousMonth() {
         guard let newMonth = calendar.date(byAdding: .month, value: -1, to: selectedMonth) else { return }
         selectedMonth = newMonth
-        // Jump to first day of that month
-        if let firstDay = calendar.date(from: calendar.dateComponents([.year, .month], from: newMonth)) {
-            selectedDate = firstDay
-        }
+        selectedDate = preservedDate(in: newMonth)
     }
 
     func nextMonth() {
         guard let newMonth = calendar.date(byAdding: .month, value: 1, to: selectedMonth) else { return }
-        // Don't allow future months
-        if newMonth > Date() { return }
+        let newComps = calendar.dateComponents([.year, .month], from: newMonth)
+        let nowComps = calendar.dateComponents([.year, .month], from: Date())
+        if (newComps.year!, newComps.month!) > (nowComps.year!, nowComps.month!) { return }
         selectedMonth = newMonth
-        if let firstDay = calendar.date(from: calendar.dateComponents([.year, .month], from: newMonth)) {
-            selectedDate = min(firstDay, Date())
-        }
+        selectedDate = preservedDate(in: newMonth)
     }
 
     func selectDay(_ date: Date) {
-        guard date <= Date() else { return }
+        let today = calendar.startOfDay(for: Date())
+        guard calendar.startOfDay(for: date) <= today else { return }
         selectedDate = date
         selectedMonth = date
     }
 
-    func isSelected(_ date: Date) -> Bool {
-        calendar.isDate(date, inSameDayAs: selectedDate)
-    }
+    // MARK: - Private Helpers
 
-    func isToday(_ date: Date) -> Bool {
-        calendar.isDateInToday(date)
-    }
-
-    func isFuture(_ date: Date) -> Bool {
-        date > Date()
-    }
-
-    func dayAbbreviation(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE"
-        return formatter.string(from: date).uppercased()
-    }
-
-    func dayNumber(_ date: Date) -> String {
-        "\(calendar.component(.day, from: date))"
+    private func preservedDate(in month: Date) -> Date {
+        let targetDay = calendar.component(.day, from: selectedDate)
+        let range = calendar.range(of: .day, in: .month, for: month)!
+        let clampedDay = min(targetDay, range.upperBound - 1)
+        var comps = calendar.dateComponents([.year, .month], from: month)
+        comps.day = clampedDay
+        let date = calendar.date(from: comps)!
+        let today = calendar.startOfDay(for: Date())
+        return date > today ? today : date
     }
 }
