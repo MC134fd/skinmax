@@ -8,6 +8,7 @@ struct HomeView: View {
     @State private var selectedFoodResult: FoodScan?
     @State private var showFoodLog = false
     @State private var currentMetricPage: Int? = 0
+    @State private var scanToDelete: SkinScan?
 
     var onViewFaceResult: (SkinScan) -> Void = { _ in }
     var onViewFoodResult: (FoodScan) -> Void = { _ in }
@@ -18,17 +19,15 @@ struct HomeView: View {
                 header
                 monthNavigation
                 WeekDayStrip(
-                    days: viewModel.weekDays,
+                    weeks: viewModel.allWeeks,
+                    currentWeekIndex: viewModel.currentWeekIndex,
                     selectedDate: viewModel.selectedDate,
                     daysWithData: viewModel.daysWithSkinData(),
                     onSelectDay: { date in
                         viewModel.selectDay(date)
                     },
-                    onSwipeForward: {
-                        viewModel.nextWeek()
-                    },
-                    onSwipeBack: {
-                        viewModel.previousWeek()
+                    onPageChanged: { date in
+                        viewModel.selectedMonth = date
                     }
                 )
 
@@ -263,28 +262,49 @@ struct HomeView: View {
             if viewModel.selectedDateScans.isEmpty {
                 recentActivityEmptyState
             } else {
-                VStack(spacing: 0) {
-                    ForEach(Array(viewModel.selectedDateScans.enumerated()), id: \.element.id) { index, scan in
-                        Button {
+                List {
+                    ForEach(viewModel.selectedDateScans) { scan in
+                        ScanHistoryRow(scan: scan) {
                             selectedScanResult = scan
-                        } label: {
-                            ScanHistoryRow(scan: scan) {
-                                selectedScanResult = scan
-                            }
                         }
-                        .buttonStyle(.plain)
-
-                        if index < viewModel.selectedDateScans.count - 1 {
-                            Divider()
-                                .foregroundStyle(SkinmaxColors.lightTan)
-                                .padding(.horizontal, 14)
+                        .listRowInsets(EdgeInsets())
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(SkinmaxColors.white)
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            Button(role: .destructive) {
+                                scanToDelete = scan
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
                         }
                     }
                 }
-                .background(SkinmaxColors.white)
+                .listStyle(.plain)
+                .scrollDisabled(true)
+                .frame(height: CGFloat(viewModel.selectedDateScans.count) * 82)
                 .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
                 .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
             }
+        }
+        .alert("Delete Scan", isPresented: Binding(
+            get: { scanToDelete != nil },
+            set: { if !$0 { scanToDelete = nil } }
+        )) {
+            Button("Cancel", role: .cancel) {
+                scanToDelete = nil
+            }
+            Button("Delete", role: .destructive) {
+                if let scan = scanToDelete {
+                    HapticManager.notification(.warning)
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                        dataStore.deleteSkinScan(id: scan.id)
+                    }
+                    HapticManager.notification(.success)
+                }
+                scanToDelete = nil
+            }
+        } message: {
+            Text("This scan and its data will be permanently removed.")
         }
     }
 

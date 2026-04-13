@@ -3,31 +3,35 @@ import SwiftUI
 struct ScanHistoryView: View {
     @Environment(DataStore.self) private var dataStore
     @State private var selectedScan: SkinScan?
+    @State private var scanToDelete: SkinScan?
 
     private var scans: [SkinScan] { dataStore.allSkinScans() }
 
     var body: some View {
-        ScrollView(showsIndicators: false) {
+        Group {
             if scans.isEmpty {
                 emptyState
             } else {
-                LazyVStack(spacing: 12) {
+                List {
                     ForEach(scans) { scan in
                         ScanHistoryRow(scan: scan) {
                             selectedScan = scan
                         }
-                        .contextMenu {
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                             Button(role: .destructive) {
-                                HapticManager.notification(.warning)
-                                dataStore.deleteSkinScan(id: scan.id)
+                                scanToDelete = scan
                             } label: {
                                 Label("Delete", systemImage: "trash")
                             }
                         }
+                        .listRowInsets(EdgeInsets(top: 6, leading: SkinmaxSpacing.screenPadding, bottom: 6, trailing: SkinmaxSpacing.screenPadding))
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
                     }
                 }
-                .padding(.horizontal, SkinmaxSpacing.screenPadding)
-                .padding(.bottom, 100)
+                .listStyle(.plain)
+                .scrollIndicators(.hidden)
+                .contentMargins(.bottom, 100)
             }
         }
         .background(SkinmaxColors.creamBG.ignoresSafeArea())
@@ -36,6 +40,26 @@ struct ScanHistoryView: View {
         .fullScreenCover(item: $selectedScan) { scan in
             FaceScanResultView(scan: scan)
                 .environment(dataStore)
+        }
+        .alert("Delete Scan", isPresented: Binding(
+            get: { scanToDelete != nil },
+            set: { if !$0 { scanToDelete = nil } }
+        )) {
+            Button("Cancel", role: .cancel) {
+                scanToDelete = nil
+            }
+            Button("Delete", role: .destructive) {
+                if let scan = scanToDelete {
+                    HapticManager.notification(.warning)
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                        dataStore.deleteSkinScan(id: scan.id)
+                    }
+                    HapticManager.notification(.success)
+                }
+                scanToDelete = nil
+            }
+        } message: {
+            Text("This scan and its data will be permanently removed.")
         }
     }
 

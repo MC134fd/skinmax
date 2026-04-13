@@ -70,17 +70,15 @@ struct FoodLogView: View {
     // MARK: - Day Picker
     private var dayPicker: some View {
         WeekDayStrip(
-            days: viewModel.weekDays,
+            weeks: viewModel.allWeeks,
+            currentWeekIndex: viewModel.currentWeekIndex,
             selectedDate: viewModel.selectedDate,
             daysWithData: viewModel.daysWithData(),
             onSelectDay: { date in
                 viewModel.selectDay(date)
             },
-            onSwipeForward: {
-                viewModel.nextWeek()
-            },
-            onSwipeBack: {
-                viewModel.previousWeek()
+            onPageChanged: { date in
+                viewModel.selectedMonth = date
             }
         )
     }

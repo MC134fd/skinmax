@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skinmax Home Card Mockups</title>
+  <style>
+    :root {
+      --coral: #E8A08A;
+      --peach-light: #F4C7B0;
+      --peach-wash: #FCEEE8;
+      --cream-bg: #FDF8F5;
+      --dark-brown: #3A2A24;
+      --warm-gray: #7A6A64;
+      --muted-tan: #B09A92;
+      --light-tan: #F0E8E4;
+      --white: #FFFFFF;
+      --green: #66BB6A;
+      --amber: #FFB74D;
+      --red: #E57373;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--cream-bg);
+      color: var(--dark-brown);
+      line-height: 1.35;
+    }
+
+    .wrap {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 28px 20px 46px;
+    }
+
+    h1 {
+      margin: 0 0 8px 0;
+      font-size: 30px;
+      letter-spacing: -0.3px;
+    }
+
+    .subtitle {
+      margin: 0 0 20px;
+      color: var(--warm-gray);
+      font-size: 15px;
+    }
+
+    .section-title {
+      margin: 26px 0 12px;
+      font-size: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    .phone-card {
+      border-radius: 20px;
+      background: var(--white);
+      border: 1px solid rgba(0,0,0,0.04);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      overflow: hidden;
+      min-height: 240px;
+    }
+
+    .preview-head {
+      padding: 10px 14px;
+      background: #f9f4f1;
+      border-bottom: 1px solid var(--light-tan);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--muted-tan);
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .face-row {
+      display: grid;
+      grid-template-columns: 145px 1fr;
+      min-height: 176px;
+    }
+
+    .face-visual {
+      position: relative;
+      background: linear-gradient(160deg, #FCEEE8 0%, #F4C7B0 100%);
+      border-right: 1px solid var(--light-tan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .face-visual .shield {
+      width: 88px;
+      height: 108px;
+      border-radius: 42px 42px 46px 46px;
+      border: 2px dashed rgba(58,42,36,0.22);
+      background: rgba(255,255,255,0.32);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-align: center;
+      padding: 8px;
+      color: var(--dark-brown);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .face-visual .shield .emoji {
+      font-size: 22px;
+    }
+
+    .card-body {
+      padding: 12px 14px 10px;
+      background: #F7F7FB;
+    }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 17px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 220px;
+    }
+
+    .time {
+      color: var(--muted-tan);
+      font-size: 12px;
+      margin-top: 2px;
+      white-space: nowrap;
+    }
+
+    .score-line {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 22px;
+      color: var(--dark-brown);
+    }
+
+    .score-line .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 99px;
+      background: var(--amber);
+    }
+
+    .metric-strip {
+      margin-top: 12px;
+      display: grid;
+      gap: 7px;
+    }
+
+    .metric {
+      display: grid;
+      grid-template-columns: 76px 1fr 38px;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .metric .name {
+      color: var(--warm-gray);
+      font-weight: 700;
+    }
+
+    .bar {
+      height: 6px;
+      border-radius: 999px;
+      background: var(--light-tan);
+      overflow: hidden;
+    }
+
+    .fill {
+      height: 100%;
+      border-radius: 999px;
+    }
+
+    .fill.good { background: var(--green); }
+    .fill.fair { background: var(--amber); }
+    .fill.poor { background: var(--red); }
+    .metric .value {
+      font-size: 11px;
+      color: var(--muted-tan);
+      text-align: right;
+      font-weight: 700;
+    }
+
+    .chips {
+      margin-top: 11px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--warm-gray);
+      background: #EFEAF4;
+      border-radius: 10px;
+      padding: 4px 7px;
+    }
+
+    .card-footer {
+      border-top: 1px solid var(--light-tan);
+      margin-top: 10px;
+      padding-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--muted-tan);
+      font-weight: 700;
+    }
+
+    .card-footer .cta {
+      color: var(--coral);
+    }
+
+    .note-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(280px, 1fr));
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .note {
+      background: #fff;
+      border: 1px solid var(--light-tan);
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: var(--warm-gray);
+    }
+
+    .layout-demo {
+      margin-top: 10px;
+      background: white;
+      border: 1px solid var(--light-tan);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+
+    .layout-head {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--light-tan);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+    }
+
+    .layout-title {
+      font-size: 15px;
+      margin: 0;
+      font-weight: 800;
+    }
+
+    .tiny {
+      font-size: 11px;
+      color: var(--muted-tan);
+      font-weight: 700;
+    }
+
+    .layout-body {
+      padding: 12px;
+      background: #fbfaf9;
+    }
+
+    .activity-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(250px, 1fr));
+      gap: 10px;
+    }
+
+    .activity-card {
+      border: 1px solid var(--light-tan);
+      border-radius: 16px;
+      background: white;
+      overflow: hidden;
+      min-height: 128px;
+    }
+
+    .activity-card .top {
+      display: grid;
+      grid-template-columns: 82px 1fr;
+      min-height: 106px;
+    }
+
+    .thumb {
+      background: linear-gradient(150deg, #FCEEE8 0%, #F4C7B0 100%);
+      border-right: 1px solid var(--light-tan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .food-thumb {
+      background: linear-gradient(150deg, #E7F6E8 0%, #CDEBCD 100%);
+    }
+
+    .detail {
+      padding: 10px;
+    }
+
+    .detail .name {
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .detail .big {
+      font-size: 20px;
+      font-weight: 900;
+      margin-top: 6px;
+    }
+
+    .detail .meta {
+      color: var(--muted-tan);
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 1020px) {
+      .grid, .note-grid {
+        grid-template-columns: 1fr;
+      }
+      .activity-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Home Recent Activity — Face Card Concepts</h1>
+    <p class="subtitle">
+      Metric-breakdown first (your choice B). All options avoid face photos and keep the card independent like your food card style.
+    </p>
+
+    <h2 class="section-title">3 Face Card Directions</h2>
+    <div class="grid">
+      <div class="phone-card">
+        <div class="preview-head">
+          <span>Option A · Metric Bars</span>
+          <span>Recommended</span>
+        </div>
+        <div class="face-row">
+          <div class="face-visual">
+            <div class="shield">
+              <div class="emoji">🛡️</div>
+              <div>Privacy<br/>Face Safe</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="topline">
+              <h3 class="title">Face Scan · Evening</h3>
+              <div class="time">2:17 AM</div>
+            </div>
+            <div class="score-line">
+              <span class="dot"></span>
+              72 Glow Score
+            </div>
+            <div class="metric-strip">
+              <div class="metric">
+                <span class="name">Hydration</span>
+                <div class="bar"><div class="fill good" style="width: 78%"></div></div>
+                <span class="value">78</span>
+              </div>
+              <div class="metric">
+                <span class="name">Redness</span>
+                <div class="bar"><div class="fill fair" style="width: 52%"></div></div>
+                <span class="value">52</span>
+              </div>
+              <div class="metric">
+                <span class="name">Acne</span>
+                <div class="bar"><div class="fill fair" style="width: 48%"></div></div>
+                <span class="value">48</span>
+              </div>
+            </div>
+            <div class="card-footer">
+              <span>4 metrics analyzed</span>
+              <span class="cta">View details →</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-card">
+        <div class="preview-head">
+          <span>Option B · Tag Insights</span>
+          <span>Most expressive</span>
+        </div>
+        <div class="face-row">
+          <div class="face-visual">
+            <div class="shield">
+              <div class="emoji">✨</div>
+              <div>Scan<br/>Summary</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="topline">
+              <h3 class="title">Face Scan · Night Check</h3>
+              <div class="time">2:17 AM</div>
+            </div>
+            <div class="score-line">
+              <span class="dot"></span>
+              72 Glow Score
+            </div>
+            <div class="chips">
+              <span class="chip">Hydration ↑</span>
+              <span class="chip">Redness Moderate</span>
+              <span class="chip">Texture Stable</span>
+            </div>
+            <div class="metric-strip">
+              <div class="metric">
+                <span class="name">Hydration</span>
+                <div class="bar"><div class="fill good" style="width: 78%"></div></div>
+                <span class="value">+6</span>
+              </div>
+              <div class="metric">
+                <span class="name">Redness</span>
+                <div class="bar"><div class="fill fair" style="width: 52%"></div></div>
+                <span class="value">-2</span>
+              </div>
+            </div>
+            <div class="card-footer">
+              <span>Compared to last scan</span>
+              <span class="cta">Open scan →</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-card">
+        <div class="preview-head">
+          <span>Option C · Mini Rings</span>
+          <span>Most compact</span>
+        </div>
+        <div class="face-row">
+          <div class="face-visual">
+            <div class="shield">
+              <div class="emoji">🔒</div>
+              <div>No face<br/>image used</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="topline">
+              <h3 class="title">Face Scan · Daily</h3>
+              <div class="time">2:17 AM</div>
+            </div>
+            <div class="score-line">
+              <span class="dot"></span>
+              72 Glow Score
+            </div>
+            <div class="chips">
+              <span class="chip">Hydration 78</span>
+              <span class="chip">Redness 52</span>
+              <span class="chip">Acne 48</span>
+            </div>
+            <div class="card-footer">
+              <span>Tap for full metric circles</span>
+              <span class="cta">Details →</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-grid">
+      <div class="note"><strong>Option A</strong>: cleanest with strongest readability; best fit with your current Home cards and traffic-light logic.</div>
+      <div class="note"><strong>Option B</strong>: narrative feel using tags; better if you want "what changed" without opening details.</div>
+      <div class="note"><strong>Option C</strong>: shortest height; useful if Home has many cards but less informative at a glance.</div>
+    </div>
+
+    <h2 class="section-title">Frontend Shift — Independent Activity Cards</h2>
+    <div class="layout-demo">
+      <div class="layout-head">
+        <h3 class="layout-title">Recent Activity (independent card grid)</h3>
+        <span class="tiny">Not a merged list with dividers</span>
+      </div>
+      <div class="layout-body">
+        <div class="activity-grid">
+          <div class="activity-card">
+            <div class="top">
+              <div class="thumb">🛡️</div>
+              <div class="detail">
+                <div class="name">Face Scan · Evening</div>
+                <div class="big">72 Glow</div>
+                <div class="meta">Hydration 78 · Redness 52 · 2:17 AM</div>
+              </div>
+            </div>
+          </div>
+          <div class="activity-card">
+            <div class="top">
+              <div class="thumb food-thumb">🍽️</div>
+              <div class="detail">
+                <div class="name">Rigatoni Pasta with To...</div>
+                <div class="big">374 calories</div>
+                <div class="meta">13g protein · 73g carbs · 2g fat</div>
+              </div>
+            </div>
+          </div>
+          <div class="activity-card">
+            <div class="top">
+              <div class="thumb">🛡️</div>
+              <div class="detail">
+                <div class="name">Face Scan · Morning</div>
+                <div class="big">68 Glow</div>
+                <div class="meta">Hydration 70 · Acne 45 · 8:40 AM</div>
+              </div>
+            </div>
+          </div>
+          <div class="activity-card">
+            <div class="top">
+              <div class="thumb food-thumb">🥗</div>
+              <div class="detail">
+                <div class="name">Kale Salad Bowl</div>
+                <div class="big">241 calories</div>
+                <div class="meta">12g protein · 25g carbs · 11g fat</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

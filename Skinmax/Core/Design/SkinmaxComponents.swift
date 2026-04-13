@@ -241,96 +241,61 @@ struct CircleMetricCard: View {
     }
 }
 
-// MARK: - Week Day Strip (paged 7-day picker, Mon–Sun, drag-to-peek)
+// MARK: - Week Day Strip (native scroll paging, Mon–Sun)
 struct WeekDayStrip: View {
-    let days: [Date]
+    let weeks: [[Date]]
+    let currentWeekIndex: Int
     let selectedDate: Date
     let daysWithData: Set<Int>
     let onSelectDay: (Date) -> Void
-    let onSwipeForward: () -> Void
-    let onSwipeBack: () -> Void
+    let onPageChanged: (Date) -> Void
 
-    @State private var dragOffset: CGFloat = 0
+    @State private var scrollPosition: Int?
 
     private let calendar = Calendar.current
 
-    private var prevWeekDays: [Date] {
-        days.compactMap { calendar.date(byAdding: .day, value: -7, to: $0) }
-    }
-    private var nextWeekDays: [Date] {
-        days.compactMap { calendar.date(byAdding: .day, value: 7, to: $0) }
-    }
-    private var canSwipeForward: Bool {
-        let today = calendar.startOfDay(for: Date())
-        return nextWeekDays.contains { calendar.startOfDay(for: $0) <= today }
-    }
-
     var body: some View {
-        GeometryReader { geo in
-            let width = geo.size.width
-            HStack(spacing: 0) {
-                weekRow(prevWeekDays, interactive: false)
-                    .frame(width: width)
-                weekRow(days, interactive: true)
-                    .frame(width: width)
-                weekRow(nextWeekDays, interactive: false)
-                    .frame(width: width)
+        ScrollView(.horizontal, showsIndicators: false) {
+            LazyHStack(spacing: 0) {
+                ForEach(Array(weeks.enumerated()), id: \.offset) { index, week in
+                    weekRow(week)
+                        .containerRelativeFrame(.horizontal)
+                }
             }
-            .offset(x: -width + dragOffset)
-            .gesture(
-                DragGesture(minimumDistance: 15, coordinateSpace: .local)
-                    .onChanged { value in
-                        let translation = value.translation.width
-                        // Resist dragging forward if can't swipe forward
-                        if translation < 0 && !canSwipeForward {
-                            dragOffset = translation * 0.2
-                        } else {
-                            dragOffset = translation
-                        }
-                    }
-                    .onEnded { value in
-                        let threshold = width * 0.25
-                        if value.translation.width < -threshold && canSwipeForward {
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
-                                dragOffset = -width
-                            }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                dragOffset = 0
-                                onSwipeForward()
-                            }
-                        } else if value.translation.width > threshold {
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
-                                dragOffset = width
-                            }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                dragOffset = 0
-                                onSwipeBack()
-                            }
-                        } else {
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
-                                dragOffset = 0
-                            }
-                        }
-                    }
-            )
+            .scrollTargetLayout()
+        }
+        .scrollTargetBehavior(.viewAligned)
+        .scrollPosition(id: $scrollPosition)
+        .onAppear {
+            scrollPosition = currentWeekIndex
+        }
+        .onChange(of: currentWeekIndex) { _, newIndex in
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+                scrollPosition = newIndex
+            }
+        }
+        .onChange(of: scrollPosition) { _, newIndex in
+            if let index = newIndex, index >= 0, index < weeks.count,
+               let firstDay = weeks[index].first {
+                onPageChanged(firstDay)
+            }
         }
         .frame(height: 64)
-        .clipped()
     }
 
     // MARK: - Week Row
 
-    private func weekRow(_ weekDays: [Date], interactive: Bool) -> some View {
-        HStack(spacing: 0) {
+    private func weekRow(_ weekDays: [Date]) -> some View {
+        HStack(spacing: 6) {
             ForEach(weekDays, id: \.self) { date in
                 let dayNum = calendar.component(.day, from: date)
-                let hasData = interactive && daysWithData.contains(dayNum)
-                let isSelected = interactive && calendar.isDate(date, inSameDayAs: selectedDate)
+                let hasData = daysWithData.contains(dayNum)
+                let isSelected = calendar.isDate(date, inSameDayAs: selectedDate)
                 let isToday = calendar.isDateInToday(date)
                 let isFuture = calendar.startOfDay(for: date) > calendar.startOfDay(for: Date())
 
                 Button {
-                    if interactive { onSelectDay(date) }
+                    onSelectDay(date)
                 } label: {
                     VStack(spacing: 4) {
                         Text(dayAbbreviation(date))
@@ -349,8 +314,8 @@ struct WeekDayStrip: View {
                         isFuture ? SkinmaxColors.mutedTan.opacity(0.5) :
                         SkinmaxColors.warmGray
                     )
-                    .padding(.horizontal, 3)
-                    .frame(height: 60)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 64)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
                             .fill(isSelected ? SkinmaxColors.coral : Color.clear)
@@ -363,8 +328,7 @@ struct WeekDayStrip: View {
                             )
                     )
                 }
-                .frame(maxWidth: .infinity)
-                .disabled(!interactive || isFuture)
+                .disabled(isFuture)
             }
         }
     }

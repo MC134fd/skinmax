@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Face Card Example Build</title>
+  <style>
+    :root {
+      --coral: #E8A08A;
+      --peach-light: #F4C7B0;
+      --peach-wash: #FCEEE8;
+      --cream-bg: #FDF8F5;
+      --dark-brown: #3A2A24;
+      --warm-gray: #7A6A64;
+      --muted-tan: #B09A92;
+      --light-tan: #F0E8E4;
+      --white: #FFFFFF;
+      --green: #66BB6A;
+      --amber: #FFB74D;
+      --red: #E57373;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--cream-bg);
+      color: var(--dark-brown);
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 26px 18px 40px; }
+    h1 { margin: 0 0 8px; font-size: 30px; }
+    .sub { margin: 0 0 18px; color: var(--warm-gray); }
+    .label {
+      display: inline-block;
+      font-size: 11px;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--muted-tan);
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(260px, 1fr));
+      gap: 12px;
+    }
+
+    .face-card {
+      background: var(--white);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    }
+
+    .face-row {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      min-height: 190px;
+    }
+
+    .left-asset {
+      border-right: 1px solid var(--light-tan);
+      background: linear-gradient(160deg, #FCEEE8 0%, #F4C7B0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .asset-box {
+      width: 96px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.52);
+      border: 1px dashed rgba(58,42,36,0.22);
+      padding: 10px 8px;
+    }
+
+    .asset-emoji { font-size: 30px; }
+    .asset-name { margin-top: 6px; font-size: 11px; font-weight: 800; color: var(--dark-brown); }
+    .asset-file { margin-top: 3px; font-size: 9px; color: var(--muted-tan); }
+
+    .body { background: #F7F7FB; padding: 12px 12px 10px; }
+    .top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+    .title { font-size: 15px; font-weight: 800; }
+    .time { font-size: 11px; color: var(--muted-tan); }
+    .score { margin-top: 8px; font-size: 28px; font-weight: 900; }
+
+    .pill {
+      margin-top: 6px;
+      display: inline-block;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 10px;
+      font-weight: 800;
+      color: white;
+    }
+    .pill.good { background: var(--green); }
+    .pill.fair { background: var(--amber); }
+    .pill.poor { background: var(--red); }
+
+    .metrics { margin-top: 10px; display: grid; gap: 6px; }
+    .metric {
+      display: grid;
+      grid-template-columns: 70px 1fr 35px;
+      gap: 8px;
+      align-items: center;
+      font-size: 11px;
+    }
+    .metric .n { color: var(--warm-gray); font-weight: 700; }
+    .bar { height: 6px; border-radius: 999px; background: var(--light-tan); overflow: hidden; }
+    .fill { height: 100%; border-radius: 999px; }
+    .fill.good { background: var(--green); }
+    .fill.fair { background: var(--amber); }
+    .fill.poor { background: var(--red); }
+    .metric .v { text-align: right; color: var(--muted-tan); font-weight: 800; }
+
+    .footer {
+      margin-top: 9px;
+      border-top: 1px solid var(--light-tan);
+      padding-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--muted-tan);
+      font-weight: 700;
+    }
+
+    .map {
+      margin-top: 20px;
+      background: #fff;
+      border: 1px solid var(--light-tan);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--light-tan);
+      text-align: left;
+    }
+    th { background: #faf7f4; color: var(--warm-gray); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    @media (max-width: 980px) {
+      .card-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Example Build — Dynamic Face Card</h1>
+    <p class="sub">Left image uses a preloaded illustration based on the <strong>worst current metric</strong> + severity band. Right side keeps Glow Score + top metrics.</p>
+
+    <span class="label">How this works</span>
+    <div class="card-grid">
+      <div class="face-card">
+        <div class="face-row">
+          <div class="left-asset">
+            <div class="asset-box">
+              <div class="asset-emoji">🌡️</div>
+              <div class="asset-name">Redness Focus</div>
+              <div class="asset-file">redness-fair.png</div>
+            </div>
+          </div>
+          <div class="body">
+            <div class="top"><div class="title">Face Scan · Example 1</div><div class="time">2:17 AM</div></div>
+            <div class="score">72</div>
+            <span class="pill fair">Fair Glow</span>
+            <div class="metrics">
+              <div class="metric"><span class="n">Hydration</span><div class="bar"><div class="fill good" style="width:78%"></div></div><span class="v">78</span></div>
+              <div class="metric"><span class="n">Redness</span><div class="bar"><div class="fill fair" style="width:52%"></div></div><span class="v">52</span></div>
+              <div class="metric"><span class="n">Acne</span><div class="bar"><div class="fill fair" style="width:48%"></div></div><span class="v">48</span></div>
+            </div>
+            <div class="footer"><span>focus = lowest metric</span><span>View details →</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="face-card">
+        <div class="face-row">
+          <div class="left-asset">
+            <div class="asset-box">
+              <div class="asset-emoji">✨</div>
+              <div class="asset-name">Acne Focus</div>
+              <div class="asset-file">acne-poor.png</div>
+            </div>
+          </div>
+          <div class="body">
+            <div class="top"><div class="title">Face Scan · Example 2</div><div class="time">8:40 AM</div></div>
+            <div class="score">61</div>
+            <span class="pill fair">Fair Glow</span>
+            <div class="metrics">
+              <div class="metric"><span class="n">Hydration</span><div class="bar"><div class="fill fair" style="width:55%"></div></div><span class="v">55</span></div>
+              <div class="metric"><span class="n">Acne</span><div class="bar"><div class="fill poor" style="width:33%"></div></div><span class="v">33</span></div>
+              <div class="metric"><span class="n">Texture</span><div class="bar"><div class="fill fair" style="width:49%"></div></div><span class="v">49</span></div>
+            </div>
+            <div class="footer"><span>focus = lowest metric</span><span>View details →</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="face-card">
+        <div class="face-row">
+          <div class="left-asset">
+            <div class="asset-box">
+              <div class="asset-emoji">💧</div>
+              <div class="asset-name">Hydration Focus</div>
+              <div class="asset-file">hydration-good.png</div>
+            </div>
+          </div>
+          <div class="body">
+            <div class="top"><div class="title">Face Scan · Example 3</div><div class="time">9:05 PM</div></div>
+            <div class="score">84</div>
+            <span class="pill good">Good Glow</span>
+            <div class="metrics">
+              <div class="metric"><span class="n">Hydration</span><div class="bar"><div class="fill good" style="width:87%"></div></div><span class="v">87</span></div>
+              <div class="metric"><span class="n">Pores</span><div class="bar"><div class="fill good" style="width:76%"></div></div><span class="v">76</span></div>
+              <div class="metric"><span class="n">Wrinkles</span><div class="bar"><div class="fill good" style="width:74%"></div></div><span class="v">74</span></div>
+            </div>
+            <div class="footer"><span>focus = best metric mode</span><span>View details →</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="map">
+      <table>
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Good (70-100)</th>
+            <th>Fair (40-69)</th>
+            <th>Poor (0-39)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Hydration</td><td>hydration-good.png</td><td>hydration-fair.png</td><td>hydration-poor.png</td></tr>
+          <tr><td>Acne</td><td>acne-good.png</td><td>acne-fair.png</td><td>acne-poor.png</td></tr>
+          <tr><td>Texture</td><td>texture-good.png</td><td>texture-fair.png</td><td>texture-poor.png</td></tr>
+          <tr><td>Elasticity</td><td>elasticity-good.png</td><td>elasticity-fair.png</td><td>elasticity-poor.png</td></tr>
+          <tr><td>Dark Spots</td><td>darkspots-good.png</td><td>darkspots-fair.png</td><td>darkspots-poor.png</td></tr>
+          <tr><td>Redness</td><td>redness-good.png</td><td>redness-fair.png</td><td>redness-poor.png</td></tr>
+          <tr><td>Pores</td><td>pores-good.png</td><td>pores-fair.png</td><td>pores-poor.png</td></tr>
+          <tr><td>Wrinkles</td><td>wrinkles-good.png</td><td>wrinkles-fair.png</td><td>wrinkles-poor.png</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

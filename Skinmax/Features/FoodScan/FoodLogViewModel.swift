@@ -18,11 +18,31 @@ final class FoodLogViewModel {
         dataStore?.averageFoodScore(for: selectedDate)
     }
 
-    var weekDays: [Date] {
+    var allWeeks: [[Date]] {
+        let today = calendar.startOfDay(for: Date())
+        let weekday = calendar.component(.weekday, from: today)
+        let daysSinceMonday = (weekday + 5) % 7
+        guard let currentMonday = calendar.date(byAdding: .day, value: -daysSinceMonday, to: today) else { return [] }
+
+        var weeks: [[Date]] = []
+        for weeksBack in (0..<52).reversed() {
+            guard let monday = calendar.date(byAdding: .weekOfYear, value: -weeksBack, to: currentMonday) else { continue }
+            let week = (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: monday) }
+            weeks.append(week)
+        }
+        return weeks
+    }
+
+    var currentWeekIndex: Int {
         let weekday = calendar.component(.weekday, from: selectedDate)
         let daysSinceMonday = (weekday + 5) % 7
-        guard let monday = calendar.date(byAdding: .day, value: -daysSinceMonday, to: calendar.startOfDay(for: selectedDate)) else { return [] }
-        return (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: monday) }
+        guard let monday = calendar.date(byAdding: .day, value: -daysSinceMonday, to: calendar.startOfDay(for: selectedDate)) else {
+            return allWeeks.count - 1
+        }
+        return allWeeks.firstIndex { week in
+            guard let weekMonday = week.first else { return false }
+            return calendar.isDate(weekMonday, inSameDayAs: monday)
+        } ?? allWeeks.count - 1
     }
 
     var monthTitle: String {
@@ -40,35 +60,17 @@ final class FoodLogViewModel {
 
     func daysWithData() -> Set<Int> {
         guard let dataStore else { return [] }
+        let weekday = calendar.component(.weekday, from: selectedDate)
+        let daysSinceMonday = (weekday + 5) % 7
+        guard let monday = calendar.date(byAdding: .day, value: -daysSinceMonday, to: calendar.startOfDay(for: selectedDate)) else { return [] }
         var result = Set<Int>()
-        for day in weekDays {
+        for i in 0..<7 {
+            guard let day = calendar.date(byAdding: .day, value: i, to: monday) else { continue }
             if !dataStore.foodScans(for: day).isEmpty {
                 result.insert(calendar.component(.day, from: day))
             }
         }
         return result
-    }
-
-    func previousWeek() {
-        guard let newDate = calendar.date(byAdding: .day, value: -7, to: selectedDate) else { return }
-        selectedDate = newDate
-        selectedMonth = newDate
-    }
-
-    func nextWeek() {
-        guard let newDate = calendar.date(byAdding: .day, value: 7, to: selectedDate) else { return }
-        let today = calendar.startOfDay(for: Date())
-        let target = calendar.startOfDay(for: newDate)
-        if target > today {
-            let weekday = calendar.component(.weekday, from: newDate)
-            let daysSinceMonday = (weekday + 5) % 7
-            guard let monday = calendar.date(byAdding: .day, value: -daysSinceMonday, to: target) else { return }
-            if monday > today { return }
-            selectedDate = today
-        } else {
-            selectedDate = newDate
-        }
-        selectedMonth = selectedDate
     }
 
     func previousMonth() {
