@@ -1,4 +1,4 @@
-# Task: Rebrand and Build Out [NEW_NAME] iOS App
+# Task: Rebrand and Build Out [NEW_NAMEw] iOS App
 
 ## Context
 This is a Swift/SwiftUI iOS app (previously called "Skinmax") — an AI-powered food scanning + face scanning app for women 18-35. The app scans your food with AI and shows how it affects your skin (Skin Impact Score), and also does face scans for a Glow Score. The unique angle is connecting diet to skin health.
