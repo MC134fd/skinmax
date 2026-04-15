@@ -14,27 +14,50 @@ extension Color {
 
 enum SkinmaxColors {
     // MARK: - Primary
-    static let coral = Color(hex: "E8A08A")
-    static let peachLight = Color(hex: "F4C7B0")
-    static let peachWash = Color(hex: "FCEEE8")
-    static let creamBG = Color(hex: "FDF8F5")
+    static let coral = Color(hex: "FF7A5C")
+    static let peachLight = Color(hex: "FFB89E")
+    static let peachWash = Color(hex: "FFD3B8")
+    static let creamBG = Color(hex: "FAF6F2")
+    static let sunnyButter = Color(hex: "FFF8E8")
 
-    // MARK: - Neutral
-    static let darkBrown = Color(hex: "3A2A24")
-    static let warmGray = Color(hex: "7A6A64")
-    static let mutedTan = Color(hex: "B09A92")
-    static let lightTan = Color(hex: "F0E8E4")
-    static let white = Color.white
-
-    // MARK: - Metric Accents
-    static let hydrationBlue = Color(hex: "81D4FA")
+    // MARK: - Supporting
     static let greenGood = Color(hex: "66BB6A")
     static let amberFair = Color(hex: "FFB74D")
     static let redAlert = Color(hex: "E57373")
+    static let hydrationBlue = Color(hex: "81D4FA")
 
-    // MARK: - Dark Surfaces
-    static let darkSurface = Color(hex: "3A2A24")
-    static let darkMid = Color(hex: "5A4A44")
+    // MARK: - Text
+    static let darkBrown = Color(hex: "2B1F1A")
+    static let warmBrown = Color(hex: "4B3D36")
+    static let mediumTaupe = Color(hex: "6B5C54")
+    static let lightTaupe = Color(hex: "9B8C85")
+    static let softTan = Color(hex: "F0E8E4")
+    static let white = Color.white
+
+    // MARK: - Legacy Aliases (for gradual migration)
+    static let warmGray: Color = warmBrown
+    static let mutedTan: Color = lightTaupe
+    static let lightTan: Color = softTan
+    static let darkSurface: Color = darkBrown
+    static let darkMid = Color(hex: "4B3D36")
+
+    // MARK: - Gradients
+    static let heroGradient = LinearGradient(
+        colors: [coral, peachLight],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+    static let buttonGradient = LinearGradient(
+        colors: [coral, Color(hex: "FF9B7D")],
+        startPoint: .leading,
+        endPoint: .trailing
+    )
+
+    // MARK: - Shadows (warm coral-tinted)
+    static let cardShadowColor = Color(hex: "FF7A5C").opacity(0.10)
+    static let elevatedShadowColor = Color(hex: "FF7A5C").opacity(0.15)
+    static let buttonGlowColor = Color(hex: "FF7A5C").opacity(0.30)
+    static let subtleShadowColor = Color(hex: "FF7A5C").opacity(0.06)
 
     // MARK: - Traffic Light
     static func trafficLight(for score: Double) -> Color {

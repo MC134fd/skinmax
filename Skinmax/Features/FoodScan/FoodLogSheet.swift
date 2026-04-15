@@ -14,7 +14,7 @@ struct FoodLogSheet: View {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 18) {
                     Text("Log a Meal")
-                        .font(SkinmaxFonts.h2())
+                        .font(.gbTitleM)
                         .foregroundStyle(SkinmaxColors.darkBrown)
                         .padding(.top, 8)
 
@@ -27,7 +27,7 @@ struct FoodLogSheet: View {
 
                     if let error = viewModel.errorMessage {
                         Text(error)
-                            .font(SkinmaxFonts.caption())
+                            .font(.gbCaption)
                             .foregroundStyle(SkinmaxColors.redAlert)
                     }
 
@@ -45,7 +45,7 @@ struct FoodLogSheet: View {
                     } label: {
                         Image(systemName: "xmark.circle.fill")
                             .font(.system(size: 22))
-                            .foregroundStyle(SkinmaxColors.mutedTan)
+                            .foregroundStyle(SkinmaxColors.lightTaupe)
                     }
                 }
             }
@@ -82,18 +82,18 @@ struct FoodLogSheet: View {
     private var foodNameField: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("What did you eat?")
-                .font(SkinmaxFonts.caption())
-                .foregroundStyle(SkinmaxColors.mutedTan)
+                .font(.gbCaption)
+                .foregroundStyle(SkinmaxColors.lightTaupe)
 
             TextField("e.g. Salmon bowl, Pizza...", text: $viewModel.foodName)
-                .font(SkinmaxFonts.body())
+                .font(.gbBodyM)
                 .foregroundStyle(SkinmaxColors.darkBrown)
                 .padding(14)
                 .background(SkinmaxColors.white)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(SkinmaxColors.lightTan, lineWidth: 1)
+                        .stroke(SkinmaxColors.softTan, lineWidth: 1)
                 )
         }
     }
@@ -102,8 +102,8 @@ struct FoodLogSheet: View {
     private var photoSection: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("Add a photo")
-                .font(SkinmaxFonts.caption())
-                .foregroundStyle(SkinmaxColors.mutedTan)
+                .font(.gbCaption)
+                .foregroundStyle(SkinmaxColors.lightTaupe)
 
             HStack(spacing: 10) {
                 Button {
@@ -121,7 +121,7 @@ struct FoodLogSheet: View {
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
-                            .stroke(SkinmaxColors.lightTan, lineWidth: 1)
+                            .stroke(SkinmaxColors.softTan, lineWidth: 1)
                     )
                 }
 
@@ -138,7 +138,7 @@ struct FoodLogSheet: View {
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
-                            .stroke(SkinmaxColors.lightTan, lineWidth: 1)
+                            .stroke(SkinmaxColors.softTan, lineWidth: 1)
                     )
                 }
             }
@@ -184,7 +184,7 @@ struct FoodLogSheet: View {
                     Text("Analyze with AI \u{2728}")
                 }
             }
-            .font(.custom("Nunito-SemiBold", size: 14))
+            .font(.gbBodyM)
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
             .frame(height: 50)

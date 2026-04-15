@@ -6,9 +6,7 @@ struct HomeView: View {
     @State private var viewModel = HomeViewModel()
     @State private var selectedScanResult: SkinScan?
     @State private var selectedFoodResult: FoodScan?
-    @State private var showFoodLog = false
     @State private var currentMetricPage: Int? = 0
-    @State private var scanToDelete: SkinScan?
 
     var onViewFaceResult: (SkinScan) -> Void = { _ in }
     var onViewFoodResult: (FoodScan) -> Void = { _ in }
@@ -31,7 +29,6 @@ struct HomeView: View {
                     }
                 )
 
-                // Analysis in progress card
                 if coordinator.isActive {
                     AnalysisHomeCard(
                         coordinator: coordinator,
@@ -54,7 +51,7 @@ struct HomeView: View {
             }
             .padding(.horizontal, SkinmaxSpacing.screenPadding)
             .padding(.bottom, 100)
-            .animation(.spring(response: 0.3, dampingFraction: 0.8), value: coordinator.isActive)
+            .animation(.spring(response: 0.4, dampingFraction: 0.75), value: coordinator.isActive)
         }
         .background(SkinmaxColors.creamBG.ignoresSafeArea())
         .onAppear {
@@ -67,9 +64,6 @@ struct HomeView: View {
         .fullScreenCover(item: $selectedFoodResult) { scan in
             FoodScanResultView(scan: scan)
                 .environment(dataStore)
-        }
-        .navigationDestination(isPresented: $showFoodLog) {
-            FoodLogView()
         }
     }
 
@@ -87,7 +81,7 @@ struct HomeView: View {
                 .frame(width: 36, height: 36)
                 .overlay(
                     Text("\u{1F469}")
-                        .font(.system(size: 18))
+                        .font(.gbTitleM)
                 )
         }
         .padding(.top, 8)
@@ -99,20 +93,20 @@ struct HomeView: View {
         HStack {
             Button { viewModel.previousMonth() } label: {
                 Image(systemName: "chevron.left")
-                    .foregroundStyle(SkinmaxColors.mutedTan)
+                    .foregroundStyle(SkinmaxColors.lightTaupe)
             }
 
             Spacer()
 
             Text(viewModel.monthTitle)
-                .font(SkinmaxFonts.h3())
+                .font(.gbTitleM)
                 .foregroundStyle(SkinmaxColors.darkBrown)
 
             Spacer()
 
             Button { viewModel.nextMonth() } label: {
                 Image(systemName: "chevron.right")
-                    .foregroundStyle(SkinmaxColors.mutedTan)
+                    .foregroundStyle(SkinmaxColors.lightTaupe)
             }
         }
     }
@@ -123,31 +117,31 @@ struct HomeView: View {
         HStack {
             VStack(alignment: .leading, spacing: 6) {
                 Text("GLOW SCORE")
-                    .font(.custom("Nunito-Medium", size: 10))
-                    .foregroundStyle(SkinmaxColors.mutedTan)
+                    .font(.gbOverline)
+                    .foregroundStyle(SkinmaxColors.mediumTaupe)
                     .tracking(2)
 
                 if viewModel.hasData {
                     Text(String(format: "%.0f", viewModel.glowScore))
-                        .font(.custom("Nunito-Bold", size: 42))
+                        .font(.gbDisplayXL)
                         .foregroundStyle(SkinmaxColors.coral)
 
                     Text(viewModel.overallMessage)
-                        .font(SkinmaxFonts.body())
-                        .foregroundStyle(SkinmaxColors.warmGray)
+                        .font(.gbBodyM)
+                        .foregroundStyle(SkinmaxColors.warmBrown)
                         .lineLimit(2)
 
                     Text(viewModel.trendPercentage)
-                        .font(SkinmaxFonts.caption())
+                        .font(.gbCaption)
                         .foregroundStyle(viewModel.trendPositive ? SkinmaxColors.greenGood : SkinmaxColors.redAlert)
                 } else {
                     Text("--")
-                        .font(.custom("Nunito-Bold", size: 42))
-                        .foregroundStyle(SkinmaxColors.mutedTan)
+                        .font(.gbDisplayXL)
+                        .foregroundStyle(SkinmaxColors.lightTaupe)
 
                     Text(viewModel.overallMessage)
-                        .font(SkinmaxFonts.body())
-                        .foregroundStyle(SkinmaxColors.warmGray)
+                        .font(.gbBodyM)
+                        .foregroundStyle(SkinmaxColors.warmBrown)
                 }
             }
 
@@ -156,14 +150,14 @@ struct HomeView: View {
             ScoreRing(
                 score: viewModel.glowScore,
                 size: 90,
-                lineWidth: 8,
-                trackColor: SkinmaxColors.lightTan
+                lineWidth: 12,
+                trackColor: SkinmaxColors.softTan
             )
         }
         .padding(SkinmaxSpacing.cardPadding)
         .background(SkinmaxColors.white)
         .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 
     // MARK: - Metric Carousel (3 per page, paged with dots)
@@ -205,7 +199,7 @@ struct HomeView: View {
                         HStack(spacing: 6) {
                             ForEach(0..<metricPages.count, id: \.self) { index in
                                 Circle()
-                                    .fill(SkinmaxColors.lightTan)
+                                    .fill(SkinmaxColors.softTan)
                                     .frame(width: 6, height: 6)
                             }
                         }
@@ -231,100 +225,73 @@ struct HomeView: View {
         .padding(.vertical, 14)
         .padding(.horizontal, 4)
         .background(SkinmaxColors.white)
-        .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadiusSmall))
-        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+        .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
+        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 
     private var metricEmptyState: some View {
         VStack(spacing: 8) {
             Text("No metrics yet")
-                .font(SkinmaxFonts.h3())
+                .font(.gbTitleM)
                 .foregroundStyle(SkinmaxColors.darkBrown)
             Text("No scan for \(viewModel.selectedDayName)")
-                .font(SkinmaxFonts.body())
-                .foregroundStyle(SkinmaxColors.mutedTan)
+                .font(.gbBodyM)
+                .foregroundStyle(SkinmaxColors.lightTaupe)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 24)
+        .padding(.vertical, SkinmaxSpacing.lg)
         .background(SkinmaxColors.white)
         .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 
-    // MARK: - Recent Activity (Selected Date Face Scans)
+    // MARK: - Recent Activity (Face + Food, sorted by time)
 
     private var recentActivitySection: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Recent activity")
-                .font(SkinmaxFonts.h3())
+                .font(.gbTitleM)
                 .foregroundStyle(SkinmaxColors.darkBrown)
 
-            if viewModel.selectedDateScans.isEmpty {
+            let activity = viewModel.selectedDateActivity
+            if activity.isEmpty {
                 recentActivityEmptyState
             } else {
-                List {
-                    ForEach(viewModel.selectedDateScans) { scan in
-                        ScanHistoryRow(scan: scan) {
-                            selectedScanResult = scan
-                        }
-                        .listRowInsets(EdgeInsets())
-                        .listRowSeparator(.hidden)
-                        .listRowBackground(SkinmaxColors.white)
-                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                            Button(role: .destructive) {
-                                scanToDelete = scan
-                            } label: {
-                                Label("Delete", systemImage: "trash")
+                VStack(spacing: 10) {
+                    ForEach(activity) { item in
+                        switch item {
+                        case .face(let scan):
+                            FaceActivityCard(scan: scan) {
+                                selectedScanResult = scan
+                            }
+                        case .food(let foodScan):
+                            FoodActivityCard(foodScan: foodScan) {
+                                selectedFoodResult = foodScan
                             }
                         }
                     }
                 }
-                .listStyle(.plain)
-                .scrollDisabled(true)
-                .frame(height: CGFloat(viewModel.selectedDateScans.count) * 82)
-                .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-                .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
             }
-        }
-        .alert("Delete Scan", isPresented: Binding(
-            get: { scanToDelete != nil },
-            set: { if !$0 { scanToDelete = nil } }
-        )) {
-            Button("Cancel", role: .cancel) {
-                scanToDelete = nil
-            }
-            Button("Delete", role: .destructive) {
-                if let scan = scanToDelete {
-                    HapticManager.notification(.warning)
-                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                        dataStore.deleteSkinScan(id: scan.id)
-                    }
-                    HapticManager.notification(.success)
-                }
-                scanToDelete = nil
-            }
-        } message: {
-            Text("This scan and its data will be permanently removed.")
         }
     }
 
     private var recentActivityEmptyState: some View {
         VStack(spacing: 8) {
             Text("\u{1F50D}")
-                .font(.system(size: 28))
-            Text("No scans on \(viewModel.selectedDayName)")
-                .font(SkinmaxFonts.h3())
+                .font(.gbDisplayM)
+            Text("No activity on \(viewModel.selectedDayName)")
+                .font(.gbTitleM)
                 .foregroundStyle(SkinmaxColors.darkBrown)
-            Text("Take a face scan to see your results here")
-                .font(SkinmaxFonts.body())
-                .foregroundStyle(SkinmaxColors.mutedTan)
+            Text("Scan your face or log a meal to get started")
+                .font(.gbBodyM)
+                .foregroundStyle(SkinmaxColors.lightTaupe)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 24)
+        .padding(.vertical, SkinmaxSpacing.lg)
         .background(SkinmaxColors.white)
         .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 
     // MARK: - Dismissible Insight Card
@@ -337,7 +304,7 @@ struct HomeView: View {
                 title: "Today's Insight",
                 message: viewModel.todayInsight,
                 onDismiss: {
-                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
                         viewModel.insightDismissed = true
                     }
                 }

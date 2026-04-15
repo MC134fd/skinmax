@@ -39,7 +39,7 @@ struct FoodLogView: View {
     // MARK: - Title
     private var title: some View {
         Text("Food Log")
-            .font(SkinmaxFonts.h2())
+            .font(.gbTitleM)
             .foregroundStyle(SkinmaxColors.darkBrown)
             .padding(.top, 12)
     }
@@ -49,7 +49,7 @@ struct FoodLogView: View {
         HStack {
             Button { viewModel.previousMonth() } label: {
                 Image(systemName: "chevron.left")
-                    .foregroundStyle(SkinmaxColors.mutedTan)
+                    .foregroundStyle(SkinmaxColors.lightTaupe)
             }
 
             Spacer()
@@ -62,7 +62,7 @@ struct FoodLogView: View {
 
             Button { viewModel.nextMonth() } label: {
                 Image(systemName: "chevron.right")
-                    .foregroundStyle(SkinmaxColors.mutedTan)
+                    .foregroundStyle(SkinmaxColors.lightTaupe)
             }
         }
     }
@@ -87,20 +87,20 @@ struct FoodLogView: View {
     private var dailySummary: some View {
         HStack {
             Text("\(viewModel.selectedDayName)'s average:")
-                .font(SkinmaxFonts.body())
-                .foregroundStyle(SkinmaxColors.warmGray)
+                .font(.gbBodyM)
+                .foregroundStyle(SkinmaxColors.warmBrown)
 
             if let avg = viewModel.averageScore {
                 Text(String(format: "%.1f", avg))
-                    .font(.custom("Nunito-SemiBold", size: 16))
+                    .font(.gbBodyL)
                     .foregroundStyle(SkinmaxColors.trafficLight(for: avg * 10))
                 Text("/10")
-                    .font(SkinmaxFonts.body())
-                    .foregroundStyle(SkinmaxColors.mutedTan)
+                    .font(.gbBodyM)
+                    .foregroundStyle(SkinmaxColors.lightTaupe)
             } else {
                 Text("No meals logged")
-                    .font(SkinmaxFonts.body())
-                    .foregroundStyle(SkinmaxColors.mutedTan)
+                    .font(.gbBodyM)
+                    .foregroundStyle(SkinmaxColors.lightTaupe)
             }
 
             Spacer()
@@ -140,8 +140,8 @@ struct FoodLogView: View {
                 .foregroundStyle(SkinmaxColors.darkBrown)
 
             Text("Tap the + button to log your first meal")
-                .font(SkinmaxFonts.body())
-                .foregroundStyle(SkinmaxColors.mutedTan)
+                .font(.gbBodyM)
+                .foregroundStyle(SkinmaxColors.lightTaupe)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)

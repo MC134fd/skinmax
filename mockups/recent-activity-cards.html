@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skinmax — Recent Activity Card Directions</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap');
+
+  :root {
+    --coral: #E8A08A;
+    --peach-light: #F4C7B0;
+    --peach-wash: #FCEEE8;
+    --cream-bg: #FDF8F5;
+    --dark-brown: #3A2A24;
+    --warm-gray: #7A6A64;
+    --muted-tan: #B09A92;
+    --light-tan: #F0E8E4;
+    --white: #FFFFFF;
+    --green: #66BB6A;
+    --amber: #FFB74D;
+    --red: #E57373;
+    --shadow: 0 2px 8px rgba(0,0,0,0.03);
+    --radius: 18px;
+    --radius-sm: 14px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #f0f0f0;
+    color: var(--dark-brown);
+    padding: 20px;
+  }
+
+  .page-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: var(--dark-brown);
+  }
+  .page-subtitle {
+    text-align: center;
+    font-size: 14px;
+    color: var(--warm-gray);
+    margin-bottom: 40px;
+  }
+
+  .direction-section {
+    max-width: 900px;
+    margin: 0 auto 60px;
+    background: var(--cream-bg);
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  }
+
+  .direction-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .direction-number {
+    background: var(--coral);
+    color: white;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+  }
+  .direction-title {
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .direction-desc {
+    font-size: 13px;
+    color: var(--warm-gray);
+    margin-bottom: 24px;
+    padding-left: 44px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-left: 8px;
+  }
+  .badge-rec { background: var(--green); color: white; }
+  .badge-alt { background: var(--light-tan); color: var(--muted-tan); }
+
+  /* Phone frame */
+  .phone-frame {
+    width: 375px;
+    margin: 0 auto 24px;
+    background: var(--cream-bg);
+    border-radius: 32px;
+    padding: 20px 16px;
+    border: 2px solid var(--light-tan);
+    position: relative;
+  }
+  .phone-frame::before {
+    content: '';
+    display: block;
+    width: 120px; height: 4px;
+    background: var(--light-tan);
+    border-radius: 2px;
+    margin: 0 auto 16px;
+  }
+
+  .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark-brown);
+    margin-bottom: 12px;
+  }
+
+  /* Layout options */
+  .layout-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted-tan);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .layouts-row {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Cards base */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  /* Pros/cons */
+  .analysis {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding-left: 44px;
+    margin-top: 20px;
+  }
+  .analysis-col h4 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .analysis-col.pros h4 { color: var(--green); }
+  .analysis-col.cons h4 { color: var(--red); }
+  .analysis-col ul {
+    list-style: none;
+    font-size: 12px;
+    color: var(--warm-gray);
+    line-height: 1.6;
+  }
+  .analysis-col ul li::before {
+    content: '•';
+    margin-right: 6px;
+    font-weight: 700;
+  }
+  .analysis-col.pros ul li::before { color: var(--green); }
+  .analysis-col.cons ul li::before { color: var(--red); }
+
+  .fit-note {
+    padding-left: 44px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--muted-tan);
+    font-style: italic;
+  }
+
+  /* ============================================
+     DIRECTION 1 — MINIMAL / CLEAN
+     ============================================ */
+
+  .d1-card {
+    display: flex;
+    align-items: center;
+    padding: 14px;
+    gap: 12px;
+  }
+  .d1-media {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    overflow: hidden;
+  }
+  .d1-media.face { background: var(--peach-wash); }
+  .d1-media.food { background: var(--peach-wash); }
+  .d1-media img { width: 100%; height: 100%; object-fit: cover; }
+  .d1-content { flex: 1; min-width: 0; }
+  .d1-title {
+    font-size: 13px; font-weight: 600;
+    color: var(--dark-brown);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .d1-sub {
+    font-size: 11px; font-weight: 500;
+    color: var(--muted-tan);
+    margin-top: 1px;
+  }
+  .d1-score {
+    font-size: 20px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .d1-score-label {
+    font-size: 9px; font-weight: 600;
+    color: var(--muted-tan);
+    text-align: right;
+  }
+
+  /* ============================================
+     DIRECTION 2 — DATA-RICH / ANALYTICAL
+     ============================================ */
+
+  .d2-card {
+    padding: 14px;
+  }
+  .d2-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .d2-media {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    overflow: hidden;
+  }
+  .d2-media.face { background: var(--peach-wash); }
+  .d2-media.food { background: var(--peach-wash); }
+  .d2-media img { width: 100%; height: 100%; object-fit: cover; }
+  .d2-header { flex: 1; }
+  .d2-title {
+    font-size: 13px; font-weight: 600;
+    color: var(--dark-brown);
+  }
+  .d2-time {
+    font-size: 11px; font-weight: 500;
+    color: var(--muted-tan);
+  }
+  .d2-score-block { text-align: right; flex-shrink: 0; }
+  .d2-score {
+    font-size: 22px; font-weight: 700;
+  }
+  .d2-score-unit {
+    font-size: 10px; font-weight: 600;
+    color: var(--muted-tan);
+  }
+  .d2-metrics {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .d2-metric-chip {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--peach-wash);
+    border-radius: 10px;
+    padding: 4px 8px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .d2-metric-chip .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .d2-metric-chip .name { color: var(--warm-gray); }
+  .d2-metric-chip .val { font-weight: 700; }
+  .d2-divider {
+    height: 1px;
+    background: var(--light-tan);
+    margin: 10px 0;
+  }
+  .d2-nutrition {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .d2-nutri-item {
+    text-align: center;
+  }
+  .d2-nutri-val {
+    font-size: 13px; font-weight: 700;
+    color: var(--dark-brown);
+  }
+  .d2-nutri-label {
+    font-size: 9px; font-weight: 600;
+    color: var(--muted-tan);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ============================================
+     DIRECTION 3 — LIFESTYLE / EXPRESSIVE
+     ============================================ */
+
+  .d3-card {
+    position: relative;
+    overflow: hidden;
+  }
+  .d3-media-banner {
+    height: 100px;
+    background: linear-gradient(135deg, var(--peach-wash), var(--peach-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .d3-media-banner.food {
+    background: #f5e6d0;
+  }
+  .d3-media-banner img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .d3-score-badge {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    padding: 4px 10px;
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .d3-score-badge .label {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--muted-tan);
+  }
+  .d3-body {
+    padding: 12px 14px 14px;
+  }
+  .d3-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--dark-brown);
+  }
+  .d3-sub {
+    font-size: 11px;
+    color: var(--muted-tan);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+  .d3-tags {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .d3-tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 8px;
+  }
+  .d3-tag.up { background: #e8f5e9; color: var(--green); }
+  .d3-tag.down { background: #fce4ec; color: var(--red); }
+  .d3-tag.stable { background: #fff8e1; color: var(--amber); }
+
+  /* ============================================
+     DIRECTION 4 — PREMIUM / EDITORIAL
+     ============================================ */
+
+  .d4-card {
+    display: flex;
+    overflow: hidden;
+  }
+  .d4-media {
+    width: 90px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .d4-media.face {
+    background: linear-gradient(180deg, var(--peach-wash) 0%, var(--peach-light) 100%);
+  }
+  .d4-media.food {
+    background: #f5e6d0;
+  }
+  .d4-media img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .d4-content {
+    flex: 1;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+  }
+  .d4-type-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted-tan);
+  }
+  .d4-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--dark-brown);
+  }
+  .d4-score-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-top: 2px;
+  }
+  .d4-score {
+    font-size: 24px;
+    font-weight: 800;
+  }
+  .d4-score-unit {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted-tan);
+  }
+  .d4-metrics-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .d4-metric-mini {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--warm-gray);
+  }
+  .d4-metric-mini .dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+  }
+  .d4-time {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--muted-tan);
+    margin-top: 2px;
+  }
+  .d4-nutri-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .d4-nutri {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--warm-gray);
+  }
+  .d4-nutri span { color: var(--dark-brown); font-weight: 700; }
+
+  /* Grid layout */
+  .grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .stacked {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Illustration placeholder */
+  .illust-placeholder {
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+  }
+  .illust-placeholder .emoji { font-size: inherit; }
+  .illust-placeholder .asset-name {
+    font-size: 7px;
+    font-weight: 600;
+    color: var(--coral);
+    background: rgba(232,160,138,0.15);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-family: monospace;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-title">Recent Activity Cards</div>
+<div class="page-subtitle">4 design directions for Skinmax Home — face + food cards</div>
+
+<!-- =============================================
+     DIRECTION 1 — MINIMAL / CLEAN
+     ============================================= -->
+<div class="direction-section">
+  <div class="direction-header">
+    <div class="direction-number">1</div>
+    <div class="direction-title">Minimal / Clean</div>
+  </div>
+  <div class="direction-desc">
+    Single-row cards. Tight, scannable. Left illustration + title/time, right score.
+    Maximum information density with minimum visual noise.
+  </div>
+
+  <div class="layouts-row">
+    <!-- Stacked layout -->
+    <div>
+      <div class="layout-label">Stacked (1 Column)</div>
+      <div class="phone-frame">
+        <div class="section-title">Recent activity</div>
+        <div class="stacked">
+          <!-- Face card -->
+          <div class="card d1-card">
+            <div class="d1-media face">
+              <div class="illust-placeholder">
+                <span class="emoji">💧</span>
+                <span class="asset-name">hydration-fair</span>
+              </div>
+            </div>
+            <div class="d1-content">
+              <div class="d1-title">Face Scan</div>
+              <div class="d1-sub">2:30 PM · Hydration 52 · Acne 78</div>
+            </div>
+            <div>
+              <div class="d1-score" style="color: var(--green);">74</div>
+              <div class="d1-score-label">GLOW</div>
+            </div>
+          </div>
+
+          <!-- Food card -->
+          <div class="card d1-card">
+            <div class="d1-media food" style="background: #f5e6d0;">
+              <span style="font-size: 28px;">🥗</span>
+            </div>
+            <div class="d1-content">
+              <div class="d1-title">Greek Salad</div>
+              <div class="d1-sub">1:15 PM · 320 cal · 18g protein</div>
+            </div>
+            <div>
+              <div class="d1-score" style="color: var(--green);">8.2</div>
+              <div class="d1-score-label">SKIN</div>
+            </div>
+          </div>
+
+          <!-- Face card — poor -->
+          <div class="card d1-card">
+            <div class="d1-media face">
+              <div class="illust-placeholder">
+                <span class="emoji">✨</span>
+                <span class="asset-name">acne-poor</span>
+              </div>
+            </div>
+            <div class="d1-content">
+              <div class="d1-title">Face Scan</div>
+              <div class="d1-sub">9:00 AM · Acne 28 · Redness 35</div>
+            </div>
+            <div>
+              <div class="d1-score" style="color: var(--red);">38</div>
+              <div class="d1-score-label">GLOW</div>
+            </div>
+          </div>
+
+          <!-- Food card -->
+          <div class="card d1-card">
+            <div class="d1-media food" style="background: #f5e6d0;">
+              <span style="font-size: 28px;">🍕</span>
+            </div>
+            <div class="d1-content">
+              <div class="d1-title">Pepperoni Pizza</div>
+              <div class="d1-sub">12:30 PM · 680 cal · 22g protein</div>
+            </div>
+            <div>
+              <div class="d1-score" style="color: var(--red);">3.5</div>
+              <div class="d1-score-label">SKIN</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid layout -->
+    <div>
+      <div class="layout-label">Grid (2 Column)</div>
+      <div class="phone-frame">
+        <div class="section-title">Recent activity</div>
+        <div class="grid-2col">
+          <div class="card d1-card" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+              <div class="d1-media face" style="width: 40px; height: 40px; font-size: 18px;">
+                <div class="illust-placeholder">
+                  <span class="emoji">💧</span>
+                </div>
+              </div>
+              <div class="d1-score" style="color: var(--green); font-size: 18px; margin-left: auto;">74</div>
+            </div>
+            <div>
+              <div class="d1-title" style="font-size: 12px;">Face Scan</div>
+              <div class="d1-sub" style="font-size: 10px;">2:30 PM</div>
+            </div>
+          </div>
+          <div class="card d1-card" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+              <div class="d1-media food" style="width: 40px; height: 40px; font-size: 18px; background: #f5e6d0;">🥗</div>
+              <div class="d1-score" style="color: var(--green); font-size: 18px; margin-left: auto;">8.2</div>
+            </div>
+            <div>
+              <div class="d1-title" style="font-size: 12px;">Greek Salad</div>
+              <div class="d1-sub" style="font-size: 10px;">1:15 PM</div>
+            </div>
+          </div>
+          <div class="card d1-card" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+              <div class="d1-media face" style="width: 40px; height: 40px; font-size: 18px;">
+                <div class="illust-placeholder">
+                  <span class="emoji">✨</span>
+                </div>
+              </div>
+              <div class="d1-score" style="color: var(--red); font-size: 18px; margin-left: auto;">38</div>
+            </div>
+            <div>
+              <div class="d1-title" style="font-size: 12px;">Face Scan</div>
+              <div class="d1-sub" style="font-size: 10px;">9:00 AM</div>
+            </div>
+          </div>
+          <div class="card d1-card" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+              <div class="d1-media food" style="width: 40px; height: 40px; font-size: 18px; background: #f5e6d0;">🍕</div>
+              <div class="d1-score" style="color: var(--red); font-size: 18px; margin-left: auto;">3.5</div>
+            </div>
+            <div>
+              <div class="d1-title" style="font-size: 12px;">Pepperoni Pizza</div>
+              <div class="d1-sub" style="font-size: 10px;">12:30 PM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="analysis">
+    <div class="analysis-col pros">
+      <h4>Pros</h4>
+      <ul>
+        <li>Most scannable — users parse instantly</li>
+        <li>Fits many items without scrolling</li>
+        <li>Consistent with current ScanHistoryRow feel</li>
+        <li>Works well for both stacked and grid</li>
+      </ul>
+    </div>
+    <div class="analysis-col cons">
+      <h4>Cons</h4>
+      <ul>
+        <li>Metrics compressed into subtitle text — easy to miss</li>
+        <li>Illustration area too small to appreciate artwork</li>
+        <li>Feels functional, not delightful</li>
+        <li>Grid loses metric detail entirely</li>
+      </ul>
+    </div>
+  </div>
+  <div class="fit-note">Good fit if the activity section is secondary to the Glow Score card above. Not ideal if you want users to engage deeply with individual scans.</div>
+</div>
+
+<!-- =============================================
+     DIRECTION 2 — DATA-RICH / ANALYTICAL
+     ============================================= -->
+<div class="direction-section">
+  <div class="direction-header">
+    <div class="direction-number">2</div>
+    <div class="direction-title">Data-Rich / Analytical</div>
+    <span class="badge badge-rec">★ RECOMMENDED</span>
+  </div>
+  <div class="direction-desc">
+    Two-tier card: top row = thumbnail + title + score, bottom row = metric chips or nutrition pills.
+    Balances data visibility with clean hierarchy. Illustration gets proper space.
+  </div>
+
+  <div class="layouts-row">
+    <!-- Stacked -->
+    <div>
+      <div class="layout-label">Stacked (1 Column)</div>
+      <div class="phone-frame">
+        <div class="section-title">Recent activity</div>
+        <div class="stacked">
+          <!-- Face card — good -->
+          <div class="card d2-card">
+            <div class="d2-top">
+              <div class="d2-media face">
+                <div class="illust-placeholder" style="font-size: 26px;">
+                  <span class="emoji">💧</span>
+                  <span class="asset-name">hydration-fair</span>
+                </div>
+              </div>
+              <div class="d2-header">
+                <div class="d2-title">Face Scan</div>
+                <div class="d2-time">2:30 PM</div>
+              </div>
+              <div class="d2-score-block">
+                <div class="d2-score" style="color: var(--green);">74</div>
+                <div class="d2-score-unit">GLOW</div>
+              </div>
+            </div>
+            <div class="d2-metrics">
+              <div class="d2-metric-chip">
+                <div class="dot" style="background: var(--amber);"></div>
+                <span class="name">Hydration</span>
+                <span class="val" style="color: var(--amber);">52</span>
+              </div>
+              <div class="d2-metric-chip">
+                <div class="dot" style="background: var(--green);"></div>
+                <span class="name">Acne</span>
+                <span class="val" style="color: var(--green);">78</span>
+              </div>
+              <div class="d2-metric-chip">
+                <div class="dot" style="background: var(--green);"></div>
+                <span class="name">Texture</span>
+                <span class="val" style="color: var(--green);">71</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Food card -->
+          <div class="card d2-card">
+            <div class="d2-top">
+              <div class="d2-media food" style="background: #f5e6d0;">
+                <span style="font-size: 28px;">🥗</span>
+              </div>
+              <div class="d2-header">
+                <div class="d2-title">Greek Salad</div>
+                <div class="d2-time">1:15 PM</div>
+              </div>
+              <div class="d2-score-block">
+                <div class="d2-score" style="color: var(--green);">8.2</div>
+                <div class="d2-score-unit">SKIN</div>
+              </div>
+            </div>
+            <div class="d2-nutrition">
+              <div class="d2-nutri-item">
+                <div class="d2-nutri-val">320</div>
+                <div class="d2-nutri-label">Cal</div>
+              </div>
+              <div class="d2-nutri-item">
+                <div class="d2-nutri-val">18g</div>
+                <div class="d2-nutri-label">Protein</div>
+              </div>
+              <div class="d2-nutri-item">
+                <div class="d2-nutri-val">12g</div>
+                <div class="d2-nutri-label">Fat</div>
+              </div>
+              <div class="d2-nutri-item">
+                <div class="d2-nutri-val">28g</div>
+                <div class="d2-nutri-label">Carbs</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Face card — poor -->
+          <div class="card d2-card">
+            <div class="d2-top">
+              <div class="d2-media face">
+                <div class="illust-placeholder" style="font-size: 26px;">
+                  <span class="emoji">✨</span>
+                  <span class="asset-name">acne-poor</span>
+                </div>
+              </div>
+              <div class="d2-header">
+                <div class="d2-title">Face Scan</div>
+                <div class="d2-time">9:00 AM</div>
+              </div>
+              <div class="d2-score-block">
+                <div class="d2-score" style="color: var(--red);">38</div>
+                <div class="d2-score-unit">GLOW</div>
+              </div>
+            </div>
+            <div class="d2-metrics">
+              <div class="d2-metric-chip">
+                <div class="dot" style="background: var(--red);"></div>
+                <span class="name">Acne</span>
+                <span class="val" style="color: var(--red);">28</span>
+              </div>
+              <div class="d2-metric-chip">
+                <div class="dot" style="background: var(--red);"></div>
+                <span class="name">Redness</span>
+                <span class="val" style="color: var(--red);">35</span>
+              </div>
+              <div class="d2-metric-chip">
+                <div class="dot" style="background: var(--amber);"></div>
+                <span class="name">Pores</span>
+                <span class="val" style="color: var(--amber);">44</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Food card — bad -->
+          <div class="card d2-card">
+            <div class="d2-top">
+              <div class="d2-media food" style="background: #f5e6d0;">
+                <span style="font-size: 28px;">🍕</span>
+              </div>
+              <div class="d2-header">
+                <div class="d2-title">Pepperoni Pizza</div>
+                <div class="d2-time">12:30 PM</div>
+              </div>
+              <div class="d2-score-block">
+                <div class="d2-score" style="color: var(--red);">3.5</div>
+                <div class="d2-score-unit">SKIN</div>
+              </div>
+            </div>
+            <div class="d2-nutrition">
+              <div class="d2-nutri-item">
+                <div class="d2-nutri-val">680</div>
+                <div class="d2-nutri-label">Cal</div>
+              </div>
+              <div class="d2-nutri-item">
+                <div class="d2-nutri-val">22g</div>
+                <div class="d2-nutri-label">Protein</div>
+              </div>
+              <div class="d2-nutri-item">
+                <div class="d2-nutri-val">28g</div>
+                <div class="d2-nutri-label">Fat</div>
+              </div>
+              <div class="d2-nutri-item">
+                <div class="d2-nutri-val">72g</div>
+                <div class="d2-nutri-label">Carbs</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div>
+      <div class="layout-label">Grid (2 Column)</div>
+      <div class="phone-frame">
+        <div class="section-title">Recent activity</div>
+        <div class="grid-2col">
+          <!-- Face card compact -->
+          <div class="card" style="padding: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+              <div class="d2-media face" style="width: 40px; height: 40px; font-size: 20px; border-radius: 10px;">
+                <div class="illust-placeholder">
+                  <span class="emoji">💧</span>
+                </div>
+              </div>
+              <div style="flex:1;">
+                <div style="font-size: 12px; font-weight: 600;">Face Scan</div>
+                <div style="font-size: 10px; color: var(--muted-tan);">2:30 PM</div>
+              </div>
+              <div style="font-size: 20px; font-weight: 700; color: var(--green);">74</div>
+            </div>
+            <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+              <div class="d2-metric-chip" style="padding: 2px 6px; font-size: 9px;">
+                <div class="dot" style="background: var(--amber); width: 5px; height: 5px;"></div>
+                <span class="name">Hyd</span>
+                <span class="val" style="color: var(--amber);">52</span>
+              </div>
+              <div class="d2-metric-chip" style="padding: 2px 6px; font-size: 9px;">
+                <div class="dot" style="background: var(--green); width: 5px; height: 5px;"></div>
+                <span class="name">Acne</span>
+                <span class="val" style="color: var(--green);">78</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Food card compact -->
+          <div class="card" style="padding: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+              <div style="width: 40px; height: 40px; border-radius: 10px; background: #f5e6d0; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">🥗</div>
+              <div style="flex:1;">
+                <div style="font-size: 12px; font-weight: 600;">Greek Salad</div>
+                <div style="font-size: 10px; color: var(--muted-tan);">1:15 PM</div>
+              </div>
+              <div style="font-size: 20px; font-weight: 700; color: var(--green);">8.2</div>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <div style="font-size: 9px; font-weight: 600; color: var(--warm-gray);"><span style="font-weight: 700; color: var(--dark-brown);">320</span> cal</div>
+              <div style="font-size: 9px; font-weight: 600; color: var(--warm-gray);"><span style="font-weight: 700; color: var(--dark-brown);">18g</span> pro</div>
+            </div>
+          </div>
+
+          <!-- Face card poor -->
+          <div class="card" style="padding: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+              <div class="d2-media face" style="width: 40px; height: 40px; font-size: 20px; border-radius: 10px;">
+                <div class="illust-placeholder">
+                  <span class="emoji">✨</span>
+                </div>
+              </div>
+              <div style="flex:1;">
+                <div style="font-size: 12px; font-weight: 600;">Face Scan</div>
+                <div style="font-size: 10px; color: var(--muted-tan);">9:00 AM</div>
+              </div>
+              <div style="font-size: 20px; font-weight: 700; color: var(--red);">38</div>
+            </div>
+            <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+              <div class="d2-metric-chip" style="padding: 2px 6px; font-size: 9px;">
+                <div class="dot" style="background: var(--red); width: 5px; height: 5px;"></div>
+                <span class="name">Acne</span>
+                <span class="val" style="color: var(--red);">28</span>
+              </div>
+              <div class="d2-metric-chip" style="padding: 2px 6px; font-size: 9px;">
+                <div class="dot" style="background: var(--red); width: 5px; height: 5px;"></div>
+                <span class="name">Red</span>
+                <span class="val" style="color: var(--red);">35</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Food card bad -->
+          <div class="card" style="padding: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+              <div style="width: 40px; height: 40px; border-radius: 10px; background: #f5e6d0; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">🍕</div>
+              <div style="flex:1;">
+                <div style="font-size: 12px; font-weight: 600;">Pizza</div>
+                <div style="font-size: 10px; color: var(--muted-tan);">12:30 PM</div>
+              </div>
+              <div style="font-size: 20px; font-weight: 700; color: var(--red);">3.5</div>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <div style="font-size: 9px; font-weight: 600; color: var(--warm-gray);"><span style="font-weight: 700; color: var(--dark-brown);">680</span> cal</div>
+              <div style="font-size: 9px; font-weight: 600; color: var(--warm-gray);"><span style="font-weight: 700; color: var(--dark-brown);">22g</span> pro</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="analysis">
+    <div class="analysis-col pros">
+      <h4>Pros</h4>
+      <ul>
+        <li>Metric chips give at-a-glance skin breakdown</li>
+        <li>Traffic-light dots make severity instantly clear</li>
+        <li>Nutrition row mirrors metric chips — unified pattern</li>
+        <li>Illustration has breathing room at 56px</li>
+        <li>Works in both stacked and grid layouts</li>
+      </ul>
+    </div>
+    <div class="analysis-col cons">
+      <h4>Cons</h4>
+      <ul>
+        <li>Taller cards — fewer visible without scrolling</li>
+        <li>Metric chips add visual complexity</li>
+        <li>Grid variant truncates chip labels</li>
+      </ul>
+    </div>
+  </div>
+  <div class="fit-note">Best fit for Skinmax. Delivers the "metric breakdown first" goal while staying clean. Chip pattern is reusable across the app. Stacked layout recommended — grid works but loses detail.</div>
+</div>
+
+<!-- =============================================
+     DIRECTION 3 — LIFESTYLE / EXPRESSIVE
+     ============================================= -->
+<div class="direction-section">
+  <div class="direction-header">
+    <div class="direction-number">3</div>
+    <div class="direction-title">Lifestyle / Expressive</div>
+  </div>
+  <div class="direction-desc">
+    Banner-style cards with large illustration area on top, content below.
+    More visual impact — feels like a social feed or wellness journal.
+  </div>
+
+  <div class="layouts-row">
+    <!-- Stacked -->
+    <div>
+      <div class="layout-label">Stacked (1 Column)</div>
+      <div class="phone-frame">
+        <div class="section-title">Recent activity</div>
+        <div class="stacked">
+          <!-- Face card -->
+          <div class="card d3-card">
+            <div class="d3-media-banner">
+              <div class="illust-placeholder" style="font-size: 48px;">
+                <span class="emoji">💧</span>
+                <span class="asset-name">hydration-fair.png</span>
+              </div>
+              <div class="d3-score-badge">
+                <span class="label">GLOW</span>
+                <span style="color: var(--green); font-size: 16px;">74</span>
+              </div>
+            </div>
+            <div class="d3-body">
+              <div class="d3-title">Face Scan</div>
+              <div class="d3-sub">2:30 PM · 8 metrics analyzed</div>
+              <div class="d3-tags">
+                <div class="d3-tag stable">💧 Hydration 52</div>
+                <div class="d3-tag up">✨ Acne 78</div>
+                <div class="d3-tag up">🪞 Texture 71</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Food card -->
+          <div class="card d3-card">
+            <div class="d3-media-banner food" style="height: 80px;">
+              <span style="font-size: 40px;">🥗</span>
+              <div class="d3-score-badge">
+                <span class="label">SKIN</span>
+                <span style="color: var(--green); font-size: 16px;">8.2</span>
+              </div>
+            </div>
+            <div class="d3-body">
+              <div class="d3-title">Greek Salad</div>
+              <div class="d3-sub">1:15 PM · 320 cal · 18g protein</div>
+              <div class="d3-tags">
+                <div class="d3-tag up">Hydration ↑</div>
+                <div class="d3-tag up">Antioxidants ↑</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Face card poor -->
+          <div class="card d3-card">
+            <div class="d3-media-banner" style="background: linear-gradient(135deg, #fce8e6, #f4c7b0);">
+              <div class="illust-placeholder" style="font-size: 48px;">
+                <span class="emoji">✨</span>
+                <span class="asset-name">acne-poor.png</span>
+              </div>
+              <div class="d3-score-badge">
+                <span class="label">GLOW</span>
+                <span style="color: var(--red); font-size: 16px;">38</span>
+              </div>
+            </div>
+            <div class="d3-body">
+              <div class="d3-title">Face Scan</div>
+              <div class="d3-sub">9:00 AM · 8 metrics analyzed</div>
+              <div class="d3-tags">
+                <div class="d3-tag down">✨ Acne 28</div>
+                <div class="d3-tag down">🌡️ Redness 35</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div>
+      <div class="layout-label">Grid (2 Column)</div>
+      <div class="phone-frame">
+        <div class="section-title">Recent activity</div>
+        <div class="grid-2col">
+          <div class="card d3-card">
+            <div class="d3-media-banner" style="height: 70px;">
+              <div class="illust-placeholder" style="font-size: 32px;">
+                <span class="emoji">💧</span>
+              </div>
+              <div class="d3-score-badge" style="font-size: 12px; padding: 3px 7px;">
+                <span style="color: var(--green);">74</span>
+              </div>
+            </div>
+            <div class="d3-body" style="padding: 8px 10px 10px;">
+              <div class="d3-title" style="font-size: 12px;">Face Scan</div>
+              <div class="d3-sub" style="font-size: 9px;">2:30 PM</div>
+            </div>
+          </div>
+          <div class="card d3-card">
+            <div class="d3-media-banner food" style="height: 70px;">
+              <span style="font-size: 32px;">🥗</span>
+              <div class="d3-score-badge" style="font-size: 12px; padding: 3px 7px;">
+                <span style="color: var(--green);">8.2</span>
+              </div>
+            </div>
+            <div class="d3-body" style="padding: 8px 10px 10px;">
+              <div class="d3-title" style="font-size: 12px;">Greek Salad</div>
+              <div class="d3-sub" style="font-size: 9px;">1:15 PM</div>
+            </div>
+          </div>
+          <div class="card d3-card">
+            <div class="d3-media-banner" style="height: 70px; background: linear-gradient(135deg, #fce8e6, #f4c7b0);">
+              <div class="illust-placeholder" style="font-size: 32px;">
+                <span class="emoji">✨</span>
+              </div>
+              <div class="d3-score-badge" style="font-size: 12px; padding: 3px 7px;">
+                <span style="color: var(--red);">38</span>
+              </div>
+            </div>
+            <div class="d3-body" style="padding: 8px 10px 10px;">
+              <div class="d3-title" style="font-size: 12px;">Face Scan</div>
+              <div class="d3-sub" style="font-size: 9px;">9:00 AM</div>
+            </div>
+          </div>
+          <div class="card d3-card">
+            <div class="d3-media-banner food" style="height: 70px;">
+              <span style="font-size: 32px;">🍕</span>
+              <div class="d3-score-badge" style="font-size: 12px; padding: 3px 7px;">
+                <span style="color: var(--red);">3.5</span>
+              </div>
+            </div>
+            <div class="d3-body" style="padding: 8px 10px 10px;">
+              <div class="d3-title" style="font-size: 12px;">Pizza</div>
+              <div class="d3-sub" style="font-size: 9px;">12:30 PM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="analysis">
+    <div class="analysis-col pros">
+      <h4>Pros</h4>
+      <ul>
+        <li>Illustrations get maximum visual impact</li>
+        <li>Feels premium and app-store-ready</li>
+        <li>Great for onboarding / first impressions</li>
+        <li>Grid layout looks like a lifestyle journal</li>
+      </ul>
+    </div>
+    <div class="analysis-col cons">
+      <h4>Cons</h4>
+      <ul>
+        <li>Cards are tall — only 2-3 visible at once</li>
+        <li>Banner space wasted until real illustrations exist</li>
+        <li>Feels more like a feed than a dashboard tool</li>
+        <li>Scrolling fatigue on busy days (4+ scans)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="fit-note">Visually striking but trades information density for aesthetics. Better suited for a social/journal app. Could overwhelm the Home screen when combined with Glow Score card + metric carousel above.</div>
+</div>
+
+<!-- =============================================
+     DIRECTION 4 — PREMIUM / EDITORIAL
+     ============================================= -->
+<div class="direction-section">
+  <div class="direction-header">
+    <div class="direction-number">4</div>
+    <div class="direction-title">Premium / Editorial</div>
+  </div>
+  <div class="direction-desc">
+    Side-by-side layout: tall media strip on left, stacked content on right.
+    Magazine-style. Illustration gets a dedicated column that feels intentional.
+  </div>
+
+  <div class="layouts-row">
+    <!-- Stacked -->
+    <div>
+      <div class="layout-label">Stacked (1 Column)</div>
+      <div class="phone-frame">
+        <div class="section-title">Recent activity</div>
+        <div class="stacked">
+          <!-- Face card -->
+          <div class="card d4-card">
+            <div class="d4-media face">
+              <div class="illust-placeholder" style="font-size: 36px;">
+                <span class="emoji">💧</span>
+                <span class="asset-name">hydration-fair</span>
+              </div>
+            </div>
+            <div class="d4-content">
+              <div class="d4-type-label">FACE SCAN</div>
+              <div class="d4-score-row">
+                <div class="d4-score" style="color: var(--green);">74</div>
+                <div class="d4-score-unit">Glow Score</div>
+              </div>
+              <div class="d4-metrics-row">
+                <div class="d4-metric-mini">
+                  <div class="dot" style="background: var(--amber);"></div>
+                  Hydration 52
+                </div>
+                <div class="d4-metric-mini">
+                  <div class="dot" style="background: var(--green);"></div>
+                  Acne 78
+                </div>
+                <div class="d4-metric-mini">
+                  <div class="dot" style="background: var(--green);"></div>
+                  Texture 71
+                </div>
+              </div>
+              <div class="d4-time">2:30 PM</div>
+            </div>
+          </div>
+
+          <!-- Food card -->
+          <div class="card d4-card">
+            <div class="d4-media food" style="background: #f5e6d0;">
+              <span style="font-size: 36px;">🥗</span>
+            </div>
+            <div class="d4-content">
+              <div class="d4-type-label">FOOD LOG</div>
+              <div class="d4-title">Greek Salad</div>
+              <div class="d4-score-row">
+                <div class="d4-score" style="color: var(--green);">8.2</div>
+                <div class="d4-score-unit">Skin Impact</div>
+              </div>
+              <div class="d4-nutri-row">
+                <div class="d4-nutri"><span>320</span> cal</div>
+                <div class="d4-nutri"><span>18g</span> pro</div>
+                <div class="d4-nutri"><span>12g</span> fat</div>
+              </div>
+              <div class="d4-time">1:15 PM</div>
+            </div>
+          </div>
+
+          <!-- Face card poor -->
+          <div class="card d4-card">
+            <div class="d4-media face" style="background: linear-gradient(180deg, #fce8e6 0%, #e8a08a 100%);">
+              <div class="illust-placeholder" style="font-size: 36px;">
+                <span class="emoji">✨</span>
+                <span class="asset-name">acne-poor</span>
+              </div>
+            </div>
+            <div class="d4-content">
+              <div class="d4-type-label">FACE SCAN</div>
+              <div class="d4-score-row">
+                <div class="d4-score" style="color: var(--red);">38</div>
+                <div class="d4-score-unit">Glow Score</div>
+              </div>
+              <div class="d4-metrics-row">
+                <div class="d4-metric-mini">
+                  <div class="dot" style="background: var(--red);"></div>
+                  Acne 28
+                </div>
+                <div class="d4-metric-mini">
+                  <div class="dot" style="background: var(--red);"></div>
+                  Redness 35
+                </div>
+              </div>
+              <div class="d4-time">9:00 AM</div>
+            </div>
+          </div>
+
+          <!-- Food card bad -->
+          <div class="card d4-card">
+            <div class="d4-media food" style="background: #f5e6d0;">
+              <span style="font-size: 36px;">🍕</span>
+            </div>
+            <div class="d4-content">
+              <div class="d4-type-label">FOOD LOG</div>
+              <div class="d4-title">Pepperoni Pizza</div>
+              <div class="d4-score-row">
+                <div class="d4-score" style="color: var(--red);">3.5</div>
+                <div class="d4-score-unit">Skin Impact</div>
+              </div>
+              <div class="d4-nutri-row">
+                <div class="d4-nutri"><span>680</span> cal</div>
+                <div class="d4-nutri"><span>22g</span> pro</div>
+                <div class="d4-nutri"><span>28g</span> fat</div>
+              </div>
+              <div class="d4-time">12:30 PM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div>
+      <div class="layout-label">Grid (2 Column)</div>
+      <div class="phone-frame">
+        <div class="section-title">Recent activity</div>
+        <div class="grid-2col">
+          <div class="card d4-card" style="flex-direction: column;">
+            <div class="d4-media face" style="width: 100%; height: 60px; border-radius: 0;">
+              <div class="illust-placeholder" style="font-size: 28px;">
+                <span class="emoji">💧</span>
+              </div>
+            </div>
+            <div class="d4-content" style="padding: 10px;">
+              <div class="d4-type-label" style="font-size: 8px;">FACE SCAN</div>
+              <div class="d4-score-row">
+                <div class="d4-score" style="color: var(--green); font-size: 20px;">74</div>
+                <div class="d4-score-unit" style="font-size: 9px;">Glow</div>
+              </div>
+              <div class="d4-time" style="font-size: 9px;">2:30 PM</div>
+            </div>
+          </div>
+          <div class="card d4-card" style="flex-direction: column;">
+            <div class="d4-media food" style="width: 100%; height: 60px; border-radius: 0; background: #f5e6d0;">
+              <span style="font-size: 28px;">🥗</span>
+            </div>
+            <div class="d4-content" style="padding: 10px;">
+              <div class="d4-type-label" style="font-size: 8px;">FOOD LOG</div>
+              <div class="d4-title" style="font-size: 12px;">Greek Salad</div>
+              <div class="d4-score-row">
+                <div class="d4-score" style="color: var(--green); font-size: 20px;">8.2</div>
+                <div class="d4-score-unit" style="font-size: 9px;">Skin</div>
+              </div>
+            </div>
+          </div>
+          <div class="card d4-card" style="flex-direction: column;">
+            <div class="d4-media face" style="width: 100%; height: 60px; border-radius: 0; background: linear-gradient(180deg, #fce8e6 0%, #e8a08a 100%);">
+              <div class="illust-placeholder" style="font-size: 28px;">
+                <span class="emoji">✨</span>
+              </div>
+            </div>
+            <div class="d4-content" style="padding: 10px;">
+              <div class="d4-type-label" style="font-size: 8px;">FACE SCAN</div>
+              <div class="d4-score-row">
+                <div class="d4-score" style="color: var(--red); font-size: 20px;">38</div>
+                <div class="d4-score-unit" style="font-size: 9px;">Glow</div>
+              </div>
+              <div class="d4-time" style="font-size: 9px;">9:00 AM</div>
+            </div>
+          </div>
+          <div class="card d4-card" style="flex-direction: column;">
+            <div class="d4-media food" style="width: 100%; height: 60px; border-radius: 0; background: #f5e6d0;">
+              <span style="font-size: 28px;">🍕</span>
+            </div>
+            <div class="d4-content" style="padding: 10px;">
+              <div class="d4-type-label" style="font-size: 8px;">FOOD LOG</div>
+              <div class="d4-title" style="font-size: 12px;">Pizza</div>
+              <div class="d4-score-row">
+                <div class="d4-score" style="color: var(--red); font-size: 20px;">3.5</div>
+                <div class="d4-score-unit" style="font-size: 9px;">Skin</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="analysis">
+    <div class="analysis-col pros">
+      <h4>Pros</h4>
+      <ul>
+        <li>Illustration gets a dedicated, elegant column</li>
+        <li>Type label (FACE SCAN / FOOD LOG) adds clarity</li>
+        <li>Score is hero-sized and immediately readable</li>
+        <li>Feels premium and magazine-like</li>
+      </ul>
+    </div>
+    <div class="analysis-col cons">
+      <h4>Cons</h4>
+      <ul>
+        <li>90px media column uses horizontal space</li>
+        <li>Metrics are tiny inline text — less prominent</li>
+        <li>Grid variant loses the side-by-side elegance</li>
+        <li>Doesn't match existing card patterns in the app</li>
+      </ul>
+    </div>
+  </div>
+  <div class="fit-note">Elegant but the side media strip is a departure from the existing top-down card flow. Works best if you plan to invest in high-quality illustrations that deserve the dedicated space.</div>
+</div>
+
+<!-- =============================================
+     RECOMMENDATION SUMMARY
+     ============================================= -->
+<div class="direction-section" style="background: linear-gradient(135deg, #FDF8F5, #FCEEE8); border: 2px solid var(--peach-light);">
+  <div class="direction-header">
+    <div class="direction-number" style="background: var(--green);">★</div>
+    <div class="direction-title">Recommendation</div>
+  </div>
+  <div style="padding-left: 44px; font-size: 13px; color: var(--warm-gray); line-height: 1.7;">
+    <p><strong style="color: var(--dark-brown);">Direction 2 (Data-Rich) + Stacked layout</strong></p>
+    <p style="margin-top: 8px;">Why this fits Skinmax best:</p>
+    <ul style="margin-top: 6px; padding-left: 16px;">
+      <li><strong>Metric-first</strong> — traffic-light chips deliver the "skin breakdown first" goal without opening the detail view</li>
+      <li><strong>Unified pattern</strong> — metric chips on face cards and nutrition pills on food cards use the same visual grammar</li>
+      <li><strong>Illustration space</strong> — 56px media area is large enough for meaningful artwork, small enough to not dominate</li>
+      <li><strong>Density</strong> — 3-4 cards visible without scrolling on iPhone 15/16</li>
+      <li><strong>Extensible</strong> — chip pattern reusable in ScanHistoryView, FoodLogView, notifications</li>
+      <li><strong>Stacked &gt; Grid</strong> — grid loses metric detail and food names get truncated; stacked fits the Home scroll flow</li>
+    </ul>
+    <p style="margin-top: 12px; font-size: 12px; color: var(--muted-tan); font-style: italic;">
+      Direction 4 is a strong alternative if you plan to invest heavily in illustration assets.
+      Direction 3 is great for marketing screenshots but too tall for daily use.
+    </p>
+  </div>
+</div>
+
+</body>
+</html>

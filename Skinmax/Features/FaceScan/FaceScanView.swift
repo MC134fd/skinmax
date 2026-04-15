@@ -149,7 +149,7 @@ struct FaceScanView: View {
 
                 if !viewModel.subtitleText.isEmpty {
                     Text(viewModel.subtitleText)
-                        .font(.custom("Nunito-Regular", size: 10))
+                        .font(.gbOverline)
                         .foregroundStyle(.white.opacity(0.35))
                 }
             }
@@ -225,11 +225,11 @@ struct FaceScanView: View {
                     .foregroundStyle(SkinmaxColors.coral)
 
                 Text("Camera Access Needed")
-                    .font(SkinmaxFonts.h2())
+                    .font(.gbTitleM)
                     .foregroundStyle(.white)
 
                 Text("Skinmax needs your camera to analyze your skin health")
-                    .font(SkinmaxFonts.body())
+                    .font(.gbBodyM)
                     .foregroundStyle(.white.opacity(0.6))
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 40)

@@ -15,7 +15,7 @@ struct DataSettingsView: View {
                     Image(systemName: "info.circle.fill")
                         .foregroundStyle(SkinmaxColors.coral)
                     Text("Your data is stored for 90 days. Older data is automatically removed to keep the app fast.")
-                        .font(SkinmaxFonts.body())
+                        .font(.gbBodyM)
                         .foregroundStyle(SkinmaxColors.darkBrown)
                 }
                 .padding(14)
@@ -25,12 +25,12 @@ struct DataSettingsView: View {
                 // Stats
                 VStack(spacing: 0) {
                     statRow(label: "Skin Scans", value: "\(skinCount)")
-                    Divider().foregroundStyle(SkinmaxColors.lightTan)
+                    Divider().foregroundStyle(SkinmaxColors.softTan)
                     statRow(label: "Food Logs", value: "\(foodCount)")
                 }
                 .background(SkinmaxColors.white)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
-                .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+                .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
 
                 // Delete button
                 Button {
@@ -66,12 +66,12 @@ struct DataSettingsView: View {
     private func statRow(label: String, value: String) -> some View {
         HStack {
             Text(label)
-                .font(.custom("Nunito-Regular", size: 14))
+                .font(.gbBodyM)
                 .foregroundStyle(SkinmaxColors.darkBrown)
             Spacer()
             Text(value)
-                .font(.custom("Nunito-SemiBold", size: 14))
-                .foregroundStyle(SkinmaxColors.warmGray)
+                .font(.gbBodyM)
+                .foregroundStyle(SkinmaxColors.warmBrown)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)

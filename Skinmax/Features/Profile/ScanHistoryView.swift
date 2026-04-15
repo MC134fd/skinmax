@@ -51,7 +51,7 @@ struct ScanHistoryView: View {
             Button("Delete", role: .destructive) {
                 if let scan = scanToDelete {
                     HapticManager.notification(.warning)
-                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
                         dataStore.deleteSkinScan(id: scan.id)
                     }
                     HapticManager.notification(.success)
@@ -71,8 +71,8 @@ struct ScanHistoryView: View {
                 .font(SkinmaxFonts.h3())
                 .foregroundStyle(SkinmaxColors.darkBrown)
             Text("Take your first face scan to start tracking")
-                .font(SkinmaxFonts.body())
-                .foregroundStyle(SkinmaxColors.mutedTan)
+                .font(.gbBodyM)
+                .foregroundStyle(SkinmaxColors.lightTaupe)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
@@ -107,28 +107,28 @@ struct ScanHistoryRow: View {
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(scan.createdAt.formatted(date: .abbreviated, time: .omitted))
-                        .font(.custom("Nunito-SemiBold", size: 13))
+                        .font(.gbCaption)
                         .foregroundStyle(SkinmaxColors.darkBrown)
 
                     Text(scan.createdAt.formatted(date: .omitted, time: .shortened))
-                        .font(SkinmaxFonts.caption())
-                        .foregroundStyle(SkinmaxColors.mutedTan)
+                        .font(.gbCaption)
+                        .foregroundStyle(SkinmaxColors.lightTaupe)
 
                     Text("\(scan.metrics.count) metrics analyzed")
-                        .font(SkinmaxFonts.caption())
-                        .foregroundStyle(SkinmaxColors.mutedTan)
+                        .font(.gbCaption)
+                        .foregroundStyle(SkinmaxColors.lightTaupe)
                 }
 
                 Spacer()
 
                 Text(String(format: "%.0f", scan.glowScore))
-                    .font(.custom("Nunito-Bold", size: 22))
+                    .font(.gbTitleL)
                     .foregroundStyle(scoreColor)
             }
             .padding(14)
             .background(SkinmaxColors.white)
             .clipShape(RoundedRectangle(cornerRadius: 16))
-            .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+            .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
         }
     }
 }

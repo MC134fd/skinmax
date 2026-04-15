@@ -101,7 +101,7 @@ struct AnalyticsContainerView: View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 18) {
                 Text("Analytics")
-                    .font(SkinmaxFonts.h2())
+                    .font(.gbTitleM)
                     .foregroundStyle(SkinmaxColors.darkBrown)
                     .padding(.top, 12)
 
@@ -174,17 +174,17 @@ struct AnalyticsContainerView: View {
             .chartYAxis {
                 AxisMarks(position: .leading) { _ in
                     AxisValueLabel()
-                        .font(SkinmaxFonts.small())
-                        .foregroundStyle(SkinmaxColors.mutedTan)
+                        .font(.gbOverline)
+                        .foregroundStyle(SkinmaxColors.lightTaupe)
                     AxisGridLine()
-                        .foregroundStyle(SkinmaxColors.lightTan)
+                        .foregroundStyle(SkinmaxColors.softTan)
                 }
             }
             .chartXAxis {
                 AxisMarks { _ in
                     AxisValueLabel(format: .dateTime.day().month(.abbreviated))
-                        .font(SkinmaxFonts.small())
-                        .foregroundStyle(SkinmaxColors.mutedTan)
+                        .font(.gbOverline)
+                        .foregroundStyle(SkinmaxColors.lightTaupe)
                 }
             }
             .frame(height: 200)
@@ -194,21 +194,21 @@ struct AnalyticsContainerView: View {
                 HStack(spacing: 4) {
                     Circle().fill(SkinmaxColors.coral).frame(width: 6, height: 6)
                     Text("Skin Score")
-                        .font(SkinmaxFonts.caption())
-                        .foregroundStyle(SkinmaxColors.warmGray)
+                        .font(.gbCaption)
+                        .foregroundStyle(SkinmaxColors.warmBrown)
                 }
                 HStack(spacing: 4) {
                     Circle().fill(SkinmaxColors.greenGood).frame(width: 6, height: 6)
                     Text("Food Avg")
-                        .font(SkinmaxFonts.caption())
-                        .foregroundStyle(SkinmaxColors.warmGray)
+                        .font(.gbCaption)
+                        .foregroundStyle(SkinmaxColors.warmBrown)
                 }
             }
         }
         .padding(SkinmaxSpacing.cardPadding)
         .background(SkinmaxColors.white)
         .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 
     // MARK: - Time Range Picker
@@ -217,13 +217,13 @@ struct AnalyticsContainerView: View {
         HStack(spacing: 0) {
             ForEach(TimeRange.allCases, id: \.self) { range in
                 Button {
-                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
                         timeRange = range
                     }
                 } label: {
                     Text(range.rawValue)
-                        .font(SkinmaxFonts.caption())
-                        .foregroundStyle(timeRange == range ? SkinmaxColors.coral : SkinmaxColors.mutedTan)
+                        .font(.gbCaption)
+                        .foregroundStyle(timeRange == range ? SkinmaxColors.coral : SkinmaxColors.lightTaupe)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 6)
                         .background(
@@ -260,25 +260,25 @@ struct AnalyticsContainerView: View {
     private func scoreSummaryCard(label: String, value: String?, color: Color?, change: Double?, suffix: String?) -> some View {
         VStack(spacing: 4) {
             Text(label)
-                .font(SkinmaxFonts.small())
-                .foregroundStyle(SkinmaxColors.mutedTan)
+                .font(.gbOverline)
+                .foregroundStyle(SkinmaxColors.lightTaupe)
 
             HStack(spacing: 2) {
                 Text(value ?? "--")
-                    .font(.custom("Nunito-Bold", size: 22))
-                    .foregroundStyle(color ?? SkinmaxColors.mutedTan)
+                    .font(.gbTitleL)
+                    .foregroundStyle(color ?? SkinmaxColors.lightTaupe)
 
                 if let suffix {
                     Text(suffix)
-                        .font(SkinmaxFonts.caption())
-                        .foregroundStyle(SkinmaxColors.mutedTan)
+                        .font(.gbCaption)
+                        .foregroundStyle(SkinmaxColors.lightTaupe)
                 }
             }
 
             if let change {
                 let positive = change >= 0
                 Text("\(positive ? "\u{2191}" : "\u{2193}") \(positive ? "+" : "")\(String(format: "%.1f", change))%")
-                    .font(SkinmaxFonts.caption())
+                    .font(.gbCaption)
                     .foregroundStyle(positive ? SkinmaxColors.greenGood : SkinmaxColors.redAlert)
             }
         }
@@ -286,7 +286,7 @@ struct AnalyticsContainerView: View {
         .padding(.vertical, 14)
         .background(SkinmaxColors.white)
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 
     // MARK: - AI Insights Section
@@ -299,8 +299,8 @@ struct AnalyticsContainerView: View {
 
             if insights.isEmpty {
                 Text("Log more data to unlock AI insights.")
-                    .font(SkinmaxFonts.body())
-                    .foregroundStyle(SkinmaxColors.mutedTan)
+                    .font(.gbBodyM)
+                    .foregroundStyle(SkinmaxColors.lightTaupe)
                     .padding(.vertical, 12)
             } else {
                 ForEach(insights) { insight in
@@ -309,15 +309,15 @@ struct AnalyticsContainerView: View {
                             .font(.system(size: 16))
 
                         Text(insight.text)
-                            .font(SkinmaxFonts.body())
+                            .font(.gbBodyM)
                             .foregroundStyle(SkinmaxColors.darkBrown)
                             .lineSpacing(2)
 
                         Spacer(minLength: 0)
 
                         Text("— AI")
-                            .font(SkinmaxFonts.small())
-                            .foregroundStyle(SkinmaxColors.mutedTan)
+                            .font(.gbOverline)
+                            .foregroundStyle(SkinmaxColors.lightTaupe)
                     }
                     .padding(14)
                     .background(SkinmaxColors.peachWash)
@@ -384,7 +384,7 @@ struct AnalyticsContainerView: View {
             }
             .background(SkinmaxColors.white)
             .clipShape(RoundedRectangle(cornerRadius: 16))
-            .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+            .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
         }
     }
 
@@ -395,13 +395,13 @@ struct AnalyticsContainerView: View {
                     .font(.system(size: 14))
 
                 Text(label)
-                    .font(SkinmaxFonts.body())
-                    .foregroundStyle(SkinmaxColors.warmGray)
+                    .font(.gbBodyM)
+                    .foregroundStyle(SkinmaxColors.warmBrown)
 
                 Spacer()
 
                 Text(value)
-                    .font(.custom("Nunito-SemiBold", size: 13))
+                    .font(.gbCaption)
                     .foregroundStyle(color)
             }
             .padding(.horizontal, 14)
@@ -409,7 +409,7 @@ struct AnalyticsContainerView: View {
 
             if showDivider {
                 Divider()
-                    .foregroundStyle(SkinmaxColors.lightTan)
+                    .foregroundStyle(SkinmaxColors.softTan)
                     .padding(.horizontal, 14)
             }
         }
@@ -428,14 +428,14 @@ struct AnalyticsContainerView: View {
 
             let dataPoints = skinData.count + foodData.count
             Text("We need at least 2 days of data to show trends.\n\(dataPoints) of 2 days logged.")
-                .font(SkinmaxFonts.body())
-                .foregroundStyle(SkinmaxColors.mutedTan)
+                .font(.gbBodyM)
+                .foregroundStyle(SkinmaxColors.lightTaupe)
                 .multilineTextAlignment(.center)
 
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(SkinmaxColors.lightTan)
+                        .fill(SkinmaxColors.softTan)
                         .frame(height: 6)
                     RoundedRectangle(cornerRadius: 4)
                         .fill(SkinmaxColors.coral)
@@ -449,6 +449,6 @@ struct AnalyticsContainerView: View {
         .padding(.vertical, 20)
         .background(SkinmaxColors.white)
         .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 }

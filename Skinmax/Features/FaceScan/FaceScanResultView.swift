@@ -106,7 +106,7 @@ struct FaceScanResultView: View {
                     .rotationEffect(.degrees(-90))
 
                 Text(String(format: "%.0f", animatedScore))
-                    .font(.custom("Nunito-Bold", size: 36))
+                    .font(.gbDisplayL)
                     .foregroundStyle(SkinmaxColors.peachLight)
             }
 
@@ -118,7 +118,7 @@ struct FaceScanResultView: View {
 
             // Trend
             Text("First scan!")
-                .font(SkinmaxFonts.caption())
+                .font(.gbCaption)
                 .foregroundStyle(SkinmaxColors.greenGood)
         }
         .frame(maxWidth: .infinity)
@@ -138,7 +138,7 @@ struct FaceScanResultView: View {
     private var detailedAnalysisHeader: some View {
         HStack {
             Text("Detailed Analysis")
-                .font(.custom("Nunito-Bold", size: 14))
+                .font(.gbCaption)
                 .foregroundStyle(SkinmaxColors.darkBrown)
             Spacer()
         }
@@ -156,7 +156,7 @@ struct FaceScanResultView: View {
                     .opacity(showMetrics ? 1 : 0)
                     .offset(y: showMetrics ? 0 : 20)
                     .animation(
-                        .spring(response: 0.4, dampingFraction: 0.8)
+                        .spring(response: 0.4, dampingFraction: 0.75)
                         .delay(Double(index) * 0.05),
                         value: showMetrics
                     )
@@ -192,10 +192,9 @@ struct FaceScanResultView: View {
 
     // MARK: - Save
     private func saveScan() {
-        dataStore.saveSkinScan(scan)
         HapticManager.notification(.success)
         saved = true
-        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
             showSaveToast = true
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
@@ -218,7 +217,7 @@ struct ResultMetricCard: View {
             // Mini circle ring
             ZStack {
                 Circle()
-                    .stroke(SkinmaxColors.lightTan, lineWidth: 5)
+                    .stroke(SkinmaxColors.softTan, lineWidth: 5)
                     .frame(width: 60, height: 60)
 
                 Circle()
@@ -228,19 +227,19 @@ struct ResultMetricCard: View {
                     .rotationEffect(.degrees(-90))
 
                 Text(String(format: "%.0f", metric.score))
-                    .font(.custom("Nunito-Bold", size: 16))
+                    .font(.gbTitleM)
                     .foregroundStyle(SkinmaxColors.darkBrown)
             }
 
             // Metric name + emoji
             Text("\(metric.type.icon) \(metric.type.displayName)")
-                .font(SkinmaxFonts.small())
-                .foregroundStyle(SkinmaxColors.mutedTan)
+                .font(.gbOverline)
+                .foregroundStyle(SkinmaxColors.lightTaupe)
                 .textCase(.uppercase)
 
             // Status label
             Text(SkinmaxColors.trafficLightLabel(for: metric.score))
-                .font(SkinmaxFonts.caption())
+                .font(.gbCaption)
                 .foregroundStyle(color)
         }
         .padding(.vertical, 14)
@@ -248,9 +247,9 @@ struct ResultMetricCard: View {
         .frame(maxWidth: .infinity)
         .background(SkinmaxColors.white)
         .clipShape(RoundedRectangle(cornerRadius: 18))
-        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
         .onAppear {
-            withAnimation(.spring(response: 0.6, dampingFraction: 0.8).delay(0.2)) {
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.2)) {
                 animatedProgress = metric.score / 100.0
             }
         }

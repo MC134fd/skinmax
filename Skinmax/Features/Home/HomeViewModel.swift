@@ -113,6 +113,16 @@ final class HomeViewModel {
         dataStore?.skinScans(for: selectedDate) ?? []
     }
 
+    var selectedDateFoodScans: [FoodScan] {
+        dataStore?.foodScans(for: selectedDate) ?? []
+    }
+
+    var selectedDateActivity: [ActivityItem] {
+        let faceItems = selectedDateScans.map { ActivityItem.face($0) }
+        let foodItems = selectedDateFoodScans.map { ActivityItem.food($0) }
+        return (faceItems + foodItems).sorted { $0.date > $1.date }
+    }
+
     // MARK: - Glow Score (selected date)
 
     var latestScan: SkinScan? {

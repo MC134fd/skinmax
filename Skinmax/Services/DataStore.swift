@@ -211,12 +211,12 @@ final class DataStore {
         }
     }
 
-    // MARK: - Cache Retention (7-day policy)
+    // MARK: - Cache Retention (90-day policy)
 
-    /// Deletes cached skin and food scans older than 7 days.
+    /// Deletes cached skin and food scans older than 90 days.
     /// Safe to call at app launch; logs counts before and after.
     func pruneExpiredCache() {
-        let cutoff = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
+        let cutoff = Calendar.current.date(byAdding: .day, value: -90, to: Date()) ?? Date()
         let skinCountBefore = totalSkinScans()
         let foodCountBefore = totalFoodScans()
 

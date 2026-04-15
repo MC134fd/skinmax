@@ -28,24 +28,24 @@ struct FoodRowView: View {
                     .foregroundStyle(SkinmaxColors.darkBrown)
 
                 Text("\(foodScan.calories) cal · \(String(format: "%.0fg", foodScan.protein)) protein")
-                    .font(SkinmaxFonts.caption())
-                    .foregroundStyle(SkinmaxColors.mutedTan)
+                    .font(.gbCaption)
+                    .foregroundStyle(SkinmaxColors.lightTaupe)
 
                 Text(foodScan.createdAt.formatted(date: .omitted, time: .shortened))
-                    .font(SkinmaxFonts.small())
-                    .foregroundStyle(SkinmaxColors.mutedTan)
+                    .font(.gbOverline)
+                    .foregroundStyle(SkinmaxColors.lightTaupe)
             }
 
             Spacer()
 
             // Score
             Text(String(format: "%.1f", foodScan.skinImpactScore))
-                .font(.custom("Nunito-SemiBold", size: 16))
+                .font(.gbBodyL)
                 .foregroundStyle(scoreColor)
         }
         .padding(14)
         .background(SkinmaxColors.white)
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 }

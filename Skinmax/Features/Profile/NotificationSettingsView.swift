@@ -15,14 +15,14 @@ struct NotificationSettingsView: View {
                     subtitle: "9:00 AM",
                     isOn: $morningScan
                 )
-                Divider().foregroundStyle(SkinmaxColors.lightTan)
+                Divider().foregroundStyle(SkinmaxColors.softTan)
                 toggleRow(
                     icon: "🍽",
                     title: "Meal Log Reminder",
                     subtitle: "12:00 PM, 6:00 PM",
                     isOn: $mealLog
                 )
-                Divider().foregroundStyle(SkinmaxColors.lightTan)
+                Divider().foregroundStyle(SkinmaxColors.softTan)
                 toggleRow(
                     icon: "📊",
                     title: "Weekly Summary",
@@ -32,7 +32,7 @@ struct NotificationSettingsView: View {
             }
             .background(SkinmaxColors.white)
             .clipShape(RoundedRectangle(cornerRadius: 16))
-            .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+            .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
             .padding(.horizontal, SkinmaxSpacing.screenPadding)
             .padding(.top, 16)
         }
@@ -59,12 +59,12 @@ struct NotificationSettingsView: View {
                 HStack(spacing: 8) {
                     Text(icon).font(.system(size: 18))
                     Text(title)
-                        .font(.custom("Nunito-Regular", size: 14))
+                        .font(.gbBodyM)
                         .foregroundStyle(SkinmaxColors.darkBrown)
                 }
                 Text(subtitle)
-                    .font(SkinmaxFonts.caption())
-                    .foregroundStyle(SkinmaxColors.mutedTan)
+                    .font(.gbCaption)
+                    .foregroundStyle(SkinmaxColors.lightTaupe)
                     .padding(.leading, 30)
             }
             Spacer()

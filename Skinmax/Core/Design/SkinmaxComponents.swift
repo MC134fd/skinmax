@@ -10,17 +10,17 @@ struct ScoreCard: View {
     var body: some View {
         VStack(spacing: 8) {
             Text(String(format: "%.0f", score))
-                .font(SkinmaxFonts.scoreDisplay())
+                .font(.gbDisplayXL)
                 .foregroundStyle(SkinmaxColors.coral)
 
             Text(label.uppercased())
-                .font(SkinmaxFonts.caption())
-                .foregroundStyle(SkinmaxColors.mutedTan)
-                .tracking(1.5)
+                .font(.gbOverline)
+                .foregroundStyle(SkinmaxColors.lightTaupe)
+                .tracking(2)
 
             if !trend.isEmpty {
                 Text(trend)
-                    .font(SkinmaxFonts.small())
+                    .font(.gbCaption)
                     .foregroundStyle(trendPositive ? SkinmaxColors.greenGood : SkinmaxColors.redAlert)
             }
         }
@@ -38,7 +38,7 @@ struct ScoreCard: View {
     }
 }
 
-// MARK: - Score Ring (progress ring, adapts to light/dark bg)
+// MARK: - Score Ring (gradient stroke, 12pt width)
 struct ScoreRing: View {
     let score: Double
     let size: CGFloat
@@ -46,7 +46,7 @@ struct ScoreRing: View {
     let trackColor: Color
     let showLabel: Bool
 
-    init(score: Double, size: CGFloat = 140, lineWidth: CGFloat = 10, trackColor: Color = SkinmaxColors.lightTan, showLabel: Bool = false) {
+    init(score: Double, size: CGFloat = 140, lineWidth: CGFloat = 12, trackColor: Color = SkinmaxColors.softTan, showLabel: Bool = false) {
         self.score = score
         self.size = size
         self.lineWidth = lineWidth
@@ -65,11 +65,7 @@ struct ScoreRing: View {
             Circle()
                 .trim(from: 0, to: progress)
                 .stroke(
-                    LinearGradient(
-                        colors: [SkinmaxColors.coral, SkinmaxColors.peachLight],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ),
+                    SkinmaxColors.heroGradient,
                     style: StrokeStyle(lineWidth: lineWidth, lineCap: .round)
                 )
                 .frame(width: size, height: size)
@@ -77,7 +73,7 @@ struct ScoreRing: View {
 
             if showLabel {
                 Text(String(format: "%.0f", score))
-                    .font(.custom("Nunito-Bold", size: size * 0.3))
+                    .font(.custom("Nunito-ExtraBold", size: size * 0.3))
                     .foregroundStyle(SkinmaxColors.darkBrown)
             }
         }
@@ -98,17 +94,17 @@ struct DismissibleInsightCard: View {
                 .frame(width: 40, height: 40)
                 .overlay(
                     Text(emoji)
-                        .font(.system(size: 18))
+                        .font(.custom("Nunito-Bold", size: 18))
                 )
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
-                    .font(SkinmaxFonts.h3())
+                    .font(.gbTitleM)
                     .foregroundStyle(SkinmaxColors.darkBrown)
 
                 Text(message)
-                    .font(SkinmaxFonts.body())
-                    .foregroundStyle(SkinmaxColors.warmGray)
+                    .font(.gbBodyM)
+                    .foregroundStyle(SkinmaxColors.warmBrown)
                     .lineSpacing(3)
             }
 
@@ -117,14 +113,14 @@ struct DismissibleInsightCard: View {
             Button(action: onDismiss) {
                 Image(systemName: "xmark")
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(SkinmaxColors.mutedTan)
+                    .foregroundStyle(SkinmaxColors.lightTaupe)
             }
         }
         .padding(SkinmaxSpacing.cardPadding)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(SkinmaxColors.white)
         .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 }
 
@@ -138,21 +134,21 @@ struct MetricChip: View {
     var body: some View {
         VStack(spacing: 6) {
             Text(emoji)
-                .font(.system(size: 18))
+                .font(.custom("Nunito-Bold", size: 18))
 
             Text(value)
-                .font(.custom("Nunito-Bold", size: 16))
+                .font(.gbTitleM)
                 .foregroundStyle(color)
 
             Text(label.uppercased())
-                .font(.custom("Nunito-Medium", size: 9))
-                .foregroundStyle(SkinmaxColors.mutedTan)
+                .font(.gbOverline)
+                .foregroundStyle(SkinmaxColors.lightTaupe)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 12)
         .background(SkinmaxColors.white)
-        .clipShape(RoundedRectangle(cornerRadius: 14))
-        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+        .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
+        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 }
 
@@ -166,17 +162,17 @@ struct MetricCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(label)
-                .font(SkinmaxFonts.caption())
-                .foregroundStyle(SkinmaxColors.mutedTan)
+                .font(.gbCaption)
+                .foregroundStyle(SkinmaxColors.lightTaupe)
 
             Text(value)
-                .font(SkinmaxFonts.h3())
+                .font(.gbTitleM)
                 .foregroundStyle(SkinmaxColors.darkBrown)
 
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(SkinmaxColors.lightTan)
+                        .fill(SkinmaxColors.softTan)
                         .frame(height: 6)
 
                     RoundedRectangle(cornerRadius: 4)
@@ -189,7 +185,7 @@ struct MetricCard: View {
         .padding(SkinmaxSpacing.cardPaddingSmall)
         .background(SkinmaxColors.white)
         .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadiusSmall))
-        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 }
 
@@ -214,7 +210,7 @@ struct CircleMetricCard: View {
         VStack(spacing: 8) {
             ZStack {
                 Circle()
-                    .stroke(SkinmaxColors.lightTan, lineWidth: 6)
+                    .stroke(SkinmaxColors.softTan, lineWidth: 6)
                     .frame(width: size, height: size)
 
                 Circle()
@@ -224,18 +220,18 @@ struct CircleMetricCard: View {
                     .rotationEffect(.degrees(-90))
 
                 Text(String(format: "%.0f", score))
-                    .font(SkinmaxFonts.h2())
+                    .font(.gbTitleM)
                     .foregroundStyle(SkinmaxColors.darkBrown)
             }
 
             if !icon.isEmpty {
                 Text(icon)
-                    .font(.system(size: 14))
+                    .font(.custom("Nunito-Bold", size: 14))
             }
 
             Text(label)
-                .font(SkinmaxFonts.caption())
-                .foregroundStyle(SkinmaxColors.warmGray)
+                .font(.gbCaption)
+                .foregroundStyle(SkinmaxColors.mediumTaupe)
                 .multilineTextAlignment(.center)
         }
     }
@@ -270,7 +266,7 @@ struct WeekDayStrip: View {
             scrollPosition = currentWeekIndex
         }
         .onChange(of: currentWeekIndex) { _, newIndex in
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
                 scrollPosition = newIndex
             }
         }
@@ -299,7 +295,7 @@ struct WeekDayStrip: View {
                 } label: {
                     VStack(spacing: 4) {
                         Text(dayAbbreviation(date))
-                            .font(SkinmaxFonts.small())
+                            .font(.gbOverline)
 
                         Text("\(dayNum)")
                             .font(.custom("Nunito-SemiBold", size: 14))
@@ -311,8 +307,8 @@ struct WeekDayStrip: View {
                     }
                     .foregroundStyle(
                         isSelected ? .white :
-                        isFuture ? SkinmaxColors.mutedTan.opacity(0.5) :
-                        SkinmaxColors.warmGray
+                        isFuture ? SkinmaxColors.lightTaupe.opacity(0.5) :
+                        SkinmaxColors.warmBrown
                     )
                     .frame(maxWidth: .infinity)
                     .frame(height: 64)
@@ -340,46 +336,44 @@ struct WeekDayStrip: View {
     }
 }
 
-// MARK: - Tag Pill
+// MARK: - Tag Pill (fully rounded)
 struct TagPill: View {
     let text: String
 
     var body: some View {
         Text(text)
-            .font(SkinmaxFonts.small())
+            .font(.gbCaption)
             .foregroundStyle(SkinmaxColors.coral)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 5)
-            .background(SkinmaxColors.peachWash)
-            .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.tagCornerRadius))
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+            .background(SkinmaxColors.peachWash.opacity(0.5))
+            .clipShape(Capsule())
     }
 }
 
-// MARK: - Action Button (coral gradient, full width)
+// MARK: - Action Button (coral gradient pill with glow)
 struct ActionButton: View {
     let title: String
     let action: () -> Void
 
     var body: some View {
-        Button(action: action) {
+        Button {
+            HapticManager.impact(.medium)
+            action()
+        } label: {
             Text(title)
-                .font(SkinmaxFonts.h3())
-                .foregroundStyle(SkinmaxColors.darkBrown)
+                .font(.gbTitleM)
+                .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
-                .background(
-                    LinearGradient(
-                        colors: [SkinmaxColors.coral, SkinmaxColors.peachLight],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                )
-                .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.buttonCornerRadius))
+                .padding(.vertical, 16)
+                .background(SkinmaxColors.buttonGradient)
+                .clipShape(Capsule())
+                .shadow(color: SkinmaxColors.buttonGlowColor, radius: 16, x: 0, y: 6)
         }
     }
 }
 
-// MARK: - Ghost Button
+// MARK: - Ghost Button (peach outlined pill)
 struct GhostButton: View {
     let title: String
     let action: () -> Void
@@ -387,14 +381,16 @@ struct GhostButton: View {
     var body: some View {
         Button(action: action) {
             Text(title)
-                .font(SkinmaxFonts.h3())
+                .font(.gbTitleM)
                 .foregroundStyle(SkinmaxColors.coral)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
-                .background(SkinmaxColors.white)
-                .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.buttonCornerRadius))
+                .padding(.vertical, 16)
+                .background(
+                    Capsule()
+                        .fill(SkinmaxColors.peachWash.opacity(0.3))
+                )
                 .overlay(
-                    RoundedRectangle(cornerRadius: SkinmaxSpacing.buttonCornerRadius)
+                    Capsule()
                         .stroke(SkinmaxColors.coral, lineWidth: 1.5)
                 )
         }
@@ -409,17 +405,22 @@ struct InsightCard: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            Text(emoji)
-                .font(.system(size: 28))
+            Circle()
+                .fill(SkinmaxColors.peachWash)
+                .frame(width: 40, height: 40)
+                .overlay(
+                    Text(emoji)
+                        .font(.custom("Nunito-Bold", size: 18))
+                )
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
-                    .font(SkinmaxFonts.h3())
+                    .font(.gbTitleM)
                     .foregroundStyle(SkinmaxColors.darkBrown)
 
                 Text(message)
-                    .font(SkinmaxFonts.body())
-                    .foregroundStyle(SkinmaxColors.warmGray)
+                    .font(.gbBodyM)
+                    .foregroundStyle(SkinmaxColors.warmBrown)
                     .lineSpacing(3)
             }
         }
@@ -427,7 +428,7 @@ struct InsightCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(SkinmaxColors.white)
         .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 }
 
@@ -439,7 +440,6 @@ struct GlassTabBar: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            // Tab bar with 3 tabs
             HStack(spacing: 0) {
                 ForEach(TabItem.allCases, id: \.self) { tab in
                     Button {
@@ -451,16 +451,16 @@ struct GlassTabBar: View {
                             Image(systemName: tab.systemIcon)
                                 .font(.system(size: 20))
                             Text(tab.title)
-                                .font(SkinmaxFonts.tabLabel())
+                                .font(.gbCaption)
                         }
-                        .foregroundStyle(selectedTab == tab ? SkinmaxColors.coral : SkinmaxColors.mutedTan)
+                        .foregroundStyle(selectedTab == tab ? SkinmaxColors.coral : SkinmaxColors.mediumTaupe)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
                         .background(
                             Group {
                                 if selectedTab == tab {
                                     RoundedRectangle(cornerRadius: 14)
-                                        .fill(Color(hex: "F4C7B0").opacity(0.35))
+                                        .fill(SkinmaxColors.peachLight.opacity(0.35))
                                         .matchedGeometryEffect(id: "activeTab", in: tabAnimation)
                                 }
                             }
@@ -483,27 +483,21 @@ struct GlassTabBar: View {
                         RoundedRectangle(cornerRadius: SkinmaxSpacing.tabBarCornerRadius)
                             .stroke(Color.white.opacity(0.5), lineWidth: 1)
                     )
-                    .shadow(color: .black.opacity(0.06), radius: 15, x: 0, y: 4)
+                    .shadow(color: SkinmaxColors.subtleShadowColor, radius: 15, x: 0, y: 4)
             )
 
             // Floating scan circle
             Button {
                 HapticManager.impact(.medium)
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
                     showScanPopup.toggle()
                 }
             } label: {
                 ZStack {
                     Circle()
-                        .fill(
-                            LinearGradient(
-                                colors: [SkinmaxColors.peachLight, SkinmaxColors.coral],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
+                        .fill(SkinmaxColors.heroGradient)
                         .frame(width: 56, height: 56)
-                        .shadow(color: SkinmaxColors.coral.opacity(0.35), radius: 8, x: 0, y: 4)
+                        .shadow(color: SkinmaxColors.buttonGlowColor, radius: 8, x: 0, y: 4)
 
                     Image(systemName: "camera.fill")
                         .font(.system(size: 22))
@@ -545,10 +539,10 @@ struct ScanPopupOverlay: View {
 
     var body: some View {
         ZStack {
-            Color(hex: "3A2A24").opacity(0.3)
+            SkinmaxColors.darkBrown.opacity(0.3)
                 .ignoresSafeArea()
                 .onTapGesture {
-                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
                         isPresented = false
                     }
                 }
@@ -564,23 +558,23 @@ struct ScanPopupOverlay: View {
                         onScanFace()
                     } label: {
                         VStack(spacing: 8) {
-                            Text("🧑")
-                                .font(.system(size: 32))
+                            Text("\u{1F9D1}")
+                                .font(.custom("Nunito-Bold", size: 32))
                             Text("Scan Face")
-                                .font(SkinmaxFonts.h3())
+                                .font(.gbTitleM)
                                 .foregroundStyle(SkinmaxColors.darkBrown)
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 20)
                         .background(
-                            RoundedRectangle(cornerRadius: 18)
+                            RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius)
                                 .fill(.ultraThinMaterial)
                                 .overlay(
-                                    RoundedRectangle(cornerRadius: 18)
+                                    RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius)
                                         .fill(SkinmaxColors.peachWash.opacity(0.7))
                                 )
                                 .overlay(
-                                    RoundedRectangle(cornerRadius: 18)
+                                    RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius)
                                         .stroke(Color.white.opacity(0.5), lineWidth: 1)
                                 )
                         )
@@ -593,23 +587,23 @@ struct ScanPopupOverlay: View {
                         onLogFood()
                     } label: {
                         VStack(spacing: 8) {
-                            Text("🍽")
-                                .font(.system(size: 32))
+                            Text("\u{1F37D}")
+                                .font(.custom("Nunito-Bold", size: 32))
                             Text("Log Food")
-                                .font(SkinmaxFonts.h3())
+                                .font(.gbTitleM)
                                 .foregroundStyle(SkinmaxColors.darkBrown)
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 20)
                         .background(
-                            RoundedRectangle(cornerRadius: 18)
+                            RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius)
                                 .fill(.ultraThinMaterial)
                                 .overlay(
-                                    RoundedRectangle(cornerRadius: 18)
+                                    RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius)
                                         .fill(SkinmaxColors.greenGood.opacity(0.15))
                                 )
                                 .overlay(
-                                    RoundedRectangle(cornerRadius: 18)
+                                    RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius)
                                         .stroke(Color.white.opacity(0.5), lineWidth: 1)
                                 )
                         )

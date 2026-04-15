@@ -39,7 +39,7 @@ struct SkinDetailView: View {
             .navigationBarBackButtonHidden()
         }
         .onAppear {
-            withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.75)) {
                 animatedProgress = metric.score / 100.0
             }
         }
@@ -50,7 +50,7 @@ struct SkinDetailView: View {
         VStack(spacing: 12) {
             ZStack {
                 Circle()
-                    .stroke(SkinmaxColors.lightTan, lineWidth: 8)
+                    .stroke(SkinmaxColors.softTan, lineWidth: 8)
                     .frame(width: 120, height: 120)
 
                 Circle()
@@ -61,7 +61,7 @@ struct SkinDetailView: View {
 
                 VStack(spacing: 2) {
                     Text(String(format: "%.0f", metric.score))
-                        .font(.custom("Nunito-Bold", size: 32))
+                        .font(.gbDisplayL)
                         .foregroundStyle(SkinmaxColors.darkBrown)
 
                     Text(metric.type.icon)
@@ -70,7 +70,7 @@ struct SkinDetailView: View {
             }
 
             Text(metric.type.displayName)
-                .font(SkinmaxFonts.h2())
+                .font(.gbTitleM)
                 .foregroundStyle(SkinmaxColors.darkBrown)
         }
         .padding(.top, 20)
@@ -82,7 +82,7 @@ struct SkinDetailView: View {
             TagPill(text: metric.severity.capitalized)
 
             Text(SkinmaxColors.trafficLightLabel(for: metric.score))
-                .font(SkinmaxFonts.caption())
+                .font(.gbCaption)
                 .foregroundStyle(color)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 5)
@@ -101,15 +101,15 @@ struct SkinDetailView: View {
                         .foregroundStyle(SkinmaxColors.darkBrown)
 
                     Text(metric.description)
-                        .font(SkinmaxFonts.body())
-                        .foregroundStyle(SkinmaxColors.warmGray)
+                        .font(.gbBodyM)
+                        .foregroundStyle(SkinmaxColors.warmBrown)
                         .lineSpacing(3)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(SkinmaxSpacing.cardPadding)
                 .background(SkinmaxColors.white)
                 .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-                .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+                .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
             }
         }
     }
@@ -124,12 +124,12 @@ struct SkinDetailView: View {
             ForEach(Array(tipsForMetric.enumerated()), id: \.offset) { _, tip in
                 HStack(alignment: .top, spacing: 10) {
                     Text("✦")
-                        .font(SkinmaxFonts.body())
+                        .font(.gbBodyM)
                         .foregroundStyle(SkinmaxColors.coral)
 
                     Text(tip)
-                        .font(SkinmaxFonts.body())
-                        .foregroundStyle(SkinmaxColors.warmGray)
+                        .font(.gbBodyM)
+                        .foregroundStyle(SkinmaxColors.warmBrown)
                         .lineSpacing(2)
                 }
             }
@@ -138,7 +138,7 @@ struct SkinDetailView: View {
         .padding(SkinmaxSpacing.cardPadding)
         .background(SkinmaxColors.white)
         .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 
     private var tipsForMetric: [String] {

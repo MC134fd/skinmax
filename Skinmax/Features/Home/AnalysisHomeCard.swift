@@ -20,11 +20,9 @@ struct AnalysisHomeCard: View {
 
     var body: some View {
         HStack(spacing: 14) {
-            // Left: Progress ring
             progressRing
                 .frame(width: 64, height: 64)
 
-            // Right: Status content
             VStack(alignment: .leading, spacing: 6) {
                 if isComplete {
                     completeContent
@@ -36,10 +34,10 @@ struct AnalysisHomeCard: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(16)
+        .padding(SkinmaxSpacing.cardPadding)
         .background(SkinmaxColors.white)
         .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
         .onAppear {
             startPulse()
         }
@@ -50,7 +48,7 @@ struct AnalysisHomeCard: View {
     private var progressRing: some View {
         ZStack {
             Circle()
-                .stroke(SkinmaxColors.lightTan, lineWidth: 5)
+                .stroke(SkinmaxColors.softTan, lineWidth: 5)
 
             Circle()
                 .trim(from: 0, to: coordinator.progress)
@@ -59,7 +57,7 @@ struct AnalysisHomeCard: View {
                     style: StrokeStyle(lineWidth: 5, lineCap: .round)
                 )
                 .rotationEffect(.degrees(-90))
-                .animation(.spring(response: 0.3, dampingFraction: 0.8), value: coordinator.progress)
+                .animation(.spring(response: 0.4, dampingFraction: 0.75), value: coordinator.progress)
 
             if isComplete {
                 Image(systemName: "checkmark")
@@ -71,7 +69,7 @@ struct AnalysisHomeCard: View {
                     .foregroundStyle(SkinmaxColors.redAlert)
             } else {
                 Text("\(Int(coordinator.progress * 100))%")
-                    .font(.custom("Nunito-Bold", size: 14))
+                    .font(.gbBodyM)
                     .foregroundStyle(SkinmaxColors.darkBrown)
             }
         }
@@ -88,13 +86,13 @@ struct AnalysisHomeCard: View {
     private var analyzingContent: some View {
         VStack(alignment: .leading, spacing: 3) {
             Text(coordinator.kind == .face ? "Analyzing Skin" : "Analyzing Food")
-                .font(SkinmaxFonts.h3())
+                .font(.gbTitleM)
                 .foregroundStyle(SkinmaxColors.darkBrown)
                 .opacity(pulseOpacity)
 
             Text(coordinator.phase.label)
-                .font(SkinmaxFonts.caption())
-                .foregroundStyle(SkinmaxColors.mutedTan)
+                .font(.gbCaption)
+                .foregroundStyle(SkinmaxColors.lightTaupe)
         }
     }
 
@@ -104,14 +102,14 @@ struct AnalysisHomeCard: View {
         VStack(alignment: .leading, spacing: 6) {
             if coordinator.kind == .face, let scan = coordinator.faceScanResult {
                 Text("Glow Score: \(Int(scan.glowScore))")
-                    .font(SkinmaxFonts.h3())
+                    .font(.gbTitleM)
                     .foregroundStyle(SkinmaxColors.darkBrown)
 
                 Button {
                     onViewFaceResult(scan)
                 } label: {
                     Text("View Results")
-                        .font(SkinmaxFonts.caption())
+                        .font(.gbCaption)
                         .foregroundStyle(.white)
                         .padding(.horizontal, 14)
                         .padding(.vertical, 6)
@@ -120,14 +118,14 @@ struct AnalysisHomeCard: View {
                 }
             } else if coordinator.kind == .food, let scan = coordinator.foodScanResult {
                 Text("\(scan.name) — \(String(format: "%.1f", scan.skinImpactScore))/10")
-                    .font(SkinmaxFonts.h3())
+                    .font(.gbTitleM)
                     .foregroundStyle(SkinmaxColors.darkBrown)
 
                 Button {
                     onViewFoodResult(scan)
                 } label: {
                     Text("View Results")
-                        .font(SkinmaxFonts.caption())
+                        .font(.gbCaption)
                         .foregroundStyle(.white)
                         .padding(.horizontal, 14)
                         .padding(.vertical, 6)
@@ -144,7 +142,7 @@ struct AnalysisHomeCard: View {
         VStack(alignment: .leading, spacing: 6) {
             if case .error(let msg) = coordinator.phase {
                 Text(msg)
-                    .font(SkinmaxFonts.caption())
+                    .font(.gbCaption)
                     .foregroundStyle(SkinmaxColors.redAlert)
                     .lineLimit(2)
             }
@@ -153,7 +151,7 @@ struct AnalysisHomeCard: View {
                 onDismiss()
             } label: {
                 Text("Dismiss")
-                    .font(SkinmaxFonts.caption())
+                    .font(.gbCaption)
                     .foregroundStyle(SkinmaxColors.coral)
             }
         }

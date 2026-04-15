@@ -5,37 +5,39 @@ struct ContentView: View {
     @State private var showScanPopup = false
     @State private var showFaceScan = false
     @State private var showFoodLogSheet = false
+    @State private var showFaceResult = false
+    @State private var showFoodResult = false
     @State private var faceResultScan: SkinScan?
     @State private var foodResultScan: FoodScan?
 
     @Environment(AnalysisCoordinator.self) private var coordinator
-    @Environment(DataStore.self) private var dataStore
 
     var body: some View {
         ZStack {
             SkinmaxColors.creamBG.ignoresSafeArea()
 
-            // Main content — no animation on content swap to prevent dark flash
+            // Main content
             Group {
                 switch selectedTab {
                 case .home:
-                    NavigationStack {
-                        HomeView(
-                            onViewFaceResult: { scan in
-                                faceResultScan = scan
-                            },
-                            onViewFoodResult: { scan in
-                                foodResultScan = scan
-                            }
-                        )
-                    }
+                    HomeView(
+                        onViewFaceResult: { scan in
+                            faceResultScan = scan
+                            showFaceResult = true
+                        },
+                        onViewFoodResult: { scan in
+                            foodResultScan = scan
+                            showFoodResult = true
+                        }
+                    )
                 case .analytics:
                     AnalyticsContainerView()
                 case .account:
-                    AccountView()
+                    NavigationStack {
+                        AccountView()
+                    }
                 }
             }
-            .animation(nil, value: selectedTab)
 
             // Tab bar
             VStack {
@@ -59,21 +61,19 @@ struct ContentView: View {
         }
         .fullScreenCover(isPresented: $showFaceScan) {
             FaceScanView()
-                .environment(dataStore)
-                .environment(coordinator)
         }
         .fullScreenCover(isPresented: $showFoodLogSheet) {
             FoodLogSheet()
-                .environment(dataStore)
-                .environment(coordinator)
         }
-        .fullScreenCover(item: $faceResultScan) { scan in
-            FaceScanResultView(scan: scan)
-                .environment(dataStore)
+        .fullScreenCover(isPresented: $showFaceResult) {
+            if let scan = faceResultScan {
+                FaceScanResultView(scan: scan)
+            }
         }
-        .fullScreenCover(item: $foodResultScan) { scan in
-            FoodScanResultView(scan: scan)
-                .environment(dataStore)
+        .fullScreenCover(isPresented: $showFoodResult) {
+            if let scan = foodResultScan {
+                FoodScanResultView(scan: scan)
+            }
         }
     }
 }

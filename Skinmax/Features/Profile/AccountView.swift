@@ -49,21 +49,21 @@ struct AccountView: View {
                 .frame(width: 80, height: 80)
                 .overlay(
                     Text("U")
-                        .font(.custom("Nunito-Bold", size: 28))
+                        .font(.gbDisplayM)
                         .foregroundStyle(.white)
                 )
 
             Text("User")
-                .font(SkinmaxFonts.h2())
+                .font(.gbTitleM)
                 .foregroundStyle(SkinmaxColors.darkBrown)
 
             Text("Member since \(memberSince)")
-                .font(SkinmaxFonts.body())
-                .foregroundStyle(SkinmaxColors.mutedTan)
+                .font(.gbBodyM)
+                .foregroundStyle(SkinmaxColors.lightTaupe)
 
             if streak > 0 {
                 Text("🔥 \(streak) day streak")
-                    .font(.custom("Nunito-SemiBold", size: 13))
+                    .font(.gbCaption)
                     .foregroundStyle(SkinmaxColors.coral)
             }
         }
@@ -82,32 +82,32 @@ struct AccountView: View {
     private func statCard(value: String, label: String) -> some View {
         VStack(spacing: 4) {
             Text(value)
-                .font(.custom("Nunito-Bold", size: 20))
+                .font(.gbTitleL)
                 .foregroundStyle(SkinmaxColors.darkBrown)
             Text(label)
-                .font(SkinmaxFonts.caption())
-                .foregroundStyle(SkinmaxColors.mutedTan)
+                .font(.gbCaption)
+                .foregroundStyle(SkinmaxColors.lightTaupe)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 14)
         .background(SkinmaxColors.white)
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 
     // MARK: - Menu List
     private var menuList: some View {
         VStack(spacing: 0) {
             menuRow(icon: "camera.fill", label: "Progress Photos") { showProgress = true }
-            Divider().foregroundStyle(SkinmaxColors.lightTan)
+            Divider().foregroundStyle(SkinmaxColors.softTan)
             menuRow(icon: "list.bullet", label: "Scan History") { showHistory = true }
-            Divider().foregroundStyle(SkinmaxColors.lightTan)
+            Divider().foregroundStyle(SkinmaxColors.softTan)
             menuRow(icon: "bell.fill", label: "Notifications") { showNotifications = true }
-            Divider().foregroundStyle(SkinmaxColors.lightTan)
+            Divider().foregroundStyle(SkinmaxColors.softTan)
             menuRow(icon: "externaldrive.fill", label: "Data & Storage") { showDataSettings = true }
-            Divider().foregroundStyle(SkinmaxColors.lightTan)
+            Divider().foregroundStyle(SkinmaxColors.softTan)
             menuRow(icon: "info.circle.fill", label: "About Skinmax") { showAbout = true }
-            Divider().foregroundStyle(SkinmaxColors.lightTan)
+            Divider().foregroundStyle(SkinmaxColors.softTan)
             menuRow(icon: "star.fill", label: "Rate the App") {
                 if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
                     SKStoreReviewController.requestReview(in: scene)
@@ -116,7 +116,7 @@ struct AccountView: View {
         }
         .background(SkinmaxColors.white)
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 
     private func menuRow(icon: String, label: String, action: @escaping () -> Void) -> some View {
@@ -128,14 +128,14 @@ struct AccountView: View {
                     .frame(width: 24)
 
                 Text(label)
-                    .font(.custom("Nunito-Regular", size: 14))
+                    .font(.gbBodyM)
                     .foregroundStyle(SkinmaxColors.darkBrown)
 
                 Spacer()
 
                 Image(systemName: "chevron.right")
                     .font(.system(size: 12))
-                    .foregroundStyle(SkinmaxColors.mutedTan)
+                    .foregroundStyle(SkinmaxColors.lightTaupe)
             }
             .padding(.horizontal, 16)
             .frame(height: 56)
@@ -146,11 +146,11 @@ struct AccountView: View {
     private var footer: some View {
         VStack(spacing: 4) {
             Text("Skinmax v1.0")
-                .font(SkinmaxFonts.caption())
-                .foregroundStyle(SkinmaxColors.mutedTan)
+                .font(.gbCaption)
+                .foregroundStyle(SkinmaxColors.lightTaupe)
             Text("Data stored for 90 days")
-                .font(SkinmaxFonts.caption())
-                .foregroundStyle(SkinmaxColors.mutedTan)
+                .font(.gbCaption)
+                .foregroundStyle(SkinmaxColors.lightTaupe)
         }
         .padding(.top, 8)
     }

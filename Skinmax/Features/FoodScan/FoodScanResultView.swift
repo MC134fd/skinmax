@@ -65,12 +65,11 @@ struct FoodScanResultView: View {
             .navigationBarBackButtonHidden()
         }
         .onAppear {
-            dataStore.saveFoodScan(scan)
             withAnimation(.easeOut(duration: 0.8)) {
                 animatedScore = scan.skinImpactScore
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
                     showNutrition = true
                 }
             }
@@ -85,12 +84,12 @@ struct FoodScanResultView: View {
     private var foodNameSection: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(scan.name)
-                .font(SkinmaxFonts.h2())
+                .font(.gbTitleM)
                 .foregroundStyle(SkinmaxColors.darkBrown)
 
             Text("AI Identified \u{00B7} \(scan.createdAt.formatted(date: .omitted, time: .shortened))")
-                .font(SkinmaxFonts.caption())
-                .foregroundStyle(SkinmaxColors.mutedTan)
+                .font(.gbCaption)
+                .foregroundStyle(SkinmaxColors.lightTaupe)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -99,7 +98,7 @@ struct FoodScanResultView: View {
     private var skinImpactCard: some View {
         VStack(spacing: 14) {
             Text("SKIN IMPACT")
-                .font(SkinmaxFonts.caption())
+                .font(.gbCaption)
                 .foregroundStyle(.white.opacity(0.6))
                 .tracking(1)
 
@@ -116,10 +115,10 @@ struct FoodScanResultView: View {
                     )
                     .frame(width: 110, height: 110)
                     .rotationEffect(.degrees(-90))
-                    .animation(.spring(response: 0.6, dampingFraction: 0.8), value: animatedScore)
+                    .animation(.spring(response: 0.6, dampingFraction: 0.75), value: animatedScore)
 
                 Text(String(format: "%.1f", animatedScore))
-                    .font(.custom("Nunito-Bold", size: 36))
+                    .font(.gbDisplayL)
                     .foregroundStyle(scoreColor)
             }
 
@@ -150,23 +149,23 @@ struct FoodScanResultView: View {
             ForEach(Array(nutritionItems.enumerated()), id: \.offset) { index, item in
                 VStack(spacing: 4) {
                     Text(item.value)
-                        .font(.custom("Nunito-SemiBold", size: 16))
+                        .font(.gbBodyL)
                         .foregroundStyle(SkinmaxColors.darkBrown)
 
                     Text(item.label)
-                        .font(SkinmaxFonts.small())
-                        .foregroundStyle(SkinmaxColors.mutedTan)
+                        .font(.gbOverline)
+                        .foregroundStyle(SkinmaxColors.lightTaupe)
                         .textCase(.uppercase)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
                 .background(SkinmaxColors.white)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
-                .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+                .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
                 .opacity(showNutrition ? 1 : 0)
                 .offset(y: showNutrition ? 0 : 16)
                 .animation(
-                    .spring(response: 0.4, dampingFraction: 0.8)
+                    .spring(response: 0.4, dampingFraction: 0.75)
                     .delay(Double(index) * 0.1),
                     value: showNutrition
                 )
@@ -198,8 +197,8 @@ struct FoodScanResultView: View {
                         .padding(.top, 5)
 
                     Text(benefit)
-                        .font(SkinmaxFonts.body())
-                        .foregroundStyle(SkinmaxColors.warmGray)
+                        .font(.gbBodyM)
+                        .foregroundStyle(SkinmaxColors.warmBrown)
                 }
             }
         }
@@ -207,7 +206,7 @@ struct FoodScanResultView: View {
         .padding(SkinmaxSpacing.cardPadding)
         .background(SkinmaxColors.white)
         .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
         .opacity(showBenefits ? 1 : 0)
         .animation(.easeIn(duration: 0.3), value: showBenefits)
     }
@@ -230,7 +229,7 @@ struct FoodScanResultView: View {
                         Text(arrow)
                             .foregroundStyle(tint)
                     }
-                    .font(SkinmaxFonts.caption())
+                    .font(.gbCaption)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 6)
                     .background(SkinmaxColors.peachWash)
@@ -242,7 +241,7 @@ struct FoodScanResultView: View {
         .padding(SkinmaxSpacing.cardPadding)
         .background(SkinmaxColors.white)
         .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
         .opacity(showBenefits ? 1 : 0)
         .animation(.easeIn(duration: 0.3).delay(0.1), value: showBenefits)
     }
@@ -256,7 +255,7 @@ struct FoodScanResultView: View {
                         .font(.system(size: 20))
 
                     Text(tip)
-                        .font(SkinmaxFonts.body())
+                        .font(.gbBodyM)
                         .foregroundStyle(SkinmaxColors.darkBrown)
                         .lineSpacing(3)
                 }

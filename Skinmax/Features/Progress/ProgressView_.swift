@@ -68,16 +68,16 @@ struct ProgressView_: View {
                 )
 
             Text(scan.createdAt.formatted(.dateTime.month(.abbreviated).day()))
-                .font(SkinmaxFonts.caption())
-                .foregroundStyle(SkinmaxColors.mutedTan)
+                .font(.gbCaption)
+                .foregroundStyle(SkinmaxColors.lightTaupe)
 
             Text(String(format: "%.0f", scan.glowScore))
-                .font(.custom("Nunito-Bold", size: 16))
+                .font(.gbBodyL)
                 .foregroundStyle(SkinmaxColors.trafficLight(for: scan.glowScore))
 
             Text(label)
-                .font(SkinmaxFonts.small())
-                .foregroundStyle(SkinmaxColors.mutedTan)
+                .font(.gbOverline)
+                .foregroundStyle(SkinmaxColors.lightTaupe)
                 .textCase(.uppercase)
         }
         .frame(maxWidth: .infinity)
@@ -90,20 +90,20 @@ struct ProgressView_: View {
                 let diff = Int(latest.glowScore - comparison.glowScore)
                 HStack {
                     Text(String(format: "%.0f", comparison.glowScore))
-                        .font(.custom("Nunito-Bold", size: 22))
-                        .foregroundStyle(SkinmaxColors.mutedTan)
+                        .font(.gbTitleL)
+                        .foregroundStyle(SkinmaxColors.lightTaupe)
 
                     Text("→")
-                        .foregroundStyle(SkinmaxColors.mutedTan)
+                        .foregroundStyle(SkinmaxColors.lightTaupe)
 
                     Text(String(format: "%.0f", latest.glowScore))
-                        .font(.custom("Nunito-Bold", size: 22))
+                        .font(.gbTitleL)
                         .foregroundStyle(SkinmaxColors.trafficLight(for: latest.glowScore))
 
                     Spacer()
 
                     Text(diff >= 0 ? "+\(diff)" : "\(diff)")
-                        .font(.custom("Nunito-SemiBold", size: 13))
+                        .font(.gbCaption)
                         .foregroundStyle(.white)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
@@ -113,7 +113,7 @@ struct ProgressView_: View {
                 .padding(SkinmaxSpacing.cardPadding)
                 .background(SkinmaxColors.white)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
-                .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+                .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
             }
         }
     }
@@ -125,21 +125,21 @@ struct ProgressView_: View {
                 ForEach(Array(allScans.enumerated().reversed()), id: \.element.id) { index, scan in
                     let isSelected = index == selectedComparisonIndex
                     Button {
-                        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                        withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
                             selectedComparisonIndex = index
                         }
                     } label: {
                         VStack(spacing: 6) {
                             Circle()
-                                .fill(isSelected ? SkinmaxColors.coral : SkinmaxColors.lightTan)
+                                .fill(isSelected ? SkinmaxColors.coral : SkinmaxColors.softTan)
                                 .frame(width: isSelected ? 12 : 8, height: isSelected ? 12 : 8)
                                 .overlay(
                                     isSelected ? Circle().stroke(SkinmaxColors.coral.opacity(0.3), lineWidth: 3) : nil
                                 )
 
                             Text(scan.createdAt.formatted(.dateTime.month(.abbreviated).day()))
-                                .font(SkinmaxFonts.small())
-                                .foregroundStyle(isSelected ? SkinmaxColors.coral : SkinmaxColors.mutedTan)
+                                .font(.gbOverline)
+                                .foregroundStyle(isSelected ? SkinmaxColors.coral : SkinmaxColors.lightTaupe)
                         }
                     }
                 }
@@ -160,17 +160,17 @@ struct ProgressView_: View {
                     let changes = metricChanges(from: comparison, to: latest)
                     if changes.isEmpty {
                         Text("No significant changes detected")
-                            .font(SkinmaxFonts.body())
-                            .foregroundStyle(SkinmaxColors.mutedTan)
+                            .font(.gbBodyM)
+                            .foregroundStyle(SkinmaxColors.lightTaupe)
                     } else {
                         ForEach(changes, id: \.name) { change in
                             HStack {
                                 Text(change.name)
-                                    .font(SkinmaxFonts.body())
-                                    .foregroundStyle(SkinmaxColors.warmGray)
+                                    .font(.gbBodyM)
+                                    .foregroundStyle(SkinmaxColors.warmBrown)
                                 Spacer()
                                 Text(change.pct >= 0 ? "+\(change.pct)%" : "\(change.pct)%")
-                                    .font(.custom("Nunito-SemiBold", size: 13))
+                                    .font(.gbCaption)
                                     .foregroundStyle(change.pct >= 0 ? SkinmaxColors.greenGood : SkinmaxColors.redAlert)
                             }
                         }
@@ -179,7 +179,7 @@ struct ProgressView_: View {
                 .padding(SkinmaxSpacing.cardPadding)
                 .background(SkinmaxColors.white)
                 .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-                .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 2)
+                .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
             }
         }
     }
@@ -207,8 +207,8 @@ struct ProgressView_: View {
                 .foregroundStyle(SkinmaxColors.darkBrown)
                 .multilineTextAlignment(.center)
             Text("Your first scan sets the baseline")
-                .font(SkinmaxFonts.body())
-                .foregroundStyle(SkinmaxColors.mutedTan)
+                .font(.gbBodyM)
+                .foregroundStyle(SkinmaxColors.lightTaupe)
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, SkinmaxSpacing.screenPadding)
