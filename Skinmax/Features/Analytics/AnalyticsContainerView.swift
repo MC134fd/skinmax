@@ -116,7 +116,7 @@ struct AnalyticsContainerView: View {
                 weeklySummarySection
             }
             .padding(.horizontal, GlowbiteSpacing.screenPadding)
-            .padding(.bottom, 100)
+            .padding(.bottom, 20)
         }
         .background(GlowbiteColors.creamBG.ignoresSafeArea())
     }

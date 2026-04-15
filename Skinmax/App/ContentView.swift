@@ -14,12 +14,8 @@ struct ContentView: View {
 
     var body: some View {
         ZStack {
-            GlowbiteColors.creamBG.ignoresSafeArea()
-
-            // Main content
-            Group {
-                switch selectedTab {
-                case .home:
+            TabView(selection: $selectedTab) {
+                Tab("Home", systemImage: "house.fill", value: TabItem.home) {
                     HomeView(
                         onViewFaceResult: { scan in
                             faceResultScan = scan
@@ -33,20 +29,37 @@ struct ContentView: View {
                             showScanPopup = true
                         }
                     )
-                case .analytics:
+                }
+
+                Tab("Analytics", systemImage: "chart.bar.fill", value: TabItem.analytics) {
                     AnalyticsContainerView()
-                case .account:
+                }
+
+                Tab("Account", systemImage: "person.fill", value: TabItem.account) {
                     NavigationStack {
                         AccountView()
                     }
                 }
             }
-
-            // Tab bar
-            VStack {
-                Spacer()
-                GlassTabBar(selectedTab: $selectedTab, showScanPopup: $showScanPopup)
-                    .padding(.bottom, 4)
+            .tint(GlowbiteColors.coral)
+            .tabBarMinimizeBehavior(.onScrollDown)
+            .tabViewBottomAccessory {
+                Button {
+                    HapticManager.impact(.medium)
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
+                        showScanPopup.toggle()
+                    }
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "camera.fill")
+                        Text("Scan")
+                    }
+                    .font(.gbTitleM)
+                }
+                .tint(GlowbiteColors.coral)
+            }
+            .onChange(of: selectedTab) { _, _ in
+                HapticManager.selection()
             }
 
             // Scan popup overlay

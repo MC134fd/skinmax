@@ -39,7 +39,7 @@ struct HomeView: View {
                 mealsSection
             }
             .padding(.horizontal, GlowbiteSpacing.screenPadding)
-            .padding(.bottom, 100)
+            .padding(.bottom, 20)
             .animation(.spring(response: 0.4, dampingFraction: 0.75), value: coordinator.isActive)
         }
         .background(GlowbiteColors.creamBG.ignoresSafeArea())

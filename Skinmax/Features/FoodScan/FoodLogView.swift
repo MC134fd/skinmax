@@ -17,7 +17,7 @@ struct FoodLogView: View {
                     foodList
                 }
                 .padding(.horizontal, GlowbiteSpacing.screenPadding)
-                .padding(.bottom, 100)
+                .padding(.bottom, 20)
             }
 
             // Floating add button
@@ -161,6 +161,6 @@ struct FoodLogView: View {
                 .shadow(color: GlowbiteColors.coral.opacity(0.3), radius: 6, x: 0, y: 4)
         }
         .padding(.trailing, GlowbiteSpacing.screenPadding)
-        .padding(.bottom, 90)
+        .padding(.bottom, 20)
     }
 }

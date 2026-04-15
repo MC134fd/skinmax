@@ -30,7 +30,7 @@ struct AccountView: View {
                     footer
                 }
                 .padding(.horizontal, GlowbiteSpacing.screenPadding)
-                .padding(.bottom, 100)
+                .padding(.bottom, 20)
             }
             .background(GlowbiteColors.creamBG.ignoresSafeArea())
             .navigationDestination(isPresented: $showProgress) { ProgressView_() }
