@@ -6,28 +6,15 @@ struct HomeView: View {
     @State private var viewModel = HomeViewModel()
     @State private var selectedScanResult: SkinScan?
     @State private var selectedFoodResult: FoodScan?
-    @State private var currentMetricPage: Int? = 0
 
     var onViewFaceResult: (SkinScan) -> Void = { _ in }
     var onViewFoodResult: (FoodScan) -> Void = { _ in }
+    var onScanMeal: () -> Void = {}
 
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 18) {
-                header
-                monthNavigation
-                WeekDayStrip(
-                    weeks: viewModel.allWeeks,
-                    currentWeekIndex: viewModel.currentWeekIndex,
-                    selectedDate: viewModel.selectedDate,
-                    daysWithData: viewModel.daysWithSkinData(),
-                    onSelectDay: { date in
-                        viewModel.selectDay(date)
-                    },
-                    onPageChanged: { date in
-                        viewModel.selectedMonth = date
-                    }
-                )
+                topBar
 
                 if coordinator.isActive {
                     AnalysisHomeCard(
@@ -44,16 +31,18 @@ struct HomeView: View {
                     ))
                 }
 
-                glowScoreCard
-                metricCarousel
-                recentActivitySection
-                insightCard
+                monthNavigation
+                weekStrip
+
+                heroRow
+                skinNutrientsSection
+                mealsSection
             }
-            .padding(.horizontal, SkinmaxSpacing.screenPadding)
+            .padding(.horizontal, GlowbiteSpacing.screenPadding)
             .padding(.bottom, 100)
             .animation(.spring(response: 0.4, dampingFraction: 0.75), value: coordinator.isActive)
         }
-        .background(SkinmaxColors.creamBG.ignoresSafeArea())
+        .background(GlowbiteColors.creamBG.ignoresSafeArea())
         .onAppear {
             viewModel.dataStore = dataStore
         }
@@ -67,24 +56,50 @@ struct HomeView: View {
         }
     }
 
-    // MARK: - Header
+    // MARK: - Top Bar
 
-    private var header: some View {
+    private var topBar: some View {
         HStack {
-            Text("skinmax")
-                .h1Style()
+            VStack(alignment: .leading, spacing: 2) {
+                Text(Date.now.formatted(.dateTime.weekday(.wide).month(.abbreviated).day()))
+                    .font(.gbCaption)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
+
+                Text(greetingText)
+                    .font(.gbTitleL)
+                    .tracking(-0.3)
+                    .foregroundStyle(GlowbiteColors.darkBrown)
+            }
 
             Spacer()
 
-            Circle()
-                .fill(SkinmaxColors.peachLight)
-                .frame(width: 36, height: 36)
-                .overlay(
-                    Text("\u{1F469}")
-                        .font(.gbTitleM)
-                )
+            HStack(spacing: 4) {
+                Text("🔥")
+                    .font(.gbCaption)
+                Text("\(viewModel.streak)")
+                    .font(.gbCaption)
+                    .foregroundStyle(GlowbiteColors.darkBrown)
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 5)
+            .background(GlowbiteColors.paper)
+            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(GlowbiteColors.border, lineWidth: 1)
+            )
         }
         .padding(.top, 8)
+    }
+
+    private var greetingText: String {
+        let hour = Calendar.current.component(.hour, from: Date())
+        switch hour {
+        case 5..<12: return "Good morning"
+        case 12..<17: return "Good afternoon"
+        case 17..<22: return "Good evening"
+        default: return "Good night"
+        }
     }
 
     // MARK: - Month Navigation
@@ -93,226 +108,167 @@ struct HomeView: View {
         HStack {
             Button { viewModel.previousMonth() } label: {
                 Image(systemName: "chevron.left")
-                    .foregroundStyle(SkinmaxColors.lightTaupe)
+                    .font(.gbCaption)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
             }
 
             Spacer()
 
             Text(viewModel.monthTitle)
                 .font(.gbTitleM)
-                .foregroundStyle(SkinmaxColors.darkBrown)
+                .foregroundStyle(GlowbiteColors.darkBrown)
 
             Spacer()
 
             Button { viewModel.nextMonth() } label: {
                 Image(systemName: "chevron.right")
-                    .foregroundStyle(SkinmaxColors.lightTaupe)
+                    .font(.gbCaption)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
             }
         }
     }
 
-    // MARK: - Glow Score Card
+    // MARK: - Week Strip
 
-    private var glowScoreCard: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 6) {
-                Text("GLOW SCORE")
+    private var weekStrip: some View {
+        WeekDayStrip(
+            weeks: viewModel.allWeeks,
+            currentWeekIndex: viewModel.currentWeekIndex,
+            selectedDate: viewModel.selectedDate,
+            daysWithData: viewModel.daysWithSkinData(),
+            onSelectDay: { date in
+                viewModel.selectDay(date)
+            },
+            onPageChanged: { date in
+                viewModel.selectedMonth = date
+            }
+        )
+    }
+
+    // MARK: - Hero Row (2:1 split)
+
+    private var heroRow: some View {
+        GeometryReader { geo in
+            let rightWidth = (geo.size.width - 8) / 3
+            let leftWidth = geo.size.width - rightWidth - 8
+
+            HStack(alignment: .top, spacing: 8) {
+                CalorieRingCard(
+                    consumed: viewModel.consumedCalories,
+                    goal: viewModel.dailyCalorieGoal
+                )
+                .frame(width: leftWidth)
+
+                VStack(spacing: 8) {
+                    GlowScoreTile(
+                        scan: viewModel.latestScan,
+                        trendDiff: viewModel.glowTrendDiff
+                    )
+
+                    HydrationTile(
+                        consumed: viewModel.hydration.consumed,
+                        goal: viewModel.hydration.goal,
+                        glasses: viewModel.hydration.glasses
+                    )
+                }
+                .frame(width: rightWidth)
+            }
+        }
+        .frame(height: 220)
+    }
+
+    // MARK: - Skin Nutrients
+
+    private var skinNutrientsSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("SKIN NUTRIENTS")
                     .font(.gbOverline)
-                    .foregroundStyle(SkinmaxColors.mediumTaupe)
-                    .tracking(2)
+                    .tracking(2.0)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
 
-                if viewModel.hasData {
-                    Text(String(format: "%.0f", viewModel.glowScore))
-                        .font(.gbDisplayXL)
-                        .foregroundStyle(SkinmaxColors.coral)
+                Spacer()
 
-                    Text(viewModel.overallMessage)
-                        .font(.gbBodyM)
-                        .foregroundStyle(SkinmaxColors.warmBrown)
-                        .lineLimit(2)
-
-                    Text(viewModel.trendPercentage)
-                        .font(.gbCaption)
-                        .foregroundStyle(viewModel.trendPositive ? SkinmaxColors.greenGood : SkinmaxColors.redAlert)
-                } else {
-                    Text("--")
-                        .font(.gbDisplayXL)
-                        .foregroundStyle(SkinmaxColors.lightTaupe)
-
-                    Text(viewModel.overallMessage)
-                        .font(.gbBodyM)
-                        .foregroundStyle(SkinmaxColors.warmBrown)
-                }
+                Text("SWIPE →")
+                    .font(.gbOverline)
+                    .tracking(2.0)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
             }
 
-            Spacer()
-
-            ScoreRing(
-                score: viewModel.glowScore,
-                size: 90,
-                lineWidth: 12,
-                trackColor: SkinmaxColors.softTan
-            )
-        }
-        .padding(SkinmaxSpacing.cardPadding)
-        .background(SkinmaxColors.white)
-        .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
-    }
-
-    // MARK: - Metric Carousel (3 per page, paged with dots)
-
-    private var metricPages: [[SkinMetric]] {
-        let metrics = viewModel.allMetrics
-        return stride(from: 0, to: metrics.count, by: 3).map {
-            Array(metrics[$0..<min($0 + 3, metrics.count)])
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 6) {
+                    ForEach(HomeViewModel.skinNutrients) { nutrient in
+                        SkinNutrientCard(
+                            label: nutrient.label,
+                            value: nutrient.value,
+                            target: nutrient.target,
+                            descriptor: nutrient.descriptor,
+                            color: nutrient.color,
+                            lightColor: nutrient.lightColor,
+                            progress: nutrient.progress
+                        )
+                    }
+                }
+            }
         }
     }
 
-    private var metricCarousel: some View {
-        Group {
-            if viewModel.allMetrics.isEmpty {
-                metricEmptyState
+    // MARK: - Today's Meals
+
+    private var mealsSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            let meals = viewModel.todayFoodScans.sorted { $0.createdAt < $1.createdAt }
+
+            Text("TODAY · \(meals.count) MEALS")
+                .font(.gbOverline)
+                .tracking(2.0)
+                .foregroundStyle(GlowbiteColors.lightTaupe)
+
+            if meals.isEmpty {
+                mealsEmptyState
             } else {
-                VStack(spacing: 10) {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        LazyHStack(spacing: 0) {
-                            ForEach(Array(metricPages.enumerated()), id: \.offset) { index, page in
-                                HStack(spacing: 8) {
-                                    ForEach(page) { metric in
-                                        metricCarouselCard(metric)
-                                    }
-                                    if page.count < 3 {
-                                        ForEach(0..<(3 - page.count), id: \.self) { _ in
-                                            Color.clear.frame(maxWidth: .infinity)
-                                        }
-                                    }
-                                }
-                                .containerRelativeFrame(.horizontal)
-                            }
+                VStack(spacing: 5) {
+                    ForEach(meals) { meal in
+                        Button {
+                            selectedFoodResult = meal
+                        } label: {
+                            MealRow(foodScan: meal)
                         }
-                        .scrollTargetLayout()
-                    }
-                    .scrollTargetBehavior(.viewAligned)
-
-                    if metricPages.count > 1 {
-                        HStack(spacing: 6) {
-                            ForEach(0..<metricPages.count, id: \.self) { index in
-                                Circle()
-                                    .fill(SkinmaxColors.softTan)
-                                    .frame(width: 6, height: 6)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        .onChange(of: viewModel.selectedDate) {
-            currentMetricPage = 0
-        }
-    }
-
-    private func metricCarouselCard(_ metric: SkinMetric) -> some View {
-        VStack(spacing: 8) {
-            CircleMetricCard(
-                label: metric.type.displayName,
-                score: metric.score,
-                icon: metric.type.icon,
-                size: 60
-            )
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 14)
-        .padding(.horizontal, 4)
-        .background(SkinmaxColors.white)
-        .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
-    }
-
-    private var metricEmptyState: some View {
-        VStack(spacing: 8) {
-            Text("No metrics yet")
-                .font(.gbTitleM)
-                .foregroundStyle(SkinmaxColors.darkBrown)
-            Text("No scan for \(viewModel.selectedDayName)")
-                .font(.gbBodyM)
-                .foregroundStyle(SkinmaxColors.lightTaupe)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, SkinmaxSpacing.lg)
-        .background(SkinmaxColors.white)
-        .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
-    }
-
-    // MARK: - Recent Activity (Face + Food, sorted by time)
-
-    private var recentActivitySection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Recent activity")
-                .font(.gbTitleM)
-                .foregroundStyle(SkinmaxColors.darkBrown)
-
-            let activity = viewModel.selectedDateActivity
-            if activity.isEmpty {
-                recentActivityEmptyState
-            } else {
-                VStack(spacing: 10) {
-                    ForEach(activity) { item in
-                        switch item {
-                        case .face(let scan):
-                            FaceActivityCard(scan: scan) {
-                                selectedScanResult = scan
-                            }
-                        case .food(let foodScan):
-                            FoodActivityCard(foodScan: foodScan) {
-                                selectedFoodResult = foodScan
-                            }
-                        }
+                        .buttonStyle(.plain)
                     }
                 }
             }
         }
     }
 
-    private var recentActivityEmptyState: some View {
-        VStack(spacing: 8) {
-            Text("\u{1F50D}")
-                .font(.gbDisplayM)
-            Text("No activity on \(viewModel.selectedDayName)")
-                .font(.gbTitleM)
-                .foregroundStyle(SkinmaxColors.darkBrown)
-            Text("Scan your face or log a meal to get started")
+    private var mealsEmptyState: some View {
+        VStack(spacing: 10) {
+            Text("No meals logged yet")
                 .font(.gbBodyM)
-                .foregroundStyle(SkinmaxColors.lightTaupe)
-                .multilineTextAlignment(.center)
+                .foregroundStyle(GlowbiteColors.lightTaupe)
+
+            Button {
+                onScanMeal()
+            } label: {
+                Text("Scan your first meal")
+                    .font(.gbCaption)
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(GlowbiteColors.coral)
+                    .clipShape(Capsule())
+            }
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, SkinmaxSpacing.lg)
-        .background(SkinmaxColors.white)
-        .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
-    }
-
-    // MARK: - Dismissible Insight Card
-
-    @ViewBuilder
-    private var insightCard: some View {
-        if !viewModel.insightDismissed {
-            DismissibleInsightCard(
-                emoji: "\u{1F4A1}",
-                title: "Today's Insight",
-                message: viewModel.todayInsight,
-                onDismiss: {
-                    withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
-                        viewModel.insightDismissed = true
-                    }
-                }
-            )
-            .transition(.asymmetric(
-                insertion: .identity,
-                removal: .move(edge: .trailing).combined(with: .opacity)
-            ))
-        }
+        .padding(.vertical, GlowbiteSpacing.lg)
+        .background(GlowbiteColors.paper)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .strokeBorder(
+                    GlowbiteColors.lightTaupe.opacity(0.30),
+                    style: StrokeStyle(lineWidth: 1, dash: [6, 3])
+                )
+        )
     }
 }

@@ -15,14 +15,14 @@ struct NotificationSettingsView: View {
                     subtitle: "9:00 AM",
                     isOn: $morningScan
                 )
-                Divider().foregroundStyle(SkinmaxColors.softTan)
+                Divider().foregroundStyle(GlowbiteColors.softTan)
                 toggleRow(
                     icon: "🍽",
                     title: "Meal Log Reminder",
                     subtitle: "12:00 PM, 6:00 PM",
                     isOn: $mealLog
                 )
-                Divider().foregroundStyle(SkinmaxColors.softTan)
+                Divider().foregroundStyle(GlowbiteColors.softTan)
                 toggleRow(
                     icon: "📊",
                     title: "Weekly Summary",
@@ -30,13 +30,13 @@ struct NotificationSettingsView: View {
                     isOn: $weeklySummary
                 )
             }
-            .background(SkinmaxColors.white)
+            .background(GlowbiteColors.white)
             .clipShape(RoundedRectangle(cornerRadius: 16))
-            .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
-            .padding(.horizontal, SkinmaxSpacing.screenPadding)
+            .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
+            .padding(.horizontal, GlowbiteSpacing.screenPadding)
             .padding(.top, 16)
         }
-        .background(SkinmaxColors.creamBG.ignoresSafeArea())
+        .background(GlowbiteColors.creamBG.ignoresSafeArea())
         .navigationTitle("Notifications")
         .navigationBarTitleDisplayMode(.inline)
         .onChange(of: morningScan) { _, enabled in
@@ -60,16 +60,16 @@ struct NotificationSettingsView: View {
                     Text(icon).font(.system(size: 18))
                     Text(title)
                         .font(.gbBodyM)
-                        .foregroundStyle(SkinmaxColors.darkBrown)
+                        .foregroundStyle(GlowbiteColors.darkBrown)
                 }
                 Text(subtitle)
                     .font(.gbCaption)
-                    .foregroundStyle(SkinmaxColors.lightTaupe)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
                     .padding(.leading, 30)
             }
             Spacer()
             Toggle("", isOn: isOn)
-                .tint(SkinmaxColors.coral)
+                .tint(GlowbiteColors.coral)
                 .labelsHidden()
         }
         .padding(.horizontal, 16)

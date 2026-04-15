@@ -8,59 +8,61 @@ struct AboutView: View {
                 RoundedRectangle(cornerRadius: 18)
                     .fill(
                         LinearGradient(
-                            colors: [SkinmaxColors.peachLight, SkinmaxColors.coral],
+                            colors: [GlowbiteColors.peachLight, GlowbiteColors.coral],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
                     )
                     .frame(width: 80, height: 80)
                     .overlay(
-                        Text("S")
+                        Text("G")
                             .font(.gbDisplayL)
+                            .tracking(-1.0)
                             .foregroundStyle(.white)
                     )
 
-                Text("Skinmax")
+                Text("Glowbite")
                     .font(.gbTitleL)
-                    .foregroundStyle(SkinmaxColors.darkBrown)
+                    .tracking(-0.3)
+                    .foregroundStyle(GlowbiteColors.darkBrown)
 
                 Text("Version 1.0")
                     .font(.gbBodyM)
-                    .foregroundStyle(SkinmaxColors.lightTaupe)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
 
                 // Description
-                Text("Skinmax uses AI to analyze your skin health and track how your diet affects your skin. Scan your face daily, log your meals, and discover personalized insights.")
+                Text("Glowbite uses AI to analyze your skin health and track how your diet affects your skin. Scan your face daily, log your meals, and discover personalized insights.")
                     .font(.gbBodyM)
-                    .foregroundStyle(SkinmaxColors.warmBrown)
+                    .foregroundStyle(GlowbiteColors.warmBrown)
                     .lineSpacing(3)
                     .multilineTextAlignment(.center)
-                    .padding(SkinmaxSpacing.cardPadding)
-                    .background(SkinmaxColors.white)
-                    .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-                    .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+                    .padding(GlowbiteSpacing.cardPadding)
+                    .background(GlowbiteColors.white)
+                    .clipShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadius))
+                    .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
 
                 // Links
                 VStack(spacing: 0) {
                     linkRow(label: "Privacy Policy", icon: "lock.fill")
-                    Divider().foregroundStyle(SkinmaxColors.softTan)
+                    Divider().foregroundStyle(GlowbiteColors.softTan)
                     linkRow(label: "Terms of Service", icon: "doc.text.fill")
-                    Divider().foregroundStyle(SkinmaxColors.softTan)
+                    Divider().foregroundStyle(GlowbiteColors.softTan)
                     mailRow()
                 }
-                .background(SkinmaxColors.white)
+                .background(GlowbiteColors.white)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
-                .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+                .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
 
                 Text("Made with ❤️ for better skin")
                     .font(.gbCaption)
-                    .foregroundStyle(SkinmaxColors.lightTaupe)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
                     .padding(.top, 8)
             }
-            .padding(.horizontal, SkinmaxSpacing.screenPadding)
+            .padding(.horizontal, GlowbiteSpacing.screenPadding)
             .padding(.top, 16)
             .padding(.bottom, 40)
         }
-        .background(SkinmaxColors.creamBG.ignoresSafeArea())
+        .background(GlowbiteColors.creamBG.ignoresSafeArea())
         .navigationTitle("About")
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -71,16 +73,16 @@ struct AboutView: View {
         } label: {
             HStack(spacing: 12) {
                 Image(systemName: icon)
-                    .font(.system(size: 16))
-                    .foregroundStyle(SkinmaxColors.coral)
+                    .font(.gbBodyL)
+                    .foregroundStyle(GlowbiteColors.coral)
                     .frame(width: 24)
                 Text(label)
                     .font(.gbBodyM)
-                    .foregroundStyle(SkinmaxColors.darkBrown)
+                    .foregroundStyle(GlowbiteColors.darkBrown)
                 Spacer()
                 Image(systemName: "chevron.right")
-                    .font(.system(size: 12))
-                    .foregroundStyle(SkinmaxColors.lightTaupe)
+                    .font(.gbCaption)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
             }
             .padding(.horizontal, 16)
             .frame(height: 50)
@@ -89,22 +91,22 @@ struct AboutView: View {
 
     private func mailRow() -> some View {
         Button {
-            if let url = URL(string: "mailto:support@skinmax.app") {
+            if let url = URL(string: "mailto:support@glowbite.app") {
                 UIApplication.shared.open(url)
             }
         } label: {
             HStack(spacing: 12) {
                 Image(systemName: "envelope.fill")
-                    .font(.system(size: 16))
-                    .foregroundStyle(SkinmaxColors.coral)
+                    .font(.gbBodyL)
+                    .foregroundStyle(GlowbiteColors.coral)
                     .frame(width: 24)
                 Text("Contact Us")
                     .font(.gbBodyM)
-                    .foregroundStyle(SkinmaxColors.darkBrown)
+                    .foregroundStyle(GlowbiteColors.darkBrown)
                 Spacer()
                 Image(systemName: "chevron.right")
-                    .font(.system(size: 12))
-                    .foregroundStyle(SkinmaxColors.lightTaupe)
+                    .font(.gbCaption)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
             }
             .padding(.horizontal, 16)
             .frame(height: 50)

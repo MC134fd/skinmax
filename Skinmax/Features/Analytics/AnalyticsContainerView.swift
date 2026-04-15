@@ -102,7 +102,7 @@ struct AnalyticsContainerView: View {
             VStack(alignment: .leading, spacing: 18) {
                 Text("Analytics")
                     .font(.gbTitleM)
-                    .foregroundStyle(SkinmaxColors.darkBrown)
+                    .foregroundStyle(GlowbiteColors.darkBrown)
                     .padding(.top, 12)
 
                 if hasEnoughData {
@@ -115,10 +115,10 @@ struct AnalyticsContainerView: View {
                 aiInsightsSection
                 weeklySummarySection
             }
-            .padding(.horizontal, SkinmaxSpacing.screenPadding)
+            .padding(.horizontal, GlowbiteSpacing.screenPadding)
             .padding(.bottom, 100)
         }
-        .background(SkinmaxColors.creamBG.ignoresSafeArea())
+        .background(GlowbiteColors.creamBG.ignoresSafeArea())
     }
 
     // MARK: - Trend Chart Card
@@ -127,8 +127,8 @@ struct AnalyticsContainerView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Text("Skin vs. Food Trends")
-                    .font(SkinmaxFonts.h3())
-                    .foregroundStyle(SkinmaxColors.darkBrown)
+                    .font(.gbBodyM)
+                    .foregroundStyle(GlowbiteColors.darkBrown)
 
                 Spacer()
 
@@ -141,7 +141,7 @@ struct AnalyticsContainerView: View {
                         x: .value("Date", point.date),
                         y: .value("Score", point.score)
                     )
-                    .foregroundStyle(SkinmaxColors.coral)
+                    .foregroundStyle(GlowbiteColors.coral)
                     .lineStyle(StrokeStyle(lineWidth: 2.5, lineCap: .round))
                     .interpolationMethod(.catmullRom)
 
@@ -149,7 +149,7 @@ struct AnalyticsContainerView: View {
                         x: .value("Date", point.date),
                         y: .value("Score", point.score)
                     )
-                    .foregroundStyle(SkinmaxColors.coral)
+                    .foregroundStyle(GlowbiteColors.coral)
                     .symbolSize(30)
                 }
 
@@ -158,7 +158,7 @@ struct AnalyticsContainerView: View {
                         x: .value("Date", point.date),
                         y: .value("Score", point.avgScore * 10)
                     )
-                    .foregroundStyle(SkinmaxColors.greenGood)
+                    .foregroundStyle(GlowbiteColors.greenGood)
                     .lineStyle(StrokeStyle(lineWidth: 2.5, lineCap: .round))
                     .interpolationMethod(.catmullRom)
 
@@ -166,7 +166,7 @@ struct AnalyticsContainerView: View {
                         x: .value("Date", point.date),
                         y: .value("Score", point.avgScore * 10)
                     )
-                    .foregroundStyle(SkinmaxColors.greenGood)
+                    .foregroundStyle(GlowbiteColors.greenGood)
                     .symbolSize(30)
                 }
             }
@@ -175,16 +175,16 @@ struct AnalyticsContainerView: View {
                 AxisMarks(position: .leading) { _ in
                     AxisValueLabel()
                         .font(.gbOverline)
-                        .foregroundStyle(SkinmaxColors.lightTaupe)
+                        .foregroundStyle(GlowbiteColors.lightTaupe)
                     AxisGridLine()
-                        .foregroundStyle(SkinmaxColors.softTan)
+                        .foregroundStyle(GlowbiteColors.softTan)
                 }
             }
             .chartXAxis {
                 AxisMarks { _ in
                     AxisValueLabel(format: .dateTime.day().month(.abbreviated))
                         .font(.gbOverline)
-                        .foregroundStyle(SkinmaxColors.lightTaupe)
+                        .foregroundStyle(GlowbiteColors.lightTaupe)
                 }
             }
             .frame(height: 200)
@@ -192,23 +192,23 @@ struct AnalyticsContainerView: View {
             // Legend
             HStack(spacing: 16) {
                 HStack(spacing: 4) {
-                    Circle().fill(SkinmaxColors.coral).frame(width: 6, height: 6)
+                    Circle().fill(GlowbiteColors.coral).frame(width: 6, height: 6)
                     Text("Skin Score")
                         .font(.gbCaption)
-                        .foregroundStyle(SkinmaxColors.warmBrown)
+                        .foregroundStyle(GlowbiteColors.warmBrown)
                 }
                 HStack(spacing: 4) {
-                    Circle().fill(SkinmaxColors.greenGood).frame(width: 6, height: 6)
+                    Circle().fill(GlowbiteColors.greenGood).frame(width: 6, height: 6)
                     Text("Food Avg")
                         .font(.gbCaption)
-                        .foregroundStyle(SkinmaxColors.warmBrown)
+                        .foregroundStyle(GlowbiteColors.warmBrown)
                 }
             }
         }
-        .padding(SkinmaxSpacing.cardPadding)
-        .background(SkinmaxColors.white)
-        .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+        .padding(GlowbiteSpacing.cardPadding)
+        .background(GlowbiteColors.white)
+        .clipShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadius))
+        .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 
     // MARK: - Time Range Picker
@@ -223,11 +223,11 @@ struct AnalyticsContainerView: View {
                 } label: {
                     Text(range.rawValue)
                         .font(.gbCaption)
-                        .foregroundStyle(timeRange == range ? SkinmaxColors.coral : SkinmaxColors.lightTaupe)
+                        .foregroundStyle(timeRange == range ? GlowbiteColors.coral : GlowbiteColors.lightTaupe)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 6)
                         .background(
-                            timeRange == range ? SkinmaxColors.peachWash : Color.clear
+                            timeRange == range ? GlowbiteColors.peachWash : Color.clear
                         )
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
@@ -242,7 +242,7 @@ struct AnalyticsContainerView: View {
             scoreSummaryCard(
                 label: "AVG SKIN SCORE",
                 value: avgSkinScore.map { String(format: "%.0f", $0) },
-                color: avgSkinScore.map { SkinmaxColors.trafficLight(for: $0) },
+                color: avgSkinScore.map { GlowbiteColors.trafficLight(for: $0) },
                 change: skinScoreChange,
                 suffix: nil
             )
@@ -250,7 +250,7 @@ struct AnalyticsContainerView: View {
             scoreSummaryCard(
                 label: "AVG FOOD SCORE",
                 value: avgFoodScore.map { String(format: "%.1f", $0) },
-                color: avgFoodScore.map { SkinmaxColors.trafficLight(for: $0 * 10) },
+                color: avgFoodScore.map { GlowbiteColors.trafficLight(for: $0 * 10) },
                 change: foodScoreChange,
                 suffix: "/10"
             )
@@ -261,17 +261,19 @@ struct AnalyticsContainerView: View {
         VStack(spacing: 4) {
             Text(label)
                 .font(.gbOverline)
-                .foregroundStyle(SkinmaxColors.lightTaupe)
+                .tracking(2.0)
+                .foregroundStyle(GlowbiteColors.lightTaupe)
 
             HStack(spacing: 2) {
                 Text(value ?? "--")
                     .font(.gbTitleL)
-                    .foregroundStyle(color ?? SkinmaxColors.lightTaupe)
+                    .tracking(-0.3)
+                    .foregroundStyle(color ?? GlowbiteColors.lightTaupe)
 
                 if let suffix {
                     Text(suffix)
                         .font(.gbCaption)
-                        .foregroundStyle(SkinmaxColors.lightTaupe)
+                        .foregroundStyle(GlowbiteColors.lightTaupe)
                 }
             }
 
@@ -279,14 +281,14 @@ struct AnalyticsContainerView: View {
                 let positive = change >= 0
                 Text("\(positive ? "\u{2191}" : "\u{2193}") \(positive ? "+" : "")\(String(format: "%.1f", change))%")
                     .font(.gbCaption)
-                    .foregroundStyle(positive ? SkinmaxColors.greenGood : SkinmaxColors.redAlert)
+                    .foregroundStyle(positive ? GlowbiteColors.greenGood : GlowbiteColors.redAlert)
             }
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 14)
-        .background(SkinmaxColors.white)
+        .background(GlowbiteColors.white)
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+        .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 
     // MARK: - AI Insights Section
@@ -294,13 +296,13 @@ struct AnalyticsContainerView: View {
     private var aiInsightsSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("AI Insights")
-                .font(SkinmaxFonts.h3())
-                .foregroundStyle(SkinmaxColors.darkBrown)
+                .font(.gbBodyM)
+                .foregroundStyle(GlowbiteColors.darkBrown)
 
             if insights.isEmpty {
                 Text("Log more data to unlock AI insights.")
                     .font(.gbBodyM)
-                    .foregroundStyle(SkinmaxColors.lightTaupe)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
                     .padding(.vertical, 12)
             } else {
                 ForEach(insights) { insight in
@@ -310,17 +312,18 @@ struct AnalyticsContainerView: View {
 
                         Text(insight.text)
                             .font(.gbBodyM)
-                            .foregroundStyle(SkinmaxColors.darkBrown)
+                            .foregroundStyle(GlowbiteColors.darkBrown)
                             .lineSpacing(2)
 
                         Spacer(minLength: 0)
 
                         Text("— AI")
                             .font(.gbOverline)
-                            .foregroundStyle(SkinmaxColors.lightTaupe)
+                            .tracking(2.0)
+                            .foregroundStyle(GlowbiteColors.lightTaupe)
                     }
                     .padding(14)
-                    .background(SkinmaxColors.peachWash)
+                    .background(GlowbiteColors.peachWash)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                 }
             }
@@ -332,8 +335,8 @@ struct AnalyticsContainerView: View {
     private var weeklySummarySection: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Weekly Summary")
-                .font(SkinmaxFonts.h3())
-                .foregroundStyle(SkinmaxColors.darkBrown)
+                .font(.gbBodyM)
+                .foregroundStyle(GlowbiteColors.darkBrown)
 
             VStack(spacing: 0) {
                 if let best = bestDay {
@@ -341,7 +344,7 @@ struct AnalyticsContainerView: View {
                         icon: "\u{1F3C6}",
                         label: "Best Day",
                         value: "\(Int(best.score)) — \(best.date.formatted(date: .abbreviated, time: .omitted))",
-                        color: SkinmaxColors.greenGood,
+                        color: GlowbiteColors.greenGood,
                         showDivider: true
                     )
                 }
@@ -351,7 +354,7 @@ struct AnalyticsContainerView: View {
                         icon: "\u{1F4C9}",
                         label: "Worst Day",
                         value: "\(Int(worst.score)) — \(worst.date.formatted(date: .abbreviated, time: .omitted))",
-                        color: SkinmaxColors.redAlert,
+                        color: GlowbiteColors.redAlert,
                         showDivider: true
                     )
                 }
@@ -361,7 +364,7 @@ struct AnalyticsContainerView: View {
                         icon: "\u{1F947}",
                         label: "Top Food",
                         value: "\(food.name) (\(String(format: "%.1f", food.skinImpactScore))/10)",
-                        color: SkinmaxColors.greenGood,
+                        color: GlowbiteColors.greenGood,
                         showDivider: true
                     )
                 }
@@ -370,7 +373,7 @@ struct AnalyticsContainerView: View {
                     icon: "\u{1F525}",
                     label: "Scan Streak",
                     value: "\(scanStreak) days",
-                    color: SkinmaxColors.coral,
+                    color: GlowbiteColors.coral,
                     showDivider: true
                 )
 
@@ -378,13 +381,13 @@ struct AnalyticsContainerView: View {
                     icon: "\u{1F37D}",
                     label: "Log Streak",
                     value: "\(foodLogStreak) days",
-                    color: SkinmaxColors.coral,
+                    color: GlowbiteColors.coral,
                     showDivider: false
                 )
             }
-            .background(SkinmaxColors.white)
+            .background(GlowbiteColors.white)
             .clipShape(RoundedRectangle(cornerRadius: 16))
-            .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+            .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
         }
     }
 
@@ -396,7 +399,7 @@ struct AnalyticsContainerView: View {
 
                 Text(label)
                     .font(.gbBodyM)
-                    .foregroundStyle(SkinmaxColors.warmBrown)
+                    .foregroundStyle(GlowbiteColors.warmBrown)
 
                 Spacer()
 
@@ -409,7 +412,7 @@ struct AnalyticsContainerView: View {
 
             if showDivider {
                 Divider()
-                    .foregroundStyle(SkinmaxColors.softTan)
+                    .foregroundStyle(GlowbiteColors.softTan)
                     .padding(.horizontal, 14)
             }
         }
@@ -423,22 +426,22 @@ struct AnalyticsContainerView: View {
                 .font(.system(size: 40))
 
             Text("Keep logging!")
-                .font(SkinmaxFonts.h3())
-                .foregroundStyle(SkinmaxColors.darkBrown)
+                .font(.gbBodyM)
+                .foregroundStyle(GlowbiteColors.darkBrown)
 
             let dataPoints = skinData.count + foodData.count
             Text("We need at least 2 days of data to show trends.\n\(dataPoints) of 2 days logged.")
                 .font(.gbBodyM)
-                .foregroundStyle(SkinmaxColors.lightTaupe)
+                .foregroundStyle(GlowbiteColors.lightTaupe)
                 .multilineTextAlignment(.center)
 
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(SkinmaxColors.softTan)
+                        .fill(GlowbiteColors.softTan)
                         .frame(height: 6)
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(SkinmaxColors.coral)
+                        .fill(GlowbiteColors.coral)
                         .frame(width: geo.size.width * min(Double(dataPoints) / 2.0, 1.0), height: 6)
                 }
             }
@@ -447,8 +450,8 @@ struct AnalyticsContainerView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 20)
-        .background(SkinmaxColors.white)
-        .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+        .background(GlowbiteColors.white)
+        .clipShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadius))
+        .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 }

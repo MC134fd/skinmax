@@ -13,14 +13,13 @@
 		8077974BF65C4C84BEC03267 /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = AE3CA0E406A749B99E5FBA21 /* Secrets.plist */; };
 		13F632E415EF817E2E220577 /* Nunito-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2D87C9F11F459C410B8D0A0E /* Nunito-Medium.ttf */; };
 		16A45C326274D00833C7D30E /* FoodLogSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C012FA3DE75DD4EC6F889FA4 /* FoodLogSheet.swift */; };
-		18526CAFEF5EB56A1DDCC2A1 /* SkinmaxComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FF0AC04361F74E7E940E898 /* SkinmaxComponents.swift */; };
+		18526CAFEF5EB56A1DDCC2A1 /* GlowbiteComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FF0AC04361F74E7E940E898 /* GlowbiteComponents.swift */; };
 		1BA73256C51F0077A202FC41 /* FoodLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F758F2CF96DBEB782C5D7EAD /* FoodLogView.swift */; };
 		1F7BEDDB0AA0E8477F11567C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8C92E9FC2E6EC29C11296D /* ContentView.swift */; };
 		26E2327AF0850BC97B7EC21A /* AnalysisHomeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B798A683F2075CD0B72EB980 /* AnalysisHomeCard.swift */; };
 		32243F2CD354716E2C3B773D /* AnalyticsContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB45A0EC14BB78679326126 /* AnalyticsContainerView.swift */; };
 		36E480F7A356D96EB64BE34B /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB665B5506616422E8D8E8 /* DataStore.swift */; };
 		3EB2F1633F80401D6CEB5931 /* ImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D66257683CC044466A99F3C /* ImageProcessor.swift */; };
-		4881D1DD545F96F4873EBA8A /* SkinmaxFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = D91D03E3C062377D78130775 /* SkinmaxFonts.swift */; };
 		4C7EB9EEF16C799DF79042C1 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2322698B4CE43808BF519A13 /* Config.swift */; };
 		537CF4CA6CDBD1FDB47B35F1 /* AnalysisCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FAC2EF0B4C651CE05CC52C /* AnalysisCoordinator.swift */; };
 		5E0F9D46E2E85FE7007973D2 /* FoodLogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF45D3C22D5A27B1B00ABDA2 /* FoodLogViewModel.swift */; };
@@ -34,15 +33,15 @@
 		9BE153E2C646F06C4EDEF946 /* NotificationSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B3C4DB70E7D45D6240FF6F2 /* NotificationSettingsView.swift */; };
 		9E6901CCE6AC4486460E9CB8 /* Nunito-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 687A18A53F4E50D8C19653BF /* Nunito-Regular.ttf */; };
 		9EFFDF60469A01AF2A25DF6B /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E461395F6A57AD71DD3C33E6 /* HapticManager.swift */; };
-		FCC9C2804B7F428D9EA7744B /* SkinmaxLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241BBF6DF843429F8D5F9F7C /* SkinmaxLog.swift */; };
+		FCC9C2804B7F428D9EA7744B /* GlowbiteLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241BBF6DF843429F8D5F9F7C /* GlowbiteLog.swift */; };
 		9F4386F4AA40096EC9420AA3 /* FoodScanResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6AD93ABE52DFE5AF5A135AC /* FoodScanResultView.swift */; };
 		A5EB32042878CE05283EA447 /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9609A8F232A1CDC4D15E713 /* CameraPreviewView.swift */; };
 		A6A578429E8524656A3E4008 /* SkinAnalysisService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D939DFD2FCB97DAC14A877D /* SkinAnalysisService.swift */; };
-		A7EF358DD5FA1A0B9ABBCD45 /* SkinmaxSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0DD8F2FE49B6697BE3B793 /* SkinmaxSpacing.swift */; };
+		A7EF358DD5FA1A0B9ABBCD45 /* GlowbiteSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0DD8F2FE49B6697BE3B793 /* GlowbiteSpacing.swift */; };
 		A8226DB2BC35CF531FB1F2BD /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7623671B5F6783E85000295 /* AccountView.swift */; };
 		AC72180E5342A7EAE3B6AAF6 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A028B16977384E6719862F4D /* CameraManager.swift */; };
 		ACE04C0C03288E45B626AC8C /* DataSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944584F52D956C7269EF86AA /* DataSettingsView.swift */; };
-		BC110F0C6404E35177DD3185 /* SkinmaxApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDF88F48200F3FEBEA2C1F9 /* SkinmaxApp.swift */; };
+		BC110F0C6404E35177DD3185 /* GlowbiteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDF88F48200F3FEBEA2C1F9 /* GlowbiteApp.swift */; };
 		C095671A41F2FBA97F5E67FB /* FaceScanViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CE6CB81C125B88E2656A92 /* FaceScanViewModel.swift */; };
 		C0E43B907000A71C5AA6DB7B /* FoodRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B1A4F14B83115BE86BB147 /* FoodRowView.swift */; };
 		C2C794AE38363227B6DDD0EE /* LocalCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1188B1A9C8C2C5DCE2C386F /* LocalCache.swift */; };
@@ -53,7 +52,7 @@
 		CAED5FEE4D41BAC59C27A4F1 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E26244F53177526D6C89B9 /* AboutView.swift */; };
 		CFA062AE218408C828A85370 /* SkinModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F5F523CFDC16E5B6C6780 /* SkinModels.swift */; };
 		AC11FF00BBBB000100000001 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC11FF00BBBB000200000001 /* Typography.swift */; };
-		D4175D2B5F704DC445268345 /* SkinmaxColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEAEBDB007C6722C5F580F73 /* SkinmaxColors.swift */; };
+		D4175D2B5F704DC445268345 /* GlowbiteColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEAEBDB007C6722C5F580F73 /* GlowbiteColors.swift */; };
 		D4D52C3A0F78D79916D63CD9 /* AppStoreMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839D4C1B23EF45B6040248C8 /* AppStoreMetadata.swift */; };
 		D9644A4D0F3CA8EC21C0253E /* SkinDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54411EEA23C91979EEC4796A /* SkinDetailView.swift */; };
 		DA2D26BF997AED659003A776 /* ScanHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DA4111435F1A7F5B55A8626 /* ScanHistoryView.swift */; };
@@ -62,6 +61,11 @@
 		E6EBB9FD527115D459030316 /* FaceScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68B8A2590204BE7F1BE953 /* FaceScanView.swift */; };
 		F14226768E91B9B4FE4740AB /* Config.example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28515B96C7709727306F9B3E /* Config.example.swift */; };
 		F48BB771AF1F5DA1C87A1BAD /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF50994FDF6BCB906DE8ED8 /* HomeViewModel.swift */; };
+		A1B2C3D4E5F60001B0000001 /* CalorieRingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001A0000001 /* CalorieRingCard.swift */; };
+		A1B2C3D4E5F60001B0000002 /* GlowScoreTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001A0000002 /* GlowScoreTile.swift */; };
+		A1B2C3D4E5F60001B0000003 /* HydrationTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001A0000003 /* HydrationTile.swift */; };
+		A1B2C3D4E5F60001B0000004 /* SkinNutrientCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001A0000004 /* SkinNutrientCard.swift */; };
+		A1B2C3D4E5F60001B0000005 /* MealRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001A0000005 /* MealRow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,9 +77,9 @@
 		AC11FF00CCCC000200000001 /* Nunito-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-ExtraBold.ttf"; sourceTree = "<group>"; };
 		AC11FF00DDDD000200000001 /* Nunito-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Black.ttf"; sourceTree = "<group>"; };
 		1E68B8A2590204BE7F1BE953 /* FaceScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceScanView.swift; sourceTree = "<group>"; };
-		1F0DD8F2FE49B6697BE3B793 /* SkinmaxSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinmaxSpacing.swift; sourceTree = "<group>"; };
+		1F0DD8F2FE49B6697BE3B793 /* GlowbiteSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowbiteSpacing.swift; sourceTree = "<group>"; };
 		1F3F5F523CFDC16E5B6C6780 /* SkinModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinModels.swift; sourceTree = "<group>"; };
-		1FF0AC04361F74E7E940E898 /* SkinmaxComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinmaxComponents.swift; sourceTree = "<group>"; };
+		1FF0AC04361F74E7E940E898 /* GlowbiteComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowbiteComponents.swift; sourceTree = "<group>"; };
 		22B148AF975ECA6186AA7F85 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		AC11FF00AAAA000200000001 /* ActivityCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCards.swift; sourceTree = "<group>"; };
 		2322698B4CE43808BF519A13 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
@@ -105,21 +109,25 @@
 		B9609A8F232A1CDC4D15E713 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
 		BFE30112AD5A47636A9E6360 /* Nunito-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Bold.ttf"; sourceTree = "<group>"; };
 		C012FA3DE75DD4EC6F889FA4 /* FoodLogSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLogSheet.swift; sourceTree = "<group>"; };
-		CEAEBDB007C6722C5F580F73 /* SkinmaxColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinmaxColors.swift; sourceTree = "<group>"; };
+		CEAEBDB007C6722C5F580F73 /* GlowbiteColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowbiteColors.swift; sourceTree = "<group>"; };
 		AC11FF00BBBB000200000001 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
-		D91D03E3C062377D78130775 /* SkinmaxFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinmaxFonts.swift; sourceTree = "<group>"; };
 		DF45D3C22D5A27B1B00ABDA2 /* FoodLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLogViewModel.swift; sourceTree = "<group>"; };
 		DF46C6DFAD8C399295A4F5FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		AE3CA0E406A749B99E5FBA21 /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
 		DF94BD712BEA9A2282A01ED5 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
 		E1188B1A9C8C2C5DCE2C386F /* LocalCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCache.swift; sourceTree = "<group>"; };
 		E461395F6A57AD71DD3C33E6 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
-		241BBF6DF843429F8D5F9F7C /* SkinmaxLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinmaxLog.swift; sourceTree = "<group>"; };
+		241BBF6DF843429F8D5F9F7C /* GlowbiteLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowbiteLog.swift; sourceTree = "<group>"; };
 		E6AD93ABE52DFE5AF5A135AC /* FoodScanResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodScanResultView.swift; sourceTree = "<group>"; };
-		EDDF88F48200F3FEBEA2C1F9 /* SkinmaxApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinmaxApp.swift; sourceTree = "<group>"; };
+		EDDF88F48200F3FEBEA2C1F9 /* GlowbiteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowbiteApp.swift; sourceTree = "<group>"; };
 		F2B1A4F14B83115BE86BB147 /* FoodRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodRowView.swift; sourceTree = "<group>"; };
 		F758F2CF96DBEB782C5D7EAD /* FoodLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLogView.swift; sourceTree = "<group>"; };
 		F7623671B5F6783E85000295 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60001A0000001 /* CalorieRingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieRingCard.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60001A0000002 /* GlowScoreTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowScoreTile.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60001A0000003 /* HydrationTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HydrationTile.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60001A0000004 /* SkinNutrientCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinNutrientCard.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60001A0000005 /* MealRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealRow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,10 +159,9 @@
 		0A17DFECE51ED131BF968B83 /* Design */ = {
 			isa = PBXGroup;
 			children = (
-				CEAEBDB007C6722C5F580F73 /* SkinmaxColors.swift */,
-				1FF0AC04361F74E7E940E898 /* SkinmaxComponents.swift */,
-				D91D03E3C062377D78130775 /* SkinmaxFonts.swift */,
-				1F0DD8F2FE49B6697BE3B793 /* SkinmaxSpacing.swift */,
+				CEAEBDB007C6722C5F580F73 /* GlowbiteColors.swift */,
+				1FF0AC04361F74E7E940E898 /* GlowbiteComponents.swift */,
+				1F0DD8F2FE49B6697BE3B793 /* GlowbiteSpacing.swift */,
 				AC11FF00BBBB000200000001 /* Typography.swift */,
 			);
 			path = Design;
@@ -175,12 +182,25 @@
 		28168C7BE12AE66A5BAD495C /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				A1B2C3D4E5F60001C0000001 /* Components */,
 				AC11FF00AAAA000200000001 /* ActivityCards.swift */,
 				B798A683F2075CD0B72EB980 /* AnalysisHomeCard.swift */,
 				22B148AF975ECA6186AA7F85 /* HomeView.swift */,
 				2AF50994FDF6BCB906DE8ED8 /* HomeViewModel.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		A1B2C3D4E5F60001C0000001 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F60001A0000001 /* CalorieRingCard.swift */,
+				A1B2C3D4E5F60001A0000002 /* GlowScoreTile.swift */,
+				A1B2C3D4E5F60001A0000003 /* HydrationTile.swift */,
+				A1B2C3D4E5F60001A0000005 /* MealRow.swift */,
+				A1B2C3D4E5F60001A0000004 /* SkinNutrientCard.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		455DAC3CF028B99CFFD33D25 /* Skinmax */ = {
@@ -238,7 +258,7 @@
 			isa = PBXGroup;
 			children = (
 				8F8C92E9FC2E6EC29C11296D /* ContentView.swift */,
-				EDDF88F48200F3FEBEA2C1F9 /* SkinmaxApp.swift */,
+				EDDF88F48200F3FEBEA2C1F9 /* GlowbiteApp.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -266,7 +286,7 @@
 				28515B96C7709727306F9B3E /* Config.example.swift */,
 				2322698B4CE43808BF519A13 /* Config.swift */,
 				E461395F6A57AD71DD3C33E6 /* HapticManager.swift */,
-				241BBF6DF843429F8D5F9F7C /* SkinmaxLog.swift */,
+				241BBF6DF843429F8D5F9F7C /* GlowbiteLog.swift */,
 				6D66257683CC044466A99F3C /* ImageProcessor.swift */,
 			);
 			path = Utilities;
@@ -457,7 +477,7 @@
 				C0E43B907000A71C5AA6DB7B /* FoodRowView.swift in Sources */,
 				9F4386F4AA40096EC9420AA3 /* FoodScanResultView.swift in Sources */,
 				9EFFDF60469A01AF2A25DF6B /* HapticManager.swift in Sources */,
-				FCC9C2804B7F428D9EA7744B /* SkinmaxLog.swift in Sources */,
+				FCC9C2804B7F428D9EA7744B /* GlowbiteLog.swift in Sources */,
 				AC11FF00AAAA000100000001 /* ActivityCards.swift in Sources */,
 				C918B211140CDB2A14B6C15F /* HomeView.swift in Sources */,
 				F48BB771AF1F5DA1C87A1BAD /* HomeViewModel.swift in Sources */,
@@ -472,12 +492,16 @@
 				A6A578429E8524656A3E4008 /* SkinAnalysisService.swift in Sources */,
 				D9644A4D0F3CA8EC21C0253E /* SkinDetailView.swift in Sources */,
 				CFA062AE218408C828A85370 /* SkinModels.swift in Sources */,
-				BC110F0C6404E35177DD3185 /* SkinmaxApp.swift in Sources */,
-				D4175D2B5F704DC445268345 /* SkinmaxColors.swift in Sources */,
+				BC110F0C6404E35177DD3185 /* GlowbiteApp.swift in Sources */,
+				D4175D2B5F704DC445268345 /* GlowbiteColors.swift in Sources */,
 				AC11FF00BBBB000100000001 /* Typography.swift in Sources */,
-				18526CAFEF5EB56A1DDCC2A1 /* SkinmaxComponents.swift in Sources */,
-				4881D1DD545F96F4873EBA8A /* SkinmaxFonts.swift in Sources */,
-				A7EF358DD5FA1A0B9ABBCD45 /* SkinmaxSpacing.swift in Sources */,
+				18526CAFEF5EB56A1DDCC2A1 /* GlowbiteComponents.swift in Sources */,
+				A7EF358DD5FA1A0B9ABBCD45 /* GlowbiteSpacing.swift in Sources */,
+				A1B2C3D4E5F60001B0000001 /* CalorieRingCard.swift in Sources */,
+				A1B2C3D4E5F60001B0000002 /* GlowScoreTile.swift in Sources */,
+				A1B2C3D4E5F60001B0000003 /* HydrationTile.swift in Sources */,
+				A1B2C3D4E5F60001B0000004 /* SkinNutrientCard.swift in Sources */,
+				A1B2C3D4E5F60001B0000005 /* MealRow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -621,7 +645,7 @@
 				DEVELOPMENT_TEAM = 6G9QKGZ3ZQ;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Skinmax/Resources/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Skinmax;
+				INFOPLIST_KEY_CFBundleDisplayName = Glowbite;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -643,7 +667,7 @@
 				DEVELOPMENT_TEAM = 6G9QKGZ3ZQ;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Skinmax/Resources/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Skinmax;
+				INFOPLIST_KEY_CFBundleDisplayName = Glowbite;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

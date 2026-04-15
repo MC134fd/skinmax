@@ -24,7 +24,7 @@ enum FoodAnalysisError: LocalizedError {
 final class FoodAnalysisService: FoodAnalysisServiceProtocol {
     private let apiKey: String
     private let endpoint = "https://api.openai.com/v1/chat/completions"
-    private let log = SkinmaxLog.foodAPI
+    private let log = GlowbiteLog.foodAPI
 
     init(apiKey: String = Config.openAIAPIKey) {
         self.apiKey = apiKey

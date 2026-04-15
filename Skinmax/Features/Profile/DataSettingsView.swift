@@ -13,43 +13,43 @@ struct DataSettingsView: View {
                 // Info card
                 HStack(alignment: .top, spacing: 10) {
                     Image(systemName: "info.circle.fill")
-                        .foregroundStyle(SkinmaxColors.coral)
+                        .foregroundStyle(GlowbiteColors.coral)
                     Text("Your data is stored for 90 days. Older data is automatically removed to keep the app fast.")
                         .font(.gbBodyM)
-                        .foregroundStyle(SkinmaxColors.darkBrown)
+                        .foregroundStyle(GlowbiteColors.darkBrown)
                 }
                 .padding(14)
-                .background(SkinmaxColors.peachWash)
+                .background(GlowbiteColors.peachWash)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
 
                 // Stats
                 VStack(spacing: 0) {
                     statRow(label: "Skin Scans", value: "\(skinCount)")
-                    Divider().foregroundStyle(SkinmaxColors.softTan)
+                    Divider().foregroundStyle(GlowbiteColors.softTan)
                     statRow(label: "Food Logs", value: "\(foodCount)")
                 }
-                .background(SkinmaxColors.white)
+                .background(GlowbiteColors.white)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
-                .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+                .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
 
                 // Delete button
                 Button {
                     showDeleteAlert = true
                 } label: {
                     Text("Delete All Data")
-                        .font(SkinmaxFonts.h3())
+                        .font(.gbBodyM)
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
-                        .background(SkinmaxColors.redAlert)
-                        .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.buttonCornerRadius))
+                        .background(GlowbiteColors.redAlert)
+                        .clipShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.buttonCornerRadius))
                 }
                 .padding(.top, 20)
             }
-            .padding(.horizontal, SkinmaxSpacing.screenPadding)
+            .padding(.horizontal, GlowbiteSpacing.screenPadding)
             .padding(.top, 16)
         }
-        .background(SkinmaxColors.creamBG.ignoresSafeArea())
+        .background(GlowbiteColors.creamBG.ignoresSafeArea())
         .navigationTitle("Data & Storage")
         .navigationBarTitleDisplayMode(.inline)
         .alert("Delete All Data?", isPresented: $showDeleteAlert) {
@@ -67,11 +67,11 @@ struct DataSettingsView: View {
         HStack {
             Text(label)
                 .font(.gbBodyM)
-                .foregroundStyle(SkinmaxColors.darkBrown)
+                .foregroundStyle(GlowbiteColors.darkBrown)
             Spacer()
             Text(value)
                 .font(.gbBodyM)
-                .foregroundStyle(SkinmaxColors.warmBrown)
+                .foregroundStyle(GlowbiteColors.warmBrown)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)

@@ -15,7 +15,7 @@ struct FoodLogSheet: View {
                 VStack(alignment: .leading, spacing: 18) {
                     Text("Log a Meal")
                         .font(.gbTitleM)
-                        .foregroundStyle(SkinmaxColors.darkBrown)
+                        .foregroundStyle(GlowbiteColors.darkBrown)
                         .padding(.top, 8)
 
                     foodNameField
@@ -28,15 +28,15 @@ struct FoodLogSheet: View {
                     if let error = viewModel.errorMessage {
                         Text(error)
                             .font(.gbCaption)
-                            .foregroundStyle(SkinmaxColors.redAlert)
+                            .foregroundStyle(GlowbiteColors.redAlert)
                     }
 
                     analyzeButton
                 }
-                .padding(.horizontal, SkinmaxSpacing.screenPadding)
+                .padding(.horizontal, GlowbiteSpacing.screenPadding)
                 .padding(.bottom, 30)
             }
-            .background(SkinmaxColors.creamBG.ignoresSafeArea())
+            .background(GlowbiteColors.creamBG.ignoresSafeArea())
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -44,8 +44,8 @@ struct FoodLogSheet: View {
                         dismiss()
                     } label: {
                         Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 22))
-                            .foregroundStyle(SkinmaxColors.lightTaupe)
+                            .font(.gbDisplayM)
+                            .foregroundStyle(GlowbiteColors.lightTaupe)
                     }
                 }
             }
@@ -83,17 +83,17 @@ struct FoodLogSheet: View {
         VStack(alignment: .leading, spacing: 6) {
             Text("What did you eat?")
                 .font(.gbCaption)
-                .foregroundStyle(SkinmaxColors.lightTaupe)
+                .foregroundStyle(GlowbiteColors.lightTaupe)
 
             TextField("e.g. Salmon bowl, Pizza...", text: $viewModel.foodName)
                 .font(.gbBodyM)
-                .foregroundStyle(SkinmaxColors.darkBrown)
+                .foregroundStyle(GlowbiteColors.darkBrown)
                 .padding(14)
-                .background(SkinmaxColors.white)
+                .background(GlowbiteColors.white)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(SkinmaxColors.softTan, lineWidth: 1)
+                        .stroke(GlowbiteColors.softTan, lineWidth: 1)
                 )
         }
     }
@@ -103,7 +103,7 @@ struct FoodLogSheet: View {
         VStack(alignment: .leading, spacing: 6) {
             Text("Add a photo")
                 .font(.gbCaption)
-                .foregroundStyle(SkinmaxColors.lightTaupe)
+                .foregroundStyle(GlowbiteColors.lightTaupe)
 
             HStack(spacing: 10) {
                 Button {
@@ -113,15 +113,15 @@ struct FoodLogSheet: View {
                         Image(systemName: "camera.fill")
                         Text("Take Photo")
                     }
-                    .font(SkinmaxFonts.h3())
-                    .foregroundStyle(SkinmaxColors.darkBrown)
+                    .font(.gbBodyM)
+                    .foregroundStyle(GlowbiteColors.darkBrown)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
-                    .background(SkinmaxColors.white)
+                    .background(GlowbiteColors.white)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
-                            .stroke(SkinmaxColors.softTan, lineWidth: 1)
+                            .stroke(GlowbiteColors.softTan, lineWidth: 1)
                     )
                 }
 
@@ -130,15 +130,15 @@ struct FoodLogSheet: View {
                         Image(systemName: "photo.fill")
                         Text("Choose Photo")
                     }
-                    .font(SkinmaxFonts.h3())
-                    .foregroundStyle(SkinmaxColors.darkBrown)
+                    .font(.gbBodyM)
+                    .foregroundStyle(GlowbiteColors.darkBrown)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
-                    .background(SkinmaxColors.white)
+                    .background(GlowbiteColors.white)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
-                            .stroke(SkinmaxColors.softTan, lineWidth: 1)
+                            .stroke(GlowbiteColors.softTan, lineWidth: 1)
                     )
                 }
             }
@@ -161,7 +161,7 @@ struct FoodLogSheet: View {
                 photosPickerItem = nil
             } label: {
                 Image(systemName: "xmark.circle.fill")
-                    .font(.system(size: 24))
+                    .font(.gbDisplayM)
                     .foregroundStyle(.white)
                     .shadow(radius: 4)
             }
@@ -188,7 +188,7 @@ struct FoodLogSheet: View {
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
             .frame(height: 50)
-            .background(SkinmaxColors.coral)
+            .background(GlowbiteColors.coral)
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .opacity(viewModel.canAnalyze ? 1.0 : 0.5)
         }

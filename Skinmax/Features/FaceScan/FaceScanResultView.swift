@@ -20,10 +20,10 @@ struct FaceScanResultView: View {
                     metricsGrid
                     aiInsightCard
                 }
-                .padding(.horizontal, SkinmaxSpacing.screenPadding)
+                .padding(.horizontal, GlowbiteSpacing.screenPadding)
                 .padding(.bottom, 40)
             }
-            .background(SkinmaxColors.creamBG.ignoresSafeArea())
+            .background(GlowbiteColors.creamBG.ignoresSafeArea())
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
@@ -33,8 +33,8 @@ struct FaceScanResultView: View {
                             Image(systemName: "chevron.left")
                             Text("Back")
                         }
-                        .font(SkinmaxFonts.h3())
-                        .foregroundStyle(SkinmaxColors.coral)
+                        .font(.gbBodyM)
+                        .foregroundStyle(GlowbiteColors.coral)
                     }
                 }
 
@@ -43,13 +43,13 @@ struct FaceScanResultView: View {
                         saveScan()
                     } label: {
                         Text(saved ? "Saved" : "Save")
-                            .font(SkinmaxFonts.h3())
-                            .foregroundStyle(SkinmaxColors.darkBrown)
+                            .font(.gbBodyM)
+                            .foregroundStyle(GlowbiteColors.darkBrown)
                             .padding(.horizontal, 16)
                             .padding(.vertical, 6)
                             .background(
                                 LinearGradient(
-                                    colors: [SkinmaxColors.coral, SkinmaxColors.peachLight],
+                                    colors: [GlowbiteColors.coral, GlowbiteColors.peachLight],
                                     startPoint: .leading,
                                     endPoint: .trailing
                                 )
@@ -67,11 +67,11 @@ struct FaceScanResultView: View {
                 VStack {
                     Spacer()
                     Text("Scan saved!")
-                        .font(SkinmaxFonts.h3())
+                        .font(.gbBodyM)
                         .foregroundStyle(.white)
                         .padding(.horizontal, 20)
                         .padding(.vertical, 10)
-                        .background(SkinmaxColors.greenGood)
+                        .background(GlowbiteColors.greenGood)
                         .clipShape(Capsule())
                         .padding(.bottom, 40)
                         .transition(.move(edge: .bottom).combined(with: .opacity))
@@ -99,7 +99,7 @@ struct FaceScanResultView: View {
                 Circle()
                     .trim(from: 0, to: animatedScore / 100.0)
                     .stroke(
-                        SkinmaxColors.peachLight,
+                        GlowbiteColors.peachLight,
                         style: StrokeStyle(lineWidth: 8, lineCap: .round)
                     )
                     .frame(width: 110, height: 110)
@@ -107,26 +107,27 @@ struct FaceScanResultView: View {
 
                 Text(String(format: "%.0f", animatedScore))
                     .font(.gbDisplayL)
-                    .foregroundStyle(SkinmaxColors.peachLight)
+                    .tracking(-1.0)
+                    .foregroundStyle(GlowbiteColors.peachLight)
             }
 
             // Overall message
             Text(scan.overallMessage)
-                .font(SkinmaxFonts.h3())
+                .font(.gbBodyM)
                 .foregroundStyle(.white.opacity(0.8))
                 .multilineTextAlignment(.center)
 
             // Trend
             Text("First scan!")
                 .font(.gbCaption)
-                .foregroundStyle(SkinmaxColors.greenGood)
+                .foregroundStyle(GlowbiteColors.greenGood)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 28)
-        .padding(.horizontal, SkinmaxSpacing.cardPadding)
+        .padding(.horizontal, GlowbiteSpacing.cardPadding)
         .background(
             LinearGradient(
-                colors: [SkinmaxColors.darkSurface, SkinmaxColors.darkMid],
+                colors: [GlowbiteColors.darkBrown, GlowbiteColors.warmBrown],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
@@ -139,7 +140,7 @@ struct FaceScanResultView: View {
         HStack {
             Text("Detailed Analysis")
                 .font(.gbCaption)
-                .foregroundStyle(SkinmaxColors.darkBrown)
+                .foregroundStyle(GlowbiteColors.darkBrown)
             Spacer()
         }
         .padding(.top, 4)
@@ -148,9 +149,9 @@ struct FaceScanResultView: View {
     // MARK: - Metrics Grid
     private var metricsGrid: some View {
         LazyVGrid(columns: [
-            GridItem(.flexible(), spacing: SkinmaxSpacing.metricGridSpacing),
-            GridItem(.flexible(), spacing: SkinmaxSpacing.metricGridSpacing),
-        ], spacing: SkinmaxSpacing.metricGridSpacing) {
+            GridItem(.flexible(), spacing: GlowbiteSpacing.metricGridSpacing),
+            GridItem(.flexible(), spacing: GlowbiteSpacing.metricGridSpacing),
+        ], spacing: GlowbiteSpacing.metricGridSpacing) {
             ForEach(Array(scan.metrics.enumerated()), id: \.element.id) { index, metric in
                 ResultMetricCard(metric: metric)
                     .opacity(showMetrics ? 1 : 0)
@@ -210,14 +211,14 @@ struct ResultMetricCard: View {
     let metric: SkinMetric
     @State private var animatedProgress: Double = 0
 
-    private var color: Color { SkinmaxColors.trafficLight(for: metric.score) }
+    private var color: Color { GlowbiteColors.trafficLight(for: metric.score) }
 
     var body: some View {
         VStack(spacing: 6) {
             // Mini circle ring
             ZStack {
                 Circle()
-                    .stroke(SkinmaxColors.softTan, lineWidth: 5)
+                    .stroke(GlowbiteColors.softTan, lineWidth: 5)
                     .frame(width: 60, height: 60)
 
                 Circle()
@@ -228,26 +229,27 @@ struct ResultMetricCard: View {
 
                 Text(String(format: "%.0f", metric.score))
                     .font(.gbTitleM)
-                    .foregroundStyle(SkinmaxColors.darkBrown)
+                    .foregroundStyle(GlowbiteColors.darkBrown)
             }
 
             // Metric name + emoji
             Text("\(metric.type.icon) \(metric.type.displayName)")
                 .font(.gbOverline)
-                .foregroundStyle(SkinmaxColors.lightTaupe)
+                .tracking(2.0)
+                .foregroundStyle(GlowbiteColors.lightTaupe)
                 .textCase(.uppercase)
 
             // Status label
-            Text(SkinmaxColors.trafficLightLabel(for: metric.score))
+            Text(GlowbiteColors.trafficLightLabel(for: metric.score))
                 .font(.gbCaption)
                 .foregroundStyle(color)
         }
         .padding(.vertical, 14)
         .padding(.horizontal, 8)
         .frame(maxWidth: .infinity)
-        .background(SkinmaxColors.white)
+        .background(GlowbiteColors.white)
         .clipShape(RoundedRectangle(cornerRadius: 18))
-        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+        .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
         .onAppear {
             withAnimation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.2)) {
                 animatedProgress = metric.score / 100.0

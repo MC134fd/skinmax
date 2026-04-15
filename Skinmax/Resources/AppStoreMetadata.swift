@@ -1,11 +1,11 @@
 import Foundation
 
 enum AppStoreMetadata {
-    static let appName = "Skinmax"
+    static let appName = "Glowbite"
     static let subtitle = "AI Skin Health Tracker"
 
     static let description = """
-    Skinmax uses AI to analyze your skin health and track how your diet affects your appearance.
+    Glowbite uses AI to analyze your skin health and track how your diet affects your appearance.
 
     KEY FEATURES:
     • AI Face Scanner — Snap a selfie and get an instant Glow Score across 8 skin metrics including hydration, acne, texture, elasticity, dark spots, redness, pores, and wrinkles
@@ -18,7 +18,7 @@ enum AppStoreMetadata {
     HOW IT WORKS:
     1. Take a face scan each morning to establish your baseline
     2. Log your meals throughout the day
-    3. Watch Skinmax connect the dots between what you eat and how your skin looks
+    3. Watch Glowbite connect the dots between what you eat and how your skin looks
     4. Follow personalized recommendations to improve your Glow Score
 
     Your data stays on your device. No account required.

@@ -24,7 +24,7 @@ struct ScanHistoryView: View {
                                 Label("Delete", systemImage: "trash")
                             }
                         }
-                        .listRowInsets(EdgeInsets(top: 6, leading: SkinmaxSpacing.screenPadding, bottom: 6, trailing: SkinmaxSpacing.screenPadding))
+                        .listRowInsets(EdgeInsets(top: 6, leading: GlowbiteSpacing.screenPadding, bottom: 6, trailing: GlowbiteSpacing.screenPadding))
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color.clear)
                     }
@@ -34,7 +34,7 @@ struct ScanHistoryView: View {
                 .contentMargins(.bottom, 100)
             }
         }
-        .background(SkinmaxColors.creamBG.ignoresSafeArea())
+        .background(GlowbiteColors.creamBG.ignoresSafeArea())
         .navigationTitle("Scan History")
         .navigationBarTitleDisplayMode(.inline)
         .fullScreenCover(item: $selectedScan) { scan in
@@ -68,11 +68,11 @@ struct ScanHistoryView: View {
             Spacer().frame(height: 80)
             Text("🔍").font(.system(size: 40))
             Text("No scans yet")
-                .font(SkinmaxFonts.h3())
-                .foregroundStyle(SkinmaxColors.darkBrown)
+                .font(.gbBodyM)
+                .foregroundStyle(GlowbiteColors.darkBrown)
             Text("Take your first face scan to start tracking")
                 .font(.gbBodyM)
-                .foregroundStyle(SkinmaxColors.lightTaupe)
+                .foregroundStyle(GlowbiteColors.lightTaupe)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
@@ -84,7 +84,7 @@ struct ScanHistoryRow: View {
     let scan: SkinScan
     let onTap: () -> Void
 
-    private var scoreColor: Color { SkinmaxColors.trafficLight(for: scan.glowScore) }
+    private var scoreColor: Color { GlowbiteColors.trafficLight(for: scan.glowScore) }
 
     var body: some View {
         Button(action: onTap) {
@@ -93,7 +93,7 @@ struct ScanHistoryRow: View {
                 Circle()
                     .fill(
                         LinearGradient(
-                            colors: [SkinmaxColors.peachLight, SkinmaxColors.coral],
+                            colors: [GlowbiteColors.peachLight, GlowbiteColors.coral],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
@@ -101,34 +101,35 @@ struct ScanHistoryRow: View {
                     .frame(width: 50, height: 50)
                     .overlay(
                         Image(systemName: "face.smiling")
-                            .font(.system(size: 22))
+                            .font(.gbDisplayM)
                             .foregroundStyle(.white.opacity(0.8))
                     )
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(scan.createdAt.formatted(date: .abbreviated, time: .omitted))
                         .font(.gbCaption)
-                        .foregroundStyle(SkinmaxColors.darkBrown)
+                        .foregroundStyle(GlowbiteColors.darkBrown)
 
                     Text(scan.createdAt.formatted(date: .omitted, time: .shortened))
                         .font(.gbCaption)
-                        .foregroundStyle(SkinmaxColors.lightTaupe)
+                        .foregroundStyle(GlowbiteColors.lightTaupe)
 
                     Text("\(scan.metrics.count) metrics analyzed")
                         .font(.gbCaption)
-                        .foregroundStyle(SkinmaxColors.lightTaupe)
+                        .foregroundStyle(GlowbiteColors.lightTaupe)
                 }
 
                 Spacer()
 
                 Text(String(format: "%.0f", scan.glowScore))
                     .font(.gbTitleL)
+                    .tracking(-0.3)
                     .foregroundStyle(scoreColor)
             }
             .padding(14)
-            .background(SkinmaxColors.white)
+            .background(GlowbiteColors.white)
             .clipShape(RoundedRectangle(cornerRadius: 16))
-            .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+            .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
         }
     }
 }

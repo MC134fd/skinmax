@@ -46,7 +46,7 @@ struct FaceActivityCard: View {
         Button(action: onTap) {
             HStack(spacing: 0) {
                 ZStack {
-                    SkinmaxColors.heroGradient
+                    GlowbiteColors.heroGradient
 
                     if let img = UIImage(named: illustrationName) {
                         Image(uiImage: img)
@@ -59,6 +59,7 @@ struct FaceActivityCard: View {
                     } else {
                         Text(topMetrics.first?.type.icon ?? "\u{1F9D1}")
                             .font(.gbDisplayL)
+                            .tracking(-1.0)
                     }
                 }
                 .frame(width: 90)
@@ -67,44 +68,46 @@ struct FaceActivityCard: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("FACE SCAN")
                         .font(.gbOverline)
-                        .foregroundStyle(SkinmaxColors.lightTaupe)
-                        .tracking(1.5)
+                        .foregroundStyle(GlowbiteColors.lightTaupe)
+                        .tracking(2.0)
 
                     HStack(alignment: .firstTextBaseline, spacing: 6) {
                         Text(String(format: "%.0f", scan.glowScore))
                             .font(.gbDisplayM)
-                            .foregroundStyle(SkinmaxColors.trafficLight(for: scan.glowScore))
+                            .tracking(-0.5)
+                            .foregroundStyle(GlowbiteColors.trafficLight(for: scan.glowScore))
 
                         Text("Glow Score")
                             .font(.gbCaption)
-                            .foregroundStyle(SkinmaxColors.lightTaupe)
+                            .foregroundStyle(GlowbiteColors.lightTaupe)
                     }
 
                     HStack(spacing: 10) {
                         ForEach(topMetrics) { metric in
                             HStack(spacing: 3) {
                                 Circle()
-                                    .fill(SkinmaxColors.trafficLight(for: metric.score))
+                                    .fill(GlowbiteColors.trafficLight(for: metric.score))
                                     .frame(width: 5, height: 5)
 
                                 Text("\(metric.type.displayName) \(Int(metric.score))")
                                     .font(.gbCaption)
-                                    .foregroundStyle(SkinmaxColors.warmBrown)
+                                    .foregroundStyle(GlowbiteColors.warmBrown)
                             }
                         }
                     }
 
                     Text(scan.createdAt.formatted(date: .omitted, time: .shortened))
                         .font(.gbOverline)
-                        .foregroundStyle(SkinmaxColors.lightTaupe)
+                        .tracking(2.0)
+                        .foregroundStyle(GlowbiteColors.lightTaupe)
                 }
                 .padding(14)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .frame(height: 110)
-            .background(SkinmaxColors.white)
-            .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-            .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+            .background(GlowbiteColors.white)
+            .clipShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadius))
+            .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
         }
         .buttonStyle(.plain)
     }
@@ -117,14 +120,14 @@ struct FoodActivityCard: View {
     let onTap: () -> Void
 
     private var scoreColor: Color {
-        SkinmaxColors.trafficLight(for: foodScan.skinImpactScore * 10)
+        GlowbiteColors.trafficLight(for: foodScan.skinImpactScore * 10)
     }
 
     var body: some View {
         Button(action: onTap) {
             HStack(spacing: 0) {
                 ZStack {
-                    SkinmaxColors.peachWash
+                    GlowbiteColors.peachWash
 
                     if let data = foodScan.photoData,
                        let img = UIImage(data: data) {
@@ -134,6 +137,7 @@ struct FoodActivityCard: View {
                     } else {
                         Text("\u{1F37D}")
                             .font(.gbDisplayL)
+                            .tracking(-1.0)
                     }
                 }
                 .frame(width: 90)
@@ -142,22 +146,23 @@ struct FoodActivityCard: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("FOOD LOG")
                         .font(.gbOverline)
-                        .foregroundStyle(SkinmaxColors.lightTaupe)
-                        .tracking(1.5)
+                        .foregroundStyle(GlowbiteColors.lightTaupe)
+                        .tracking(2.0)
 
                     Text(foodScan.name)
                         .font(.gbTitleM)
-                        .foregroundStyle(SkinmaxColors.darkBrown)
+                        .foregroundStyle(GlowbiteColors.darkBrown)
                         .lineLimit(1)
 
                     HStack(alignment: .firstTextBaseline, spacing: 6) {
                         Text(String(format: "%.1f", foodScan.skinImpactScore))
                             .font(.gbDisplayM)
+                            .tracking(-0.5)
                             .foregroundStyle(scoreColor)
 
                         Text("Skin Impact")
                             .font(.gbCaption)
-                            .foregroundStyle(SkinmaxColors.lightTaupe)
+                            .foregroundStyle(GlowbiteColors.lightTaupe)
                     }
 
                     HStack(spacing: 8) {
@@ -168,15 +173,16 @@ struct FoodActivityCard: View {
 
                     Text(foodScan.createdAt.formatted(date: .omitted, time: .shortened))
                         .font(.gbOverline)
-                        .foregroundStyle(SkinmaxColors.lightTaupe)
+                        .tracking(2.0)
+                        .foregroundStyle(GlowbiteColors.lightTaupe)
                 }
                 .padding(14)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .frame(height: 110)
-            .background(SkinmaxColors.white)
-            .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-            .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+            .background(GlowbiteColors.white)
+            .clipShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadius))
+            .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
         }
         .buttonStyle(.plain)
     }
@@ -185,10 +191,12 @@ struct FoodActivityCard: View {
         HStack(spacing: 2) {
             Text(value)
                 .font(.gbOverline)
-                .foregroundStyle(SkinmaxColors.darkBrown)
+                .tracking(2.0)
+                .foregroundStyle(GlowbiteColors.darkBrown)
             Text(unit)
                 .font(.gbOverline)
-                .foregroundStyle(SkinmaxColors.warmBrown)
+                .tracking(2.0)
+                .foregroundStyle(GlowbiteColors.warmBrown)
         }
     }
 }

@@ -26,7 +26,7 @@ enum SkinAnalysisError: LocalizedError {
 final class SkinAnalysisService: SkinAnalysisServiceProtocol {
     private let apiKey: String
     private let endpoint = "https://api.openai.com/v1/chat/completions"
-    private let log = SkinmaxLog.skinAPI
+    private let log = GlowbiteLog.skinAPI
 
     // All metric types the prompt must return, matching the app enum
     private static let requiredMetricTypes: Set<String> = [
@@ -39,7 +39,7 @@ final class SkinAnalysisService: SkinAnalysisServiceProtocol {
     ]
 
     private let systemPrompt = """
-    You are a dermatology-focused skin condition assessment tool for the Skinmax wellness app. The user has voluntarily submitted a close-up photo of their own skin for a general wellness check. You are NOT identifying any person — you are assessing visible skin characteristics only (texture, tone, hydration signs, blemishes, pore visibility, etc.), similar to what a skincare product recommendation quiz would evaluate.
+    You are a dermatology-focused skin condition assessment tool for the Glowbite wellness app. The user has voluntarily submitted a close-up photo of their own skin for a general wellness check. You are NOT identifying any person — you are assessing visible skin characteristics only (texture, tone, hydration signs, blemishes, pore visibility, etc.), similar to what a skincare product recommendation quiz would evaluate.
 
     IMPORTANT: Use objective, evidence-based phrasing only. Do not diagnose conditions or make medical claims.
 

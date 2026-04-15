@@ -1,6 +1,6 @@
 import Foundation
 
-enum SkinmaxSpacing {
+enum GlowbiteSpacing {
     // MARK: - 8pt Grid
     static let xs: CGFloat = 4
     static let sm: CGFloat = 8

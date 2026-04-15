@@ -9,7 +9,7 @@
 //      → Set in Xcode: Product ▸ Scheme ▸ Edit Scheme ▸ Run ▸ Environment Variables
 //
 //   2. Secrets.plist  (bundled in the app target)
-//      → Create a file  Skinmax/Resources/Secrets.plist  with:
+//      → Create a file  Glowbite/Resources/Secrets.plist  with:
 //
 //        <?xml version="1.0" encoding="UTF-8"?>
 //        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"

@@ -29,10 +29,10 @@ struct AccountView: View {
                     menuList
                     footer
                 }
-                .padding(.horizontal, SkinmaxSpacing.screenPadding)
+                .padding(.horizontal, GlowbiteSpacing.screenPadding)
                 .padding(.bottom, 100)
             }
-            .background(SkinmaxColors.creamBG.ignoresSafeArea())
+            .background(GlowbiteColors.creamBG.ignoresSafeArea())
             .navigationDestination(isPresented: $showProgress) { ProgressView_() }
             .navigationDestination(isPresented: $showHistory) { ScanHistoryView() }
             .navigationDestination(isPresented: $showNotifications) { NotificationSettingsView() }
@@ -45,26 +45,27 @@ struct AccountView: View {
     private var profileHeader: some View {
         VStack(spacing: 8) {
             Circle()
-                .fill(SkinmaxColors.peachLight)
+                .fill(GlowbiteColors.peachLight)
                 .frame(width: 80, height: 80)
                 .overlay(
                     Text("U")
                         .font(.gbDisplayM)
+                        .tracking(-0.5)
                         .foregroundStyle(.white)
                 )
 
             Text("User")
                 .font(.gbTitleM)
-                .foregroundStyle(SkinmaxColors.darkBrown)
+                .foregroundStyle(GlowbiteColors.darkBrown)
 
             Text("Member since \(memberSince)")
                 .font(.gbBodyM)
-                .foregroundStyle(SkinmaxColors.lightTaupe)
+                .foregroundStyle(GlowbiteColors.lightTaupe)
 
             if streak > 0 {
                 Text("🔥 \(streak) day streak")
                     .font(.gbCaption)
-                    .foregroundStyle(SkinmaxColors.coral)
+                    .foregroundStyle(GlowbiteColors.coral)
             }
         }
         .padding(.top, 16)
@@ -83,59 +84,60 @@ struct AccountView: View {
         VStack(spacing: 4) {
             Text(value)
                 .font(.gbTitleL)
-                .foregroundStyle(SkinmaxColors.darkBrown)
+                .tracking(-0.3)
+                .foregroundStyle(GlowbiteColors.darkBrown)
             Text(label)
                 .font(.gbCaption)
-                .foregroundStyle(SkinmaxColors.lightTaupe)
+                .foregroundStyle(GlowbiteColors.lightTaupe)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 14)
-        .background(SkinmaxColors.white)
+        .background(GlowbiteColors.white)
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+        .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 
     // MARK: - Menu List
     private var menuList: some View {
         VStack(spacing: 0) {
             menuRow(icon: "camera.fill", label: "Progress Photos") { showProgress = true }
-            Divider().foregroundStyle(SkinmaxColors.softTan)
+            Divider().foregroundStyle(GlowbiteColors.softTan)
             menuRow(icon: "list.bullet", label: "Scan History") { showHistory = true }
-            Divider().foregroundStyle(SkinmaxColors.softTan)
+            Divider().foregroundStyle(GlowbiteColors.softTan)
             menuRow(icon: "bell.fill", label: "Notifications") { showNotifications = true }
-            Divider().foregroundStyle(SkinmaxColors.softTan)
+            Divider().foregroundStyle(GlowbiteColors.softTan)
             menuRow(icon: "externaldrive.fill", label: "Data & Storage") { showDataSettings = true }
-            Divider().foregroundStyle(SkinmaxColors.softTan)
-            menuRow(icon: "info.circle.fill", label: "About Skinmax") { showAbout = true }
-            Divider().foregroundStyle(SkinmaxColors.softTan)
+            Divider().foregroundStyle(GlowbiteColors.softTan)
+            menuRow(icon: "info.circle.fill", label: "About Glowbite") { showAbout = true }
+            Divider().foregroundStyle(GlowbiteColors.softTan)
             menuRow(icon: "star.fill", label: "Rate the App") {
                 if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
                     SKStoreReviewController.requestReview(in: scene)
                 }
             }
         }
-        .background(SkinmaxColors.white)
+        .background(GlowbiteColors.white)
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+        .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 
     private func menuRow(icon: String, label: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack(spacing: 12) {
                 Image(systemName: icon)
-                    .font(.system(size: 18))
-                    .foregroundStyle(SkinmaxColors.coral)
+                    .font(.gbTitleM)
+                    .foregroundStyle(GlowbiteColors.coral)
                     .frame(width: 24)
 
                 Text(label)
                     .font(.gbBodyM)
-                    .foregroundStyle(SkinmaxColors.darkBrown)
+                    .foregroundStyle(GlowbiteColors.darkBrown)
 
                 Spacer()
 
                 Image(systemName: "chevron.right")
-                    .font(.system(size: 12))
-                    .foregroundStyle(SkinmaxColors.lightTaupe)
+                    .font(.gbCaption)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
             }
             .padding(.horizontal, 16)
             .frame(height: 56)
@@ -145,12 +147,12 @@ struct AccountView: View {
     // MARK: - Footer
     private var footer: some View {
         VStack(spacing: 4) {
-            Text("Skinmax v1.0")
+            Text("Glowbite v1.0")
                 .font(.gbCaption)
-                .foregroundStyle(SkinmaxColors.lightTaupe)
+                .foregroundStyle(GlowbiteColors.lightTaupe)
             Text("Data stored for 90 days")
                 .font(.gbCaption)
-                .foregroundStyle(SkinmaxColors.lightTaupe)
+                .foregroundStyle(GlowbiteColors.lightTaupe)
         }
         .padding(.top, 8)
     }

@@ -89,7 +89,7 @@ struct FaceScanView: View {
                 Image(systemName: "chevron.left")
                 Text("Back")
             }
-            .font(SkinmaxFonts.h3())
+            .font(.gbBodyM)
             .foregroundStyle(.white)
             .padding(.horizontal, 14)
             .padding(.vertical, 8)
@@ -120,7 +120,7 @@ struct FaceScanView: View {
                     // Pulsing glow when capturing
                     if viewModel.state == .capturing {
                         Ellipse()
-                            .stroke(SkinmaxColors.coral.opacity(0.4), lineWidth: 6)
+                            .stroke(GlowbiteColors.coral.opacity(0.4), lineWidth: 6)
                             .frame(width: ovalWidth, height: ovalHeight)
                             .scaleEffect(pulseAnimation ? 1.08 : 1.0)
                             .opacity(pulseAnimation ? 0.0 : 0.6)
@@ -144,12 +144,13 @@ struct FaceScanView: View {
 
                 // Status text
                 Text(viewModel.statusText)
-                    .font(SkinmaxFonts.h3())
+                    .font(.gbBodyM)
                     .foregroundStyle(.white.opacity(0.7))
 
                 if !viewModel.subtitleText.isEmpty {
                     Text(viewModel.subtitleText)
                         .font(.gbOverline)
+                        .tracking(2.0)
                         .foregroundStyle(.white.opacity(0.35))
                 }
             }
@@ -159,10 +160,10 @@ struct FaceScanView: View {
 
     private var ovalColor: Color {
         switch viewModel.state {
-        case .faceDetected: return SkinmaxColors.coral
-        case .capturing: return SkinmaxColors.peachLight
-        case .error: return SkinmaxColors.redAlert
-        default: return SkinmaxColors.peachLight.opacity(0.5)
+        case .faceDetected: return GlowbiteColors.coral
+        case .capturing: return GlowbiteColors.peachLight
+        case .error: return GlowbiteColors.redAlert
+        default: return GlowbiteColors.peachLight.opacity(0.5)
         }
     }
 
@@ -178,11 +179,11 @@ struct FaceScanView: View {
                     viewModel.retry()
                 } label: {
                     Text("Try Again")
-                        .font(SkinmaxFonts.h3())
+                        .font(.gbBodyM)
                         .foregroundStyle(.white)
                         .padding(.horizontal, 24)
                         .padding(.vertical, 12)
-                        .background(SkinmaxColors.coral)
+                        .background(GlowbiteColors.coral)
                         .clipShape(Capsule())
                 }
             } else {
@@ -199,13 +200,13 @@ struct FaceScanView: View {
                         Circle()
                             .fill(
                                 LinearGradient(
-                                    colors: [SkinmaxColors.peachLight, SkinmaxColors.coral],
+                                    colors: [GlowbiteColors.peachLight, GlowbiteColors.coral],
                                     startPoint: .top,
                                     endPoint: .bottom
                                 )
                             )
                             .frame(width: 60, height: 60)
-                            .shadow(color: SkinmaxColors.coral.opacity(0.4), radius: 8, y: 4)
+                            .shadow(color: GlowbiteColors.coral.opacity(0.4), radius: 8, y: 4)
                     }
                 }
                 .disabled(viewModel.state == .capturing)
@@ -221,14 +222,14 @@ struct FaceScanView: View {
 
             VStack(spacing: 20) {
                 Image(systemName: "camera.fill")
-                    .font(.system(size: 48))
-                    .foregroundStyle(SkinmaxColors.coral)
+                    .font(.gbScoreDisplay)
+                    .foregroundStyle(GlowbiteColors.coral)
 
                 Text("Camera Access Needed")
                     .font(.gbTitleM)
                     .foregroundStyle(.white)
 
-                Text("Skinmax needs your camera to analyze your skin health")
+                Text("Glowbite needs your camera to analyze your skin health")
                     .font(.gbBodyM)
                     .foregroundStyle(.white.opacity(0.6))
                     .multilineTextAlignment(.center)
@@ -240,11 +241,11 @@ struct FaceScanView: View {
                     }
                 } label: {
                     Text("Open Settings")
-                        .font(SkinmaxFonts.h3())
-                        .foregroundStyle(SkinmaxColors.darkBrown)
+                        .font(.gbBodyM)
+                        .foregroundStyle(GlowbiteColors.darkBrown)
                         .padding(.horizontal, 24)
                         .padding(.vertical, 12)
-                        .background(SkinmaxColors.coral)
+                        .background(GlowbiteColors.coral)
                         .clipShape(Capsule())
                 }
 
@@ -252,7 +253,7 @@ struct FaceScanView: View {
                     dismiss()
                 } label: {
                     Text("Go Back")
-                        .font(SkinmaxFonts.h3())
+                        .font(.gbBodyM)
                         .foregroundStyle(.white.opacity(0.6))
                 }
             }

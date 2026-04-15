@@ -14,7 +14,7 @@ struct ContentView: View {
 
     var body: some View {
         ZStack {
-            SkinmaxColors.creamBG.ignoresSafeArea()
+            GlowbiteColors.creamBG.ignoresSafeArea()
 
             // Main content
             Group {
@@ -28,6 +28,9 @@ struct ContentView: View {
                         onViewFoodResult: { scan in
                             foodResultScan = scan
                             showFoodResult = true
+                        },
+                        onScanMeal: {
+                            showScanPopup = true
                         }
                     )
                 case .analytics:

@@ -34,10 +34,10 @@ struct AnalysisHomeCard: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(SkinmaxSpacing.cardPadding)
-        .background(SkinmaxColors.white)
-        .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+        .padding(GlowbiteSpacing.cardPadding)
+        .background(GlowbiteColors.white)
+        .clipShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadius))
+        .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
         .onAppear {
             startPulse()
         }
@@ -48,7 +48,7 @@ struct AnalysisHomeCard: View {
     private var progressRing: some View {
         ZStack {
             Circle()
-                .stroke(SkinmaxColors.softTan, lineWidth: 5)
+                .stroke(GlowbiteColors.softTan, lineWidth: 5)
 
             Circle()
                 .trim(from: 0, to: coordinator.progress)
@@ -61,24 +61,24 @@ struct AnalysisHomeCard: View {
 
             if isComplete {
                 Image(systemName: "checkmark")
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundStyle(SkinmaxColors.greenGood)
+                    .font(.gbTitleM)
+                    .foregroundStyle(GlowbiteColors.greenGood)
             } else if isError {
                 Image(systemName: "exclamationmark.triangle.fill")
-                    .font(.system(size: 16))
-                    .foregroundStyle(SkinmaxColors.redAlert)
+                    .font(.gbBodyL)
+                    .foregroundStyle(GlowbiteColors.redAlert)
             } else {
                 Text("\(Int(coordinator.progress * 100))%")
                     .font(.gbBodyM)
-                    .foregroundStyle(SkinmaxColors.darkBrown)
+                    .foregroundStyle(GlowbiteColors.darkBrown)
             }
         }
     }
 
     private var ringColor: Color {
-        if isComplete { return SkinmaxColors.greenGood }
-        if isError { return SkinmaxColors.redAlert }
-        return SkinmaxColors.coral
+        if isComplete { return GlowbiteColors.greenGood }
+        if isError { return GlowbiteColors.redAlert }
+        return GlowbiteColors.coral
     }
 
     // MARK: - Analyzing State
@@ -87,12 +87,12 @@ struct AnalysisHomeCard: View {
         VStack(alignment: .leading, spacing: 3) {
             Text(coordinator.kind == .face ? "Analyzing Skin" : "Analyzing Food")
                 .font(.gbTitleM)
-                .foregroundStyle(SkinmaxColors.darkBrown)
+                .foregroundStyle(GlowbiteColors.darkBrown)
                 .opacity(pulseOpacity)
 
             Text(coordinator.phase.label)
                 .font(.gbCaption)
-                .foregroundStyle(SkinmaxColors.lightTaupe)
+                .foregroundStyle(GlowbiteColors.lightTaupe)
         }
     }
 
@@ -103,7 +103,7 @@ struct AnalysisHomeCard: View {
             if coordinator.kind == .face, let scan = coordinator.faceScanResult {
                 Text("Glow Score: \(Int(scan.glowScore))")
                     .font(.gbTitleM)
-                    .foregroundStyle(SkinmaxColors.darkBrown)
+                    .foregroundStyle(GlowbiteColors.darkBrown)
 
                 Button {
                     onViewFaceResult(scan)
@@ -113,13 +113,13 @@ struct AnalysisHomeCard: View {
                         .foregroundStyle(.white)
                         .padding(.horizontal, 14)
                         .padding(.vertical, 6)
-                        .background(SkinmaxColors.coral)
+                        .background(GlowbiteColors.coral)
                         .clipShape(Capsule())
                 }
             } else if coordinator.kind == .food, let scan = coordinator.foodScanResult {
                 Text("\(scan.name) — \(String(format: "%.1f", scan.skinImpactScore))/10")
                     .font(.gbTitleM)
-                    .foregroundStyle(SkinmaxColors.darkBrown)
+                    .foregroundStyle(GlowbiteColors.darkBrown)
 
                 Button {
                     onViewFoodResult(scan)
@@ -129,7 +129,7 @@ struct AnalysisHomeCard: View {
                         .foregroundStyle(.white)
                         .padding(.horizontal, 14)
                         .padding(.vertical, 6)
-                        .background(SkinmaxColors.coral)
+                        .background(GlowbiteColors.coral)
                         .clipShape(Capsule())
                 }
             }
@@ -143,7 +143,7 @@ struct AnalysisHomeCard: View {
             if case .error(let msg) = coordinator.phase {
                 Text(msg)
                     .font(.gbCaption)
-                    .foregroundStyle(SkinmaxColors.redAlert)
+                    .foregroundStyle(GlowbiteColors.redAlert)
                     .lineLimit(2)
             }
 
@@ -152,7 +152,7 @@ struct AnalysisHomeCard: View {
             } label: {
                 Text("Dismiss")
                     .font(.gbCaption)
-                    .foregroundStyle(SkinmaxColors.coral)
+                    .foregroundStyle(GlowbiteColors.coral)
             }
         }
     }

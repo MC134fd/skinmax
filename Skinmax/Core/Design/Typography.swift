@@ -19,4 +19,26 @@ extension Font {
     static let gbCaption = Font.custom("Nunito-SemiBold", size: 12)
     /// Overline labels, uppercase — Nunito-Bold 11pt
     static let gbOverline = Font.custom("Nunito-Bold", size: 11)
+    /// Large score display — Nunito-Black 56pt
+    static let gbScoreDisplay = Font.custom("Nunito-Black", size: 56)
+}
+
+// MARK: - View Modifiers bundling font + tracking
+
+extension View {
+    func gbDisplayXLStyle() -> some View {
+        self.font(.gbDisplayXL).tracking(-1.5)
+    }
+    func gbDisplayLStyle() -> some View {
+        self.font(.gbDisplayL).tracking(-1.0)
+    }
+    func gbDisplayMStyle() -> some View {
+        self.font(.gbDisplayM).tracking(-0.5)
+    }
+    func gbTitleLStyle() -> some View {
+        self.font(.gbTitleL).tracking(-0.3)
+    }
+    func gbOverlineStyle() -> some View {
+        self.font(.gbOverline).tracking(2.0)
+    }
 }

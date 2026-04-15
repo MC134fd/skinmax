@@ -188,6 +188,90 @@ final class HomeViewModel {
         return insights.first?.text ?? "Scan your face and log meals daily to unlock personalized insights."
     }
 
+    // MARK: - Calories (real data from today's food scans)
+
+    let dailyCalorieGoal: Int = 2000
+
+    var todayFoodScans: [FoodScan] {
+        dataStore?.foodScans(for: Date()) ?? []
+    }
+
+    var consumedCalories: Int {
+        todayFoodScans.reduce(0) { $0 + $1.calories }
+    }
+
+    var caloriesRemaining: Int {
+        max(dailyCalorieGoal - consumedCalories, 0)
+    }
+
+    var calorieProgress: Double {
+        guard dailyCalorieGoal > 0 else { return 0 }
+        return Double(consumedCalories) / Double(dailyCalorieGoal)
+    }
+
+    // MARK: - Streak
+
+    var streak: Int {
+        dataStore?.calculateStreak() ?? 0
+    }
+
+    // MARK: - Glow Trend
+
+    var glowTrendDiff: Int? {
+        guard let dataStore else { return nil }
+        let scores = dataStore.dailySkinScores(last: 7)
+        guard scores.count >= 2 else { return nil }
+        return Int(scores.last!.score - scores.first!.score)
+    }
+
+    // MARK: - Glow Score Bucket
+
+    var glowScoreBucket: String {
+        guard latestScan != nil else { return "Scan to start" }
+        let score = latestScan?.glowScore ?? 0
+        switch score {
+        case 90...100: return "Glowing"
+        case 75..<90: return "Great"
+        case 60..<75: return "Good"
+        case 40..<60: return "Fair"
+        default: return "Low"
+        }
+    }
+
+    // MARK: - Hydration (placeholder)
+
+    struct HydrationPlaceholder {
+        let consumed: Double   // liters
+        let goal: Double
+        let glasses: Int       // out of 8
+    }
+
+    // TODO: Wire to a real hydration tracking feature later
+    let hydration = HydrationPlaceholder(consumed: 1.2, goal: 2.5, glasses: 3)
+
+    // MARK: - Skin Nutrients (placeholder)
+
+    struct SkinNutrient: Identifiable {
+        let id = UUID()
+        let label: String
+        let value: String
+        let target: String
+        let descriptor: String
+        let color: Color
+        let lightColor: Color
+        let progress: Double
+    }
+
+    // TODO: Derive from FoodScan entries when the model supports these nutrients
+    static let skinNutrients: [SkinNutrient] = [
+        SkinNutrient(label: "PROTEIN", value: "48", target: "92g", descriptor: "Collagen fuel",
+                     color: GlowbiteColors.purple, lightColor: GlowbiteColors.purpleLight, progress: 0.52),
+        SkinNutrient(label: "OMEGA-3", value: "1.2", target: "2g", descriptor: "Glow booster",
+                     color: GlowbiteColors.greenGood, lightColor: GlowbiteColors.greenLight, progress: 0.60),
+        SkinNutrient(label: "SUGAR", value: "18", target: "25g", descriptor: "Breakout flag",
+                     color: GlowbiteColors.redAlert, lightColor: GlowbiteColors.redLight, progress: 0.72),
+    ]
+
     // MARK: - Food Score
 
     var foodScore: Double {
@@ -218,7 +302,7 @@ final class HomeViewModel {
     }
 
     func metricColor(for metric: SkinMetric) -> Color {
-        SkinmaxColors.trafficLight(for: metric.score)
+        GlowbiteColors.trafficLight(for: metric.score)
     }
 
     // MARK: - Weekly Scores (kept for analytics reuse)

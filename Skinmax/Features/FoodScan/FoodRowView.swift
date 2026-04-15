@@ -5,16 +5,16 @@ struct FoodRowView: View {
 
     private var scoreColor: Color {
         switch foodScan.skinImpactScore {
-        case 8...10: return SkinmaxColors.greenGood
-        case 5..<8: return SkinmaxColors.amberFair
-        default: return SkinmaxColors.redAlert
+        case 8...10: return GlowbiteColors.greenGood
+        case 5..<8: return GlowbiteColors.amberFair
+        default: return GlowbiteColors.redAlert
         }
     }
 
     var body: some View {
         HStack(spacing: 12) {
             RoundedRectangle(cornerRadius: 10)
-                .fill(SkinmaxColors.peachWash)
+                .fill(GlowbiteColors.peachWash)
                 .frame(width: 48, height: 48)
                 .overlay(
                     Text("\u{1F37D}")
@@ -24,16 +24,17 @@ struct FoodRowView: View {
             // Info
             VStack(alignment: .leading, spacing: 2) {
                 Text(foodScan.name)
-                    .font(SkinmaxFonts.h3())
-                    .foregroundStyle(SkinmaxColors.darkBrown)
+                    .font(.gbBodyM)
+                    .foregroundStyle(GlowbiteColors.darkBrown)
 
                 Text("\(foodScan.calories) cal · \(String(format: "%.0fg", foodScan.protein)) protein")
                     .font(.gbCaption)
-                    .foregroundStyle(SkinmaxColors.lightTaupe)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
 
                 Text(foodScan.createdAt.formatted(date: .omitted, time: .shortened))
                     .font(.gbOverline)
-                    .foregroundStyle(SkinmaxColors.lightTaupe)
+                    .tracking(2.0)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
             }
 
             Spacer()
@@ -44,8 +45,8 @@ struct FoodRowView: View {
                 .foregroundStyle(scoreColor)
         }
         .padding(14)
-        .background(SkinmaxColors.white)
+        .background(GlowbiteColors.white)
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+        .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 }

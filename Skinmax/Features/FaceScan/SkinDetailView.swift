@@ -5,7 +5,7 @@ struct SkinDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var animatedProgress: Double = 0
 
-    private var color: Color { SkinmaxColors.trafficLight(for: metric.score) }
+    private var color: Color { GlowbiteColors.trafficLight(for: metric.score) }
 
     var body: some View {
         NavigationStack {
@@ -16,10 +16,10 @@ struct SkinDetailView: View {
                     descriptionSection
                     tipsSection
                 }
-                .padding(.horizontal, SkinmaxSpacing.screenPadding)
+                .padding(.horizontal, GlowbiteSpacing.screenPadding)
                 .padding(.bottom, 40)
             }
-            .background(SkinmaxColors.creamBG.ignoresSafeArea())
+            .background(GlowbiteColors.creamBG.ignoresSafeArea())
             .navigationTitle(metric.type.displayName)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -31,8 +31,8 @@ struct SkinDetailView: View {
                             Image(systemName: "chevron.left")
                             Text("Back")
                         }
-                        .font(SkinmaxFonts.h3())
-                        .foregroundStyle(SkinmaxColors.coral)
+                        .font(.gbBodyM)
+                        .foregroundStyle(GlowbiteColors.coral)
                     }
                 }
             }
@@ -50,7 +50,7 @@ struct SkinDetailView: View {
         VStack(spacing: 12) {
             ZStack {
                 Circle()
-                    .stroke(SkinmaxColors.softTan, lineWidth: 8)
+                    .stroke(GlowbiteColors.softTan, lineWidth: 8)
                     .frame(width: 120, height: 120)
 
                 Circle()
@@ -62,7 +62,8 @@ struct SkinDetailView: View {
                 VStack(spacing: 2) {
                     Text(String(format: "%.0f", metric.score))
                         .font(.gbDisplayL)
-                        .foregroundStyle(SkinmaxColors.darkBrown)
+                        .tracking(-1.0)
+                        .foregroundStyle(GlowbiteColors.darkBrown)
 
                     Text(metric.type.icon)
                         .font(.system(size: 16))
@@ -71,7 +72,7 @@ struct SkinDetailView: View {
 
             Text(metric.type.displayName)
                 .font(.gbTitleM)
-                .foregroundStyle(SkinmaxColors.darkBrown)
+                .foregroundStyle(GlowbiteColors.darkBrown)
         }
         .padding(.top, 20)
     }
@@ -81,13 +82,13 @@ struct SkinDetailView: View {
         HStack(spacing: 8) {
             TagPill(text: metric.severity.capitalized)
 
-            Text(SkinmaxColors.trafficLightLabel(for: metric.score))
+            Text(GlowbiteColors.trafficLightLabel(for: metric.score))
                 .font(.gbCaption)
                 .foregroundStyle(color)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 5)
                 .background(color.opacity(0.12))
-                .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.tagCornerRadius))
+                .clipShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.tagCornerRadius))
         }
     }
 
@@ -97,19 +98,19 @@ struct SkinDetailView: View {
             if !metric.description.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("About")
-                        .font(SkinmaxFonts.h3())
-                        .foregroundStyle(SkinmaxColors.darkBrown)
+                        .font(.gbBodyM)
+                        .foregroundStyle(GlowbiteColors.darkBrown)
 
                     Text(metric.description)
                         .font(.gbBodyM)
-                        .foregroundStyle(SkinmaxColors.warmBrown)
+                        .foregroundStyle(GlowbiteColors.warmBrown)
                         .lineSpacing(3)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(SkinmaxSpacing.cardPadding)
-                .background(SkinmaxColors.white)
-                .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-                .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+                .padding(GlowbiteSpacing.cardPadding)
+                .background(GlowbiteColors.white)
+                .clipShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadius))
+                .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
             }
         }
     }
@@ -118,27 +119,27 @@ struct SkinDetailView: View {
     private var tipsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Tips to Improve")
-                .font(SkinmaxFonts.h3())
-                .foregroundStyle(SkinmaxColors.darkBrown)
+                .font(.gbBodyM)
+                .foregroundStyle(GlowbiteColors.darkBrown)
 
             ForEach(Array(tipsForMetric.enumerated()), id: \.offset) { _, tip in
                 HStack(alignment: .top, spacing: 10) {
                     Text("✦")
                         .font(.gbBodyM)
-                        .foregroundStyle(SkinmaxColors.coral)
+                        .foregroundStyle(GlowbiteColors.coral)
 
                     Text(tip)
                         .font(.gbBodyM)
-                        .foregroundStyle(SkinmaxColors.warmBrown)
+                        .foregroundStyle(GlowbiteColors.warmBrown)
                         .lineSpacing(2)
                 }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(SkinmaxSpacing.cardPadding)
-        .background(SkinmaxColors.white)
-        .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+        .padding(GlowbiteSpacing.cardPadding)
+        .background(GlowbiteColors.white)
+        .clipShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadius))
+        .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
     }
 
     private var tipsForMetric: [String] {

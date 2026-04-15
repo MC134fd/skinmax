@@ -23,11 +23,11 @@ struct ProgressView_: View {
                     timelineScrubber
                     keyChanges
                 }
-                .padding(.horizontal, SkinmaxSpacing.screenPadding)
+                .padding(.horizontal, GlowbiteSpacing.screenPadding)
                 .padding(.bottom, 100)
             }
         }
-        .background(SkinmaxColors.creamBG.ignoresSafeArea())
+        .background(GlowbiteColors.creamBG.ignoresSafeArea())
         .navigationTitle("Progress")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
@@ -55,7 +55,7 @@ struct ProgressView_: View {
             Circle()
                 .fill(
                     LinearGradient(
-                        colors: [SkinmaxColors.peachLight, SkinmaxColors.coral.opacity(0.6)],
+                        colors: [GlowbiteColors.peachLight, GlowbiteColors.coral.opacity(0.6)],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
@@ -63,21 +63,23 @@ struct ProgressView_: View {
                 .frame(width: 100, height: 100)
                 .overlay(
                     Image(systemName: "face.smiling")
-                        .font(.system(size: 40))
+                        .font(.gbDisplayXL)
+                        .tracking(-1.5)
                         .foregroundStyle(.white.opacity(0.7))
                 )
 
             Text(scan.createdAt.formatted(.dateTime.month(.abbreviated).day()))
                 .font(.gbCaption)
-                .foregroundStyle(SkinmaxColors.lightTaupe)
+                .foregroundStyle(GlowbiteColors.lightTaupe)
 
             Text(String(format: "%.0f", scan.glowScore))
                 .font(.gbBodyL)
-                .foregroundStyle(SkinmaxColors.trafficLight(for: scan.glowScore))
+                .foregroundStyle(GlowbiteColors.trafficLight(for: scan.glowScore))
 
             Text(label)
                 .font(.gbOverline)
-                .foregroundStyle(SkinmaxColors.lightTaupe)
+                .tracking(2.0)
+                .foregroundStyle(GlowbiteColors.lightTaupe)
                 .textCase(.uppercase)
         }
         .frame(maxWidth: .infinity)
@@ -91,14 +93,16 @@ struct ProgressView_: View {
                 HStack {
                     Text(String(format: "%.0f", comparison.glowScore))
                         .font(.gbTitleL)
-                        .foregroundStyle(SkinmaxColors.lightTaupe)
+                        .tracking(-0.3)
+                        .foregroundStyle(GlowbiteColors.lightTaupe)
 
                     Text("→")
-                        .foregroundStyle(SkinmaxColors.lightTaupe)
+                        .foregroundStyle(GlowbiteColors.lightTaupe)
 
                     Text(String(format: "%.0f", latest.glowScore))
                         .font(.gbTitleL)
-                        .foregroundStyle(SkinmaxColors.trafficLight(for: latest.glowScore))
+                        .tracking(-0.3)
+                        .foregroundStyle(GlowbiteColors.trafficLight(for: latest.glowScore))
 
                     Spacer()
 
@@ -107,13 +111,13 @@ struct ProgressView_: View {
                         .foregroundStyle(.white)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
-                        .background(diff >= 0 ? SkinmaxColors.greenGood : SkinmaxColors.redAlert)
+                        .background(diff >= 0 ? GlowbiteColors.greenGood : GlowbiteColors.redAlert)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
-                .padding(SkinmaxSpacing.cardPadding)
-                .background(SkinmaxColors.white)
+                .padding(GlowbiteSpacing.cardPadding)
+                .background(GlowbiteColors.white)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
-                .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+                .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
             }
         }
     }
@@ -131,15 +135,16 @@ struct ProgressView_: View {
                     } label: {
                         VStack(spacing: 6) {
                             Circle()
-                                .fill(isSelected ? SkinmaxColors.coral : SkinmaxColors.softTan)
+                                .fill(isSelected ? GlowbiteColors.coral : GlowbiteColors.softTan)
                                 .frame(width: isSelected ? 12 : 8, height: isSelected ? 12 : 8)
                                 .overlay(
-                                    isSelected ? Circle().stroke(SkinmaxColors.coral.opacity(0.3), lineWidth: 3) : nil
+                                    isSelected ? Circle().stroke(GlowbiteColors.coral.opacity(0.3), lineWidth: 3) : nil
                                 )
 
                             Text(scan.createdAt.formatted(.dateTime.month(.abbreviated).day()))
                                 .font(.gbOverline)
-                                .foregroundStyle(isSelected ? SkinmaxColors.coral : SkinmaxColors.lightTaupe)
+                                .tracking(2.0)
+                                .foregroundStyle(isSelected ? GlowbiteColors.coral : GlowbiteColors.lightTaupe)
                         }
                     }
                 }
@@ -154,32 +159,32 @@ struct ProgressView_: View {
             if let comparison = comparisonScan, let latest = latestScan {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Key Changes")
-                        .font(SkinmaxFonts.h3())
-                        .foregroundStyle(SkinmaxColors.darkBrown)
+                        .font(.gbBodyM)
+                        .foregroundStyle(GlowbiteColors.darkBrown)
 
                     let changes = metricChanges(from: comparison, to: latest)
                     if changes.isEmpty {
                         Text("No significant changes detected")
                             .font(.gbBodyM)
-                            .foregroundStyle(SkinmaxColors.lightTaupe)
+                            .foregroundStyle(GlowbiteColors.lightTaupe)
                     } else {
                         ForEach(changes, id: \.name) { change in
                             HStack {
                                 Text(change.name)
                                     .font(.gbBodyM)
-                                    .foregroundStyle(SkinmaxColors.warmBrown)
+                                    .foregroundStyle(GlowbiteColors.warmBrown)
                                 Spacer()
                                 Text(change.pct >= 0 ? "+\(change.pct)%" : "\(change.pct)%")
                                     .font(.gbCaption)
-                                    .foregroundStyle(change.pct >= 0 ? SkinmaxColors.greenGood : SkinmaxColors.redAlert)
+                                    .foregroundStyle(change.pct >= 0 ? GlowbiteColors.greenGood : GlowbiteColors.redAlert)
                             }
                         }
                     }
                 }
-                .padding(SkinmaxSpacing.cardPadding)
-                .background(SkinmaxColors.white)
-                .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-                .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+                .padding(GlowbiteSpacing.cardPadding)
+                .background(GlowbiteColors.white)
+                .clipShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadius))
+                .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
             }
         }
     }
@@ -203,14 +208,14 @@ struct ProgressView_: View {
             Spacer().frame(height: 80)
             Text("📸").font(.system(size: 40))
             Text("Take at least 2 face scans to compare progress")
-                .font(SkinmaxFonts.h3())
-                .foregroundStyle(SkinmaxColors.darkBrown)
+                .font(.gbBodyM)
+                .foregroundStyle(GlowbiteColors.darkBrown)
                 .multilineTextAlignment(.center)
             Text("Your first scan sets the baseline")
                 .font(.gbBodyM)
-                .foregroundStyle(SkinmaxColors.lightTaupe)
+                .foregroundStyle(GlowbiteColors.lightTaupe)
         }
         .frame(maxWidth: .infinity)
-        .padding(.horizontal, SkinmaxSpacing.screenPadding)
+        .padding(.horizontal, GlowbiteSpacing.screenPadding)
     }
 }

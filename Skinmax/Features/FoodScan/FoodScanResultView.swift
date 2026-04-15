@@ -10,9 +10,9 @@ struct FoodScanResultView: View {
 
     private var scoreColor: Color {
         switch scan.skinImpactScore {
-        case 8...10: return SkinmaxColors.greenGood
-        case 5..<8: return SkinmaxColors.amberFair
-        default: return SkinmaxColors.redAlert
+        case 8...10: return GlowbiteColors.greenGood
+        case 5..<8: return GlowbiteColors.amberFair
+        default: return GlowbiteColors.redAlert
         }
     }
 
@@ -43,10 +43,10 @@ struct FoodScanResultView: View {
                     skinEffectsSection
                     aiTipCard
                 }
-                .padding(.horizontal, SkinmaxSpacing.screenPadding)
+                .padding(.horizontal, GlowbiteSpacing.screenPadding)
                 .padding(.bottom, 40)
             }
-            .background(SkinmaxColors.creamBG.ignoresSafeArea())
+            .background(GlowbiteColors.creamBG.ignoresSafeArea())
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
@@ -56,8 +56,8 @@ struct FoodScanResultView: View {
                             Image(systemName: "chevron.left")
                             Text("Back")
                         }
-                        .font(SkinmaxFonts.h3())
-                        .foregroundStyle(SkinmaxColors.coral)
+                        .font(.gbBodyM)
+                        .foregroundStyle(GlowbiteColors.coral)
                     }
                 }
             }
@@ -85,11 +85,11 @@ struct FoodScanResultView: View {
         VStack(alignment: .leading, spacing: 4) {
             Text(scan.name)
                 .font(.gbTitleM)
-                .foregroundStyle(SkinmaxColors.darkBrown)
+                .foregroundStyle(GlowbiteColors.darkBrown)
 
             Text("AI Identified \u{00B7} \(scan.createdAt.formatted(date: .omitted, time: .shortened))")
                 .font(.gbCaption)
-                .foregroundStyle(SkinmaxColors.lightTaupe)
+                .foregroundStyle(GlowbiteColors.lightTaupe)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -119,20 +119,21 @@ struct FoodScanResultView: View {
 
                 Text(String(format: "%.1f", animatedScore))
                     .font(.gbDisplayL)
+                    .tracking(-1.0)
                     .foregroundStyle(scoreColor)
             }
 
             Text(scoreLabel)
-                .font(SkinmaxFonts.h3())
+                .font(.gbBodyM)
                 .foregroundStyle(.white.opacity(0.8))
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 28)
-        .padding(.horizontal, SkinmaxSpacing.cardPadding)
+        .padding(.horizontal, GlowbiteSpacing.cardPadding)
         .background(
             LinearGradient(
-                colors: [SkinmaxColors.darkSurface, SkinmaxColors.darkMid],
+                colors: [GlowbiteColors.darkBrown, GlowbiteColors.warmBrown],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
@@ -150,18 +151,19 @@ struct FoodScanResultView: View {
                 VStack(spacing: 4) {
                     Text(item.value)
                         .font(.gbBodyL)
-                        .foregroundStyle(SkinmaxColors.darkBrown)
+                        .foregroundStyle(GlowbiteColors.darkBrown)
 
                     Text(item.label)
                         .font(.gbOverline)
-                        .foregroundStyle(SkinmaxColors.lightTaupe)
+                        .tracking(2.0)
+                        .foregroundStyle(GlowbiteColors.lightTaupe)
                         .textCase(.uppercase)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
-                .background(SkinmaxColors.white)
+                .background(GlowbiteColors.white)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
-                .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+                .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
                 .opacity(showNutrition ? 1 : 0)
                 .offset(y: showNutrition ? 0 : 16)
                 .animation(
@@ -186,27 +188,27 @@ struct FoodScanResultView: View {
     private var benefitsSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(benefitsTitle)
-                .font(SkinmaxFonts.h3())
-                .foregroundStyle(SkinmaxColors.darkBrown)
+                .font(.gbBodyM)
+                .foregroundStyle(GlowbiteColors.darkBrown)
 
             ForEach(Array(scan.benefits.enumerated()), id: \.offset) { _, benefit in
                 HStack(alignment: .top, spacing: 8) {
                     Circle()
-                        .fill(scan.skinImpactScore >= 5 ? SkinmaxColors.greenGood : SkinmaxColors.redAlert)
+                        .fill(scan.skinImpactScore >= 5 ? GlowbiteColors.greenGood : GlowbiteColors.redAlert)
                         .frame(width: 6, height: 6)
                         .padding(.top, 5)
 
                     Text(benefit)
                         .font(.gbBodyM)
-                        .foregroundStyle(SkinmaxColors.warmBrown)
+                        .foregroundStyle(GlowbiteColors.warmBrown)
                 }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(SkinmaxSpacing.cardPadding)
-        .background(SkinmaxColors.white)
-        .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+        .padding(GlowbiteSpacing.cardPadding)
+        .background(GlowbiteColors.white)
+        .clipShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadius))
+        .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
         .opacity(showBenefits ? 1 : 0)
         .animation(.easeIn(duration: 0.3), value: showBenefits)
     }
@@ -215,33 +217,33 @@ struct FoodScanResultView: View {
     private var skinEffectsSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Skin Effects")
-                .font(SkinmaxFonts.h3())
-                .foregroundStyle(SkinmaxColors.darkBrown)
+                .font(.gbBodyM)
+                .foregroundStyle(GlowbiteColors.darkBrown)
 
             FlowLayout(spacing: 8) {
                 ForEach(scan.skinEffects) { effect in
                     let arrow = effect.direction == .improved ? "\u{2191}" : "\u{2193}"
-                    let tint = effect.direction == .improved ? SkinmaxColors.greenGood : SkinmaxColors.redAlert
+                    let tint = effect.direction == .improved ? GlowbiteColors.greenGood : GlowbiteColors.redAlert
 
                     HStack(spacing: 4) {
                         Text(effect.metricType.displayName)
-                            .foregroundStyle(SkinmaxColors.darkBrown)
+                            .foregroundStyle(GlowbiteColors.darkBrown)
                         Text(arrow)
                             .foregroundStyle(tint)
                     }
                     .font(.gbCaption)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 6)
-                    .background(SkinmaxColors.peachWash)
-                    .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.tagCornerRadius))
+                    .background(GlowbiteColors.peachWash)
+                    .clipShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.tagCornerRadius))
                 }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(SkinmaxSpacing.cardPadding)
-        .background(SkinmaxColors.white)
-        .clipShape(RoundedRectangle(cornerRadius: SkinmaxSpacing.cardCornerRadius))
-        .shadow(color: SkinmaxColors.cardShadowColor, radius: 12, x: 0, y: 4)
+        .padding(GlowbiteSpacing.cardPadding)
+        .background(GlowbiteColors.white)
+        .clipShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadius))
+        .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
         .opacity(showBenefits ? 1 : 0)
         .animation(.easeIn(duration: 0.3).delay(0.1), value: showBenefits)
     }
@@ -256,12 +258,12 @@ struct FoodScanResultView: View {
 
                     Text(tip)
                         .font(.gbBodyM)
-                        .foregroundStyle(SkinmaxColors.darkBrown)
+                        .foregroundStyle(GlowbiteColors.darkBrown)
                         .lineSpacing(3)
                 }
                 .padding(14)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(SkinmaxColors.peachWash)
+                .background(GlowbiteColors.peachWash)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
             }
         }

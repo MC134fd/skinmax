@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct SkinmaxApp: App {
+struct GlowbiteApp: App {
     let container: ModelContainer
     let dataStore: DataStore
     @State private var analysisCoordinator = AnalysisCoordinator()

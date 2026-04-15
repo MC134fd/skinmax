@@ -45,7 +45,7 @@ final class AnalysisCoordinator {
     /// Monotonic ID to detect stale completions after reset/dismiss.
     private var analysisID: UInt64 = 0
 
-    private let log = SkinmaxLog.analysis
+    private let log = GlowbiteLog.analysis
 
     // MARK: - Face Scan
 

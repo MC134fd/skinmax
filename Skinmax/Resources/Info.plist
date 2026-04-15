@@ -7,7 +7,7 @@
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Skinmax</string>
+	<string>Glowbite</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>CFBundleShortVersionString</key>
@@ -30,9 +30,9 @@
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>NSCameraUsageDescription</key>
-	<string>Skinmax needs your camera to analyze your skin health</string>
+	<string>Glowbite needs your camera to analyze your skin health</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Skinmax needs access to your photos to analyze food for skin health</string>
+	<string>Glowbite needs access to your photos to analyze food for skin health</string>
 	<key>UIRequiresFullScreen</key>
 	<true/>
 	<key>UILaunchScreen</key>

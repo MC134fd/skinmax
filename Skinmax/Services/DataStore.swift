@@ -6,7 +6,7 @@ import os
 @Observable
 final class DataStore {
     private let modelContext: ModelContext
-    private let log = SkinmaxLog.dataStore
+    private let log = GlowbiteLog.dataStore
 
     init(modelContext: ModelContext) {
         self.modelContext = modelContext

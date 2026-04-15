@@ -16,7 +16,7 @@ struct FoodLogView: View {
                     dailySummary
                     foodList
                 }
-                .padding(.horizontal, SkinmaxSpacing.screenPadding)
+                .padding(.horizontal, GlowbiteSpacing.screenPadding)
                 .padding(.bottom, 100)
             }
 
@@ -40,7 +40,7 @@ struct FoodLogView: View {
     private var title: some View {
         Text("Food Log")
             .font(.gbTitleM)
-            .foregroundStyle(SkinmaxColors.darkBrown)
+            .foregroundStyle(GlowbiteColors.darkBrown)
             .padding(.top, 12)
     }
 
@@ -49,20 +49,20 @@ struct FoodLogView: View {
         HStack {
             Button { viewModel.previousMonth() } label: {
                 Image(systemName: "chevron.left")
-                    .foregroundStyle(SkinmaxColors.lightTaupe)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
             }
 
             Spacer()
 
             Text(viewModel.monthTitle)
-                .font(SkinmaxFonts.h3())
-                .foregroundStyle(SkinmaxColors.darkBrown)
+                .font(.gbBodyM)
+                .foregroundStyle(GlowbiteColors.darkBrown)
 
             Spacer()
 
             Button { viewModel.nextMonth() } label: {
                 Image(systemName: "chevron.right")
-                    .foregroundStyle(SkinmaxColors.lightTaupe)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
             }
         }
     }
@@ -88,19 +88,19 @@ struct FoodLogView: View {
         HStack {
             Text("\(viewModel.selectedDayName)'s average:")
                 .font(.gbBodyM)
-                .foregroundStyle(SkinmaxColors.warmBrown)
+                .foregroundStyle(GlowbiteColors.warmBrown)
 
             if let avg = viewModel.averageScore {
                 Text(String(format: "%.1f", avg))
                     .font(.gbBodyL)
-                    .foregroundStyle(SkinmaxColors.trafficLight(for: avg * 10))
+                    .foregroundStyle(GlowbiteColors.trafficLight(for: avg * 10))
                 Text("/10")
                     .font(.gbBodyM)
-                    .foregroundStyle(SkinmaxColors.lightTaupe)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
             } else {
                 Text("No meals logged")
                     .font(.gbBodyM)
-                    .foregroundStyle(SkinmaxColors.lightTaupe)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
             }
 
             Spacer()
@@ -136,12 +136,12 @@ struct FoodLogView: View {
                 .font(.system(size: 40))
 
             Text("No meals logged")
-                .font(SkinmaxFonts.h3())
-                .foregroundStyle(SkinmaxColors.darkBrown)
+                .font(.gbBodyM)
+                .foregroundStyle(GlowbiteColors.darkBrown)
 
             Text("Tap the + button to log your first meal")
                 .font(.gbBodyM)
-                .foregroundStyle(SkinmaxColors.lightTaupe)
+                .foregroundStyle(GlowbiteColors.lightTaupe)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
@@ -153,14 +153,14 @@ struct FoodLogView: View {
             showFoodLogSheet = true
         } label: {
             Image(systemName: "plus")
-                .font(.system(size: 22, weight: .semibold))
+                .font(.gbDisplayM)
                 .foregroundStyle(.white)
                 .frame(width: 52, height: 52)
-                .background(SkinmaxColors.coral)
+                .background(GlowbiteColors.coral)
                 .clipShape(Circle())
-                .shadow(color: SkinmaxColors.coral.opacity(0.3), radius: 6, x: 0, y: 4)
+                .shadow(color: GlowbiteColors.coral.opacity(0.3), radius: 6, x: 0, y: 4)
         }
-        .padding(.trailing, SkinmaxSpacing.screenPadding)
+        .padding(.trailing, GlowbiteSpacing.screenPadding)
         .padding(.bottom, 90)
     }
 }
