@@ -48,6 +48,9 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
           "protein": 35.0,
           "fat": 22.0,
           "carbs": 38.0,
+          "fiber": 6.0,
+          "sugar": 12.0,
+          "sodium": 0.62,
           "benefits": [
             "Omega-3 fatty acids (reduces inflammation and redness)",
             "Vitamin E (supports skin cell repair)",
@@ -78,7 +81,12 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
         For skin_effects, use these metric_type values only: hydration, acne, dark_spots, redness, texture, pores, wrinkles
         For direction, use only: improved, worsened
 
-        Be accurate with nutrition estimates. If the food photo doesn't match the name, use what you see in the photo. Always provide at least 2 benefits and 2 skin_effects. Return ONLY valid JSON, no markdown.
+        IMPORTANT nutrition fields:
+        - fiber: grams of dietary fiber
+        - sugar: grams of total sugar (added + natural)
+        - sodium: in GRAMS (not milligrams). E.g., 1500mg = 1.5g. A typical meal has 0.3-1.5g sodium.
+
+        Be accurate with all nutrition estimates based on the photo and portion size. If the food photo doesn't match the name, use what you see in the photo. Always provide at least 2 benefits and 2 skin_effects. Return ONLY valid JSON, no markdown.
         """
 
         let requestBody: [String: Any] = [
@@ -196,6 +204,9 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
         let protein = (analysis["protein"] as? Double) ?? (analysis["protein"] as? Int).map(Double.init) ?? 0
         let fat = (analysis["fat"] as? Double) ?? (analysis["fat"] as? Int).map(Double.init) ?? 0
         let carbs = (analysis["carbs"] as? Double) ?? (analysis["carbs"] as? Int).map(Double.init) ?? 0
+        let fiber = (analysis["fiber"] as? Double) ?? (analysis["fiber"] as? Int).map(Double.init) ?? 0
+        let sugar = (analysis["sugar"] as? Double) ?? (analysis["sugar"] as? Int).map(Double.init) ?? 0
+        let sodium = (analysis["sodium"] as? Double) ?? (analysis["sodium"] as? Int).map(Double.init) ?? 0
         let aiTip = analysis["ai_tip"] as? String
 
         let skinEffectsArray = analysis["skin_effects"] as? [[String: Any]] ?? []
@@ -217,6 +228,9 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
             protein: max(0, protein),
             fat: max(0, fat),
             carbs: max(0, carbs),
+            fiber: max(0, fiber),
+            sugar: max(0, sugar),
+            sodium: max(0, sodium),
             benefits: benefits,
             skinEffects: skinEffects,
             photoData: nil,

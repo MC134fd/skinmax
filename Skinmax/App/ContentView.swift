@@ -14,6 +14,8 @@ struct ContentView: View {
 
     var body: some View {
         ZStack {
+            GlowbiteColors.creamBG.ignoresSafeArea()
+
             TabView(selection: $selectedTab) {
                 Tab("Home", systemImage: "house.fill", value: TabItem.home) {
                     HomeView(
@@ -36,9 +38,7 @@ struct ContentView: View {
                 }
 
                 Tab("Account", systemImage: "person.fill", value: TabItem.account) {
-                    NavigationStack {
-                        AccountView()
-                    }
+                    AccountView()
                 }
             }
             .tint(GlowbiteColors.coral)

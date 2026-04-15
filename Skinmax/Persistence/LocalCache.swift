@@ -43,6 +43,9 @@ class CachedFoodScan {
     var protein: Double
     var fat: Double
     var carbs: Double
+    var fiber: Double = 0
+    var sugar: Double = 0
+    var sodium: Double = 0
     var benefitsJSON: Data
     var skinEffectsJSON: Data
     var aiTip: String?
@@ -56,6 +59,9 @@ class CachedFoodScan {
         self.protein = scan.protein
         self.fat = scan.fat
         self.carbs = scan.carbs
+        self.fiber = scan.fiber
+        self.sugar = scan.sugar
+        self.sodium = scan.sodium
         self.benefitsJSON = (try? JSONEncoder().encode(scan.benefits)) ?? Data()
         self.skinEffectsJSON = (try? JSONEncoder().encode(scan.skinEffects)) ?? Data()
         self.aiTip = scan.aiTip
@@ -72,6 +78,9 @@ class CachedFoodScan {
             protein: protein,
             fat: fat,
             carbs: carbs,
+            fiber: fiber,
+            sugar: sugar,
+            sodium: sodium,
             benefits: benefits,
             skinEffects: skinEffects,
             photoData: nil,

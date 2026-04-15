@@ -33,8 +33,6 @@
 	<string>Glowbite needs your camera to analyze your skin health</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Glowbite needs access to your photos to analyze food for skin health</string>
-	<key>UIRequiresFullScreen</key>
-	<true/>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>

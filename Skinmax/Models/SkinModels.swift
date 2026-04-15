@@ -114,13 +114,20 @@ struct FoodScan: Codable, Identifiable, Equatable {
     let protein: Double
     let fat: Double
     let carbs: Double
+    let fiber: Double
+    let sugar: Double
+    let sodium: Double
     let benefits: [String]
     let skinEffects: [SkinEffect]
     let photoData: Data?
     let aiTip: String?
     let createdAt: Date
 
-    init(id: UUID = UUID(), name: String, skinImpactScore: Double, calories: Int, protein: Double, fat: Double, carbs: Double, benefits: [String] = [], skinEffects: [SkinEffect] = [], photoData: Data? = nil, aiTip: String? = nil, createdAt: Date = Date()) {
+    init(id: UUID = UUID(), name: String, skinImpactScore: Double, calories: Int,
+         protein: Double, fat: Double, carbs: Double,
+         fiber: Double = 0, sugar: Double = 0, sodium: Double = 0,
+         benefits: [String] = [], skinEffects: [SkinEffect] = [],
+         photoData: Data? = nil, aiTip: String? = nil, createdAt: Date = Date()) {
         self.id = id
         self.name = name
         self.skinImpactScore = min(10, max(1, skinImpactScore))
@@ -128,6 +135,9 @@ struct FoodScan: Codable, Identifiable, Equatable {
         self.protein = protein
         self.fat = fat
         self.carbs = carbs
+        self.fiber = fiber
+        self.sugar = sugar
+        self.sodium = sodium
         self.benefits = benefits
         self.skinEffects = skinEffects
         self.photoData = photoData

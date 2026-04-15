@@ -43,9 +43,9 @@ struct SkinNutrientCard: View {
             }
             .frame(height: 3)
         }
-        .padding(.vertical, 10)
-        .padding(.horizontal, 11)
-        .frame(width: 90)
+        .padding(.vertical, 12)
+        .padding(.horizontal, 12)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(lightColor)
         .clipShape(RoundedRectangle(cornerRadius: 14))
     }

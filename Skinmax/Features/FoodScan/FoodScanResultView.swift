@@ -141,12 +141,9 @@ struct FoodScanResultView: View {
         .clipShape(RoundedRectangle(cornerRadius: 22))
     }
 
-    // MARK: - Nutrition Grid (2x2)
+    // MARK: - Nutrition Grid
     private var nutritionGrid: some View {
-        LazyVGrid(columns: [
-            GridItem(.flexible(), spacing: 8),
-            GridItem(.flexible(), spacing: 8),
-        ], spacing: 8) {
+        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 4), spacing: 8) {
             ForEach(Array(nutritionItems.enumerated()), id: \.offset) { index, item in
                 VStack(spacing: 4) {
                     Text(item.value)
@@ -168,7 +165,7 @@ struct FoodScanResultView: View {
                 .offset(y: showNutrition ? 0 : 16)
                 .animation(
                     .spring(response: 0.4, dampingFraction: 0.75)
-                    .delay(Double(index) * 0.1),
+                    .delay(Double(index) * 0.08),
                     value: showNutrition
                 )
             }
@@ -181,6 +178,9 @@ struct FoodScanResultView: View {
             (String(format: "%.0fg", scan.protein), "PROTEIN"),
             (String(format: "%.0fg", scan.fat), "FAT"),
             (String(format: "%.0fg", scan.carbs), "CARBS"),
+            (String(format: "%.0fg", scan.fiber), "FIBER"),
+            (String(format: "%.0fg", scan.sugar), "SUGAR"),
+            (String(format: "%.1fg", scan.sodium), "SODIUM"),
         ]
     }
 

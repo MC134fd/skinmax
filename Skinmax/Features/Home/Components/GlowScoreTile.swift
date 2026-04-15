@@ -48,7 +48,7 @@ struct GlowScoreTile: View {
                 .font(.gbCaption)
                 .foregroundStyle(GlowbiteColors.lightTaupe)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .padding(12)
         .background(
             ZStack(alignment: .topTrailing) {

@@ -6,6 +6,7 @@ struct HomeView: View {
     @State private var viewModel = HomeViewModel()
     @State private var selectedScanResult: SkinScan?
     @State private var selectedFoodResult: FoodScan?
+    @State private var nutrientPage: Int = 0
 
     var onViewFaceResult: (SkinScan) -> Void = { _ in }
     var onViewFoodResult: (FoodScan) -> Void = { _ in }
@@ -39,7 +40,7 @@ struct HomeView: View {
                 mealsSection
             }
             .padding(.horizontal, GlowbiteSpacing.screenPadding)
-            .padding(.bottom, 20)
+            .padding(.bottom, 120)
             .animation(.spring(response: 0.4, dampingFraction: 0.75), value: coordinator.isActive)
         }
         .background(GlowbiteColors.creamBG.ignoresSafeArea())
@@ -180,7 +181,7 @@ struct HomeView: View {
     // MARK: - Skin Nutrients
 
     private var skinNutrientsSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(spacing: 8) {
             HStack {
                 Text("SKIN NUTRIENTS")
                     .font(.gbOverline)
@@ -188,29 +189,130 @@ struct HomeView: View {
                     .foregroundStyle(GlowbiteColors.lightTaupe)
 
                 Spacer()
-
-                Text("SWIPE →")
-                    .font(.gbOverline)
-                    .tracking(2.0)
-                    .foregroundStyle(GlowbiteColors.lightTaupe)
             }
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 6) {
-                    ForEach(HomeViewModel.skinNutrients) { nutrient in
-                        SkinNutrientCard(
-                            label: nutrient.label,
-                            value: nutrient.value,
-                            target: nutrient.target,
-                            descriptor: nutrient.descriptor,
-                            color: nutrient.color,
-                            lightColor: nutrient.lightColor,
-                            progress: nutrient.progress
-                        )
-                    }
+            TabView(selection: $nutrientPage) {
+                nutrientRow(nutrients: viewModel.nutrientPages.indices.contains(0)
+                    ? viewModel.nutrientPages[0] : [])
+                    .tag(0)
+
+                nutrientRow(nutrients: viewModel.nutrientPages.indices.contains(1)
+                    ? viewModel.nutrientPages[1] : [])
+                    .tag(1)
+
+                lifeScorePage
+                    .tag(2)
+            }
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .frame(height: 140)
+
+            HStack(spacing: 6) {
+                ForEach(0..<3, id: \.self) { index in
+                    Circle()
+                        .fill(nutrientPage == index ? GlowbiteColors.coral : GlowbiteColors.lightTaupe.opacity(0.35))
+                        .frame(width: 6, height: 6)
+                        .animation(.easeOut(duration: 0.2), value: nutrientPage)
                 }
             }
         }
+    }
+
+    private func nutrientRow(nutrients: [HomeViewModel.NutrientDisplayData]) -> some View {
+        HStack(spacing: 8) {
+            ForEach(nutrients) { nutrient in
+                SkinNutrientCard(
+                    label: nutrient.config.label,
+                    value: nutrientValueString(nutrient),
+                    target: nutrientTargetString(nutrient),
+                    descriptor: nutrient.config.descriptor,
+                    color: nutrient.zone.color,
+                    lightColor: nutrient.zone.lightColor,
+                    progress: nutrient.progress
+                )
+            }
+        }
+        .padding(.horizontal, 2)
+    }
+
+    private func nutrientValueString(_ n: HomeViewModel.NutrientDisplayData) -> String {
+        if n.config.label == "SODIUM" {
+            return String(format: "%.1f", n.currentValue)
+        }
+        return String(format: "%.0f", n.currentValue)
+    }
+
+    private func nutrientTargetString(_ n: HomeViewModel.NutrientDisplayData) -> String {
+        if n.config.label == "SUGAR" {
+            return "<\(Int(n.config.target))\(n.config.unit)"
+        }
+        if n.config.label == "SODIUM" {
+            return String(format: "%.1f%@", n.config.target, n.config.unit)
+        }
+        return "\(Int(n.config.target))\(n.config.unit)"
+    }
+
+    private var lifeScorePage: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Text("✦ LIFE SCORE")
+                    .font(.gbOverline)
+                    .tracking(2.0)
+                    .foregroundStyle(GlowbiteColors.coral)
+                Spacer()
+                Text("COMING SOON")
+                    .font(.gbOverline)
+                    .tracking(1.0)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
+            }
+
+            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                Text("72")
+                    .font(.gbDisplayM)
+                    .foregroundStyle(GlowbiteColors.darkBrown)
+                Text("/ 100")
+                    .font(.gbCaption)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
+            }
+
+            Text("Your overall wellness balance")
+                .font(.gbCaption)
+                .foregroundStyle(GlowbiteColors.mediumTaupe)
+
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(GlowbiteColors.border)
+                        .frame(height: 6)
+
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(
+                            LinearGradient(
+                                colors: [GlowbiteColors.coral, GlowbiteColors.amberFair, GlowbiteColors.greenGood],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .frame(width: geo.size.width * 0.72, height: 6)
+                }
+            }
+            .frame(height: 6)
+
+            HStack {
+                Text("Glow + Nutrition + Habits")
+                    .font(.gbOverline)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
+                Spacer()
+            }
+        }
+        .padding(.vertical, 14)
+        .padding(.horizontal, 14)
+        .background(GlowbiteColors.paper)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(GlowbiteColors.border, lineWidth: 1)
+        )
+        .padding(.horizontal, 2)
     }
 
     // MARK: - Today's Meals

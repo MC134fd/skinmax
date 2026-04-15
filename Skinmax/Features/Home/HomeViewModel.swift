@@ -249,28 +249,103 @@ final class HomeViewModel {
     // TODO: Wire to a real hydration tracking feature later
     let hydration = HydrationPlaceholder(consumed: 1.2, goal: 2.5, glasses: 3)
 
-    // MARK: - Skin Nutrients (placeholder)
+    // MARK: - Nutrient Traffic Light Zones
 
-    struct SkinNutrient: Identifiable {
-        let id = UUID()
+    enum NutrientZone {
+        case tooLow, low, optimal, high, tooHigh
+
+        var color: Color {
+            switch self {
+            case .tooLow, .tooHigh: return GlowbiteColors.redAlert
+            case .low, .high: return GlowbiteColors.amberFair
+            case .optimal: return GlowbiteColors.greenGood
+            }
+        }
+
+        var lightColor: Color {
+            switch self {
+            case .tooLow, .tooHigh: return GlowbiteColors.redLight
+            case .low, .high: return GlowbiteColors.amberLight
+            case .optimal: return GlowbiteColors.greenLight
+            }
+        }
+    }
+
+    struct NutrientConfig {
         let label: String
-        let value: String
-        let target: String
+        let unit: String
         let descriptor: String
-        let color: Color
-        let lightColor: Color
+        let target: Double
+        let greenRange: ClosedRange<Double>
+        let amberLowRange: ClosedRange<Double>?
+        let amberHighRange: ClosedRange<Double>
+        let maxDisplay: Double
+
+        func zone(for value: Double) -> NutrientZone {
+            if greenRange.contains(value) { return .optimal }
+            if amberHighRange.contains(value) { return .high }
+            if let amberLow = amberLowRange, amberLow.contains(value) { return .low }
+            if value > amberHighRange.upperBound { return .tooHigh }
+            return .tooLow
+        }
+    }
+
+    static let nutrientConfigs: [NutrientConfig] = [
+        NutrientConfig(label: "PROTEIN", unit: "g", descriptor: "Collagen fuel",
+                       target: 50, greenRange: 40...80,
+                       amberLowRange: 25...39, amberHighRange: 81...100, maxDisplay: 120),
+        NutrientConfig(label: "CARBS", unit: "g", descriptor: "Energy source",
+                       target: 250, greenRange: 150...300,
+                       amberLowRange: 100...149, amberHighRange: 301...375, maxDisplay: 400),
+        NutrientConfig(label: "FAT", unit: "g", descriptor: "Skin barrier",
+                       target: 65, greenRange: 44...78,
+                       amberLowRange: 25...43, amberHighRange: 79...100, maxDisplay: 120),
+        NutrientConfig(label: "FIBER", unit: "g", descriptor: "Gut-skin axis",
+                       target: 28, greenRange: 20...35,
+                       amberLowRange: 10...19, amberHighRange: 36...45, maxDisplay: 50),
+        NutrientConfig(label: "SUGAR", unit: "g", descriptor: "Breakout flag",
+                       target: 25, greenRange: 0...25,
+                       amberLowRange: nil, amberHighRange: 26...40, maxDisplay: 60),
+        NutrientConfig(label: "SODIUM", unit: "g", descriptor: "Puffiness risk",
+                       target: 1.5, greenRange: 0.8...1.5,
+                       amberLowRange: 0.4...0.79, amberHighRange: 1.51...2.3, maxDisplay: 3.0),
+    ]
+
+    struct NutrientDisplayData: Identifiable {
+        let id = UUID()
+        let config: NutrientConfig
+        let currentValue: Double
+        let zone: NutrientZone
         let progress: Double
     }
 
-    // TODO: Derive from FoodScan entries when the model supports these nutrients
-    static let skinNutrients: [SkinNutrient] = [
-        SkinNutrient(label: "PROTEIN", value: "48", target: "92g", descriptor: "Collagen fuel",
-                     color: GlowbiteColors.purple, lightColor: GlowbiteColors.purpleLight, progress: 0.52),
-        SkinNutrient(label: "OMEGA-3", value: "1.2", target: "2g", descriptor: "Glow booster",
-                     color: GlowbiteColors.greenGood, lightColor: GlowbiteColors.greenLight, progress: 0.60),
-        SkinNutrient(label: "SUGAR", value: "18", target: "25g", descriptor: "Breakout flag",
-                     color: GlowbiteColors.redAlert, lightColor: GlowbiteColors.redLight, progress: 0.72),
-    ]
+    var nutrientPages: [[NutrientDisplayData]] {
+        let scans = todayFoodScans
+
+        let totals: [Double] = [
+            scans.reduce(0) { $0 + $1.protein },
+            scans.reduce(0) { $0 + $1.carbs },
+            scans.reduce(0) { $0 + $1.fat },
+            scans.reduce(0) { $0 + $1.fiber },
+            scans.reduce(0) { $0 + $1.sugar },
+            scans.reduce(0) { $0 + $1.sodium },
+        ]
+
+        let configs = Self.nutrientConfigs
+        let displayData: [NutrientDisplayData] = zip(configs, totals).map { config, value in
+            NutrientDisplayData(
+                config: config,
+                currentValue: value,
+                zone: config.zone(for: value),
+                progress: min(value / config.maxDisplay, 1.0)
+            )
+        }
+
+        return [
+            Array(displayData[0..<3]),
+            Array(displayData[3..<6]),
+        ]
+    }
 
     // MARK: - Food Score
 

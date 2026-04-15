@@ -31,7 +31,7 @@ struct HydrationTile: View {
                 }
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .padding(12)
         .background(GlowbiteColors.blueLight)
         .clipShape(RoundedRectangle(cornerRadius: 18))

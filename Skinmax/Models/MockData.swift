@@ -31,6 +31,9 @@ enum MockData {
             protein: 35,
             fat: 18,
             carbs: 42,
+            fiber: 6,
+            sugar: 8,
+            sodium: 0.62,
             benefits: ["Rich in Omega-3 for skin elasticity", "High protein for collagen production"],
             skinEffects: [
                 SkinEffect(metricType: .hydration, direction: .improved, description: "Healthy fats support moisture barrier"),
@@ -44,6 +47,9 @@ enum MockData {
             protein: 8,
             fat: 5,
             carbs: 38,
+            fiber: 5,
+            sugar: 22,
+            sodium: 0.04,
             benefits: ["Vitamin C boosts collagen", "Antioxidants fight free radicals"],
             skinEffects: [
                 SkinEffect(metricType: .texture, direction: .improved, description: "Vitamin C brightens skin"),

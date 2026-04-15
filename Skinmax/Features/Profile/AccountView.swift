@@ -30,7 +30,7 @@ struct AccountView: View {
                     footer
                 }
                 .padding(.horizontal, GlowbiteSpacing.screenPadding)
-                .padding(.bottom, 20)
+                .padding(.bottom, 120)
             }
             .background(GlowbiteColors.creamBG.ignoresSafeArea())
             .navigationDestination(isPresented: $showProgress) { ProgressView_() }
@@ -112,7 +112,7 @@ struct AccountView: View {
             Divider().foregroundStyle(GlowbiteColors.softTan)
             menuRow(icon: "star.fill", label: "Rate the App") {
                 if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-                    SKStoreReviewController.requestReview(in: scene)
+                    AppStore.requestReview(in: scene)
                 }
             }
         }
