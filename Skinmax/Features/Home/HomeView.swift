@@ -152,12 +152,12 @@ struct HomeView: View {
             let rightWidth = (geo.size.width - 8) / 3
             let leftWidth = geo.size.width - rightWidth - 8
 
-            HStack(alignment: .top, spacing: 8) {
+            HStack(spacing: 8) {
                 CalorieRingCard(
                     consumed: viewModel.consumedCalories,
                     goal: viewModel.dailyCalorieGoal
                 )
-                .frame(width: leftWidth)
+                .frame(width: leftWidth, height: geo.size.height)
 
                 VStack(spacing: 8) {
                     GlowScoreTile(
@@ -171,7 +171,7 @@ struct HomeView: View {
                         glasses: viewModel.hydration.glasses
                     )
                 }
-                .frame(width: rightWidth)
+                .frame(width: rightWidth, height: geo.size.height)
             }
         }
         .frame(height: 220)

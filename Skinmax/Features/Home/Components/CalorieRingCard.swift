@@ -13,40 +13,38 @@ struct CalorieRingCard: View {
     @State private var animatedProgress: Double = 0
 
     var body: some View {
-        VStack(spacing: 8) {
-            Text("CALORIES LEFT")
-                .font(.gbOverline)
-                .tracking(2.0)
-                .foregroundStyle(GlowbiteColors.lightTaupe)
+        ZStack {
+            Circle()
+                .stroke(GlowbiteColors.softTan, lineWidth: 10)
+                .frame(width: 160, height: 160)
 
-            ZStack {
-                Circle()
-                    .stroke(GlowbiteColors.softTan, lineWidth: 10)
-                    .frame(width: 130, height: 130)
+            Circle()
+                .trim(from: 0, to: animatedProgress)
+                .stroke(
+                    GlowbiteColors.darkBrown,
+                    style: StrokeStyle(lineWidth: 10, lineCap: .round)
+                )
+                .frame(width: 160, height: 160)
+                .rotationEffect(.degrees(-90))
 
-                Circle()
-                    .trim(from: 0, to: animatedProgress)
-                    .stroke(
-                        GlowbiteColors.darkBrown,
-                        style: StrokeStyle(lineWidth: 10, lineCap: .round)
-                    )
-                    .frame(width: 130, height: 130)
-                    .rotationEffect(.degrees(-90))
+            VStack(spacing: 2) {
+                Text("CALORIES LEFT")
+                    .font(.gbOverline)
+                    .tracking(1.5)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
 
-                VStack(spacing: 2) {
-                    Text("\(remaining)")
-                        .font(.gbDisplayL)
-                        .tracking(-1.0)
-                        .foregroundStyle(GlowbiteColors.darkBrown)
+                Text("\(remaining)")
+                    .font(.gbDisplayL)
+                    .tracking(-1.0)
+                    .foregroundStyle(GlowbiteColors.darkBrown)
 
-                    Text("kcal")
-                        .font(.gbCaption)
-                        .foregroundStyle(GlowbiteColors.lightTaupe)
-                }
+                Text("kcal")
+                    .font(.gbCaption)
+                    .foregroundStyle(GlowbiteColors.lightTaupe)
             }
         }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 16)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.vertical, 12)
         .padding(.horizontal, 14)
         .background(GlowbiteColors.paper)
         .clipShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadius))
