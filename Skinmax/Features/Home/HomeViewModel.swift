@@ -275,6 +275,8 @@ final class HomeViewModel {
         let label: String
         let unit: String
         let descriptor: String
+        let signatureColor: Color
+        let signatureLightColor: Color
         let target: Double
         let greenRange: ClosedRange<Double>
         let amberLowRange: ClosedRange<Double>?
@@ -292,21 +294,33 @@ final class HomeViewModel {
 
     static let nutrientConfigs: [NutrientConfig] = [
         NutrientConfig(label: "PROTEIN", unit: "g", descriptor: "Collagen fuel",
+                       signatureColor: GlowbiteColors.nutrientProtein,
+                       signatureLightColor: GlowbiteColors.nutrientProteinLight,
                        target: 50, greenRange: 40...80,
                        amberLowRange: 25...39, amberHighRange: 81...100, maxDisplay: 120),
         NutrientConfig(label: "CARBS", unit: "g", descriptor: "Energy source",
+                       signatureColor: GlowbiteColors.nutrientCarbs,
+                       signatureLightColor: GlowbiteColors.nutrientCarbsLight,
                        target: 250, greenRange: 150...300,
                        amberLowRange: 100...149, amberHighRange: 301...375, maxDisplay: 400),
         NutrientConfig(label: "FAT", unit: "g", descriptor: "Skin barrier",
+                       signatureColor: GlowbiteColors.nutrientFat,
+                       signatureLightColor: GlowbiteColors.nutrientFatLight,
                        target: 65, greenRange: 44...78,
                        amberLowRange: 25...43, amberHighRange: 79...100, maxDisplay: 120),
         NutrientConfig(label: "FIBER", unit: "g", descriptor: "Gut-skin axis",
+                       signatureColor: GlowbiteColors.nutrientFiber,
+                       signatureLightColor: GlowbiteColors.nutrientFiberLight,
                        target: 28, greenRange: 20...35,
                        amberLowRange: 10...19, amberHighRange: 36...45, maxDisplay: 50),
         NutrientConfig(label: "SUGAR", unit: "g", descriptor: "Breakout flag",
+                       signatureColor: GlowbiteColors.nutrientSugar,
+                       signatureLightColor: GlowbiteColors.nutrientSugarLight,
                        target: 25, greenRange: 0...25,
                        amberLowRange: nil, amberHighRange: 26...40, maxDisplay: 60),
         NutrientConfig(label: "SODIUM", unit: "g", descriptor: "Puffiness risk",
+                       signatureColor: GlowbiteColors.nutrientSodium,
+                       signatureLightColor: GlowbiteColors.nutrientSodiumLight,
                        target: 1.5, greenRange: 0.8...1.5,
                        amberLowRange: 0.4...0.79, amberHighRange: 1.51...2.3, maxDisplay: 3.0),
     ]
@@ -317,6 +331,9 @@ final class HomeViewModel {
         let currentValue: Double
         let zone: NutrientZone
         let progress: Double
+        var signatureColor: Color { config.signatureColor }
+        var signatureLightColor: Color { config.signatureLightColor }
+        var barColor: Color { zone.color }
     }
 
     var nutrientPages: [[NutrientDisplayData]] {

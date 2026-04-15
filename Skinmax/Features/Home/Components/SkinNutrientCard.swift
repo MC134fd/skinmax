@@ -5,8 +5,9 @@ struct SkinNutrientCard: View {
     let value: String
     let target: String
     let descriptor: String
-    let color: Color
-    let lightColor: Color
+    let signatureColor: Color
+    let signatureLightColor: Color
+    let barColor: Color
     let progress: Double
 
     var body: some View {
@@ -14,31 +15,32 @@ struct SkinNutrientCard: View {
             Text(label)
                 .font(.gbOverline)
                 .tracking(2.0)
-                .foregroundStyle(color)
+                .foregroundStyle(signatureColor)
 
             HStack(alignment: .firstTextBaseline, spacing: 1) {
                 Text(value)
                     .font(.gbTitleM)
-                    .foregroundStyle(color)
+                    .foregroundStyle(signatureColor)
 
                 Text("/\(target)")
                     .font(.gbCaption)
-                    .foregroundStyle(color.opacity(0.70))
+                    .foregroundStyle(signatureColor.opacity(0.55))
             }
 
             Text(descriptor)
                 .font(.gbOverline)
-                .foregroundStyle(color.opacity(0.80))
+                .foregroundStyle(signatureColor.opacity(0.65))
 
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 2)
-                        .fill(GlowbiteColors.border)
+                        .fill(signatureColor.opacity(0.12))
                         .frame(height: 3)
 
                     RoundedRectangle(cornerRadius: 2)
-                        .fill(color)
+                        .fill(barColor)
                         .frame(width: geo.size.width * min(progress, 1.0), height: 3)
+                        .animation(.easeOut(duration: 0.6), value: progress)
                 }
             }
             .frame(height: 3)
@@ -46,7 +48,7 @@ struct SkinNutrientCard: View {
         .padding(.vertical, 12)
         .padding(.horizontal, 12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(lightColor)
+        .background(signatureLightColor)
         .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 }

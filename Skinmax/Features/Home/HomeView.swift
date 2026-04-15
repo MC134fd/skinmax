@@ -225,8 +225,9 @@ struct HomeView: View {
                     value: nutrientValueString(nutrient),
                     target: nutrientTargetString(nutrient),
                     descriptor: nutrient.config.descriptor,
-                    color: nutrient.zone.color,
-                    lightColor: nutrient.zone.lightColor,
+                    signatureColor: nutrient.signatureColor,
+                    signatureLightColor: nutrient.signatureLightColor,
+                    barColor: nutrient.barColor,
                     progress: nutrient.progress
                 )
             }

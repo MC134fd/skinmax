@@ -9,13 +9,14 @@ You are updating the skin nutrients section of the home screen and adding 3 new 
 ## Scope — What Changes and What Doesn't
 
 ### DO change:
+- `GlowbiteColors.swift` — add 6 new nutrient signature color pairs (12 tokens)
 - `SkinModels.swift` — add `fiber`, `sugar`, `sodium` to `FoodScan`
 - `FoodAnalysisService.swift` — update AI prompt JSON schema + parse 3 new fields
 - `LocalCache.swift` — add `fiber`, `sugar`, `sodium` to `CachedFoodScan` + both init/toFoodScan
 - `MockData.swift` — add `fiber`, `sugar`, `sodium` to sample `FoodScan` entries
 - `HomeView.swift` — replace skin nutrients `ScrollView` with paged `TabView` + dot indicators
-- `HomeViewModel.swift` — replace hardcoded `SkinNutrient` with real-data computed properties + traffic light zone logic
-- `SkinNutrientCard.swift` — make cards wider (fill available width), dynamic progress bar color
+- `HomeViewModel.swift` — replace hardcoded `SkinNutrient` with real-data computed properties + traffic light zone logic + nutrient configs with signature colors
+- `SkinNutrientCard.swift` — make cards wider (fill available width), two-layer color system (signature + traffic light bar)
 - `FoodScanResultView.swift` — update nutrition grid to show all 6 nutrients + calories (7 items)
 
 ### DO NOT change:
@@ -23,7 +24,6 @@ You are updating the skin nutrients section of the home screen and adding 3 new 
 - Tab bar structure, scan popup behavior
 - `SkinAnalysisService.swift`, `AnalysisCoordinator.swift`, `InsightEngine.swift`
 - `SkinScan` model (only `FoodScan` changes)
-- Color palette in `GlowbiteColors.swift` (use existing tokens)
 - Camera flow, face scan flow
 - `CalorieRingCard.swift`, `GlowScoreTile.swift`, `HydrationTile.swift`, `MealRow.swift`
 - `DataStore.swift` — don't touch query logic (the existing `foodScans(for:)` returns `[FoodScan]` which will automatically include the new fields once the model is updated)
@@ -256,6 +256,61 @@ return FoodScan(
 
 ---
 
+## Section 2.5: New Nutrient Signature Colors
+
+Each nutrient gets its own **unique signature color** so the cards look vibrant and distinct — not a boring wall of the same traffic light color. The signature color is used for the card's **background tint, label text, and value text**. The **progress bar** still uses traffic light zone colors (green/amber/red) for functional feedback.
+
+### 2.5a. Add to `GlowbiteColors.swift`
+
+Add these new color tokens inside the `GlowbiteColors` enum:
+
+```swift
+// MARK: - Nutrient Signature Colors
+static let nutrientProtein = Color(hex: "8B5CF6")           // Soft violet — collagen/building blocks
+static let nutrientProteinLight = Color(hex: "8B5CF6").opacity(0.10)
+
+static let nutrientCarbs = Color(hex: "D4943A")             // Warm gold — energy/grains
+static let nutrientCarbsLight = Color(hex: "D4943A").opacity(0.10)
+
+static let nutrientFat = Color(hex: "2D9C96")               // Soft teal — oils/avocado/freshness
+static let nutrientFatLight = Color(hex: "2D9C96").opacity(0.10)
+
+static let nutrientFiber = Color(hex: "5B9A4F")             // Leafy green — plants/gut health
+static let nutrientFiberLight = Color(hex: "5B9A4F").opacity(0.10)
+
+static let nutrientSugar = Color(hex: "E8729A")             // Rose pink — sweetness/candy
+static let nutrientSugarLight = Color(hex: "E8729A").opacity(0.10)
+
+static let nutrientSodium = Color(hex: "4A7CB8")            // Ocean blue — salt/water
+static let nutrientSodiumLight = Color(hex: "4A7CB8").opacity(0.10)
+```
+
+These are deliberately soft, muted tones that work well as light-tinted card backgrounds. Each one evokes the nutrient's association:
+- **Protein → Violet**: premium, building-block feel
+- **Carbs → Gold**: warm, energetic, grain-like
+- **Fat → Teal**: fresh, clean, healthy oils
+- **Fiber → Leafy green**: natural, plant-based
+- **Sugar → Rose pink**: sweet, playful
+- **Sodium → Ocean blue**: water/salt/mineral
+
+### 2.5b. Two-Layer Color System for Nutrient Cards
+
+Each `SkinNutrientCard` now receives TWO sets of colors:
+
+1. **`signatureColor` / `signatureLightColor`** — the nutrient's unique identity color. Used for:
+   - Card background tint (the light variant)
+   - Label text ("PROTEIN", "CARBS", etc.)
+   - Value text ("48", "250", etc.)
+   - Target text ("/50g")
+   - Descriptor text ("Collagen fuel")
+
+2. **`barColor`** — the traffic light zone color (green/amber/red). Used for:
+   - The progress bar fill ONLY
+
+This means a Protein card always looks violet regardless of zone, but its progress bar turns green when optimal, amber when borderline, or red when too low/high. The user instantly sees "this is protein" (violet card) AND "am I in a good range?" (green bar).
+
+---
+
 ## Section 3: Traffic Light Zone System
 
 ### 3a. Add to `HomeViewModel.swift` — Zone Definitions
@@ -289,6 +344,8 @@ struct NutrientConfig {
     let label: String
     let unit: String
     let descriptor: String
+    let signatureColor: Color       // unique identity color per nutrient
+    let signatureLightColor: Color  // tinted background per nutrient
     let target: Double
     let greenRange: ClosedRange<Double>
     let amberLowRange: ClosedRange<Double>?   // nil for one-directional (sugar)
@@ -312,18 +369,24 @@ static let nutrientConfigs: [NutrientConfig] = [
     // Page 1
     NutrientConfig(
         label: "PROTEIN", unit: "g", descriptor: "Collagen fuel",
+        signatureColor: GlowbiteColors.nutrientProtein,
+        signatureLightColor: GlowbiteColors.nutrientProteinLight,
         target: 50, greenRange: 40...80,
         amberLowRange: 25...39, amberHighRange: 81...100,
         maxDisplay: 120
     ),
     NutrientConfig(
         label: "CARBS", unit: "g", descriptor: "Energy source",
+        signatureColor: GlowbiteColors.nutrientCarbs,
+        signatureLightColor: GlowbiteColors.nutrientCarbsLight,
         target: 250, greenRange: 150...300,
         amberLowRange: 100...149, amberHighRange: 301...375,
         maxDisplay: 400
     ),
     NutrientConfig(
         label: "FAT", unit: "g", descriptor: "Skin barrier",
+        signatureColor: GlowbiteColors.nutrientFat,
+        signatureLightColor: GlowbiteColors.nutrientFatLight,
         target: 65, greenRange: 44...78,
         amberLowRange: 25...43, amberHighRange: 79...100,
         maxDisplay: 120
@@ -331,18 +394,24 @@ static let nutrientConfigs: [NutrientConfig] = [
     // Page 2
     NutrientConfig(
         label: "FIBER", unit: "g", descriptor: "Gut-skin axis",
+        signatureColor: GlowbiteColors.nutrientFiber,
+        signatureLightColor: GlowbiteColors.nutrientFiberLight,
         target: 28, greenRange: 20...35,
         amberLowRange: 10...19, amberHighRange: 36...45,
         maxDisplay: 50
     ),
     NutrientConfig(
         label: "SUGAR", unit: "g", descriptor: "Breakout flag",
+        signatureColor: GlowbiteColors.nutrientSugar,
+        signatureLightColor: GlowbiteColors.nutrientSugarLight,
         target: 25, greenRange: 0...25,
         amberLowRange: nil, amberHighRange: 26...40,
         maxDisplay: 60
     ),
     NutrientConfig(
         label: "SODIUM", unit: "g", descriptor: "Puffiness risk",
+        signatureColor: GlowbiteColors.nutrientSodium,
+        signatureLightColor: GlowbiteColors.nutrientSodiumLight,
         target: 1.5, greenRange: 0.8...1.5,
         amberLowRange: 0.4...0.79, amberHighRange: 1.51...2.3,
         maxDisplay: 3.0
@@ -363,6 +432,9 @@ struct NutrientDisplayData: Identifiable {
     let currentValue: Double
     let zone: NutrientZone
     let progress: Double  // 0.0 to 1.0, clamped
+    var signatureColor: Color { config.signatureColor }
+    var signatureLightColor: Color { config.signatureLightColor }
+    var barColor: Color { zone.color }  // traffic light color for progress bar only
 }
 
 var nutrientPages: [[NutrientDisplayData]] {
@@ -456,8 +528,9 @@ private func nutrientRow(nutrients: [HomeViewModel.NutrientDisplayData]) -> some
                 value: nutrientValueString(nutrient),
                 target: nutrientTargetString(nutrient),
                 descriptor: nutrient.config.descriptor,
-                color: nutrient.zone.color,
-                lightColor: nutrient.zone.lightColor,
+                signatureColor: nutrient.signatureColor,
+                signatureLightColor: nutrient.signatureLightColor,
+                barColor: nutrient.barColor,
                 progress: nutrient.progress
             )
         }
@@ -556,9 +629,13 @@ private var lifeScorePage: some View {
 
 ---
 
-## Section 5: Update `SkinNutrientCard.swift`
+## Section 5: Update `SkinNutrientCard.swift` — Two-Layer Color System
 
-The card needs to fill available width (instead of fixed 90pt) since each page now shows 3 cards sharing the full screen width.
+The card uses **two color layers**:
+1. **Signature color** — the nutrient's unique identity (violet for protein, gold for carbs, etc.). Used for background tint, all text.
+2. **Bar color** — the traffic light zone color (green/amber/red). Used ONLY for the progress bar fill.
+
+This means each card always looks like "its" nutrient (distinct identity), while the progress bar gives instant zone feedback.
 
 ```swift
 import SwiftUI
@@ -568,8 +645,9 @@ struct SkinNutrientCard: View {
     let value: String
     let target: String
     let descriptor: String
-    let color: Color
-    let lightColor: Color
+    let signatureColor: Color       // nutrient's unique identity color
+    let signatureLightColor: Color  // nutrient's tinted background
+    let barColor: Color             // traffic light zone color (green/amber/red)
     let progress: Double
 
     var body: some View {
@@ -577,31 +655,33 @@ struct SkinNutrientCard: View {
             Text(label)
                 .font(.gbOverline)
                 .tracking(2.0)
-                .foregroundStyle(color)
+                .foregroundStyle(signatureColor)
 
             HStack(alignment: .firstTextBaseline, spacing: 1) {
                 Text(value)
                     .font(.gbTitleM)
-                    .foregroundStyle(color)
+                    .foregroundStyle(signatureColor)
 
                 Text("/\(target)")
                     .font(.gbCaption)
-                    .foregroundStyle(color.opacity(0.70))
+                    .foregroundStyle(signatureColor.opacity(0.55))
             }
 
             Text(descriptor)
                 .font(.gbOverline)
-                .foregroundStyle(color.opacity(0.80))
+                .foregroundStyle(signatureColor.opacity(0.65))
 
+            // Progress bar — uses traffic light zone color, NOT signature color
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 2)
-                        .fill(GlowbiteColors.border)
+                        .fill(signatureColor.opacity(0.12))
                         .frame(height: 3)
 
                     RoundedRectangle(cornerRadius: 2)
-                        .fill(color)
+                        .fill(barColor)
                         .frame(width: geo.size.width * min(progress, 1.0), height: 3)
+                        .animation(.easeOut(duration: 0.6), value: progress)
                 }
             }
             .frame(height: 3)
@@ -609,13 +689,27 @@ struct SkinNutrientCard: View {
         .padding(.vertical, 12)
         .padding(.horizontal, 12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(lightColor)
+        .background(signatureLightColor)
         .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 }
 ```
 
-Key change: removed `.frame(width: 90)` and replaced with `.frame(maxWidth: .infinity, alignment: .leading)`. Slightly increased padding from 10v/11h to 12v/12h since cards are wider now.
+**Key changes from current card:**
+- Removed fixed `.frame(width: 90)` → now `.frame(maxWidth: .infinity)` to fill available width
+- Accepts `signatureColor`, `signatureLightColor`, `barColor` instead of single `color`/`lightColor`
+- All text uses `signatureColor` (the nutrient's unique color)
+- Progress bar fill uses `barColor` (the traffic light zone color)
+- Progress bar track uses `signatureColor.opacity(0.12)` instead of `GlowbiteColors.border` (subtle tint matching the card)
+- Added `.animation(.easeOut)` on progress bar for smooth transitions
+
+**Visual result:**
+- Protein card = violet tint bg, violet text, green/amber/red progress bar
+- Carbs card = warm gold tint bg, gold text, green/amber/red progress bar
+- Fat card = teal tint bg, teal text, green/amber/red progress bar
+- Fiber card = leafy green tint bg, green text, green/amber/red progress bar
+- Sugar card = rose pink tint bg, pink text, green/amber/red progress bar
+- Sodium card = ocean blue tint bg, blue text, green/amber/red progress bar
 
 ---
 
@@ -687,22 +781,23 @@ private var nutritionGrid: some View {
 - **Build and verify** — project must compile with no errors
 - **Commit:** "Add fiber, sugar, sodium to FoodScan model and AI pipeline"
 
-### Phase 2: Traffic light zone system
-- Add `NutrientZone`, `NutrientConfig`, `NutrientDisplayData` to `HomeViewModel.swift`
-- Add `nutrientConfigs` static array with preset targets
+### Phase 2: Nutrient signature colors + traffic light zone system
+- Add 6 nutrient signature color pairs (12 tokens) to `GlowbiteColors.swift`
+- Add `NutrientZone`, `NutrientConfig` (with signatureColor fields), `NutrientDisplayData` to `HomeViewModel.swift`
+- Add `nutrientConfigs` static array with preset targets and signature colors
 - Add `nutrientPages` computed property that sums real food scan data
 - Remove old `SkinNutrient` struct and `skinNutrients` static array
 - **Build and verify**
-- **Commit:** "Add traffic light zone system for skin nutrients"
+- **Commit:** "Add nutrient signature colors and traffic light zone system"
 
 ### Phase 3: Home screen nutrients redesign
 - Add `@State private var nutrientPage: Int = 0` to `HomeView`
 - Replace `skinNutrientsSection` with paged `TabView` implementation
 - Add `lifeScorePage` placeholder
 - Add helper functions `nutrientRow`, `nutrientValueString`, `nutrientTargetString`
-- Update `SkinNutrientCard.swift` — remove fixed width, use `maxWidth: .infinity`
+- Update `SkinNutrientCard.swift` — two-layer color system (signature color for card identity, bar color for traffic light zone)
 - **Build and verify**
-- **Commit:** "Redesign skin nutrients with paged TabView and traffic light bars"
+- **Commit:** "Redesign skin nutrients with paged TabView and signature colors"
 
 ### Phase 4: Food result screen update
 - Update `FoodScanResultView.swift` — add 3 new nutrients to grid

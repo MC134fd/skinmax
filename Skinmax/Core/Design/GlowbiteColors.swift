@@ -50,6 +50,25 @@ enum GlowbiteColors {
     static let purpleLight = purple.opacity(0.10)
     static let border = Color(hex: "1A1510").opacity(0.08)
 
+    // MARK: - Nutrient Signature Colors
+    static let nutrientProtein = Color(hex: "8B5CF6")
+    static let nutrientProteinLight = Color(hex: "8B5CF6").opacity(0.10)
+
+    static let nutrientCarbs = Color(hex: "D4943A")
+    static let nutrientCarbsLight = Color(hex: "D4943A").opacity(0.10)
+
+    static let nutrientFat = Color(hex: "2D9C96")
+    static let nutrientFatLight = Color(hex: "2D9C96").opacity(0.10)
+
+    static let nutrientFiber = Color(hex: "5B9A4F")
+    static let nutrientFiberLight = Color(hex: "5B9A4F").opacity(0.10)
+
+    static let nutrientSugar = Color(hex: "E8729A")
+    static let nutrientSugarLight = Color(hex: "E8729A").opacity(0.10)
+
+    static let nutrientSodium = Color(hex: "4A7CB8")
+    static let nutrientSodiumLight = Color(hex: "4A7CB8").opacity(0.10)
+
     // MARK: - Gradients
     static let heroGradient = LinearGradient(
         colors: [Color(hex: "C24A1E"), Color(hex: "C24A1E").opacity(0.7)],
