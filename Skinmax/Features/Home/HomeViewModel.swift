@@ -118,8 +118,12 @@ final class HomeViewModel {
     }
 
     var selectedDateActivity: [ActivityItem] {
-        let faceItems = selectedDateScans.map { ActivityItem.face($0) }
-        let foodItems = selectedDateFoodScans.map { ActivityItem.food($0) }
+        var seenFaceIDs = Set<UUID>()
+        let uniqueScans = selectedDateScans.filter { seenFaceIDs.insert($0.id).inserted }
+        var seenFoodIDs = Set<UUID>()
+        let uniqueFoodScans = selectedDateFoodScans.filter { seenFoodIDs.insert($0.id).inserted }
+        let faceItems = uniqueScans.map { ActivityItem.face($0) }
+        let foodItems = uniqueFoodScans.map { ActivityItem.food($0) }
         return (faceItems + foodItems).sorted { $0.date > $1.date }
     }
 

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0103CA69767DC34AFA987CBF /* Nunito-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1C91D6F3C5059158E53AE742 /* Nunito-SemiBold.ttf */; };
+		AC11FF00CCCC000100000001 /* Nunito-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC11FF00CCCC000200000001 /* Nunito-ExtraBold.ttf */; };
+		AC11FF00DDDD000100000001 /* Nunito-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC11FF00DDDD000200000001 /* Nunito-Black.ttf */; };
 		8077974BF65C4C84BEC03267 /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = AE3CA0E406A749B99E5FBA21 /* Secrets.plist */; };
 		13F632E415EF817E2E220577 /* Nunito-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2D87C9F11F459C410B8D0A0E /* Nunito-Medium.ttf */; };
 		16A45C326274D00833C7D30E /* FoodLogSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C012FA3DE75DD4EC6F889FA4 /* FoodLogSheet.swift */; };
@@ -68,6 +70,8 @@
 		0DA4111435F1A7F5B55A8626 /* ScanHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanHistoryView.swift; sourceTree = "<group>"; };
 		11FAC2EF0B4C651CE05CC52C /* AnalysisCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisCoordinator.swift; sourceTree = "<group>"; };
 		1C91D6F3C5059158E53AE742 /* Nunito-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-SemiBold.ttf"; sourceTree = "<group>"; };
+		AC11FF00CCCC000200000001 /* Nunito-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-ExtraBold.ttf"; sourceTree = "<group>"; };
+		AC11FF00DDDD000200000001 /* Nunito-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Black.ttf"; sourceTree = "<group>"; };
 		1E68B8A2590204BE7F1BE953 /* FaceScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceScanView.swift; sourceTree = "<group>"; };
 		1F0DD8F2FE49B6697BE3B793 /* SkinmaxSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinmaxSpacing.swift; sourceTree = "<group>"; };
 		1F3F5F523CFDC16E5B6C6780 /* SkinModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinModels.swift; sourceTree = "<group>"; };
@@ -138,6 +142,8 @@
 				2D87C9F11F459C410B8D0A0E /* Nunito-Medium.ttf */,
 				687A18A53F4E50D8C19653BF /* Nunito-Regular.ttf */,
 				1C91D6F3C5059158E53AE742 /* Nunito-SemiBold.ttf */,
+				AC11FF00CCCC000200000001 /* Nunito-ExtraBold.ttf */,
+				AC11FF00DDDD000200000001 /* Nunito-Black.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -414,6 +420,8 @@
 				13F632E415EF817E2E220577 /* Nunito-Medium.ttf in Resources */,
 				9E6901CCE6AC4486460E9CB8 /* Nunito-Regular.ttf in Resources */,
 				0103CA69767DC34AFA987CBF /* Nunito-SemiBold.ttf in Resources */,
+				AC11FF00CCCC000100000001 /* Nunito-ExtraBold.ttf in Resources */,
+				AC11FF00DDDD000100000001 /* Nunito-Black.ttf in Resources */,
 				8077974BF65C4C84BEC03267 /* Secrets.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
