@@ -17,22 +17,6 @@ struct HomeView: View {
             VStack(spacing: 18) {
                 topBar
 
-                if coordinator.isActive {
-                    AnalysisHomeCard(
-                        coordinator: coordinator,
-                        onViewFaceResult: onViewFaceResult,
-                        onViewFoodResult: onViewFoodResult,
-                        onDismiss: {
-                            coordinator.dismiss()
-                        }
-                    )
-                    .transition(.asymmetric(
-                        insertion: .move(edge: .top).combined(with: .opacity),
-                        removal: .opacity
-                    ))
-                }
-
-                monthNavigation
                 weekStrip
 
                 heroRow
@@ -41,7 +25,6 @@ struct HomeView: View {
             }
             .padding(.horizontal, GlowbiteSpacing.screenPadding)
             .padding(.bottom, 120)
-            .animation(.spring(response: 0.4, dampingFraction: 0.75), value: coordinator.isActive)
         }
         .background(GlowbiteColors.creamBG.ignoresSafeArea())
         .onAppear {
@@ -103,32 +86,6 @@ struct HomeView: View {
         }
     }
 
-    // MARK: - Month Navigation
-
-    private var monthNavigation: some View {
-        HStack {
-            Button { viewModel.previousMonth() } label: {
-                Image(systemName: "chevron.left")
-                    .font(.gbCaption)
-                    .foregroundStyle(GlowbiteColors.lightTaupe)
-            }
-
-            Spacer()
-
-            Text(viewModel.monthTitle)
-                .font(.gbTitleM)
-                .foregroundStyle(GlowbiteColors.darkBrown)
-
-            Spacer()
-
-            Button { viewModel.nextMonth() } label: {
-                Image(systemName: "chevron.right")
-                    .font(.gbCaption)
-                    .foregroundStyle(GlowbiteColors.lightTaupe)
-            }
-        }
-    }
-
     // MARK: - Week Strip
 
     private var weekStrip: some View {
@@ -140,9 +97,7 @@ struct HomeView: View {
             onSelectDay: { date in
                 viewModel.selectDay(date)
             },
-            onPageChanged: { date in
-                viewModel.selectedMonth = date
-            }
+            onPageChanged: { _ in }
         )
     }
 
@@ -204,7 +159,7 @@ struct HomeView: View {
                     .tag(2)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
-            .frame(height: 165)
+            .frame(height: 178)
 
             HStack(spacing: 6) {
                 ForEach(0..<3, id: \.self) { index in
@@ -244,13 +199,11 @@ struct HomeView: View {
     }
 
     private func nutrientTargetString(_ n: HomeViewModel.NutrientDisplayData) -> String {
-        if n.config.label == "SUGAR" {
-            return "<\(Int(n.config.target))\(n.config.unit)"
-        }
+        let remaining = max(n.config.target - n.currentValue, 0)
         if n.config.label == "SODIUM" {
-            return String(format: "%.1f%@", n.config.target, n.config.unit)
+            return String(format: "%.1f%@ left", remaining, n.config.unit)
         }
-        return "\(Int(n.config.target))\(n.config.unit)"
+        return "\(Int(remaining))\(n.config.unit) left"
     }
 
     private var lifeScorePage: some View {
@@ -331,6 +284,21 @@ struct HomeView: View {
                 .tracking(2.0)
                 .foregroundStyle(GlowbiteColors.lightTaupe)
 
+            if coordinator.isActive {
+                AnalysisHomeCard(
+                    coordinator: coordinator,
+                    onViewFaceResult: onViewFaceResult,
+                    onViewFoodResult: onViewFoodResult,
+                    onDismiss: {
+                        coordinator.dismiss()
+                    }
+                )
+                .transition(.asymmetric(
+                    insertion: .move(edge: .top).combined(with: .opacity),
+                    removal: .opacity
+                ))
+            }
+
             if meals.isEmpty {
                 mealsEmptyState
             } else {
@@ -346,6 +314,7 @@ struct HomeView: View {
                 }
             }
         }
+        .animation(.spring(response: 0.4, dampingFraction: 0.75), value: coordinator.isActive)
     }
 
     private var mealsEmptyState: some View {

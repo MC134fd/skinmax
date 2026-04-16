@@ -39,5 +39,6 @@ struct HydrationTile: View {
             RoundedRectangle(cornerRadius: 18)
                 .stroke(GlowbiteColors.hydrationBlue.opacity(0.20), lineWidth: 1)
         )
+        .shadow(color: GlowbiteColors.cardShadowColor, radius: 6, x: 0, y: 2)
     }
 }

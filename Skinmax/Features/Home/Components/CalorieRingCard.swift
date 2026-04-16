@@ -52,6 +52,7 @@ struct CalorieRingCard: View {
             RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadius)
                 .stroke(GlowbiteColors.border, lineWidth: 1)
         )
+        .shadow(color: GlowbiteColors.cardShadowColor, radius: 6, x: 0, y: 2)
         .onAppear {
             withAnimation(.spring(response: 0.8, dampingFraction: 0.75)) {
                 animatedProgress = progress

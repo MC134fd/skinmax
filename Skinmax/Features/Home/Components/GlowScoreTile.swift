@@ -63,5 +63,6 @@ struct GlowScoreTile: View {
             .clipShape(RoundedRectangle(cornerRadius: 18))
         )
         .clipShape(RoundedRectangle(cornerRadius: 18))
+        .shadow(color: GlowbiteColors.cardShadowColor, radius: 6, x: 0, y: 2)
     }
 }

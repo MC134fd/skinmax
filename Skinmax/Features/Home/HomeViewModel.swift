@@ -7,7 +7,6 @@ final class HomeViewModel {
     var dataStore: DataStore?
     var insightDismissed = false
     var selectedDate: Date = .now
-    var selectedMonth: Date = .now
 
     private let calendar = Calendar.current
 
@@ -20,7 +19,7 @@ final class HomeViewModel {
         guard let currentMonday = calendar.date(byAdding: .day, value: -daysSinceMonday, to: today) else { return [] }
 
         var weeks: [[Date]] = []
-        for weeksBack in (0..<52).reversed() {
+        for weeksBack in (0..<5).reversed() {
             guard let monday = calendar.date(byAdding: .weekOfYear, value: -weeksBack, to: currentMonday) else { continue }
             let week = (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: monday) }
             weeks.append(week)
@@ -40,12 +39,6 @@ final class HomeViewModel {
         } ?? allWeeks.count - 1
     }
 
-    var monthTitle: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM yyyy"
-        return formatter.string(from: selectedMonth)
-    }
-
     var selectedDayName: String {
         if calendar.isDateInToday(selectedDate) { return "Today" }
         let formatter = DateFormatter()
@@ -57,22 +50,6 @@ final class HomeViewModel {
         let today = calendar.startOfDay(for: Date())
         guard calendar.startOfDay(for: date) <= today else { return }
         selectedDate = date
-        selectedMonth = date
-    }
-
-    func previousMonth() {
-        guard let newMonth = calendar.date(byAdding: .month, value: -1, to: selectedMonth) else { return }
-        selectedMonth = newMonth
-        selectedDate = preservedDate(in: newMonth)
-    }
-
-    func nextMonth() {
-        guard let newMonth = calendar.date(byAdding: .month, value: 1, to: selectedMonth) else { return }
-        let newComps = calendar.dateComponents([.year, .month], from: newMonth)
-        let nowComps = calendar.dateComponents([.year, .month], from: Date())
-        if (newComps.year!, newComps.month!) > (nowComps.year!, nowComps.month!) { return }
-        selectedMonth = newMonth
-        selectedDate = preservedDate(in: newMonth)
     }
 
     func daysWithSkinData() -> Set<Int> {
@@ -88,19 +65,6 @@ final class HomeViewModel {
             }
         }
         return result
-    }
-
-    // MARK: - Private Helpers
-
-    private func preservedDate(in month: Date) -> Date {
-        let targetDay = calendar.component(.day, from: selectedDate)
-        let range = calendar.range(of: .day, in: .month, for: month)!
-        let clampedDay = min(targetDay, range.upperBound - 1)
-        var comps = calendar.dateComponents([.year, .month], from: month)
-        comps.day = clampedDay
-        let date = calendar.date(from: comps)!
-        let today = calendar.startOfDay(for: Date())
-        return date > today ? today : date
     }
 
     // MARK: - Selected Date Data
