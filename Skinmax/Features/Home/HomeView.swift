@@ -172,8 +172,8 @@ struct HomeView: View {
             ForEach(nutrients) { nutrient in
                 SkinNutrientCard(
                     label: nutrient.config.label,
-                    remainingText: nutrient.remainingText,
-                    statusLabel: nutrient.statusLabel,
+                    remainingWithUnit: nutrient.remainingWithUnit,
+                    statusWord: nutrient.statusWord,
                     isOver: nutrient.isOver,
                     descriptor: nutrient.config.descriptor,
                     signatureColor: nutrient.signatureColor,

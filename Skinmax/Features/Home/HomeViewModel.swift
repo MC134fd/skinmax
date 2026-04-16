@@ -290,8 +290,8 @@ final class HomeViewModel {
         let currentValue: Double
         let zone: NutrientZone
         let progress: Double
-        let remainingText: String
-        let statusLabel: String   // "g left" / "g over"
+        let remainingWithUnit: String  // "50g", "0.6g"
+        let statusWord: String         // "left" or "over"
         let isOver: Bool
         var signatureColor: Color { config.signatureColor }
         var signatureLightColor: Color { config.signatureLightColor }
@@ -315,19 +315,19 @@ final class HomeViewModel {
             let diff = config.target - value
             let isOver = diff < 0
             let absRemaining = abs(diff)
-            let remainingText: String
+            let numStr: String
             if config.label == "SODIUM" {
-                remainingText = String(format: "%.1f", absRemaining)
+                numStr = String(format: "%.1f", absRemaining)
             } else {
-                remainingText = "\(Int(absRemaining))"
+                numStr = "\(Int(absRemaining))"
             }
             return NutrientDisplayData(
                 config: config,
                 currentValue: value,
                 zone: config.zone(for: value),
                 progress: min(value / config.maxDisplay, 1.0),
-                remainingText: remainingText,
-                statusLabel: "\(config.unit) \(isOver ? "over" : "left")",
+                remainingWithUnit: "\(numStr)\(config.unit)",
+                statusWord: isOver ? "over" : "left",
                 isOver: isOver
             )
         }
