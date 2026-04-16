@@ -10,6 +10,7 @@ enum FoodAnalysisError: LocalizedError {
     case invalidResponse
     case rateLimited
     case invalidAPIKey
+    case noFoodDetected
 
     var errorDescription: String? {
         switch self {
@@ -17,6 +18,7 @@ enum FoodAnalysisError: LocalizedError {
         case .invalidResponse: return "Couldn't analyze this food, try a clearer photo."
         case .rateLimited: return "Too many requests, try again in a moment."
         case .invalidAPIKey: return "API configuration error."
+        case .noFoodDetected: return "No food detected — try pointing the camera at your meal 🍽"
         }
     }
 }
@@ -220,6 +222,13 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
         }
 
         log.info("Response parsed, foodName=\(foodName), score=\(skinImpactScore), benefitCount=\(benefits.count)")
+
+        // Reject if the AI detected no food in the image
+        let nameLower = foodName.lowercased()
+        if skinImpactScore <= 0 || nameLower.contains("no food") || nameLower.contains("not visible") || nameLower.contains("no meal") {
+            log.notice("No food detected in image, rejecting scan")
+            throw FoodAnalysisError.noFoodDetected
+        }
 
         return FoodScan(
             name: foodName,
