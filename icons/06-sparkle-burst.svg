@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <title>Glowbite Icon — 06 Sparkle Burst</title>
+  <defs>
+    <radialGradient id="bg6" cx="50%" cy="50%" r="80%">
+      <stop offset="0%" stop-color="#FFB89E"/>
+      <stop offset="55%" stop-color="#FF8E70"/>
+      <stop offset="100%" stop-color="#E55A3C"/>
+    </radialGradient>
+    <radialGradient id="apple6" cx="38%" cy="32%" r="78%">
+      <stop offset="0%" stop-color="#FFD3B8"/>
+      <stop offset="50%" stop-color="#FF9B7D"/>
+      <stop offset="100%" stop-color="#D8512F"/>
+    </radialGradient>
+    <radialGradient id="leaf6" cx="35%" cy="35%" r="80%">
+      <stop offset="0%" stop-color="#9BD89F"/>
+      <stop offset="100%" stop-color="#4FA055"/>
+    </radialGradient>
+    <radialGradient id="biteShadow6" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#5C1A0A" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#5C1A0A" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="ray6" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFF8E8" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#FFF8E8" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="iconClip6">
+      <rect x="0" y="0" width="1024" height="1024" rx="225" ry="225"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#iconClip6)">
+    <rect width="1024" height="1024" fill="url(#bg6)"/>
+
+    <!-- Big starburst behind apple -->
+    <g transform="translate(512 540)">
+      <g fill="url(#ray6)">
+        <polygon points="0,-460 28,-100 -28,-100"/>
+        <polygon points="0,460 28,100 -28,100" transform="rotate(180)"/>
+        <polygon points="0,-460 28,-100 -28,-100" transform="rotate(45)"/>
+        <polygon points="0,-460 28,-100 -28,-100" transform="rotate(-45)"/>
+        <polygon points="0,-460 28,-100 -28,-100" transform="rotate(90)"/>
+        <polygon points="0,-460 28,-100 -28,-100" transform="rotate(-90)"/>
+        <polygon points="0,-460 28,-100 -28,-100" transform="rotate(135)"/>
+        <polygon points="0,-460 28,-100 -28,-100" transform="rotate(-135)"/>
+      </g>
+      <!-- Shorter rays in between -->
+      <g fill="#FFF8E8" opacity="0.6">
+        <polygon points="0,-340 14,-110 -14,-110" transform="rotate(22.5)"/>
+        <polygon points="0,-340 14,-110 -14,-110" transform="rotate(-22.5)"/>
+        <polygon points="0,-340 14,-110 -14,-110" transform="rotate(67.5)"/>
+        <polygon points="0,-340 14,-110 -14,-110" transform="rotate(-67.5)"/>
+        <polygon points="0,-340 14,-110 -14,-110" transform="rotate(112.5)"/>
+        <polygon points="0,-340 14,-110 -14,-110" transform="rotate(-112.5)"/>
+        <polygon points="0,-340 14,-110 -14,-110" transform="rotate(157.5)"/>
+        <polygon points="0,-340 14,-110 -14,-110" transform="rotate(-157.5)"/>
+      </g>
+    </g>
+
+    <!-- Halo behind apple -->
+    <circle cx="512" cy="560" r="290" fill="#FFF8E8" opacity="0.25"/>
+
+    <!-- Stem -->
+    <path d="M508 320 q-7 -34 16 -58 q22 -20 46 -16 q-2 22 -20 44 q-20 20 -42 30 z" fill="#5C3920"/>
+
+    <!-- Leaf -->
+    <path d="M520 318 q56 -82 168 -64 q-12 100 -112 120 q-46 8 -56 -56 z" fill="url(#leaf6)"/>
+
+    <!-- Apple body -->
+    <path d="
+      M512 350
+      C 350 350, 252 470, 252 620
+      C 252 778, 376 870, 510 870
+      C 542 870, 572 864, 596 850
+      C 588 832, 580 808, 580 782
+      C 580 730, 620 692, 668 692
+      C 692 692, 712 700, 728 716
+      C 766 660, 778 600, 778 552
+      C 778 432, 686 350, 540 350
+      Z" fill="url(#apple6)"/>
+
+    <!-- Bite shadow -->
+    <path d="M596 850 C 588 832, 580 808, 580 782 C 580 730, 620 692, 668 692 C 692 692, 712 700, 728 716 L 724 740 Q 668 770, 596 850 Z" fill="url(#biteShadow6)"/>
+
+    <!-- Highlight -->
+    <ellipse cx="382" cy="478" rx="68" ry="108" fill="#FFD3B8" opacity="0.55" transform="rotate(-25 382 478)"/>
+    <ellipse cx="358" cy="468" rx="24" ry="52" fill="#FFF8E8" opacity="0.8" transform="rotate(-25 358 468)"/>
+
+    <!-- Cheeks -->
+    <ellipse cx="400" cy="660" rx="48" ry="30" fill="#FF7A5C" opacity="0.6"/>
+    <ellipse cx="618" cy="660" rx="48" ry="30" fill="#FF7A5C" opacity="0.5"/>
+
+    <!-- Eyes — sparkle stars instead of dots -->
+    <path d="M414 590 l8 22 l22 8 l-22 8 l-8 22 l-8 -22 l-22 -8 l22 -8 z" fill="#2B1F1A"/>
+    <path d="M610 590 l8 22 l22 8 l-22 8 l-8 22 l-8 -22 l-22 -8 l22 -8 z" fill="#2B1F1A"/>
+
+    <!-- Smile -->
+    <path d="M450 700 Q 510 740, 570 700" stroke="#2B1F1A" stroke-width="13" fill="none" stroke-linecap="round"/>
+
+    <!-- Tiny sparkles in corners -->
+    <g fill="#FFF8E8">
+      <circle cx="160" cy="160" r="8"/>
+      <circle cx="864" cy="180" r="9"/>
+      <circle cx="180" cy="900" r="7"/>
+      <circle cx="864" cy="880" r="8"/>
+      <circle cx="510" cy="100" r="6"/>
+    </g>
+  </g>
+</svg>

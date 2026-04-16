@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <title>Glowbite Icon — 04 Bold Minimal</title>
+  <defs>
+    <linearGradient id="bg4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF7A5C"/>
+      <stop offset="100%" stop-color="#FF9B7D"/>
+    </linearGradient>
+    <linearGradient id="apple4" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFF8E8"/>
+      <stop offset="100%" stop-color="#FFD3B8"/>
+    </linearGradient>
+    <clipPath id="iconClip4">
+      <rect x="0" y="0" width="1024" height="1024" rx="225" ry="225"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#iconClip4)">
+    <rect width="1024" height="1024" fill="url(#bg4)"/>
+
+    <!-- Subtle background big sparkle -->
+    <path d="M512 130 l40 110 l110 40 l-110 40 l-40 110 l-40 -110 l-110 -40 l110 -40 z"
+          fill="#FFD3B8" opacity="0.18"/>
+
+    <!-- Stem -->
+    <path d="M512 290 q-8 -38 18 -64 q22 -22 50 -18 q-2 26 -22 50 q-22 22 -46 32 z" fill="#3A2418"/>
+
+    <!-- Leaf — solid green, geometric -->
+    <path d="M520 290 q66 -94 184 -70 q-12 110 -120 130 q-54 8 -64 -60 z" fill="#66BB6A"/>
+
+    <!-- Apple body in cream — bold silhouette with bite -->
+    <path d="
+      M512 320
+      C 318 320, 200 460, 200 638
+      C 200 818, 348 920, 502 920
+      C 542 920, 580 912, 612 896
+      C 596 875, 586 845, 586 814
+      C 586 757, 632 716, 690 716
+      C 720 716, 745 728, 764 748
+      C 810 686, 824 614, 824 558
+      C 824 425, 718 320, 540 320
+      Z" fill="url(#apple4)"/>
+
+    <!-- Single highlight strip -->
+    <path d="M310 460 Q 290 590, 310 720" stroke="#FFFFFF" stroke-width="32" stroke-linecap="round" fill="none" opacity="0.7"/>
+
+    <!-- Single bold sparkle on apple -->
+    <path d="M690 500 l18 46 l46 18 l-46 18 l-18 46 l-18 -46 l-46 -18 l46 -18 z" fill="#FF7A5C"/>
+
+    <!-- Corner accent sparkle -->
+    <path d="M860 220 l10 26 l26 10 l-26 10 l-10 26 l-10 -26 l-26 -10 l26 -10 z" fill="#FFF8E8" opacity="0.9"/>
+    <path d="M170 820 l9 22 l22 9 l-22 9 l-9 22 l-9 -22 l-22 -9 l22 -9 z" fill="#FFF8E8" opacity="0.7"/>
+  </g>
+</svg>

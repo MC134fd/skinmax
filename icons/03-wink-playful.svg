@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <title>Glowbite Icon — 03 Wink Playful</title>
+  <defs>
+    <linearGradient id="bg3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFB89E"/>
+      <stop offset="100%" stop-color="#FF7A5C"/>
+    </linearGradient>
+    <radialGradient id="apple3" cx="38%" cy="32%" r="78%">
+      <stop offset="0%" stop-color="#FFA88A"/>
+      <stop offset="60%" stop-color="#E55A3C"/>
+      <stop offset="100%" stop-color="#A8391A"/>
+    </radialGradient>
+    <radialGradient id="leaf3" cx="35%" cy="35%" r="80%">
+      <stop offset="0%" stop-color="#9BD89F"/>
+      <stop offset="100%" stop-color="#4FA055"/>
+    </radialGradient>
+    <radialGradient id="biteShadow3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#5C1A0A" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#5C1A0A" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="iconClip3">
+      <rect x="0" y="0" width="1024" height="1024" rx="225" ry="225"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#iconClip3)">
+    <rect width="1024" height="1024" fill="url(#bg3)"/>
+
+    <!-- Squiggle confetti -->
+    <g stroke="#FFF8E8" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.7">
+      <path d="M170 320 q15 -15 30 0 t30 0"/>
+      <path d="M820 280 q15 -15 30 0 t30 0"/>
+      <path d="M150 760 q15 -15 30 0 t30 0"/>
+      <path d="M820 770 q15 -15 30 0 t30 0"/>
+    </g>
+
+    <!-- Stem -->
+    <path d="M508 268 q-8 -38 18 -64 q22 -22 50 -18 q-2 26 -22 50 q-22 22 -46 32 z" fill="#5C3920"/>
+
+    <!-- Leaf with cute curl -->
+    <path d="M520 268 q60 -90 180 -68 q-12 110 -120 130 q-50 8 -60 -62 z" fill="url(#leaf3)"/>
+    <path d="M540 260 q70 -40 150 -52" stroke="#3A7C3F" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.5"/>
+
+    <!-- Apple body with bite -->
+    <path d="
+      M512 300
+      C 320 300, 200 440, 200 620
+      C 200 805, 340 910, 500 910
+      C 540 910, 580 902, 615 885
+      C 600 865, 590 835, 590 805
+      C 590 750, 635 710, 690 710
+      C 720 710, 745 722, 762 740
+      C 808 680, 824 610, 824 555
+      C 824 420, 720 300, 540 300
+      Z" fill="url(#apple3)"/>
+
+    <!-- Bite shadow -->
+    <path d="M615 885 C 600 865, 590 835, 590 805 C 590 750, 635 710, 690 710 C 720 710, 745 722, 762 740 L 758 770 Q 700 810, 615 885 Z" fill="url(#biteShadow3)"/>
+
+    <!-- Highlight -->
+    <ellipse cx="350" cy="450" rx="80" ry="125" fill="#FFB89E" opacity="0.5" transform="rotate(-25 350 450)"/>
+    <ellipse cx="320" cy="440" rx="28" ry="60" fill="#FFD3B8" opacity="0.75" transform="rotate(-25 320 440)"/>
+
+    <!-- Cheeks -->
+    <ellipse cx="375" cy="660" rx="58" ry="36" fill="#FF9B7D" opacity="0.65"/>
+    <ellipse cx="650" cy="660" rx="50" ry="32" fill="#FF9B7D" opacity="0.5"/>
+
+    <!-- Wink eye (left, closed in arc) -->
+    <path d="M365 580 Q 400 545, 435 580" stroke="#2B1F1A" stroke-width="16" fill="none" stroke-linecap="round"/>
+
+    <!-- Right eye open with sparkle -->
+    <ellipse cx="615" cy="580" rx="26" ry="32" fill="#2B1F1A"/>
+    <circle cx="623" cy="570" r="10" fill="#FFFFFF"/>
+    <circle cx="608" cy="590" r="4" fill="#FFFFFF"/>
+
+    <!-- Tongue out smile -->
+    <path d="M430 700 Q 500 770, 580 700" stroke="#2B1F1A" stroke-width="14" fill="none" stroke-linecap="round"/>
+    <path d="M470 730 Q 505 760, 540 730 L 540 745 Q 505 770, 470 745 Z" fill="#FF7A8E"/>
+    <line x1="505" y1="745" x2="505" y2="765" stroke="#D6486A" stroke-width="3"/>
+
+    <!-- Sparkles -->
+    <g fill="#FFF8E8">
+      <path d="M780 460 l13 34 l34 13 l-34 13 l-13 34 l-13 -34 l-34 -13 l34 -13 z"/>
+      <path d="M210 540 l11 28 l28 11 l-28 11 l-11 28 l-11 -28 l-28 -11 l28 -11 z"/>
+      <path d="M880 600 l8 20 l20 8 l-20 8 l-8 20 l-8 -20 l-20 -8 l20 -8 z"/>
+    </g>
+  </g>
+</svg>

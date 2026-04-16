@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Glowbite — Icon Concepts</title>
+<style>
+  :root {
+    --coral: #FF7A5C;
+    --peach: #FFB89E;
+    --cream-peach: #FFD3B8;
+    --cream: #FAF6F2;
+    --butter: #FFF8E8;
+    --choco: #2B1F1A;
+    --brown: #4B3D36;
+    --taupe: #6B5C54;
+    --tan: #F0E8E4;
+    --green: #66BB6A;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: linear-gradient(160deg, #FAF6F2 0%, #FFD3B8 100%);
+    color: var(--choco);
+    font-family: -apple-system, "Helvetica Neue", system-ui, sans-serif;
+    padding: 48px 24px 96px;
+    min-height: 100vh;
+  }
+  header {
+    max-width: 1100px; margin: 0 auto 32px;
+    text-align: center;
+  }
+  header h1 {
+    font-size: 40px; margin: 0 0 8px; letter-spacing: -0.02em;
+    font-weight: 800;
+  }
+  header p { margin: 0; color: var(--brown); font-size: 16px; }
+  .grid {
+    max-width: 1100px; margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+  }
+  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+  .card {
+    background: white;
+    border-radius: 28px;
+    padding: 28px;
+    box-shadow: 0 10px 30px rgba(255, 122, 92, 0.12), 0 2px 8px rgba(255, 122, 92, 0.06);
+  }
+  .card h2 {
+    margin: 0 0 4px; font-size: 22px; font-weight: 800;
+  }
+  .card .tag {
+    display: inline-block;
+    background: var(--cream-peach);
+    color: var(--coral);
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    padding: 4px 10px; border-radius: 100px; text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .card .desc { margin: 0 0 18px; color: var(--brown); font-size: 14px; line-height: 1.55; }
+  .row {
+    display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+    background: var(--cream); border-radius: 20px; padding: 20px;
+  }
+  .big {
+    width: 220px; height: 220px; border-radius: 22%;
+    overflow: hidden; box-shadow: 0 8px 24px rgba(255, 122, 92, 0.18);
+    flex: 0 0 auto;
+  }
+  .big img, .big svg { width: 100%; height: 100%; display: block; }
+  .stack { display: flex; flex-direction: column; gap: 12px; }
+  .small-row { display: flex; align-items: center; gap: 12px; }
+  .small {
+    width: 60px; height: 60px; border-radius: 22%;
+    overflow: hidden; box-shadow: 0 3px 8px rgba(255, 122, 92, 0.18);
+  }
+  .tiny {
+    width: 38px; height: 38px; border-radius: 22%;
+    overflow: hidden; box-shadow: 0 2px 5px rgba(255, 122, 92, 0.18);
+  }
+  .small img, .tiny img { width: 100%; height: 100%; display: block; }
+  .label { font-size: 12px; color: var(--taupe); }
+  .vibe { margin-top: 18px; font-size: 13px; color: var(--brown); }
+  .vibe strong { color: var(--choco); font-weight: 800; }
+
+  .home-mock {
+    margin-top: 18px;
+    background: linear-gradient(180deg, #2B1F1A 0%, #4B3D36 100%);
+    border-radius: 20px;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .home-mock .slot {
+    aspect-ratio: 1;
+    border-radius: 22%;
+    background: rgba(255,255,255,0.04);
+  }
+  .home-mock .slot.active {
+    background: white;
+    overflow: hidden;
+  }
+  .home-mock .slot.active img { width: 100%; height: 100%; display: block; }
+  footer {
+    max-width: 1100px; margin: 48px auto 0; text-align: center;
+    color: var(--taupe); font-size: 13px;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Glowbite — App Icon Concepts</h1>
+    <p>Six directions, all in the apple + sparkles family. Each is shown at full size, mid (Settings), and small (Spotlight).</p>
+  </header>
+
+  <div class="grid">
+
+    <!-- 01 -->
+    <div class="card">
+      <span class="tag">01 · Classic</span>
+      <h2>The Friendly Apple</h2>
+      <p class="desc">The full brand-doc concept executed faithfully — happy face, blush cheeks, leaf, bite, sparkles, coral→peach gradient. Reads warm and approachable; tested formula that converts on the App Store.</p>
+      <div class="row">
+        <div class="big"><img src="01-classic-apple.svg" alt=""></div>
+        <div class="stack">
+          <div class="small-row"><div class="small"><img src="01-classic-apple.svg" alt=""></div><span class="label">Settings</span></div>
+          <div class="small-row"><div class="tiny"><img src="01-classic-apple.svg" alt=""></div><span class="label">Spotlight</span></div>
+        </div>
+      </div>
+      <div class="home-mock">
+        <div class="slot"></div><div class="slot active"><img src="01-classic-apple.svg" alt=""></div><div class="slot"></div><div class="slot"></div>
+      </div>
+      <p class="vibe"><strong>Best for:</strong> Mass-market Gen Z appeal. Most likely to make someone tap "install."</p>
+    </div>
+
+    <!-- 02 -->
+    <div class="card">
+      <span class="tag">02 · Glow Aura</span>
+      <h2>The Glowing One</h2>
+      <p class="desc">Apple radiating an aura with rays + sparkles — leans hard into "glow." Eyes are blissful arcs (closed). Background has a soft radial gradient that feels like sunshine. Most differentiated from typical food apps.</p>
+      <div class="row">
+        <div class="big"><img src="02-glow-aura.svg" alt=""></div>
+        <div class="stack">
+          <div class="small-row"><div class="small"><img src="02-glow-aura.svg" alt=""></div><span class="label">Settings</span></div>
+          <div class="small-row"><div class="tiny"><img src="02-glow-aura.svg" alt=""></div><span class="label">Spotlight</span></div>
+        </div>
+      </div>
+      <div class="home-mock">
+        <div class="slot"></div><div class="slot"></div><div class="slot active"><img src="02-glow-aura.svg" alt=""></div><div class="slot"></div>
+      </div>
+      <p class="vibe"><strong>Best for:</strong> Owning "glow" as a category word. Most poetic and aspirational.</p>
+    </div>
+
+    <!-- 03 -->
+    <div class="card">
+      <span class="tag">03 · Wink</span>
+      <h2>The Cheeky Bestie</h2>
+      <p class="desc">Apple winking with tongue out. Maximum personality. Reads as "your gossip-y best friend who happens to know skincare." Will have the strongest emotional reaction in screenshots and TikToks.</p>
+      <div class="row">
+        <div class="big"><img src="03-wink-playful.svg" alt=""></div>
+        <div class="stack">
+          <div class="small-row"><div class="small"><img src="03-wink-playful.svg" alt=""></div><span class="label">Settings</span></div>
+          <div class="small-row"><div class="tiny"><img src="03-wink-playful.svg" alt=""></div><span class="label">Spotlight</span></div>
+        </div>
+      </div>
+      <div class="home-mock">
+        <div class="slot active"><img src="03-wink-playful.svg" alt=""></div><div class="slot"></div><div class="slot"></div><div class="slot"></div>
+      </div>
+      <p class="vibe"><strong>Best for:</strong> Standing out on a crowded home screen. High-personality TikTok bait.</p>
+    </div>
+
+    <!-- 04 -->
+    <div class="card">
+      <span class="tag">04 · Bold Minimal</span>
+      <h2>The Aesthetic One</h2>
+      <p class="desc">Cream apple silhouette on solid coral with one bold sparkle. No face. The most "Apple-design-language" / "iOS native aesthetic" of the bunch. Looks premium next to system apps.</p>
+      <div class="row">
+        <div class="big"><img src="04-bold-minimal.svg" alt=""></div>
+        <div class="stack">
+          <div class="small-row"><div class="small"><img src="04-bold-minimal.svg" alt=""></div><span class="label">Settings</span></div>
+          <div class="small-row"><div class="tiny"><img src="04-bold-minimal.svg" alt=""></div><span class="label">Spotlight</span></div>
+        </div>
+      </div>
+      <div class="home-mock">
+        <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot active"><img src="04-bold-minimal.svg" alt=""></div>
+      </div>
+      <p class="vibe"><strong>Best for:</strong> Users who curate aesthetic home screens. Trades warmth for sophistication.</p>
+    </div>
+
+    <!-- 05 -->
+    <div class="card">
+      <span class="tag">05 · Score Ring</span>
+      <h2>Apple in the Glow Ring</h2>
+      <p class="desc">Fuses the two strongest brand assets — the apple and the signature Glow Score ring. Apple sits inside an 85%-filled coral progress ring on a cream background. Most strategic: every time you see the icon you see the product's core mechanic.</p>
+      <div class="row">
+        <div class="big"><img src="05-score-ring.svg" alt=""></div>
+        <div class="stack">
+          <div class="small-row"><div class="small"><img src="05-score-ring.svg" alt=""></div><span class="label">Settings</span></div>
+          <div class="small-row"><div class="tiny"><img src="05-score-ring.svg" alt=""></div><span class="label">Spotlight</span></div>
+        </div>
+      </div>
+      <div class="home-mock">
+        <div class="slot"></div><div class="slot active"><img src="05-score-ring.svg" alt=""></div><div class="slot"></div><div class="slot"></div>
+      </div>
+      <p class="vibe"><strong>Best for:</strong> Telling the product story in one glance. May read busy at very small sizes.</p>
+    </div>
+
+    <!-- 06 -->
+    <div class="card">
+      <span class="tag">06 · Sparkle Burst</span>
+      <h2>The Cosmic Apple</h2>
+      <p class="desc">Apple with a starburst behind it — eyes are sparkles instead of dots. Coral background gradient, halo of light. Most "main character energy" — feels celebratory and rare. Great for launch hype.</p>
+      <div class="row">
+        <div class="big"><img src="06-sparkle-burst.svg" alt=""></div>
+        <div class="stack">
+          <div class="small-row"><div class="small"><img src="06-sparkle-burst.svg" alt=""></div><span class="label">Settings</span></div>
+          <div class="small-row"><div class="tiny"><img src="06-sparkle-burst.svg" alt=""></div><span class="label">Spotlight</span></div>
+        </div>
+      </div>
+      <div class="home-mock">
+        <div class="slot"></div><div class="slot"></div><div class="slot active"><img src="06-sparkle-burst.svg" alt=""></div><div class="slot"></div>
+      </div>
+      <p class="vibe"><strong>Best for:</strong> Launch / hero marketing icon. Could pair with #04 as a seasonal alternate.</p>
+    </div>
+
+  </div>
+
+  <footer>
+    Tip: tap each icon to view full size. iOS rounds the corners automatically — your icon should be a 1024×1024 square; the system applies the squircle mask.
+  </footer>
+</body>
+</html>
