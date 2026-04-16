@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skinmax Food Camera Flow Mockups</title>
+  <style>
+    :root {
+      --coral: #FF7A5C;
+      --peach: #FFB89E;
+      --cream: #FAF6F2;
+      --cream-soft: #FFD3B8;
+      --ink: #2B1F1A;
+      --brown: #4B3D36;
+      --taupe: #9B8C85;
+      --white: #FFFFFF;
+      --green: #66BB6A;
+      --amber: #FFB74D;
+      --red: #E57373;
+      --shadow: rgba(255, 122, 92, 0.16);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #fff6f1 0%, var(--cream) 45%, #fff 100%);
+      color: var(--ink);
+    }
+
+    .wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 28px 20px 40px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 30px;
+      letter-spacing: -0.4px;
+    }
+
+    .intro {
+      margin: 10px 0 20px;
+      color: var(--brown);
+      font-size: 15px;
+      max-width: 900px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .concept {
+      border-radius: 20px;
+      overflow: hidden;
+      background: var(--white);
+      border: 1px solid rgba(43, 31, 26, 0.06);
+      box-shadow: 0 10px 26px var(--shadow);
+    }
+
+    .concept-head {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(43, 31, 26, 0.08);
+      background: #fff9f6;
+    }
+
+    .concept-head .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--coral);
+      background: rgba(255, 122, 92, 0.12);
+      padding: 4px 8px;
+      border-radius: 999px;
+    }
+
+    .concept-head h2 {
+      margin: 8px 0 2px;
+      font-size: 18px;
+    }
+
+    .concept-head p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--taupe);
+    }
+
+    .phone {
+      width: 100%;
+      aspect-ratio: 9 / 19;
+      background: linear-gradient(180deg, #d3cabf 0%, #b89f88 42%, #8e7a69 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .status {
+      position: absolute;
+      top: 8px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 14px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+    }
+
+    .nav {
+      position: absolute;
+      top: 42px;
+      left: 14px;
+      right: 14px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .nav-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 99px;
+      background: rgba(43, 31, 26, 0.36);
+      backdrop-filter: blur(3px);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      font-weight: 700;
+    }
+
+    .focus {
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      top: 128px;
+      height: 56%;
+      border-radius: 18px;
+      border: 3px solid rgba(255,255,255,0.84);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3);
+    }
+
+    .focus:before, .focus:after {
+      content: "";
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      border: 4px solid #fff;
+    }
+    .focus:before {
+      left: 12px; top: 12px;
+      border-right: 0; border-bottom: 0;
+      border-radius: 10px 0 0 0;
+    }
+    .focus:after {
+      right: 12px; bottom: 12px;
+      border-left: 0; border-top: 0;
+      border-radius: 0 0 10px 0;
+    }
+
+    .bottom-ui {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 10px 14px 20px;
+      background: linear-gradient(180deg, rgba(17, 10, 7, 0) 0%, rgba(17, 10, 7, 0.65) 22%, rgba(17, 10, 7, 0.85) 100%);
+    }
+
+    .modes {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .mode {
+      font-size: 12px;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+    .mode.active {
+      color: var(--ink);
+      background: #fff;
+      border-color: #fff;
+      font-weight: 700;
+    }
+
+    .capture-row {
+      display: grid;
+      grid-template-columns: 56px 1fr 56px;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ghost-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.2);
+      margin: 0 auto;
+    }
+
+    .shutter {
+      width: 74px;
+      height: 74px;
+      margin: 0 auto;
+      border-radius: 999px;
+      border: 4px solid rgba(255,255,255,0.95);
+      box-shadow: 0 0 0 6px rgba(255,255,255,0.2);
+      background: radial-gradient(circle at 35% 35%, #fff 0%, #ececec 74%, #dbdbdb 100%);
+    }
+
+    .pill {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 120px;
+      border-radius: 100px;
+      padding: 11px 14px;
+      font-size: 13px;
+      background: rgba(255,255,255,0.92);
+      color: var(--brown);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 8px 14px rgba(43,31,26,0.18);
+    }
+
+    .sheet {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      bottom: 12px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 22px;
+      padding: 11px 12px 14px;
+      box-shadow: 0 12px 24px rgba(43,31,26,0.18);
+    }
+
+    .sheet h4 {
+      margin: 0 0 8px;
+      font-size: 12px;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--taupe);
+    }
+
+    .sheet .chip-row {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-bottom: 9px;
+    }
+
+    .sheet .chip {
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      background: #fff2ec;
+      color: var(--brown);
+      border: 1px solid rgba(255, 122, 92, 0.18);
+    }
+
+    .sheet .cta {
+      width: 100%;
+      border: 0;
+      border-radius: 100px;
+      padding: 11px 14px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--coral), #ff9b7d);
+    }
+
+    .notes {
+      padding: 12px 14px 14px;
+      border-top: 1px solid rgba(43,31,26,0.08);
+      background: #fff;
+    }
+
+    .notes ul {
+      margin: 0;
+      padding-left: 16px;
+      color: var(--brown);
+      font-size: 13px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .legend {
+      margin-top: 18px;
+      font-size: 13px;
+      color: var(--brown);
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+    }
+
+    @media (max-width: 1050px) {
+      .grid { grid-template-columns: 1fr; }
+      .phone { max-width: 420px; margin: 0 auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Food Scan Camera-First Concepts</h1>
+    <p class="intro">
+      3 design directions for replacing the current “Log Food sheet” with direct camera entry.
+      These keep Skinmax tone + colors, but intentionally avoid cloning the reference exactly.
+    </p>
+
+    <div class="grid">
+      <article class="concept">
+        <header class="concept-head">
+          <span class="tag">Option A</span>
+          <h2>Clean Camera-First</h2>
+          <p>Tap Log Food -> instant camera. Name comes after capture.</p>
+        </header>
+        <div class="phone">
+          <div class="status"><span>10:05</span><span>5G 38%</span></div>
+          <div class="nav">
+            <div class="nav-btn">×</div>
+            <div class="nav-btn">?</div>
+          </div>
+          <div class="focus"></div>
+          <div class="bottom-ui">
+            <div class="modes">
+              <div class="mode active">Scan Food</div>
+              <div class="mode">Barcode</div>
+              <div class="mode">Food Label</div>
+            </div>
+            <div class="capture-row">
+              <div class="ghost-btn"></div>
+              <div class="shutter"></div>
+              <div class="ghost-btn"></div>
+            </div>
+          </div>
+        </div>
+        <div class="notes">
+          <ul>
+            <li>Lowest friction, fastest to first photo.</li>
+            <li>Prompt name only after capture (or AI prefill).</li>
+            <li>Best for speed and repeat use.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="concept">
+        <header class="concept-head">
+          <span class="tag">Option B</span>
+          <h2>Camera + Quick Name Chip</h2>
+          <p>Camera opens directly, with an editable meal-name pill before capture.</p>
+        </header>
+        <div class="phone">
+          <div class="status"><span>10:05</span><span>5G 38%</span></div>
+          <div class="nav">
+            <div class="nav-btn">×</div>
+            <div class="nav-btn">?</div>
+          </div>
+          <div class="focus"></div>
+          <div class="pill">
+            <span>Meal name: “Chicken bowl”</span>
+            <strong>Edit</strong>
+          </div>
+          <div class="bottom-ui">
+            <div class="modes">
+              <div class="mode active">Scan Food</div>
+              <div class="mode">Gallery</div>
+            </div>
+            <div class="capture-row">
+              <div class="ghost-btn"></div>
+              <div class="shutter"></div>
+              <div class="ghost-btn"></div>
+            </div>
+          </div>
+        </div>
+        <div class="notes">
+          <ul>
+            <li>Still camera-first, but keeps naming lightweight.</li>
+            <li>Good if user wants clean logs immediately.</li>
+            <li>Slightly more visual complexity than A.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="concept">
+        <header class="concept-head">
+          <span class="tag">Option C</span>
+          <h2>Camera + Smart Bottom Sheet</h2>
+          <p>Capture first, then a compact confirmation sheet appears on top.</p>
+        </header>
+        <div class="phone">
+          <div class="status"><span>10:05</span><span>5G 38%</span></div>
+          <div class="nav">
+            <div class="nav-btn">×</div>
+            <div class="nav-btn">?</div>
+          </div>
+          <div class="focus"></div>
+          <div class="sheet">
+            <h4>After Capture</h4>
+            <div class="chip-row">
+              <span class="chip">Name: Avocado Toast</span>
+              <span class="chip">Confidence: High</span>
+              <span class="chip">Portion: 1 serving</span>
+            </div>
+            <button class="cta">Analyze with AI ✨</button>
+          </div>
+          <div class="bottom-ui">
+            <div class="capture-row">
+              <div class="ghost-btn"></div>
+              <div class="shutter"></div>
+              <div class="ghost-btn"></div>
+            </div>
+          </div>
+        </div>
+        <div class="notes">
+          <ul>
+            <li>Feels premium and guided for first-time users.</li>
+            <li>More UI state management than A/B.</li>
+            <li>Best when we want stronger quality control pre-analysis.</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+
+    <div class="legend">
+      <span><i class="dot" style="background:#66BB6A"></i>Fastest path: Option A</span>
+      <span><i class="dot" style="background:#FFB74D"></i>Best balance: Option B</span>
+      <span><i class="dot" style="background:#E57373"></i>Most guided: Option C</span>
+    </div>
+  </div>
+</body>
+</html>
