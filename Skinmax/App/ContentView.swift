@@ -9,15 +9,17 @@ struct ContentView: View {
     @State private var showFoodResult = false
     @State private var faceResultScan: SkinScan?
     @State private var foodResultScan: FoodScan?
+    @Namespace private var tabAnimation
 
     @Environment(AnalysisCoordinator.self) private var coordinator
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .bottom) {
             GlowbiteColors.creamBG.ignoresSafeArea()
 
-            TabView(selection: $selectedTab) {
-                Tab("Home", systemImage: "house.fill", value: TabItem.home) {
+            Group {
+                switch selectedTab {
+                case .home:
                     HomeView(
                         onViewFaceResult: { scan in
                             faceResultScan = scan
@@ -31,38 +33,19 @@ struct ContentView: View {
                             showScanPopup = true
                         }
                     )
-                }
-
-                Tab("Analytics", systemImage: "chart.bar.fill", value: TabItem.analytics) {
+                case .analytics:
                     AnalyticsContainerView()
-                }
-
-                Tab("Account", systemImage: "person.fill", value: TabItem.account) {
+                case .account:
                     AccountView()
                 }
             }
-            .tint(GlowbiteColors.coral)
-            .tabBarMinimizeBehavior(.onScrollDown)
-            .tabViewBottomAccessory {
-                Button {
-                    HapticManager.impact(.medium)
-                    withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
-                        showScanPopup.toggle()
-                    }
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: "camera.fill")
-                        Text("Scan")
-                    }
-                    .font(.gbTitleM)
-                }
-                .tint(GlowbiteColors.coral)
-            }
-            .onChange(of: selectedTab) { _, _ in
-                HapticManager.selection()
-            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(.bottom, 80)
 
-            // Scan popup overlay
+            bottomBar
+                .padding(.horizontal, 10)
+                .padding(.bottom, 2)
+
             if showScanPopup {
                 ScanPopupOverlay(
                     isPresented: $showScanPopup,
@@ -75,6 +58,7 @@ struct ContentView: View {
                 )
             }
         }
+        .ignoresSafeArea(.keyboard)
         .fullScreenCover(isPresented: $showFaceScan) {
             FaceScanView()
         }
@@ -90,6 +74,63 @@ struct ContentView: View {
             if let scan = foodResultScan {
                 FoodScanResultView(scan: scan)
             }
+        }
+    }
+
+    // MARK: - Bottom Bar (tab pill + scan circle, side by side)
+
+    private var bottomBar: some View {
+        HStack(spacing: 8) {
+            // Tab bar pill
+            HStack(spacing: 0) {
+                ForEach(TabItem.allCases, id: \.self) { tab in
+                    Button {
+                        HapticManager.selection()
+                        withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
+                            selectedTab = tab
+                        }
+                    } label: {
+                        VStack(spacing: 3) {
+                            Image(systemName: tab.systemIcon)
+                                .font(.system(size: 18, weight: .medium))
+                            Text(tab.title)
+                                .font(.gbOverline)
+                        }
+                        .foregroundStyle(selectedTab == tab ? GlowbiteColors.coral : GlowbiteColors.mediumTaupe)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                        .background {
+                            if selectedTab == tab {
+                                Capsule()
+                                    .fill(Color.black.opacity(0.08))
+                                    .matchedGeometryEffect(id: "activeTab", in: tabAnimation)
+                            }
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal, 4)
+            .padding(.vertical, 4)
+            .background(Color.white.opacity(0.75), in: Capsule())
+            .shadow(color: Color.black.opacity(0.08), radius: 12, x: 0, y: 4)
+
+            // Scan circle button — same height as tab pill
+            Button {
+                HapticManager.impact(.medium)
+                withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
+                    showScanPopup.toggle()
+                }
+            } label: {
+                Image(systemName: showScanPopup ? "xmark" : "plus")
+                    .font(.system(size: 22, weight: .bold))
+                    .foregroundStyle(.white)
+                    .frame(width: 56, height: 56)
+                    .background(GlowbiteColors.darkBrown)
+                    .clipShape(Circle())
+                    .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
+                    .rotationEffect(.degrees(showScanPopup ? 90 : 0))
+            }
+            .buttonStyle(ScaleButtonStyle())
         }
     }
 }

@@ -16,7 +16,7 @@ You are updating the skin nutrients section of the home screen and adding 3 new 
 - `MockData.swift` — add `fiber`, `sugar`, `sodium` to sample `FoodScan` entries
 - `HomeView.swift` — replace skin nutrients `ScrollView` with paged `TabView` + dot indicators
 - `HomeViewModel.swift` — replace hardcoded `SkinNutrient` with real-data computed properties + traffic light zone logic + nutrient configs with signature colors
-- `SkinNutrientCard.swift` — make cards wider (fill available width), two-layer color system (signature + traffic light bar)
+- `SkinNutrientCard.swift` — make cards fill available width AND height, two-layer color system (signature + traffic light bar)
 - `FoodScanResultView.swift` — update nutrition grid to show all 6 nutrients + calories (7 items)
 
 ### DO NOT change:
@@ -285,17 +285,9 @@ static let nutrientSodium = Color(hex: "4A7CB8")            // Ocean blue — sa
 static let nutrientSodiumLight = Color(hex: "4A7CB8").opacity(0.10)
 ```
 
-These are deliberately soft, muted tones that work well as light-tinted card backgrounds. Each one evokes the nutrient's association:
-- **Protein → Violet**: premium, building-block feel
-- **Carbs → Gold**: warm, energetic, grain-like
-- **Fat → Teal**: fresh, clean, healthy oils
-- **Fiber → Leafy green**: natural, plant-based
-- **Sugar → Rose pink**: sweet, playful
-- **Sodium → Ocean blue**: water/salt/mineral
-
 ### 2.5b. Two-Layer Color System for Nutrient Cards
 
-Each `SkinNutrientCard` now receives TWO sets of colors:
+Each `SkinNutrientCard` receives TWO sets of colors:
 
 1. **`signatureColor` / `signatureLightColor`** — the nutrient's unique identity color. Used for:
    - Card background tint (the light variant)
@@ -307,7 +299,7 @@ Each `SkinNutrientCard` now receives TWO sets of colors:
 2. **`barColor`** — the traffic light zone color (green/amber/red). Used for:
    - The progress bar fill ONLY
 
-This means a Protein card always looks violet regardless of zone, but its progress bar turns green when optimal, amber when borderline, or red when too low/high. The user instantly sees "this is protein" (violet card) AND "am I in a good range?" (green bar).
+This means a Protein card always looks violet regardless of zone, but its progress bar turns green when optimal, amber when borderline, or red when too low/high.
 
 ---
 
@@ -315,7 +307,7 @@ This means a Protein card always looks violet regardless of zone, but its progre
 
 ### 3a. Add to `HomeViewModel.swift` — Zone Definitions
 
-This is the core logic. Each nutrient has a set of zones that determine the progress bar color. Most nutrients use a 5-zone bell curve (too low → low → optimal → high → too high). Sugar is one-directional (optimal → high → too high).
+Each nutrient has a set of zones that determine the progress bar color. Most nutrients use a 5-zone bell curve (too low → low → optimal → high → too high). Sugar is one-directional (optimal → high → too high).
 
 ```swift
 // MARK: - Nutrient Traffic Light Zones
@@ -344,8 +336,8 @@ struct NutrientConfig {
     let label: String
     let unit: String
     let descriptor: String
-    let signatureColor: Color       // unique identity color per nutrient
-    let signatureLightColor: Color  // tinted background per nutrient
+    let signatureColor: Color
+    let signatureLightColor: Color
     let target: Double
     let greenRange: ClosedRange<Double>
     let amberLowRange: ClosedRange<Double>?   // nil for one-directional (sugar)
@@ -431,10 +423,10 @@ struct NutrientDisplayData: Identifiable {
     let config: NutrientConfig
     let currentValue: Double
     let zone: NutrientZone
-    let progress: Double  // 0.0 to 1.0, clamped
+    let progress: Double
     var signatureColor: Color { config.signatureColor }
     var signatureLightColor: Color { config.signatureLightColor }
-    var barColor: Color { zone.color }  // traffic light color for progress bar only
+    var barColor: Color { zone.color }
 }
 
 var nutrientPages: [[NutrientDisplayData]] {
@@ -472,7 +464,7 @@ var nutrientPages: [[NutrientDisplayData]] {
 
 ### 4a. Replace `skinNutrientsSection` in `HomeView.swift`
 
-Remove the current `skinNutrientsSection` (which uses a `ScrollView(.horizontal)`) and replace with a paged `TabView`:
+Remove the current `skinNutrientsSection` (which uses a `ScrollView(.horizontal)`) and replace with a paged `TabView`. The `TabView` has a fixed height of `140pt`. ALL three pages — nutrient rows and the Life Score card — MUST stretch to fill this full height so swiping between pages has no visual jumpiness or clipping.
 
 ```swift
 // MARK: - Skin Nutrients (paged)
@@ -535,6 +527,7 @@ private func nutrientRow(nutrients: [HomeViewModel.NutrientDisplayData]) -> some
             )
         }
     }
+    .frame(maxHeight: .infinity)
     .padding(.horizontal, 2)
 }
 
@@ -558,7 +551,7 @@ private func nutrientTargetString(_ n: HomeViewModel.NutrientDisplayData) -> Str
 
 ### 4b. Life Score Page (hardcoded placeholder)
 
-This is the 3rd swipe page. A single full-width card with a placeholder bar and score.
+This is the 3rd swipe page. A single full-width card that stretches to the same `140pt` height as the nutrient rows.
 
 ```swift
 private var lifeScorePage: some View {
@@ -587,6 +580,8 @@ private var lifeScorePage: some View {
         Text("Your overall wellness balance")
             .font(.gbCaption)
             .foregroundStyle(GlowbiteColors.mediumTaupe)
+
+        Spacer()
 
         // Hardcoded progress bar
         GeometryReader { geo in
@@ -617,6 +612,7 @@ private var lifeScorePage: some View {
     }
     .padding(.vertical, 14)
     .padding(.horizontal, 14)
+    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     .background(GlowbiteColors.paper)
     .clipShape(RoundedRectangle(cornerRadius: 16))
     .overlay(
@@ -629,13 +625,11 @@ private var lifeScorePage: some View {
 
 ---
 
-## Section 5: Update `SkinNutrientCard.swift` — Two-Layer Color System
+## Section 5: Update `SkinNutrientCard.swift` — Two-Layer Color System + Full Height
 
-The card uses **two color layers**:
+The card uses **two color layers** and stretches to fill the full available height (matching the `140pt` TabView frame):
 1. **Signature color** — the nutrient's unique identity (violet for protein, gold for carbs, etc.). Used for background tint, all text.
 2. **Bar color** — the traffic light zone color (green/amber/red). Used ONLY for the progress bar fill.
-
-This means each card always looks like "its" nutrient (distinct identity), while the progress bar gives instant zone feedback.
 
 ```swift
 import SwiftUI
@@ -645,9 +639,9 @@ struct SkinNutrientCard: View {
     let value: String
     let target: String
     let descriptor: String
-    let signatureColor: Color       // nutrient's unique identity color
-    let signatureLightColor: Color  // nutrient's tinted background
-    let barColor: Color             // traffic light zone color (green/amber/red)
+    let signatureColor: Color
+    let signatureLightColor: Color
+    let barColor: Color
     let progress: Double
 
     var body: some View {
@@ -671,6 +665,8 @@ struct SkinNutrientCard: View {
                 .font(.gbOverline)
                 .foregroundStyle(signatureColor.opacity(0.65))
 
+            Spacer()
+
             // Progress bar — uses traffic light zone color, NOT signature color
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
@@ -688,22 +684,21 @@ struct SkinNutrientCard: View {
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 12)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(signatureLightColor)
         .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 }
 ```
 
-**Key changes from current card:**
-- Removed fixed `.frame(width: 90)` → now `.frame(maxWidth: .infinity)` to fill available width
-- Accepts `signatureColor`, `signatureLightColor`, `barColor` instead of single `color`/`lightColor`
-- All text uses `signatureColor` (the nutrient's unique color)
-- Progress bar fill uses `barColor` (the traffic light zone color)
-- Progress bar track uses `signatureColor.opacity(0.12)` instead of `GlowbiteColors.border` (subtle tint matching the card)
-- Added `.animation(.easeOut)` on progress bar for smooth transitions
+**Key layout rules:**
+- `.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)` — card stretches to fill ALL available space
+- `Spacer()` between descriptor and progress bar — pushes the progress bar to the bottom of the card
+- Text content pins to top-left via `.topLeading` alignment
+- Progress bar always sits at the bottom regardless of card height
+- All 3 cards per row are the same height. The Life Score card is also the same height. No jumpiness when swiping.
 
-**Visual result:**
+**Visual result per card:**
 - Protein card = violet tint bg, violet text, green/amber/red progress bar
 - Carbs card = warm gold tint bg, gold text, green/amber/red progress bar
 - Fat card = teal tint bg, teal text, green/amber/red progress bar
@@ -735,7 +730,7 @@ private var nutritionItems: [(value: String, label: String)] {
 
 ### 6b. Update the grid layout
 
-Change the grid from 2 columns to handle 7 items nicely. Use a 4-column grid so the first row shows 4 items and the second row shows 3:
+Change the grid from 2 columns to 4 columns so the first row shows 4 items and the second row shows 3:
 
 ```swift
 private var nutritionGrid: some View {
@@ -795,7 +790,7 @@ private var nutritionGrid: some View {
 - Replace `skinNutrientsSection` with paged `TabView` implementation
 - Add `lifeScorePage` placeholder
 - Add helper functions `nutrientRow`, `nutrientValueString`, `nutrientTargetString`
-- Update `SkinNutrientCard.swift` — two-layer color system (signature color for card identity, bar color for traffic light zone)
+- Update `SkinNutrientCard.swift` — two-layer color system, `maxWidth/maxHeight: .infinity`, `Spacer()` to push progress bar to bottom
 - **Build and verify**
 - **Commit:** "Redesign skin nutrients with paged TabView and signature colors"
 
@@ -809,7 +804,7 @@ private var nutritionGrid: some View {
 
 ## Traffic Light Zone Reference
 
-These are the researched optimal ranges for skin health (women 18-35, 2000 cal/day):
+Researched optimal ranges for skin health (women 18-35, 2000 cal/day):
 
 | Nutrient | Target | Green (Optimal) | Amber Low | Amber High | Red Low | Red High |
 |----------|--------|-----------------|-----------|------------|---------|----------|
@@ -826,6 +821,21 @@ All values displayed in **grams** including sodium (converted: 1500mg → 1.5g).
 
 ---
 
+## Consistent Page Heights — CRITICAL
+
+All 3 pages inside the `TabView` MUST render at the same visual height. The rules:
+
+1. `TabView` has `.frame(height: 140)` — this is the single source of truth for height
+2. `nutrientRow` uses `.frame(maxHeight: .infinity)` — the HStack fills the 140pt
+3. `SkinNutrientCard` uses `.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)` — each card fills its share of the row
+4. `SkinNutrientCard` has a `Spacer()` between the descriptor text and the progress bar — text pins to top, bar pins to bottom
+5. `lifeScorePage` uses `.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)` — fills the same 140pt
+6. `lifeScorePage` has a `Spacer()` between the description and the progress bar — same pattern
+
+If any page is shorter than 140pt, the `maxHeight: .infinity` stretches it. The visual result: perfectly consistent height on all 3 pages with no jumpiness when swiping.
+
+---
+
 ## Hard Constraints
 
 1. **No renaming.** Don't rename Skinmax, files, folders, types, or strings.
@@ -835,9 +845,10 @@ All values displayed in **grams** including sodium (converted: 1500mg → 1.5g).
 5. **Real data only.** Nutrient totals sum from actual today's `FoodScan` entries. No hardcoded values except Life Score.
 6. **Life Score is hardcoded.** Score of 72, gradient bar, "COMING SOON" tag. No computed logic.
 7. **Standard paging.** Use `TabView` with `.tabViewStyle(.page(indexDisplayMode: .never))` + custom dots.
-8. **Keep font tokens.** Use only `.gb*` extensions. Never `.system(...)`.
-9. **Keep color tokens.** Use only `GlowbiteColors.*`. Never raw hex inline.
-10. **Must compile.** After each phase, the project must build with zero errors.
+8. **Consistent height.** All 3 TabView pages are exactly `140pt` tall. Use `maxHeight: .infinity` + `Spacer()` pattern.
+9. **Keep font tokens.** Use only `.gb*` extensions. Never `.system(...)`.
+10. **Keep color tokens.** Use only `GlowbiteColors.*`. Never raw hex inline.
+11. **Must compile.** After each phase, the project must build with zero errors.
 
 ---
 

@@ -204,7 +204,7 @@ struct HomeView: View {
                     .tag(2)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
-            .frame(height: 140)
+            .frame(height: 165)
 
             HStack(spacing: 6) {
                 ForEach(0..<3, id: \.self) { index in
@@ -232,6 +232,7 @@ struct HomeView: View {
                 )
             }
         }
+        .frame(maxHeight: .infinity)
         .padding(.horizontal, 2)
     }
 
@@ -279,6 +280,8 @@ struct HomeView: View {
                 .font(.gbCaption)
                 .foregroundStyle(GlowbiteColors.mediumTaupe)
 
+            Spacer()
+
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 4)
@@ -305,12 +308,13 @@ struct HomeView: View {
                 Spacer()
             }
         }
-        .padding(.vertical, 14)
-        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .padding(.horizontal, 12)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(GlowbiteColors.paper)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
         .overlay(
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: 14)
                 .stroke(GlowbiteColors.border, lineWidth: 1)
         )
         .padding(.horizontal, 2)

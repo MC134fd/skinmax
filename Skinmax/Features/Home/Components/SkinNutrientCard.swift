@@ -31,6 +31,8 @@ struct SkinNutrientCard: View {
                 .font(.gbOverline)
                 .foregroundStyle(signatureColor.opacity(0.65))
 
+            Spacer()
+
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 2)
@@ -47,7 +49,7 @@ struct SkinNutrientCard: View {
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 12)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(signatureLightColor)
         .clipShape(RoundedRectangle(cornerRadius: 14))
     }
