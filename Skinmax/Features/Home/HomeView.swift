@@ -4,7 +4,6 @@ struct HomeView: View {
     @Environment(DataStore.self) private var dataStore
     @Environment(AnalysisCoordinator.self) private var coordinator
     @State private var viewModel = HomeViewModel()
-    @State private var selectedScanResult: SkinScan?
     @State private var selectedFoodResult: FoodScan?
     @State private var nutrientPage: Int = 0
 
@@ -29,10 +28,6 @@ struct HomeView: View {
         .background(GlowbiteColors.creamBG.ignoresSafeArea())
         .onAppear {
             viewModel.dataStore = dataStore
-        }
-        .fullScreenCover(item: $selectedScanResult) { scan in
-            FaceScanResultView(scan: scan)
-                .environment(dataStore)
         }
         .fullScreenCover(item: $selectedFoodResult) { scan in
             FoodScanResultView(scan: scan)
