@@ -4,7 +4,7 @@ struct ContentView: View {
     @State private var selectedTab: TabItem = .home
     @State private var showScanPopup = false
     @State private var showFaceScan = false
-    @State private var showFoodLogSheet = false
+    @State private var showFoodCapture = false
     @State private var faceResultScan: SkinScan?
     @State private var foodResultScan: FoodScan?
     @Namespace private var tabAnimation
@@ -49,7 +49,7 @@ struct ContentView: View {
                         showFaceScan = true
                     },
                     onLogFood: {
-                        showFoodLogSheet = true
+                        showFoodCapture = true
                     }
                 )
             }
@@ -58,8 +58,8 @@ struct ContentView: View {
         .fullScreenCover(isPresented: $showFaceScan) {
             FaceScanView()
         }
-        .fullScreenCover(isPresented: $showFoodLogSheet) {
-            FoodLogSheet()
+        .fullScreenCover(isPresented: $showFoodCapture) {
+            FoodCaptureView()
         }
         .fullScreenCover(item: $faceResultScan) { scan in
             FaceScanResultView(scan: scan)

@@ -1,197 +1,62 @@
 import SwiftUI
-import PhotosUI
 
-struct FoodLogSheet: View {
-    @State private var viewModel = FoodLogSheetViewModel()
+/// Camera-first food capture. Opens camera immediately; on capture, processes
+/// the image and hands off to AnalysisCoordinator with a fallback name.
+struct FoodCaptureView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(DataStore.self) private var dataStore
     @Environment(AnalysisCoordinator.self) private var coordinator
-    @State private var showCamera = false
-    @State private var photosPickerItem: PhotosPickerItem?
+    @State private var capturedImage: UIImage?
+    @State private var showCamera = true
+    @State private var isProcessing = false
 
     var body: some View {
-        NavigationStack {
-            ScrollView(showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 18) {
-                    Text("Log a Meal")
-                        .font(.gbTitleM)
-                        .foregroundStyle(GlowbiteColors.darkBrown)
-                        .padding(.top, 8)
+        ZStack {
+            GlowbiteColors.creamBG.ignoresSafeArea()
 
-                    foodNameField
-                    photoSection
-
-                    if viewModel.selectedImage != nil {
-                        photoThumbnail
-                    }
-
-                    if let error = viewModel.errorMessage {
-                        Text(error)
-                            .font(.gbCaption)
-                            .foregroundStyle(GlowbiteColors.redAlert)
-                    }
-
-                    analyzeButton
-                }
-                .padding(.horizontal, GlowbiteSpacing.screenPadding)
-                .padding(.bottom, 30)
-            }
-            .background(GlowbiteColors.creamBG.ignoresSafeArea())
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.gbDisplayM)
-                            .foregroundStyle(GlowbiteColors.lightTaupe)
-                    }
+            if isProcessing {
+                VStack(spacing: 12) {
+                    ProgressView()
+                        .tint(GlowbiteColors.coral)
+                    Text("Processing your meal...")
+                        .font(.gbBodyM)
+                        .foregroundStyle(GlowbiteColors.mediumTaupe)
                 }
             }
         }
-        .sheet(isPresented: $showCamera) {
-            ImagePicker(sourceType: .camera, selectedImage: $viewModel.selectedImage)
-        }
-        .onChange(of: photosPickerItem) { _, newItem in
-            if let newItem {
-                Task { @MainActor in
-                    if let data = try? await newItem.loadTransferable(type: Data.self),
-                       let image = UIImage(data: data) {
-                        viewModel.selectedImage = image
-                        HapticManager.impact(.light)
-                    }
-                }
-            }
-        }
-        .onChange(of: viewModel.preparedImageData) { _, imageData in
-            if let imageData {
-                // Hand off to coordinator and dismiss
-                coordinator.startFoodScan(
-                    imageData: imageData,
-                    foodName: viewModel.foodName,
-                    analysisService: FoodAnalysisService(),
-                    dataStore: dataStore
-                )
+        .sheet(isPresented: $showCamera, onDismiss: {
+            // Camera dismissed without capturing — exit the flow
+            if capturedImage == nil {
                 dismiss()
             }
+        }) {
+            ImagePicker(sourceType: .camera, selectedImage: $capturedImage)
+                .ignoresSafeArea()
         }
-    }
-
-    // MARK: - Food Name Field
-    private var foodNameField: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("What did you eat?")
-                .font(.gbCaption)
-                .foregroundStyle(GlowbiteColors.lightTaupe)
-
-            TextField("e.g. Salmon bowl, Pizza...", text: $viewModel.foodName)
-                .font(.gbBodyM)
-                .foregroundStyle(GlowbiteColors.darkBrown)
-                .padding(14)
-                .background(GlowbiteColors.white)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(GlowbiteColors.softTan, lineWidth: 1)
-                )
-        }
-    }
-
-    // MARK: - Photo Section
-    private var photoSection: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("Add a photo")
-                .font(.gbCaption)
-                .foregroundStyle(GlowbiteColors.lightTaupe)
-
-            HStack(spacing: 10) {
-                Button {
-                    showCamera = true
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: "camera.fill")
-                        Text("Take Photo")
-                    }
-                    .font(.gbBodyM)
-                    .foregroundStyle(GlowbiteColors.darkBrown)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(GlowbiteColors.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(GlowbiteColors.softTan, lineWidth: 1)
-                    )
-                }
-
-                PhotosPicker(selection: $photosPickerItem, matching: .images) {
-                    HStack(spacing: 6) {
-                        Image(systemName: "photo.fill")
-                        Text("Choose Photo")
-                    }
-                    .font(.gbBodyM)
-                    .foregroundStyle(GlowbiteColors.darkBrown)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(GlowbiteColors.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(GlowbiteColors.softTan, lineWidth: 1)
-                    )
-                }
-            }
-        }
-    }
-
-    // MARK: - Photo Thumbnail
-    private var photoThumbnail: some View {
-        ZStack(alignment: .topTrailing) {
-            if let image = viewModel.selectedImage {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(maxWidth: .infinity, maxHeight: 180)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-            }
-
-            Button {
-                viewModel.removePhoto()
-                photosPickerItem = nil
-            } label: {
-                Image(systemName: "xmark.circle.fill")
-                    .font(.gbDisplayM)
-                    .foregroundStyle(.white)
-                    .shadow(radius: 4)
-            }
-            .padding(8)
-        }
-    }
-
-    // MARK: - Analyze Button
-    private var analyzeButton: some View {
-        Button {
+        .onChange(of: capturedImage) { _, image in
+            guard let image else { return }
             Task {
-                await viewModel.prepareForAnalysis()
+                await processAndAnalyze(image)
             }
-        } label: {
-            HStack(spacing: 8) {
-                if viewModel.isPreparing {
-                    ProgressView()
-                        .tint(.white)
-                } else {
-                    Text("Analyze with AI \u{2728}")
-                }
-            }
-            .font(.gbBodyM)
-            .foregroundStyle(.white)
-            .frame(maxWidth: .infinity)
-            .frame(height: 50)
-            .background(GlowbiteColors.coral)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .opacity(viewModel.canAnalyze ? 1.0 : 0.5)
         }
-        .disabled(!viewModel.canAnalyze)
+    }
+
+    private func processAndAnalyze(_ image: UIImage) async {
+        isProcessing = true
+        HapticManager.impact(.medium)
+
+        guard let imageData = await ImageProcessor.processForFoodAnalysis(image) else {
+            isProcessing = false
+            dismiss()
+            return
+        }
+
+        coordinator.startFoodScan(
+            imageData: imageData,
+            foodName: "Meal",
+            analysisService: FoodAnalysisService(),
+            dataStore: dataStore
+        )
+        dismiss()
     }
 }

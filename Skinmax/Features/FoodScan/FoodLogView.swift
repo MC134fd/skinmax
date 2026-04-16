@@ -3,7 +3,7 @@ import SwiftUI
 struct FoodLogView: View {
     @Environment(DataStore.self) private var dataStore
     @State private var viewModel = FoodLogViewModel()
-    @State private var showFoodLogSheet = false
+    @State private var showFoodCapture = false
     @State private var selectedFoodScan: FoodScan?
 
     var body: some View {
@@ -26,8 +26,8 @@ struct FoodLogView: View {
         .onAppear {
             viewModel.dataStore = dataStore
         }
-        .fullScreenCover(isPresented: $showFoodLogSheet) {
-            FoodLogSheet()
+        .fullScreenCover(isPresented: $showFoodCapture) {
+            FoodCaptureView()
                 .environment(dataStore)
         }
         .fullScreenCover(item: $selectedFoodScan) { scan in
@@ -150,7 +150,7 @@ struct FoodLogView: View {
     // MARK: - Floating Add Button
     private var floatingAddButton: some View {
         Button {
-            showFoodLogSheet = true
+            showFoodCapture = true
         } label: {
             Image(systemName: "plus")
                 .font(.gbDisplayM)

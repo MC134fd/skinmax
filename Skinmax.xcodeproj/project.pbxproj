@@ -27,7 +27,7 @@
 		66CA29CAF0CAB7F5DB3A3C20 /* FaceScanResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69524F1357C461D6FED5EBA8 /* FaceScanResultView.swift */; };
 		69770D99BD181102D17E46E6 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF94BD712BEA9A2282A01ED5 /* MockData.swift */; };
 		6FD7B2D204933866FC7A14E3 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60444437FE716295A6FBAB68 /* ImagePicker.swift */; };
-		7411A9E8E9ACBFC7F79F01BF /* FoodLogSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCFE13834F0B06D66981B73 /* FoodLogSheetViewModel.swift */; };
+
 		82C161CE3C61AB03169BD924 /* InsightEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 071559B623555A0978937FBE /* InsightEngine.swift */; };
 		9AECF514DB6ACCD7F92C5746 /* Nunito-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BFE30112AD5A47636A9E6360 /* Nunito-Bold.ttf */; };
 		9BE153E2C646F06C4EDEF946 /* NotificationSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B3C4DB70E7D45D6240FF6F2 /* NotificationSettingsView.swift */; };
@@ -103,7 +103,7 @@
 		968B3542EFA9211278FEDF5F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9B3C4DB70E7D45D6240FF6F2 /* NotificationSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsView.swift; sourceTree = "<group>"; };
 		A028B16977384E6719862F4D /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
-		ADCFE13834F0B06D66981B73 /* FoodLogSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLogSheetViewModel.swift; sourceTree = "<group>"; };
+
 		AE36B60B9F8806215B9D59E8 /* FoodAnalysisService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalysisService.swift; sourceTree = "<group>"; };
 		B798A683F2075CD0B72EB980 /* AnalysisHomeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisHomeCard.swift; sourceTree = "<group>"; };
 		B9609A8F232A1CDC4D15E713 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
@@ -296,7 +296,7 @@
 			isa = PBXGroup;
 			children = (
 				C012FA3DE75DD4EC6F889FA4 /* FoodLogSheet.swift */,
-				ADCFE13834F0B06D66981B73 /* FoodLogSheetViewModel.swift */,
+
 				F758F2CF96DBEB782C5D7EAD /* FoodLogView.swift */,
 				DF45D3C22D5A27B1B00ABDA2 /* FoodLogViewModel.swift */,
 				F2B1A4F14B83115BE86BB147 /* FoodRowView.swift */,
@@ -471,7 +471,7 @@
 				C095671A41F2FBA97F5E67FB /* FaceScanViewModel.swift in Sources */,
 				5EF83ED54BBCCD0785E5E6EC /* FoodAnalysisService.swift in Sources */,
 				16A45C326274D00833C7D30E /* FoodLogSheet.swift in Sources */,
-				7411A9E8E9ACBFC7F79F01BF /* FoodLogSheetViewModel.swift in Sources */,
+
 				1BA73256C51F0077A202FC41 /* FoodLogView.swift in Sources */,
 				5E0F9D46E2E85FE7007973D2 /* FoodLogViewModel.swift in Sources */,
 				C0E43B907000A71C5AA6DB7B /* FoodRowView.swift in Sources */,
