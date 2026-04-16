@@ -112,7 +112,7 @@ struct HomeView: View {
 
                 VStack(spacing: 8) {
                     GlowScoreTile(
-                        scan: viewModel.latestScan,
+                        scan: viewModel.selectedDateScan,
                         trendDiff: viewModel.glowTrendDiff
                     )
 
@@ -172,8 +172,9 @@ struct HomeView: View {
             ForEach(nutrients) { nutrient in
                 SkinNutrientCard(
                     label: nutrient.config.label,
-                    value: nutrientValueString(nutrient),
-                    target: nutrientTargetString(nutrient),
+                    remainingText: nutrient.remainingText,
+                    statusLabel: nutrient.statusLabel,
+                    isOver: nutrient.isOver,
                     descriptor: nutrient.config.descriptor,
                     signatureColor: nutrient.signatureColor,
                     signatureLightColor: nutrient.signatureLightColor,
@@ -184,21 +185,6 @@ struct HomeView: View {
         }
         .frame(maxHeight: .infinity)
         .padding(.horizontal, 2)
-    }
-
-    private func nutrientValueString(_ n: HomeViewModel.NutrientDisplayData) -> String {
-        if n.config.label == "SODIUM" {
-            return String(format: "%.1f", n.currentValue)
-        }
-        return String(format: "%.0f", n.currentValue)
-    }
-
-    private func nutrientTargetString(_ n: HomeViewModel.NutrientDisplayData) -> String {
-        let remaining = max(n.config.target - n.currentValue, 0)
-        if n.config.label == "SODIUM" {
-            return String(format: "%.1f%@ left", remaining, n.config.unit)
-        }
-        return "\(Int(remaining))\(n.config.unit) left"
     }
 
     private var lifeScorePage: some View {
@@ -272,9 +258,9 @@ struct HomeView: View {
 
     private var mealsSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            let meals = viewModel.todayFoodScans.sorted { $0.createdAt < $1.createdAt }
+            let meals = viewModel.selectedDateFoodScans.sorted { $0.createdAt < $1.createdAt }
 
-            Text("TODAY · \(meals.count) MEALS")
+            Text("\(viewModel.selectedDayName.uppercased()) · \(meals.count) MEALS")
                 .font(.gbOverline)
                 .tracking(2.0)
                 .foregroundStyle(GlowbiteColors.lightTaupe)

@@ -2,8 +2,9 @@ import SwiftUI
 
 struct SkinNutrientCard: View {
     let label: String
-    let value: String
-    let target: String
+    let remainingText: String
+    let statusLabel: String
+    let isOver: Bool
     let descriptor: String
     let signatureColor: Color
     let signatureLightColor: Color
@@ -32,15 +33,15 @@ struct SkinNutrientCard: View {
                     .rotationEffect(.degrees(-90))
                     .animation(.easeOut(duration: 0.6), value: progress)
 
-                Text(value)
-                    .font(.gbTitleL)
-                    .foregroundStyle(signatureColor)
+                Text(remainingText)
+                    .font(.gbDisplayM)
+                    .foregroundStyle(isOver ? GlowbiteColors.redAlert : signatureColor)
             }
-            .frame(width: 64, height: 64)
+            .frame(width: 72, height: 72)
 
-            Text(target)
+            Text(statusLabel)
                 .font(.gbCaption)
-                .foregroundStyle(signatureColor.opacity(0.55))
+                .foregroundStyle(isOver ? GlowbiteColors.redAlert.opacity(0.7) : signatureColor.opacity(0.55))
                 .padding(.top, 2)
 
             Spacer()

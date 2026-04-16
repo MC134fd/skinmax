@@ -70,15 +70,18 @@ final class HomeViewModel {
     // MARK: - Selected Date Data
 
     var selectedDateScan: SkinScan? {
-        dataStore?.skinScans(for: selectedDate).first
+        _ = dataStore?.dataVersion
+        return dataStore?.skinScans(for: selectedDate).first
     }
 
     var selectedDateScans: [SkinScan] {
-        dataStore?.skinScans(for: selectedDate) ?? []
+        _ = dataStore?.dataVersion
+        return dataStore?.skinScans(for: selectedDate) ?? []
     }
 
     var selectedDateFoodScans: [FoodScan] {
-        dataStore?.foodScans(for: selectedDate) ?? []
+        _ = dataStore?.dataVersion
+        return dataStore?.foodScans(for: selectedDate) ?? []
     }
 
     var selectedDateActivity: [ActivityItem] {
@@ -92,10 +95,6 @@ final class HomeViewModel {
     }
 
     // MARK: - Glow Score (selected date)
-
-    var latestScan: SkinScan? {
-        dataStore?.latestSkinScan()
-    }
 
     var glowScore: Double {
         selectedDateScan?.glowScore ?? 0
@@ -152,16 +151,12 @@ final class HomeViewModel {
         return insights.first?.text ?? "Scan your face and log meals daily to unlock personalized insights."
     }
 
-    // MARK: - Calories (real data from today's food scans)
+    // MARK: - Calories (selected date food scans)
 
     let dailyCalorieGoal: Int = 2000
 
-    var todayFoodScans: [FoodScan] {
-        dataStore?.foodScans(for: Date()) ?? []
-    }
-
     var consumedCalories: Int {
-        todayFoodScans.reduce(0) { $0 + $1.calories }
+        selectedDateFoodScans.reduce(0) { $0 + $1.calories }
     }
 
     var caloriesRemaining: Int {
@@ -191,8 +186,8 @@ final class HomeViewModel {
     // MARK: - Glow Score Bucket
 
     var glowScoreBucket: String {
-        guard latestScan != nil else { return "Scan to start" }
-        let score = latestScan?.glowScore ?? 0
+        guard selectedDateScan != nil else { return "Scan to start" }
+        let score = selectedDateScan?.glowScore ?? 0
         switch score {
         case 90...100: return "Glowing"
         case 75..<90: return "Great"
@@ -295,13 +290,16 @@ final class HomeViewModel {
         let currentValue: Double
         let zone: NutrientZone
         let progress: Double
+        let remainingText: String
+        let statusLabel: String   // "g left" / "g over"
+        let isOver: Bool
         var signatureColor: Color { config.signatureColor }
         var signatureLightColor: Color { config.signatureLightColor }
         var barColor: Color { zone.color }
     }
 
     var nutrientPages: [[NutrientDisplayData]] {
-        let scans = todayFoodScans
+        let scans = selectedDateFoodScans
 
         let totals: [Double] = [
             scans.reduce(0) { $0 + $1.protein },
@@ -314,11 +312,23 @@ final class HomeViewModel {
 
         let configs = Self.nutrientConfigs
         let displayData: [NutrientDisplayData] = zip(configs, totals).map { config, value in
-            NutrientDisplayData(
+            let diff = config.target - value
+            let isOver = diff < 0
+            let absRemaining = abs(diff)
+            let remainingText: String
+            if config.label == "SODIUM" {
+                remainingText = String(format: "%.1f", absRemaining)
+            } else {
+                remainingText = "\(Int(absRemaining))"
+            }
+            return NutrientDisplayData(
                 config: config,
                 currentValue: value,
                 zone: config.zone(for: value),
-                progress: min(value / config.maxDisplay, 1.0)
+                progress: min(value / config.maxDisplay, 1.0),
+                remainingText: remainingText,
+                statusLabel: "\(config.unit) \(isOver ? "over" : "left")",
+                isOver: isOver
             )
         }
 
@@ -331,11 +341,11 @@ final class HomeViewModel {
     // MARK: - Food Score
 
     var foodScore: Double {
-        dataStore?.averageFoodScore(for: Date()) ?? 0
+        dataStore?.averageFoodScore(for: selectedDate) ?? 0
     }
 
-    var todayFoodCount: Int {
-        dataStore?.todayFoodCount() ?? 0
+    var selectedDateFoodCount: Int {
+        selectedDateFoodScans.count
     }
 
     // MARK: - Metric Helpers

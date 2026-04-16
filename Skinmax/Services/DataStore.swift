@@ -7,6 +7,8 @@ import os
 final class DataStore {
     private let modelContext: ModelContext
     private let log = GlowbiteLog.dataStore
+    /// Incremented on every save/delete so computed properties re-evaluate.
+    private(set) var dataVersion = 0
 
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
@@ -27,6 +29,7 @@ final class DataStore {
         modelContext.insert(cached)
         do {
             try modelContext.save()
+            dataVersion += 1
             log.info("Skin scan saved, id=\(scan.id)")
         } catch {
             log.error("Failed to save skin scan, id=\(scan.id): \(error.localizedDescription)")
@@ -47,6 +50,7 @@ final class DataStore {
         modelContext.insert(cached)
         do {
             try modelContext.save()
+            dataVersion += 1
             log.info("Food scan saved, id=\(scan.id), name=\(scan.name)")
         } catch {
             log.error("Failed to save food scan, id=\(scan.id): \(error.localizedDescription)")
@@ -193,6 +197,7 @@ final class DataStore {
             for item in results { modelContext.delete(item) }
             do {
                 try modelContext.save()
+                dataVersion += 1
                 log.info("Deleted skin scan, id=\(id)")
             } catch {
                 log.error("Failed to delete skin scan, id=\(id): \(error.localizedDescription)")
@@ -205,6 +210,7 @@ final class DataStore {
             try modelContext.delete(model: CachedSkinScan.self)
             try modelContext.delete(model: CachedFoodScan.self)
             try modelContext.save()
+            dataVersion += 1
             log.info("All data deleted")
         } catch {
             log.error("Failed to delete all data: \(error.localizedDescription)")
