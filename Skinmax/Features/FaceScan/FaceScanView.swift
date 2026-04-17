@@ -109,13 +109,12 @@ struct FaceScanView: View {
                     // Oval guide
                     Ellipse()
                         .stroke(
-                            ovalStrokeStyle,
+                            ovalColor,
                             style: viewModel.state == .faceDetected || viewModel.state == .capturing
                                 ? StrokeStyle(lineWidth: 3)
                                 : StrokeStyle(lineWidth: 2, dash: [8, 6])
                         )
                         .frame(width: ovalWidth, height: ovalHeight)
-                        .foregroundStyle(ovalColor)
 
                     // Pulsing glow when capturing
                     if viewModel.state == .capturing {
@@ -165,10 +164,6 @@ struct FaceScanView: View {
         case .error: return GlowbiteColors.redAlert
         default: return GlowbiteColors.peachLight.opacity(0.5)
         }
-    }
-
-    private var ovalStrokeStyle: some ShapeStyle {
-        ovalColor
     }
 
     // MARK: - Capture Button

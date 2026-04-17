@@ -45,7 +45,6 @@ struct WaterDropletVisualizer: View {
 
     var body: some View {
         GeometryReader { geo in
-            let size = CGSize(width: geo.size.width, height: geo.size.height)
             ZStack {
                 WaterDropletShape()
                     .fill(GlowbiteColors.hydrationBlue.opacity(0.10))
@@ -64,12 +63,12 @@ struct WaterDropletVisualizer: View {
                     .mask(
                         Rectangle()
                             .frame(
-                                width: size.width,
-                                height: size.height * clampedRatio
+                                width: geo.size.width,
+                                height: geo.size.height * clampedRatio
                             )
                             .frame(
-                                width: size.width,
-                                height: size.height,
+                                width: geo.size.width,
+                                height: geo.size.height,
                                 alignment: .bottom
                             )
                             .animation(
@@ -105,7 +104,7 @@ struct WaterDropletVisualizer: View {
                         )
                 }
             }
-            .frame(width: size.width, height: size.height)
+            .frame(width: geo.size.width, height: geo.size.height)
         }
     }
 }

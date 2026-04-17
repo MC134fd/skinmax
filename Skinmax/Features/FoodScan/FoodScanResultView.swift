@@ -325,23 +325,22 @@ struct FoodScanResultView: View {
     }
 
     // MARK: - AI Tip Card
+    @ViewBuilder
     private var aiTipCard: some View {
-        Group {
-            if let tip = scan.aiTip {
-                HStack(alignment: .top, spacing: 10) {
-                    Text("\u{1F4A1}")
-                        .font(.system(size: 20))
+        if let tip = scan.aiTip {
+            HStack(alignment: .top, spacing: 10) {
+                Text("\u{1F4A1}")
+                    .font(.system(size: 20))
 
-                    Text(tip)
-                        .font(.gbBodyM)
-                        .foregroundStyle(GlowbiteColors.darkBrown)
-                        .lineSpacing(3)
-                }
-                .padding(14)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(GlowbiteColors.peachWash)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
+                Text(tip)
+                    .font(.gbBodyM)
+                    .foregroundStyle(GlowbiteColors.darkBrown)
+                    .lineSpacing(3)
             }
+            .padding(14)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(GlowbiteColors.peachWash)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
         }
     }
 }

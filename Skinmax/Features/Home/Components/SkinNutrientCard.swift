@@ -15,13 +15,11 @@ struct SkinNutrientCard: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
-                Text(label)
-                    .font(.gbOverline)
-                    .tracking(2.0)
-                    .foregroundStyle(signatureColor)
-                Spacer()
-            }
+            Text(label)
+                .font(.gbOverline)
+                .tracking(2.0)
+                .foregroundStyle(signatureColor)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
             Spacer()
 
@@ -61,12 +59,10 @@ struct SkinNutrientCard: View {
 
             Spacer()
 
-            HStack {
-                Text(descriptor)
-                    .font(.gbOverline)
-                    .foregroundStyle(signatureColor.opacity(0.65))
-                Spacer()
-            }
+            Text(descriptor)
+                .font(.gbOverline)
+                .foregroundStyle(signatureColor.opacity(0.65))
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 12)

@@ -171,14 +171,11 @@ struct HomeView: View {
 
     private var skinNutrientsSection: some View {
         VStack(spacing: 8) {
-            HStack {
-                Text("SKIN NUTRIENTS")
-                    .font(.gbOverline)
-                    .tracking(2.0)
-                    .foregroundStyle(GlowbiteColors.lightTaupe)
-
-                Spacer()
-            }
+            Text("SKIN NUTRIENTS")
+                .font(.gbOverline)
+                .tracking(2.0)
+                .foregroundStyle(GlowbiteColors.lightTaupe)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
             TabView(selection: $nutrientPage) {
                 nutrientRow(nutrients: viewModel.nutrientPages.indices.contains(0)
@@ -274,12 +271,10 @@ struct HomeView: View {
             }
             .frame(height: 6)
 
-            HStack {
-                Text("Glow + Nutrition + Habits")
-                    .font(.gbOverline)
-                    .foregroundStyle(GlowbiteColors.lightTaupe)
-                Spacer()
-            }
+            Text("Glow + Nutrition + Habits")
+                .font(.gbOverline)
+                .foregroundStyle(GlowbiteColors.lightTaupe)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 12)

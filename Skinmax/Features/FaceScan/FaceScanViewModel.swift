@@ -1,5 +1,4 @@
 import SwiftUI
-import Observation
 
 enum FaceScanState: Equatable {
     case idle

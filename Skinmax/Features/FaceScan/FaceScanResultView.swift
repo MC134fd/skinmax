@@ -7,7 +7,6 @@ struct FaceScanResultView: View {
     @State private var animatedScore: Double = 0
     @State private var showMetrics = false
     @State private var selectedMetric: SkinMetric?
-    @State private var showDetail = false
     @State private var saved = false
     @State private var showSaveToast = false
 
@@ -137,13 +136,11 @@ struct FaceScanResultView: View {
 
     // MARK: - Detailed Analysis Header
     private var detailedAnalysisHeader: some View {
-        HStack {
-            Text("Detailed Analysis")
-                .font(.gbCaption)
-                .foregroundStyle(GlowbiteColors.darkBrown)
-            Spacer()
-        }
-        .padding(.top, 4)
+        Text("Detailed Analysis")
+            .font(.gbCaption)
+            .foregroundStyle(GlowbiteColors.darkBrown)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.top, 4)
     }
 
     // MARK: - Metrics Grid

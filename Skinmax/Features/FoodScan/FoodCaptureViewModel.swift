@@ -1,6 +1,4 @@
 import SwiftUI
-import Observation
-import UIKit
 
 enum FoodCaptureToast: Identifiable, Equatable {
     case error(String)

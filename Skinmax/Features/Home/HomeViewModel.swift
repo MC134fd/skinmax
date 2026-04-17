@@ -1,11 +1,9 @@
 import SwiftUI
-import Observation
 
 @Observable
 @MainActor
 final class HomeViewModel {
     var dataStore: DataStore?
-    var insightDismissed = false
     var selectedDate: Date = .now
 
     private let calendar = Calendar.current
@@ -74,81 +72,9 @@ final class HomeViewModel {
         return dataStore?.skinScans(for: selectedDate).first
     }
 
-    var selectedDateScans: [SkinScan] {
-        _ = dataStore?.dataVersion
-        return dataStore?.skinScans(for: selectedDate) ?? []
-    }
-
     var selectedDateFoodScans: [FoodScan] {
         _ = dataStore?.dataVersion
         return dataStore?.foodScans(for: selectedDate) ?? []
-    }
-
-    var selectedDateActivity: [ActivityItem] {
-        var seenFaceIDs = Set<UUID>()
-        let uniqueScans = selectedDateScans.filter { seenFaceIDs.insert($0.id).inserted }
-        var seenFoodIDs = Set<UUID>()
-        let uniqueFoodScans = selectedDateFoodScans.filter { seenFoodIDs.insert($0.id).inserted }
-        let faceItems = uniqueScans.map { ActivityItem.face($0) }
-        let foodItems = uniqueFoodScans.map { ActivityItem.food($0) }
-        return (faceItems + foodItems).sorted { $0.date > $1.date }
-    }
-
-    // MARK: - Glow Score (selected date)
-
-    var glowScore: Double {
-        selectedDateScan?.glowScore ?? 0
-    }
-
-    var hasData: Bool {
-        selectedDateScan != nil
-    }
-
-    var overallMessage: String {
-        selectedDateScan?.overallMessage ?? "No scan for \(selectedDayName)"
-    }
-
-    // MARK: - All Metrics (for carousel, selected date)
-
-    var allMetrics: [SkinMetric] {
-        selectedDateScan?.metrics ?? []
-    }
-
-    // MARK: - Trend
-
-    var trendPercentage: String {
-        guard let dataStore else { return "" }
-        let scores = dataStore.dailySkinScores(last: 7)
-        guard scores.count >= 2 else { return "First scan!" }
-        let first = scores.first!.score
-        let last = scores.last!.score
-        let diff = last - first
-        let pct = (diff / max(first, 1)) * 100
-        if pct >= 0 {
-            return "\u{2191} +\(Int(pct))% this week"
-        } else {
-            return "\u{2193} \(Int(pct))% this week"
-        }
-    }
-
-    var trendPositive: Bool {
-        guard let dataStore else { return true }
-        let scores = dataStore.dailySkinScores(last: 7)
-        guard scores.count >= 2 else { return true }
-        return scores.last!.score >= scores.first!.score
-    }
-
-    // MARK: - Today Insight
-
-    var todayInsight: String {
-        guard let dataStore else {
-            return "Scan your face and log meals daily to unlock personalized insights."
-        }
-        let engine = InsightEngine()
-        let skinScans = dataStore.skinScans(last: 7)
-        let foodScans = dataStore.foodScans(last: 7)
-        let insights = engine.generateInsights(skinScans: skinScans, foodScans: foodScans)
-        return insights.first?.text ?? "Scan your face and log meals daily to unlock personalized insights."
     }
 
     // MARK: - Calories (selected date food scans)
@@ -157,15 +83,6 @@ final class HomeViewModel {
 
     var consumedCalories: Int {
         selectedDateFoodScans.reduce(0) { $0 + $1.calories }
-    }
-
-    var caloriesRemaining: Int {
-        max(dailyCalorieGoal - consumedCalories, 0)
-    }
-
-    var calorieProgress: Double {
-        guard dailyCalorieGoal > 0 else { return 0 }
-        return Double(consumedCalories) / Double(dailyCalorieGoal)
     }
 
     // MARK: - Streak
@@ -181,20 +98,6 @@ final class HomeViewModel {
         let scores = dataStore.dailySkinScores(last: 7)
         guard scores.count >= 2 else { return nil }
         return Int(scores.last!.score - scores.first!.score)
-    }
-
-    // MARK: - Glow Score Bucket
-
-    var glowScoreBucket: String {
-        guard selectedDateScan != nil else { return "Scan to start" }
-        let score = selectedDateScan?.glowScore ?? 0
-        switch score {
-        case 90...100: return "Glowing"
-        case 75..<90: return "Great"
-        case 60..<75: return "Good"
-        case 40..<60: return "Fair"
-        default: return "Low"
-        }
     }
 
     // MARK: - Hydration (in-memory session state)
@@ -353,46 +256,4 @@ final class HomeViewModel {
         ]
     }
 
-    // MARK: - Food Score
-
-    var foodScore: Double {
-        dataStore?.averageFoodScore(for: selectedDate) ?? 0
-    }
-
-    var selectedDateFoodCount: Int {
-        selectedDateFoodScans.count
-    }
-
-    // MARK: - Metric Helpers
-
-    func metricEmoji(for type: SkinMetricType) -> String {
-        switch type {
-        case .hydration: return "\u{1F4A7}"
-        case .acne: return "\u{1F534}"
-        case .texture: return "\u{270B}"
-        case .redness: return "\u{1F321}"
-        default: return type.icon
-        }
-    }
-
-    func metricValue(for metric: SkinMetric) -> String {
-        if metric.type == .acne {
-            return metric.score >= 70 ? "Low" : metric.score >= 40 ? "Mod" : "High"
-        }
-        return "\(Int(metric.score))%"
-    }
-
-    func metricColor(for metric: SkinMetric) -> Color {
-        GlowbiteColors.trafficLight(for: metric.score)
-    }
-
-    // MARK: - Weekly Scores (kept for analytics reuse)
-
-    var weeklyScores: [(day: String, score: Double)] {
-        guard let dataStore else { return [] }
-        let scores = dataStore.dailySkinScores(last: 7)
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE"
-        return scores.map { (formatter.string(from: $0.date), $0.score) }
-    }
 }

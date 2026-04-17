@@ -93,25 +93,24 @@ struct SkinDetailView: View {
     }
 
     // MARK: - Description
+    @ViewBuilder
     private var descriptionSection: some View {
-        Group {
-            if !metric.description.isEmpty {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("About")
-                        .font(.gbBodyM)
-                        .foregroundStyle(GlowbiteColors.darkBrown)
+        if !metric.description.isEmpty {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("About")
+                    .font(.gbBodyM)
+                    .foregroundStyle(GlowbiteColors.darkBrown)
 
-                    Text(metric.description)
-                        .font(.gbBodyM)
-                        .foregroundStyle(GlowbiteColors.warmBrown)
-                        .lineSpacing(3)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(GlowbiteSpacing.cardPadding)
-                .background(GlowbiteColors.white)
-                .clipShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadius))
-                .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
+                Text(metric.description)
+                    .font(.gbBodyM)
+                    .foregroundStyle(GlowbiteColors.warmBrown)
+                    .lineSpacing(3)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(GlowbiteSpacing.cardPadding)
+            .background(GlowbiteColors.white)
+            .clipShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadius))
+            .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
         }
     }
 

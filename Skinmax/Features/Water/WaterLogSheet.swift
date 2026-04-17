@@ -107,13 +107,11 @@ struct WaterLogSheet: View {
 
     private var presetsSection: some View {
         VStack(spacing: 10) {
-            HStack {
-                Text("QUICK ADD")
-                    .font(.gbOverline)
-                    .tracking(2.0)
-                    .foregroundStyle(GlowbiteColors.lightTaupe)
-                Spacer()
-            }
+            Text("QUICK ADD")
+                .font(.gbOverline)
+                .tracking(2.0)
+                .foregroundStyle(GlowbiteColors.lightTaupe)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
             LazyVGrid(
                 columns: [
