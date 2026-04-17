@@ -295,7 +295,7 @@ final class HomeViewModel {
         let isOver: Bool
         var signatureColor: Color { config.signatureColor }
         var signatureLightColor: Color { config.signatureLightColor }
-        var barColor: Color { zone.color }
+        var barColor: Color { GlowbiteColors.coral }
     }
 
     var nutrientPages: [[NutrientDisplayData]] {
