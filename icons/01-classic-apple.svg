@@ -1,90 +1,72 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
-  <title>Glowbite Icon — 01 Classic Apple</title>
+  <title>Glowbite — 01 Scanner Classic</title>
   <defs>
-    <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FF7A5C"/>
-      <stop offset="100%" stop-color="#FFB89E"/>
-    </linearGradient>
-    <radialGradient id="appleShade" cx="35%" cy="32%" r="70%">
-      <stop offset="0%" stop-color="#FF9B7D"/>
-      <stop offset="55%" stop-color="#E55A3C"/>
-      <stop offset="100%" stop-color="#C24A1E"/>
+    <radialGradient id="bgA" cx="50%" cy="55%" r="75%">
+      <stop offset="0%" stop-color="#FFD3B8"/>
+      <stop offset="55%" stop-color="#FFB89E"/>
+      <stop offset="100%" stop-color="#FF7A5C"/>
     </radialGradient>
-    <radialGradient id="leafGrad" cx="30%" cy="30%" r="80%">
-      <stop offset="0%" stop-color="#8BD18F"/>
-      <stop offset="100%" stop-color="#4A9F4F"/>
+    <radialGradient id="haloA" cx="50%" cy="55%" r="60%">
+      <stop offset="0%" stop-color="#FFF8E8" stop-opacity="0.95"/>
+      <stop offset="40%" stop-color="#FFD3B8" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#FF7A5C" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="biteShadow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#8B2A0E" stop-opacity="0.6"/>
-      <stop offset="100%" stop-color="#8B2A0E" stop-opacity="0"/>
+    <radialGradient id="appleA" cx="38%" cy="32%" r="78%">
+      <stop offset="0%" stop-color="#FFB89E"/>
+      <stop offset="50%" stop-color="#FF7A5C"/>
+      <stop offset="100%" stop-color="#D8512F"/>
     </radialGradient>
-    <clipPath id="iconClip">
-      <rect x="0" y="0" width="1024" height="1024" rx="225" ry="225"/>
-    </clipPath>
+    <radialGradient id="leafA" cx="35%" cy="35%" r="80%">
+      <stop offset="0%" stop-color="#9BD89F"/>
+      <stop offset="100%" stop-color="#4FA055"/>
+    </radialGradient>
+    <clipPath id="clipA"><rect x="0" y="0" width="1024" height="1024" rx="225" ry="225"/></clipPath>
   </defs>
 
-  <g clip-path="url(#iconClip)">
-    <!-- Background gradient -->
-    <rect width="1024" height="1024" fill="url(#bg1)"/>
-
-    <!-- Soft inner glow -->
-    <circle cx="512" cy="560" r="420" fill="#FFD3B8" opacity="0.28"/>
-
-    <!-- Background sparkles -->
-    <g fill="#FFF8E8" opacity="0.85">
-      <path d="M180 240 l12 30 l30 12 l-30 12 l-12 30 l-12 -30 l-30 -12 l30 -12 z"/>
-      <path d="M860 320 l8 22 l22 8 l-22 8 l-8 22 l-8 -22 l-22 -8 l22 -8 z"/>
-      <path d="M150 780 l9 24 l24 9 l-24 9 l-9 24 l-9 -24 l-24 -9 l24 -9 z"/>
-      <path d="M870 760 l10 26 l26 10 l-26 10 l-10 26 l-10 -26 l-26 -10 l26 -10 z"/>
-      <circle cx="270" cy="430" r="6"/>
-      <circle cx="780" cy="220" r="7"/>
-      <circle cx="800" cy="540" r="5"/>
-    </g>
+  <g clip-path="url(#clipA)">
+    <rect width="1024" height="1024" fill="url(#bgA)"/>
+    <circle cx="512" cy="540" r="450" fill="url(#haloA)"/>
+    <circle cx="512" cy="540" r="320" fill="#FFF8E8" opacity="0.18"/>
 
     <!-- Stem -->
-    <path d="M508 250 q-8 -38 18 -68 q24 -22 50 -18 q-2 26 -22 50 q-22 22 -46 36 z" fill="#6B4226"/>
-
+    <path d="M508 290 q-6 -36 18 -64 q22 -20 46 -16 q-2 24 -20 46 q-20 22 -44 34 z" fill="#5C3920"/>
     <!-- Leaf -->
-    <path d="M520 248 q60 -90 180 -70 q-12 110 -120 130 q-50 8 -60 -60 z" fill="url(#leafGrad)"/>
-    <path d="M540 240 q70 -40 150 -50" stroke="#3A7C3F" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.55"/>
+    <path d="M520 288 q56 -84 168 -64 q-12 102 -112 122 q-46 8 -56 -58 z" fill="url(#leafA)"/>
 
-    <!-- Apple body (with bite cut on right) -->
-    <path d="
-      M512 280
-      C 320 280, 200 420, 200 600
-      C 200 790, 340 900, 500 900
-      C 540 900, 580 892, 615 875
-      C 600 855, 590 825, 590 795
-      C 590 740, 635 700, 690 700
-      C 720 700, 745 712, 762 730
-      C 808 670, 824 600, 824 545
-      C 824 410, 720 280, 540 280
-      Z" fill="url(#appleShade)"/>
+    <!-- Apple -->
+    <path d="M512 320 C 330 320, 220 450, 220 620 C 220 800, 350 905, 500 905 C 540 905, 575 898, 605 883 C 595 865, 588 840, 588 815 C 588 760, 632 722, 685 722 C 715 722, 740 734, 758 752 C 800 695, 814 630, 814 575 C 814 435, 712 320, 540 320 Z" fill="url(#appleA)"/>
 
-    <!-- Bite shadow inside cutout -->
-    <path d="M615 875 C 600 855, 590 825, 590 795 C 590 740, 635 700, 690 700 C 720 700, 745 712, 762 730 L 760 760 Q 700 800, 615 875 Z" fill="url(#biteShadow)"/>
+    <!-- Highlight -->
+    <ellipse cx="380" cy="470" rx="90" ry="140" fill="#FFD3B8" opacity="0.55" transform="rotate(-22 380 470)"/>
+    <ellipse cx="352" cy="460" rx="32" ry="66" fill="#FFF8E8" opacity="0.85" transform="rotate(-22 352 460)"/>
 
-    <!-- Highlight on apple -->
-    <ellipse cx="350" cy="430" rx="80" ry="120" fill="#FFB89E" opacity="0.55" transform="rotate(-25 350 430)"/>
-    <ellipse cx="320" cy="420" rx="30" ry="55" fill="#FFD3B8" opacity="0.7" transform="rotate(-25 320 420)"/>
+    <!-- Cheeks -->
+    <ellipse cx="380" cy="670" rx="48" ry="28" fill="#FFB89E" opacity="0.7"/>
+    <ellipse cx="640" cy="670" rx="48" ry="28" fill="#FFB89E" opacity="0.55"/>
 
-    <!-- Blush cheeks -->
-    <ellipse cx="370" cy="640" rx="55" ry="35" fill="#FF9B7D" opacity="0.65"/>
-    <ellipse cx="650" cy="640" rx="55" ry="35" fill="#FF9B7D" opacity="0.55"/>
-
-    <!-- Eyes -->
-    <ellipse cx="395" cy="560" rx="22" ry="28" fill="#2B1F1A"/>
-    <ellipse cx="615" cy="560" rx="22" ry="28" fill="#2B1F1A"/>
-    <circle cx="402" cy="552" r="8" fill="#FFFFFF"/>
-    <circle cx="622" cy="552" r="8" fill="#FFFFFF"/>
+    <!-- Blissful closed eyes -->
+    <path d="M370 590 Q 395 565, 420 590" stroke="#2B1F1A" stroke-width="12" fill="none" stroke-linecap="round"/>
+    <path d="M600 590 Q 625 565, 650 590" stroke="#2B1F1A" stroke-width="12" fill="none" stroke-linecap="round"/>
 
     <!-- Smile -->
-    <path d="M440 690 Q 510 740, 580 690" stroke="#2B1F1A" stroke-width="14" fill="none" stroke-linecap="round"/>
+    <path d="M470 710 Q 510 730, 545 710" stroke="#2B1F1A" stroke-width="11" fill="none" stroke-linecap="round"/>
 
-    <!-- Foreground sparkles -->
+    <!-- Scanner corner brackets (thick, solid, cream) -->
+    <g stroke="#FFF8E8" stroke-width="18" stroke-linecap="round" fill="none" opacity="0.95">
+      <!-- Top-left -->
+      <path d="M130 230 L 130 130 L 230 130"/>
+      <!-- Top-right -->
+      <path d="M794 130 L 894 130 L 894 230"/>
+      <!-- Bottom-left -->
+      <path d="M130 794 L 130 894 L 230 894"/>
+      <!-- Bottom-right -->
+      <path d="M894 794 L 894 894 L 794 894"/>
+    </g>
+
+    <!-- Supporting sparkles -->
     <g fill="#FFF8E8">
-      <path d="M790 470 l14 36 l36 14 l-36 14 l-14 36 l-14 -36 l-36 -14 l36 -14 z"/>
-      <path d="M210 560 l10 26 l26 10 l-26 10 l-10 26 l-10 -26 l-26 -10 l26 -10 z"/>
+      <path d="M180 480 l10 26 l26 10 l-26 10 l-10 26 l-10 -26 l-26 -10 l26 -10 z" opacity="0.9"/>
+      <path d="M830 490 l11 28 l28 11 l-28 11 l-11 28 l-11 -28 l-28 -11 l28 -11 z" opacity="0.9"/>
     </g>
   </g>
 </svg>

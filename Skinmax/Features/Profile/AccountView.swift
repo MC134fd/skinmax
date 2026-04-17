@@ -8,6 +8,7 @@ struct AccountView: View {
     @State private var showNotifications = false
     @State private var showDataSettings = false
     @State private var showAbout = false
+    @State private var showAppearance = false
 
     private var streak: Int { dataStore.calculateStreak() }
     private var totalScans: Int { dataStore.totalSkinScans() }
@@ -38,6 +39,7 @@ struct AccountView: View {
             .navigationDestination(isPresented: $showNotifications) { NotificationSettingsView() }
             .navigationDestination(isPresented: $showDataSettings) { DataSettingsView() }
             .navigationDestination(isPresented: $showAbout) { AboutView() }
+            .navigationDestination(isPresented: $showAppearance) { AppearanceView() }
         }
     }
 
@@ -105,6 +107,8 @@ struct AccountView: View {
             menuRow(icon: "list.bullet", label: "Scan History") { showHistory = true }
             Divider().foregroundStyle(GlowbiteColors.softTan)
             menuRow(icon: "bell.fill", label: "Notifications") { showNotifications = true }
+            Divider().foregroundStyle(GlowbiteColors.softTan)
+            menuRow(icon: "sparkles", label: "App Icon") { showAppearance = true }
             Divider().foregroundStyle(GlowbiteColors.softTan)
             menuRow(icon: "externaldrive.fill", label: "Data & Storage") { showDataSettings = true }
             Divider().foregroundStyle(GlowbiteColors.softTan)

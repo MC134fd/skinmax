@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Glowbite — Icon Concepts</title>
+<title>Glowbite — Scanner Icon Concepts</title>
 <style>
   :root {
     --coral: #FF7A5C;
@@ -26,14 +26,8 @@
     padding: 48px 24px 96px;
     min-height: 100vh;
   }
-  header {
-    max-width: 1100px; margin: 0 auto 32px;
-    text-align: center;
-  }
-  header h1 {
-    font-size: 40px; margin: 0 0 8px; letter-spacing: -0.02em;
-    font-weight: 800;
-  }
+  header { max-width: 1100px; margin: 0 auto 32px; text-align: center; }
+  header h1 { font-size: 40px; margin: 0 0 8px; letter-spacing: -0.02em; font-weight: 800; }
   header p { margin: 0; color: var(--brown); font-size: 16px; }
   .grid {
     max-width: 1100px; margin: 0 auto;
@@ -48,10 +42,8 @@
     padding: 28px;
     box-shadow: 0 10px 30px rgba(255, 122, 92, 0.12), 0 2px 8px rgba(255, 122, 92, 0.06);
   }
-  .card h2 {
-    margin: 0 0 4px; font-size: 22px; font-weight: 800;
-  }
-  .card .tag {
+  .card h2 { margin: 0 0 4px; font-size: 22px; font-weight: 800; }
+  .tag {
     display: inline-block;
     background: var(--cream-peach);
     color: var(--coral);
@@ -59,7 +51,7 @@
     padding: 4px 10px; border-radius: 100px; text-transform: uppercase;
     margin-bottom: 14px;
   }
-  .card .desc { margin: 0 0 18px; color: var(--brown); font-size: 14px; line-height: 1.55; }
+  .desc { margin: 0 0 18px; color: var(--brown); font-size: 14px; line-height: 1.55; }
   .row {
     display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
     background: var(--cream); border-radius: 20px; padding: 20px;
@@ -69,167 +61,395 @@
     overflow: hidden; box-shadow: 0 8px 24px rgba(255, 122, 92, 0.18);
     flex: 0 0 auto;
   }
-  .big img, .big svg { width: 100%; height: 100%; display: block; }
   .stack { display: flex; flex-direction: column; gap: 12px; }
   .small-row { display: flex; align-items: center; gap: 12px; }
-  .small {
-    width: 60px; height: 60px; border-radius: 22%;
-    overflow: hidden; box-shadow: 0 3px 8px rgba(255, 122, 92, 0.18);
-  }
-  .tiny {
-    width: 38px; height: 38px; border-radius: 22%;
-    overflow: hidden; box-shadow: 0 2px 5px rgba(255, 122, 92, 0.18);
-  }
-  .small img, .tiny img { width: 100%; height: 100%; display: block; }
+  .small { width: 60px; height: 60px; border-radius: 22%; overflow: hidden; box-shadow: 0 3px 8px rgba(255, 122, 92, 0.18); }
+  .tiny { width: 38px; height: 38px; border-radius: 22%; overflow: hidden; box-shadow: 0 2px 5px rgba(255, 122, 92, 0.18); }
   .label { font-size: 12px; color: var(--taupe); }
   .vibe { margin-top: 18px; font-size: 13px; color: var(--brown); }
   .vibe strong { color: var(--choco); font-weight: 800; }
-
   .home-mock {
     margin-top: 18px;
     background: linear-gradient(180deg, #2B1F1A 0%, #4B3D36 100%);
-    border-radius: 20px;
-    padding: 16px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    border-radius: 20px; padding: 16px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
   }
-  .home-mock .slot {
-    aspect-ratio: 1;
-    border-radius: 22%;
-    background: rgba(255,255,255,0.04);
-  }
-  .home-mock .slot.active {
-    background: white;
-    overflow: hidden;
-  }
-  .home-mock .slot.active img { width: 100%; height: 100%; display: block; }
-  footer {
-    max-width: 1100px; margin: 48px auto 0; text-align: center;
-    color: var(--taupe); font-size: 13px;
-  }
+  .home-mock .slot { aspect-ratio: 1; border-radius: 22%; background: rgba(255,255,255,0.04); }
+  .home-mock .slot.active { background: white; overflow: hidden; }
+  svg.icon { width: 100%; height: 100%; display: block; }
+  footer { max-width: 1100px; margin: 48px auto 0; text-align: center; color: var(--taupe); font-size: 13px; }
 </style>
 </head>
 <body>
-  <header>
-    <h1>Glowbite — App Icon Concepts</h1>
-    <p>Six directions, all in the apple + sparkles family. Each is shown at full size, mid (Settings), and small (Spotlight).</p>
-  </header>
 
-  <div class="grid">
+<!-- =========== INLINE SYMBOL DEFINITIONS =========== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Shared gradients -->
+    <radialGradient id="bg-warm" cx="50%" cy="55%" r="75%">
+      <stop offset="0%" stop-color="#FFD3B8"/>
+      <stop offset="55%" stop-color="#FFB89E"/>
+      <stop offset="100%" stop-color="#FF7A5C"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="50%" cy="55%" r="58%">
+      <stop offset="0%" stop-color="#FFF8E8" stop-opacity="0.95"/>
+      <stop offset="42%" stop-color="#FFD3B8" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#FF7A5C" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="apple" cx="38%" cy="32%" r="78%">
+      <stop offset="0%" stop-color="#FFB89E"/>
+      <stop offset="50%" stop-color="#FF7A5C"/>
+      <stop offset="100%" stop-color="#D8512F"/>
+    </radialGradient>
+    <radialGradient id="leaf" cx="35%" cy="35%" r="80%">
+      <stop offset="0%" stop-color="#9BD89F"/>
+      <stop offset="100%" stop-color="#4FA055"/>
+    </radialGradient>
+    <radialGradient id="bg-dark" cx="50%" cy="55%" r="80%">
+      <stop offset="0%" stop-color="#FF9B7D"/>
+      <stop offset="60%" stop-color="#E55A3C"/>
+      <stop offset="100%" stop-color="#8B2A0E"/>
+    </radialGradient>
+    <radialGradient id="apple-light" cx="38%" cy="32%" r="78%">
+      <stop offset="0%" stop-color="#FFD3B8"/>
+      <stop offset="50%" stop-color="#FF9B7D"/>
+      <stop offset="100%" stop-color="#D8512F"/>
+    </radialGradient>
+    <linearGradient id="ring-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF8E8"/>
+      <stop offset="50%" stop-color="#FFD3B8"/>
+      <stop offset="100%" stop-color="#FFB89E"/>
+    </linearGradient>
+    <radialGradient id="bg-burst" cx="50%" cy="55%" r="80%">
+      <stop offset="0%" stop-color="#FFB89E"/>
+      <stop offset="55%" stop-color="#FF8E70"/>
+      <stop offset="100%" stop-color="#D8512F"/>
+    </radialGradient>
+    <linearGradient id="ray" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFF8E8" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#FFF8E8" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
 
-    <!-- 01 -->
-    <div class="card">
-      <span class="tag">01 · Classic</span>
-      <h2>The Friendly Apple</h2>
-      <p class="desc">The full brand-doc concept executed faithfully — happy face, blush cheeks, leaf, bite, sparkles, coral→peach gradient. Reads warm and approachable; tested formula that converts on the App Store.</p>
-      <div class="row">
-        <div class="big"><img src="01-classic-apple.svg" alt=""></div>
-        <div class="stack">
-          <div class="small-row"><div class="small"><img src="01-classic-apple.svg" alt=""></div><span class="label">Settings</span></div>
-          <div class="small-row"><div class="tiny"><img src="01-classic-apple.svg" alt=""></div><span class="label">Spotlight</span></div>
-        </div>
+    <!-- Reusable apple+face group -->
+    <symbol id="apple-face" viewBox="0 0 1024 1024">
+      <path d="M508 290 q-6 -36 18 -64 q22 -20 46 -16 q-2 24 -20 46 q-20 22 -44 34 z" fill="#5C3920"/>
+      <path d="M520 288 q56 -84 168 -64 q-12 102 -112 122 q-46 8 -56 -58 z" fill="url(#leaf)"/>
+      <path d="M512 320 C 330 320, 220 450, 220 620 C 220 800, 350 905, 500 905 C 540 905, 575 898, 605 883 C 595 865, 588 840, 588 815 C 588 760, 632 722, 685 722 C 715 722, 740 734, 758 752 C 800 695, 814 630, 814 575 C 814 435, 712 320, 540 320 Z" fill="url(#apple)"/>
+      <ellipse cx="380" cy="470" rx="96" ry="148" fill="#FFD3B8" opacity="0.55" transform="rotate(-22 380 470)"/>
+      <ellipse cx="348" cy="455" rx="34" ry="70" fill="#FFF8E8" opacity="0.85" transform="rotate(-22 348 455)"/>
+      <ellipse cx="380" cy="670" rx="48" ry="28" fill="#FFB89E" opacity="0.7"/>
+      <ellipse cx="640" cy="670" rx="48" ry="28" fill="#FFB89E" opacity="0.55"/>
+      <path d="M370 590 Q 395 565, 420 590" stroke="#2B1F1A" stroke-width="12" fill="none" stroke-linecap="round"/>
+      <path d="M600 590 Q 625 565, 650 590" stroke="#2B1F1A" stroke-width="12" fill="none" stroke-linecap="round"/>
+      <path d="M472 708 Q 510 728, 545 708" stroke="#2B1F1A" stroke-width="11" fill="none" stroke-linecap="round"/>
+    </symbol>
+
+    <!-- =============== 6 icon symbols =============== -->
+
+    <!-- 01: Scanner Classic — thick cream brackets + side sparkles -->
+    <symbol id="icon-1" viewBox="0 0 1024 1024">
+      <clipPath id="c1"><rect x="0" y="0" width="1024" height="1024" rx="225" ry="225"/></clipPath>
+      <g clip-path="url(#c1)">
+        <rect width="1024" height="1024" fill="url(#bg-warm)"/>
+        <circle cx="512" cy="540" r="450" fill="url(#halo)"/>
+        <circle cx="512" cy="540" r="320" fill="#FFF8E8" opacity="0.18"/>
+        <use href="#apple-face"/>
+        <g stroke="#FFF8E8" stroke-width="18" stroke-linecap="round" fill="none" opacity="0.95">
+          <path d="M130 230 L 130 130 L 230 130"/>
+          <path d="M794 130 L 894 130 L 894 230"/>
+          <path d="M130 794 L 130 894 L 230 894"/>
+          <path d="M894 794 L 894 894 L 794 894"/>
+        </g>
+        <g fill="#FFF8E8">
+          <path d="M180 480 l10 26 l26 10 l-26 10 l-10 26 l-10 -26 l-26 -10 l26 -10 z" opacity="0.9"/>
+          <path d="M830 490 l11 28 l28 11 l-28 11 l-11 28 l-11 -28 l-28 -11 l28 -11 z" opacity="0.9"/>
+        </g>
+      </g>
+    </symbol>
+
+    <!-- 02: Scanner Pure — clean thick brackets + radiating light rays -->
+    <symbol id="icon-2" viewBox="0 0 1024 1024">
+      <clipPath id="c2"><rect x="0" y="0" width="1024" height="1024" rx="225" ry="225"/></clipPath>
+      <g clip-path="url(#c2)">
+        <rect width="1024" height="1024" fill="url(#bg-warm)"/>
+        <circle cx="512" cy="540" r="450" fill="url(#halo)"/>
+        <circle cx="512" cy="540" r="310" fill="#FFF8E8" opacity="0.2"/>
+        <g stroke="#FFF8E8" stroke-width="5" stroke-linecap="round" opacity="0.45">
+          <line x1="512" y1="260" x2="512" y2="310"/>
+          <line x1="512" y1="770" x2="512" y2="820"/>
+          <line x1="260" y1="540" x2="310" y2="540"/>
+          <line x1="714" y1="540" x2="764" y2="540"/>
+          <line x1="320" y1="370" x2="360" y2="410"/>
+          <line x1="664" y1="670" x2="704" y2="710"/>
+          <line x1="320" y1="710" x2="360" y2="670"/>
+          <line x1="664" y1="410" x2="704" y2="370"/>
+        </g>
+        <use href="#apple-face"/>
+        <g stroke="#FFF8E8" stroke-width="20" stroke-linecap="round" fill="none">
+          <path d="M140 240 L 140 140 L 240 140"/>
+          <path d="M784 140 L 884 140 L 884 240"/>
+          <path d="M140 784 L 140 884 L 240 884"/>
+          <path d="M884 784 L 884 884 L 784 884"/>
+        </g>
+      </g>
+    </symbol>
+
+    <!-- 03: Scanner Thin + reticle ticks — camera-viewfinder style -->
+    <symbol id="icon-3" viewBox="0 0 1024 1024">
+      <clipPath id="c3"><rect x="0" y="0" width="1024" height="1024" rx="225" ry="225"/></clipPath>
+      <g clip-path="url(#c3)">
+        <rect width="1024" height="1024" fill="url(#bg-warm)"/>
+        <circle cx="512" cy="540" r="450" fill="url(#halo)"/>
+        <circle cx="512" cy="540" r="310" fill="#FFF8E8" opacity="0.18"/>
+        <use href="#apple-face"/>
+        <g stroke="#FFF8E8" stroke-width="10" stroke-linecap="round" fill="none">
+          <path d="M140 260 L 140 140 L 260 140"/>
+          <line x1="200" y1="140" x2="200" y2="164"/>
+          <line x1="140" y1="200" x2="164" y2="200"/>
+          <path d="M764 140 L 884 140 L 884 260"/>
+          <line x1="824" y1="140" x2="824" y2="164"/>
+          <line x1="884" y1="200" x2="860" y2="200"/>
+          <path d="M140 764 L 140 884 L 260 884"/>
+          <line x1="200" y1="884" x2="200" y2="860"/>
+          <line x1="140" y1="824" x2="164" y2="824"/>
+          <path d="M884 764 L 884 884 L 764 884"/>
+          <line x1="824" y1="884" x2="824" y2="860"/>
+          <line x1="884" y1="824" x2="860" y2="824"/>
+        </g>
+        <g stroke="#FFF8E8" stroke-width="4" stroke-linecap="round" opacity="0.55">
+          <line x1="512" y1="162" x2="512" y2="196"/>
+          <line x1="512" y1="828" x2="512" y2="862"/>
+          <line x1="162" y1="512" x2="196" y2="512"/>
+          <line x1="828" y1="512" x2="862" y2="512"/>
+        </g>
+      </g>
+    </symbol>
+
+    <!-- 04: Scanner Neon — dark crimson bg, glowing white brackets -->
+    <symbol id="icon-4" viewBox="0 0 1024 1024">
+      <clipPath id="c4"><rect x="0" y="0" width="1024" height="1024" rx="225" ry="225"/></clipPath>
+      <g clip-path="url(#c4)">
+        <rect width="1024" height="1024" fill="url(#bg-dark)"/>
+        <circle cx="512" cy="540" r="420" fill="url(#halo)"/>
+        <g>
+          <path d="M508 290 q-6 -36 18 -64 q22 -20 46 -16 q-2 24 -20 46 q-20 22 -44 34 z" fill="#3A2418"/>
+          <path d="M520 288 q56 -84 168 -64 q-12 102 -112 122 q-46 8 -56 -58 z" fill="url(#leaf)"/>
+          <path d="M512 320 C 330 320, 220 450, 220 620 C 220 800, 350 905, 500 905 C 540 905, 575 898, 605 883 C 595 865, 588 840, 588 815 C 588 760, 632 722, 685 722 C 715 722, 740 734, 758 752 C 800 695, 814 630, 814 575 C 814 435, 712 320, 540 320 Z" fill="url(#apple-light)"/>
+          <ellipse cx="380" cy="470" rx="96" ry="148" fill="#FFD3B8" opacity="0.5" transform="rotate(-22 380 470)"/>
+          <ellipse cx="350" cy="458" rx="32" ry="68" fill="#FFF8E8" opacity="0.8" transform="rotate(-22 350 458)"/>
+          <ellipse cx="380" cy="670" rx="48" ry="28" fill="#FF7A5C" opacity="0.6"/>
+          <ellipse cx="640" cy="670" rx="48" ry="28" fill="#FF7A5C" opacity="0.5"/>
+          <path d="M370 590 Q 395 565, 420 590" stroke="#2B1F1A" stroke-width="12" fill="none" stroke-linecap="round"/>
+          <path d="M600 590 Q 625 565, 650 590" stroke="#2B1F1A" stroke-width="12" fill="none" stroke-linecap="round"/>
+          <path d="M470 710 Q 510 730, 545 710" stroke="#2B1F1A" stroke-width="11" fill="none" stroke-linecap="round"/>
+        </g>
+        <g filter="url(#neonGlow)">
+          <g stroke="#FFF8E8" stroke-width="18" stroke-linecap="round" fill="none">
+            <path d="M140 240 L 140 140 L 240 140"/>
+            <path d="M784 140 L 884 140 L 884 240"/>
+            <path d="M140 784 L 140 884 L 240 884"/>
+            <path d="M884 784 L 884 884 L 784 884"/>
+          </g>
+        </g>
+        <g stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" fill="none">
+          <path d="M140 240 L 140 140 L 240 140"/>
+          <path d="M784 140 L 884 140 L 884 240"/>
+          <path d="M140 784 L 140 884 L 240 884"/>
+          <path d="M884 784 L 884 884 L 784 884"/>
+        </g>
+      </g>
+    </symbol>
+
+    <!-- 05: Scanner + Score Ring — brackets outside, ring around apple -->
+    <symbol id="icon-5" viewBox="0 0 1024 1024">
+      <clipPath id="c5"><rect x="0" y="0" width="1024" height="1024" rx="225" ry="225"/></clipPath>
+      <g clip-path="url(#c5)">
+        <rect width="1024" height="1024" fill="url(#bg-warm)"/>
+        <circle cx="512" cy="540" r="450" fill="url(#halo)"/>
+        <circle cx="512" cy="540" r="360" stroke="#FFF8E8" stroke-width="22" fill="none" opacity="0.25"/>
+        <circle cx="512" cy="540" r="360" stroke="url(#ring-grad)" stroke-width="26" fill="none"
+                stroke-linecap="round" stroke-dasharray="1920 2262"
+                transform="rotate(-90 512 540)"/>
+        <g>
+          <path d="M508 322 q-6 -32 14 -54 q20 -18 42 -14 q-2 22 -18 42 q-20 20 -38 26 z" fill="#5C3920"/>
+          <path d="M520 320 q50 -74 154 -58 q-10 94 -104 114 q-42 8 -50 -56 z" fill="url(#leaf)"/>
+          <path d="M512 352 C 352 352, 258 470, 258 628 C 258 790, 376 882, 510 882 C 544 882, 574 876, 600 862 C 592 844, 584 820, 584 796 C 584 744, 622 708, 670 708 C 696 708, 718 720, 734 738 C 770 684, 782 622, 782 568 C 782 436, 684 352, 540 352 Z" fill="url(#apple)"/>
+          <ellipse cx="388" cy="486" rx="78" ry="122" fill="#FFD3B8" opacity="0.55" transform="rotate(-22 388 486)"/>
+          <ellipse cx="362" cy="476" rx="28" ry="58" fill="#FFF8E8" opacity="0.85" transform="rotate(-22 362 476)"/>
+          <ellipse cx="400" cy="668" rx="42" ry="24" fill="#FFB89E" opacity="0.7"/>
+          <ellipse cx="622" cy="668" rx="42" ry="24" fill="#FFB89E" opacity="0.55"/>
+          <path d="M392 594 Q 415 572, 438 594" stroke="#2B1F1A" stroke-width="11" fill="none" stroke-linecap="round"/>
+          <path d="M584 594 Q 607 572, 630 594" stroke="#2B1F1A" stroke-width="11" fill="none" stroke-linecap="round"/>
+          <path d="M478 700 Q 510 716, 544 700" stroke="#2B1F1A" stroke-width="10" fill="none" stroke-linecap="round"/>
+        </g>
+        <g stroke="#FFF8E8" stroke-width="16" stroke-linecap="round" fill="none">
+          <path d="M140 240 L 140 140 L 240 140"/>
+          <path d="M784 140 L 884 140 L 884 240"/>
+          <path d="M140 784 L 140 884 L 240 884"/>
+          <path d="M884 784 L 884 884 L 784 884"/>
+        </g>
+      </g>
+    </symbol>
+
+    <!-- 06: Scanner Dashed + starburst — face-scan-oval vibe -->
+    <symbol id="icon-6" viewBox="0 0 1024 1024">
+      <clipPath id="c6"><rect x="0" y="0" width="1024" height="1024" rx="225" ry="225"/></clipPath>
+      <g clip-path="url(#c6)">
+        <rect width="1024" height="1024" fill="url(#bg-burst)"/>
+        <g transform="translate(512 540)">
+          <g fill="url(#ray)">
+            <polygon points="0,-420 24,-90 -24,-90"/>
+            <polygon points="0,420 24,90 -24,90" transform="rotate(180)"/>
+            <polygon points="0,-420 24,-90 -24,-90" transform="rotate(45)"/>
+            <polygon points="0,-420 24,-90 -24,-90" transform="rotate(-45)"/>
+            <polygon points="0,-420 24,-90 -24,-90" transform="rotate(90)"/>
+            <polygon points="0,-420 24,-90 -24,-90" transform="rotate(-90)"/>
+            <polygon points="0,-420 24,-90 -24,-90" transform="rotate(135)"/>
+            <polygon points="0,-420 24,-90 -24,-90" transform="rotate(-135)"/>
+          </g>
+        </g>
+        <circle cx="512" cy="540" r="290" fill="#FFF8E8" opacity="0.2"/>
+        <g>
+          <path d="M508 310 q-7 -34 16 -58 q22 -20 46 -16 q-2 22 -20 44 q-20 20 -42 30 z" fill="#5C3920"/>
+          <path d="M520 308 q56 -82 168 -64 q-12 100 -112 120 q-46 8 -56 -56 z" fill="url(#leaf)"/>
+          <path d="M512 340 C 350 340, 252 462, 252 612 C 252 772, 376 868, 510 868 C 542 868, 572 862, 596 848 C 588 830, 580 808, 580 782 C 580 730, 620 692, 668 692 C 692 692, 712 700, 728 716 C 766 660, 778 598, 778 552 C 778 432, 686 340, 540 340 Z" fill="url(#apple-light)"/>
+          <ellipse cx="380" cy="474" rx="72" ry="112" fill="#FFD3B8" opacity="0.55" transform="rotate(-25 380 474)"/>
+          <ellipse cx="355" cy="464" rx="26" ry="54" fill="#FFF8E8" opacity="0.85" transform="rotate(-25 355 464)"/>
+          <ellipse cx="396" cy="656" rx="48" ry="28" fill="#FF7A5C" opacity="0.6"/>
+          <ellipse cx="616" cy="656" rx="48" ry="28" fill="#FF7A5C" opacity="0.5"/>
+          <path d="M374 586 Q 399 561, 424 586" stroke="#2B1F1A" stroke-width="12" fill="none" stroke-linecap="round"/>
+          <path d="M600 586 Q 625 561, 650 586" stroke="#2B1F1A" stroke-width="12" fill="none" stroke-linecap="round"/>
+          <path d="M468 700 Q 510 722, 550 700" stroke="#2B1F1A" stroke-width="11" fill="none" stroke-linecap="round"/>
+        </g>
+        <g stroke="#FFF8E8" stroke-width="14" stroke-linecap="round" stroke-dasharray="28 18" fill="none">
+          <path d="M140 250 L 140 140 L 250 140"/>
+          <path d="M774 140 L 884 140 L 884 250"/>
+          <path d="M140 774 L 140 884 L 250 884"/>
+          <path d="M884 774 L 884 884 L 774 884"/>
+        </g>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<header>
+  <h1>Glowbite — Scanner Icon Concepts</h1>
+  <p>All six now use your Glow Aura base with 4-corner scan brackets — matches the face-scan oval in-app. Pick a bracket style below.</p>
+</header>
+
+<div class="grid">
+
+  <div class="card">
+    <span class="tag">01 · Thick Brackets + Sparkles</span>
+    <h2>Scanner Classic</h2>
+    <p class="desc">Thick rounded cream brackets in all 4 corners, plus two side sparkles. Full warmth, clear "I scan stuff" language. Safe + on-brand.</p>
+    <div class="row">
+      <div class="big"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-1"/></svg></div>
+      <div class="stack">
+        <div class="small-row"><div class="small"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-1"/></svg></div><span class="label">Settings size</span></div>
+        <div class="small-row"><div class="tiny"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-1"/></svg></div><span class="label">Spotlight size</span></div>
       </div>
-      <div class="home-mock">
-        <div class="slot"></div><div class="slot active"><img src="01-classic-apple.svg" alt=""></div><div class="slot"></div><div class="slot"></div>
-      </div>
-      <p class="vibe"><strong>Best for:</strong> Mass-market Gen Z appeal. Most likely to make someone tap "install."</p>
     </div>
-
-    <!-- 02 -->
-    <div class="card">
-      <span class="tag">02 · Glow Aura</span>
-      <h2>The Glowing One</h2>
-      <p class="desc">Apple radiating an aura with rays + sparkles — leans hard into "glow." Eyes are blissful arcs (closed). Background has a soft radial gradient that feels like sunshine. Most differentiated from typical food apps.</p>
-      <div class="row">
-        <div class="big"><img src="02-glow-aura.svg" alt=""></div>
-        <div class="stack">
-          <div class="small-row"><div class="small"><img src="02-glow-aura.svg" alt=""></div><span class="label">Settings</span></div>
-          <div class="small-row"><div class="tiny"><img src="02-glow-aura.svg" alt=""></div><span class="label">Spotlight</span></div>
-        </div>
-      </div>
-      <div class="home-mock">
-        <div class="slot"></div><div class="slot"></div><div class="slot active"><img src="02-glow-aura.svg" alt=""></div><div class="slot"></div>
-      </div>
-      <p class="vibe"><strong>Best for:</strong> Owning "glow" as a category word. Most poetic and aspirational.</p>
+    <div class="home-mock">
+      <div class="slot"></div><div class="slot active"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-1"/></svg></div><div class="slot"></div><div class="slot"></div>
     </div>
-
-    <!-- 03 -->
-    <div class="card">
-      <span class="tag">03 · Wink</span>
-      <h2>The Cheeky Bestie</h2>
-      <p class="desc">Apple winking with tongue out. Maximum personality. Reads as "your gossip-y best friend who happens to know skincare." Will have the strongest emotional reaction in screenshots and TikToks.</p>
-      <div class="row">
-        <div class="big"><img src="03-wink-playful.svg" alt=""></div>
-        <div class="stack">
-          <div class="small-row"><div class="small"><img src="03-wink-playful.svg" alt=""></div><span class="label">Settings</span></div>
-          <div class="small-row"><div class="tiny"><img src="03-wink-playful.svg" alt=""></div><span class="label">Spotlight</span></div>
-        </div>
-      </div>
-      <div class="home-mock">
-        <div class="slot active"><img src="03-wink-playful.svg" alt=""></div><div class="slot"></div><div class="slot"></div><div class="slot"></div>
-      </div>
-      <p class="vibe"><strong>Best for:</strong> Standing out on a crowded home screen. High-personality TikTok bait.</p>
-    </div>
-
-    <!-- 04 -->
-    <div class="card">
-      <span class="tag">04 · Bold Minimal</span>
-      <h2>The Aesthetic One</h2>
-      <p class="desc">Cream apple silhouette on solid coral with one bold sparkle. No face. The most "Apple-design-language" / "iOS native aesthetic" of the bunch. Looks premium next to system apps.</p>
-      <div class="row">
-        <div class="big"><img src="04-bold-minimal.svg" alt=""></div>
-        <div class="stack">
-          <div class="small-row"><div class="small"><img src="04-bold-minimal.svg" alt=""></div><span class="label">Settings</span></div>
-          <div class="small-row"><div class="tiny"><img src="04-bold-minimal.svg" alt=""></div><span class="label">Spotlight</span></div>
-        </div>
-      </div>
-      <div class="home-mock">
-        <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot active"><img src="04-bold-minimal.svg" alt=""></div>
-      </div>
-      <p class="vibe"><strong>Best for:</strong> Users who curate aesthetic home screens. Trades warmth for sophistication.</p>
-    </div>
-
-    <!-- 05 -->
-    <div class="card">
-      <span class="tag">05 · Score Ring</span>
-      <h2>Apple in the Glow Ring</h2>
-      <p class="desc">Fuses the two strongest brand assets — the apple and the signature Glow Score ring. Apple sits inside an 85%-filled coral progress ring on a cream background. Most strategic: every time you see the icon you see the product's core mechanic.</p>
-      <div class="row">
-        <div class="big"><img src="05-score-ring.svg" alt=""></div>
-        <div class="stack">
-          <div class="small-row"><div class="small"><img src="05-score-ring.svg" alt=""></div><span class="label">Settings</span></div>
-          <div class="small-row"><div class="tiny"><img src="05-score-ring.svg" alt=""></div><span class="label">Spotlight</span></div>
-        </div>
-      </div>
-      <div class="home-mock">
-        <div class="slot"></div><div class="slot active"><img src="05-score-ring.svg" alt=""></div><div class="slot"></div><div class="slot"></div>
-      </div>
-      <p class="vibe"><strong>Best for:</strong> Telling the product story in one glance. May read busy at very small sizes.</p>
-    </div>
-
-    <!-- 06 -->
-    <div class="card">
-      <span class="tag">06 · Sparkle Burst</span>
-      <h2>The Cosmic Apple</h2>
-      <p class="desc">Apple with a starburst behind it — eyes are sparkles instead of dots. Coral background gradient, halo of light. Most "main character energy" — feels celebratory and rare. Great for launch hype.</p>
-      <div class="row">
-        <div class="big"><img src="06-sparkle-burst.svg" alt=""></div>
-        <div class="stack">
-          <div class="small-row"><div class="small"><img src="06-sparkle-burst.svg" alt=""></div><span class="label">Settings</span></div>
-          <div class="small-row"><div class="tiny"><img src="06-sparkle-burst.svg" alt=""></div><span class="label">Spotlight</span></div>
-        </div>
-      </div>
-      <div class="home-mock">
-        <div class="slot"></div><div class="slot"></div><div class="slot active"><img src="06-sparkle-burst.svg" alt=""></div><div class="slot"></div>
-      </div>
-      <p class="vibe"><strong>Best for:</strong> Launch / hero marketing icon. Could pair with #04 as a seasonal alternate.</p>
-    </div>
-
+    <p class="vibe"><strong>Best for:</strong> Most balanced pick. Brackets are legible even at Spotlight size.</p>
   </div>
 
-  <footer>
-    Tip: tap each icon to view full size. iOS rounds the corners automatically — your icon should be a 1024×1024 square; the system applies the squircle mask.
-  </footer>
+  <div class="card">
+    <span class="tag">02 · Brackets + Light Rays</span>
+    <h2>Scanner Pure</h2>
+    <p class="desc">Cleanest of the set. Thick solid brackets, no sparkles — but subtle radiating light rays around the apple reinforce the "glow" idea. Minimal and premium.</p>
+    <div class="row">
+      <div class="big"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-2"/></svg></div>
+      <div class="stack">
+        <div class="small-row"><div class="small"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-2"/></svg></div><span class="label">Settings size</span></div>
+        <div class="small-row"><div class="tiny"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-2"/></svg></div><span class="label">Spotlight size</span></div>
+      </div>
+    </div>
+    <div class="home-mock">
+      <div class="slot"></div><div class="slot"></div><div class="slot active"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-2"/></svg></div><div class="slot"></div>
+    </div>
+    <p class="vibe"><strong>Best for:</strong> Pure aesthetic. Reads the clearest on a crowded home screen.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">03 · Thin Brackets + Ticks</span>
+    <h2>Camera Viewfinder</h2>
+    <p class="desc">Thinner brackets with tick marks and a center crosshair — like a professional camera reticle. Says "precise AI measurement" more than "warm lifestyle." Geekiest option.</p>
+    <div class="row">
+      <div class="big"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-3"/></svg></div>
+      <div class="stack">
+        <div class="small-row"><div class="small"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-3"/></svg></div><span class="label">Settings size</span></div>
+        <div class="small-row"><div class="tiny"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-3"/></svg></div><span class="label">Spotlight size</span></div>
+      </div>
+    </div>
+    <div class="home-mock">
+      <div class="slot active"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-3"/></svg></div><div class="slot"></div><div class="slot"></div><div class="slot"></div>
+    </div>
+    <p class="vibe"><strong>Best for:</strong> Tech-forward positioning. May lose warmth at tiny sizes.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">04 · Neon Brackets</span>
+    <h2>Scanner Neon</h2>
+    <p class="desc">Dark crimson background with glowing white brackets (blurred + crisp double stroke). Highest contrast. Screams "this is a scanner app" — also the most visually distinct on a home screen.</p>
+    <div class="row">
+      <div class="big"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-4"/></svg></div>
+      <div class="stack">
+        <div class="small-row"><div class="small"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-4"/></svg></div><span class="label">Settings size</span></div>
+        <div class="small-row"><div class="tiny"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-4"/></svg></div><span class="label">Spotlight size</span></div>
+      </div>
+    </div>
+    <div class="home-mock">
+      <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot active"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-4"/></svg></div>
+    </div>
+    <p class="vibe"><strong>Best for:</strong> Maximum standout. Consider a Dark Mode alt pairing with #02.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">05 · Scanner + Glow Ring</span>
+    <h2>Scanner + Score Ring</h2>
+    <p class="desc">Combines brackets with the signature Glow Score ring wrapping the apple. Two brand assets in one. Best at telling the full product story.</p>
+    <div class="row">
+      <div class="big"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-5"/></svg></div>
+      <div class="stack">
+        <div class="small-row"><div class="small"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-5"/></svg></div><span class="label">Settings size</span></div>
+        <div class="small-row"><div class="tiny"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-5"/></svg></div><span class="label">Spotlight size</span></div>
+      </div>
+    </div>
+    <div class="home-mock">
+      <div class="slot"></div><div class="slot active"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-5"/></svg></div><div class="slot"></div><div class="slot"></div>
+    </div>
+    <p class="vibe"><strong>Best for:</strong> Most strategic — teaches the mechanic. Busier at tiny sizes.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">06 · Dashed Brackets + Burst</span>
+    <h2>Face-Scan Vibe</h2>
+    <p class="desc">Dashed brackets (mirrors the in-app face-scan oval) plus a starburst behind the apple. Most "scanning is happening right now" energy. Very on-brand with FaceScanView.</p>
+    <div class="row">
+      <div class="big"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-6"/></svg></div>
+      <div class="stack">
+        <div class="small-row"><div class="small"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-6"/></svg></div><span class="label">Settings size</span></div>
+        <div class="small-row"><div class="tiny"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-6"/></svg></div><span class="label">Spotlight size</span></div>
+      </div>
+    </div>
+    <div class="home-mock">
+      <div class="slot"></div><div class="slot"></div><div class="slot active"><svg class="icon" viewBox="0 0 1024 1024"><use href="#icon-6"/></svg></div><div class="slot"></div>
+    </div>
+    <p class="vibe"><strong>Best for:</strong> Ties icon language to in-app scan UI. Cohesive system feel.</p>
+  </div>
+
+</div>
+
+<footer>
+  All icons are 1024×1024 SVGs. iOS applies the squircle mask automatically — corners shown are the final iOS look.
+</footer>
+
 </body>
 </html>
