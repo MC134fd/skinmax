@@ -6,6 +6,8 @@ struct HomeView: View {
     @State private var viewModel = HomeViewModel()
     @State private var selectedFoodResult: FoodScan?
     @State private var nutrientPage: Int = 0
+    @State private var showWaterLogSheet: Bool = false
+    @State private var waterLogViewModel: WaterLogViewModel?
 
     var onViewFaceResult: (SkinScan) -> Void = { _ in }
     var onViewFoodResult: (FoodScan) -> Void = { _ in }
@@ -41,6 +43,34 @@ struct HomeView: View {
             FoodScanResultView(scan: scan)
                 .environment(dataStore)
         }
+        .sheet(isPresented: $showWaterLogSheet) {
+            if let waterLogViewModel {
+                WaterLogSheet(
+                    viewModel: waterLogViewModel,
+                    onLog: { ml in
+                        viewModel.addWater(ml: ml)
+                    },
+                    onDismiss: {
+                        showWaterLogSheet = false
+                    }
+                )
+                .presentationDetents([.large])
+                .presentationCornerRadius(GlowbiteSpacing.cardCornerRadiusLarge)
+                .presentationDragIndicator(.visible)
+            }
+        }
+    }
+
+    private func openWaterLogSheet() {
+        HapticManager.impact(.light)
+        let ml = viewModel.hydrationState.consumedMl
+        let goal = viewModel.hydrationState.goalMl
+        waterLogViewModel = WaterLogViewModel(
+            alreadyConsumedMl: ml,
+            goalMl: goal,
+            unit: .defaultForLocale
+        )
+        showWaterLogSheet = true
     }
 
     // MARK: - Top Bar
@@ -127,7 +157,8 @@ struct HomeView: View {
                     HydrationTile(
                         consumed: viewModel.hydration.consumed,
                         goal: viewModel.hydration.goal,
-                        glasses: viewModel.hydration.glasses
+                        glasses: viewModel.hydration.glasses,
+                        onTap: openWaterLogSheet
                     )
                 }
                 .frame(width: rightWidth, height: geo.size.height)

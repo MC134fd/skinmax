@@ -197,16 +197,31 @@ final class HomeViewModel {
         }
     }
 
-    // MARK: - Hydration (placeholder)
+    // MARK: - Hydration (in-memory session state)
+    // TODO: Persist to SwiftData and sync with Supabase.
 
-    struct HydrationPlaceholder {
-        let consumed: Double   // liters
-        let goal: Double
-        let glasses: Int       // out of 8
+    struct HydrationState {
+        var consumedMl: Double = 0
+        var goalMl: Double = 2_000
+
+        var consumed: Double { consumedMl / 1_000 }
+        var goal: Double { goalMl / 1_000 }
+        var glasses: Int {
+            let glassMl = 250.0
+            return min(Int((consumedMl / glassMl).rounded(.down)), 8)
+        }
     }
 
-    // TODO: Wire to a real hydration tracking feature later
-    let hydration = HydrationPlaceholder(consumed: 1.2, goal: 2.5, glasses: 3)
+    var hydrationState = HydrationState()
+
+    var hydration: (consumed: Double, goal: Double, glasses: Int) {
+        (hydrationState.consumed, hydrationState.goal, hydrationState.glasses)
+    }
+
+    func addWater(ml: Double) {
+        guard ml > 0 else { return }
+        hydrationState.consumedMl += ml
+    }
 
     // MARK: - Nutrient Traffic Light Zones
 

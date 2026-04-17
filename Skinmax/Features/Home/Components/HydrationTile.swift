@@ -4,8 +4,24 @@ struct HydrationTile: View {
     let consumed: Double
     let goal: Double
     let glasses: Int
+    var onTap: (() -> Void)? = nil
 
     var body: some View {
+        let content = tileContent
+
+        if let onTap {
+            Button {
+                onTap()
+            } label: {
+                content
+            }
+            .buttonStyle(.plain)
+        } else {
+            content
+        }
+    }
+
+    private var tileContent: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("💧 WATER")
                 .font(.gbOverline)
@@ -40,5 +56,6 @@ struct HydrationTile: View {
                 .stroke(GlowbiteColors.hydrationBlue.opacity(0.20), lineWidth: 1)
         )
         .shadow(color: GlowbiteColors.cardShadowColor, radius: 6, x: 0, y: 2)
+        .contentShape(Rectangle())
     }
 }
