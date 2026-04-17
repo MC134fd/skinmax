@@ -11,6 +11,14 @@ struct HomeView: View {
     var onViewFoodResult: (FoodScan) -> Void = { _ in }
     var onScanMeal: () -> Void = {}
 
+    private var shouldShowAnalysisCard: Bool {
+        guard coordinator.isActive else { return false }
+        let analysisDate: Date = coordinator.faceScanResult?.createdAt
+            ?? coordinator.foodScanResult?.createdAt
+            ?? Date()
+        return Calendar.current.isDate(analysisDate, inSameDayAs: viewModel.selectedDate)
+    }
+
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 18) {
@@ -40,7 +48,7 @@ struct HomeView: View {
     private var topBar: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text(Date.now.formatted(.dateTime.weekday(.wide).month(.abbreviated).day()))
+                Text(viewModel.selectedDate.formatted(.dateTime.weekday(.wide).month(.abbreviated).day()))
                     .font(.gbCaption)
                     .foregroundStyle(GlowbiteColors.lightTaupe)
 
@@ -265,7 +273,7 @@ struct HomeView: View {
                 .tracking(2.0)
                 .foregroundStyle(GlowbiteColors.lightTaupe)
 
-            if coordinator.isActive {
+            if shouldShowAnalysisCard {
                 AnalysisHomeCard(
                     coordinator: coordinator,
                     onViewFaceResult: onViewFaceResult,
@@ -295,7 +303,7 @@ struct HomeView: View {
                 }
             }
         }
-        .animation(.spring(response: 0.4, dampingFraction: 0.75), value: coordinator.isActive)
+        .animation(.spring(response: 0.4, dampingFraction: 0.75), value: shouldShowAnalysisCard)
     }
 
     private var mealsEmptyState: some View {
