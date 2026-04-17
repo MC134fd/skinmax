@@ -8,9 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0103CA69767DC34AFA987CBF /* Nunito-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1C91D6F3C5059158E53AE742 /* Nunito-SemiBold.ttf */; };
-		AC11FF00CCCC000100000001 /* Nunito-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC11FF00CCCC000200000001 /* Nunito-ExtraBold.ttf */; };
-		AC11FF00DDDD000100000001 /* Nunito-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC11FF00DDDD000200000001 /* Nunito-Black.ttf */; };
-		8077974BF65C4C84BEC03267 /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = AE3CA0E406A749B99E5FBA21 /* Secrets.plist */; };
 		13F632E415EF817E2E220577 /* Nunito-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2D87C9F11F459C410B8D0A0E /* Nunito-Medium.ttf */; };
 		16A45C326274D00833C7D30E /* FoodLogSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C012FA3DE75DD4EC6F889FA4 /* FoodLogSheet.swift */; };
 		18526CAFEF5EB56A1DDCC2A1 /* GlowbiteComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FF0AC04361F74E7E940E898 /* GlowbiteComponents.swift */; };
@@ -27,18 +24,28 @@
 		66CA29CAF0CAB7F5DB3A3C20 /* FaceScanResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69524F1357C461D6FED5EBA8 /* FaceScanResultView.swift */; };
 		69770D99BD181102D17E46E6 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF94BD712BEA9A2282A01ED5 /* MockData.swift */; };
 		6FD7B2D204933866FC7A14E3 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60444437FE716295A6FBAB68 /* ImagePicker.swift */; };
-
+		8077974BF65C4C84BEC03267 /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = AE3CA0E406A749B99E5FBA21 /* Secrets.plist */; };
 		82C161CE3C61AB03169BD924 /* InsightEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 071559B623555A0978937FBE /* InsightEngine.swift */; };
 		9AECF514DB6ACCD7F92C5746 /* Nunito-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BFE30112AD5A47636A9E6360 /* Nunito-Bold.ttf */; };
 		9BE153E2C646F06C4EDEF946 /* NotificationSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B3C4DB70E7D45D6240FF6F2 /* NotificationSettingsView.swift */; };
 		9E6901CCE6AC4486460E9CB8 /* Nunito-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 687A18A53F4E50D8C19653BF /* Nunito-Regular.ttf */; };
 		9EFFDF60469A01AF2A25DF6B /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E461395F6A57AD71DD3C33E6 /* HapticManager.swift */; };
-		FCC9C2804B7F428D9EA7744B /* GlowbiteLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241BBF6DF843429F8D5F9F7C /* GlowbiteLog.swift */; };
 		9F4386F4AA40096EC9420AA3 /* FoodScanResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6AD93ABE52DFE5AF5A135AC /* FoodScanResultView.swift */; };
+		A1B2C3D4E5F60001B0000001 /* CalorieRingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001A0000001 /* CalorieRingCard.swift */; };
+		A1B2C3D4E5F60001B0000002 /* GlowScoreTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001A0000002 /* GlowScoreTile.swift */; };
+		A1B2C3D4E5F60001B0000003 /* HydrationTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001A0000003 /* HydrationTile.swift */; };
+		A1B2C3D4E5F60001B0000004 /* SkinNutrientCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001A0000004 /* SkinNutrientCard.swift */; };
+		A1B2C3D4E5F60001B0000005 /* MealRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001A0000005 /* MealRow.swift */; };
 		A5EB32042878CE05283EA447 /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9609A8F232A1CDC4D15E713 /* CameraPreviewView.swift */; };
 		A6A578429E8524656A3E4008 /* SkinAnalysisService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D939DFD2FCB97DAC14A877D /* SkinAnalysisService.swift */; };
 		A7EF358DD5FA1A0B9ABBCD45 /* GlowbiteSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0DD8F2FE49B6697BE3B793 /* GlowbiteSpacing.swift */; };
 		A8226DB2BC35CF531FB1F2BD /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7623671B5F6783E85000295 /* AccountView.swift */; };
+		AC11FF00AAAA000100000001 /* ActivityCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC11FF00AAAA000200000001 /* ActivityCards.swift */; };
+		AC11FF00BBBB000100000001 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC11FF00BBBB000200000001 /* Typography.swift */; };
+		AC11FF00CCCC000100000001 /* Nunito-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC11FF00CCCC000200000001 /* Nunito-ExtraBold.ttf */; };
+		AC11FF00DDDD000100000001 /* Nunito-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC11FF00DDDD000200000001 /* Nunito-Black.ttf */; };
+		AC11FF00EEEE000200000002 /* AppearanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC11FF00EEEE000200000001 /* AppearanceView.swift */; };
+		AC11FF00FFFF000200000002 /* AppIconManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC11FF00FFFF000200000001 /* AppIconManager.swift */; };
 		AC72180E5342A7EAE3B6AAF6 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A028B16977384E6719862F4D /* CameraManager.swift */; };
 		ACE04C0C03288E45B626AC8C /* DataSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944584F52D956C7269EF86AA /* DataSettingsView.swift */; };
 		BC110F0C6404E35177DD3185 /* GlowbiteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDF88F48200F3FEBEA2C1F9 /* GlowbiteApp.swift */; };
@@ -46,12 +53,10 @@
 		C0E43B907000A71C5AA6DB7B /* FoodRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B1A4F14B83115BE86BB147 /* FoodRowView.swift */; };
 		C2C794AE38363227B6DDD0EE /* LocalCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1188B1A9C8C2C5DCE2C386F /* LocalCache.swift */; };
 		C42740E900A81FD5DD74E2DD /* ProgressView_.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088143F0EF0A7F3A18D4B0F7 /* ProgressView_.swift */; };
-		AC11FF00AAAA000100000001 /* ActivityCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC11FF00AAAA000200000001 /* ActivityCards.swift */; };
 		C918B211140CDB2A14B6C15F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B148AF975ECA6186AA7F85 /* HomeView.swift */; };
 		CA8DC05665E90541DCD25966 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = AA9F624F542675F07337C662 /* Supabase */; };
 		CAED5FEE4D41BAC59C27A4F1 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E26244F53177526D6C89B9 /* AboutView.swift */; };
 		CFA062AE218408C828A85370 /* SkinModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F5F523CFDC16E5B6C6780 /* SkinModels.swift */; };
-		AC11FF00BBBB000100000001 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC11FF00BBBB000200000001 /* Typography.swift */; };
 		D4175D2B5F704DC445268345 /* GlowbiteColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEAEBDB007C6722C5F580F73 /* GlowbiteColors.swift */; };
 		D4D52C3A0F78D79916D63CD9 /* AppStoreMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839D4C1B23EF45B6040248C8 /* AppStoreMetadata.swift */; };
 		D9644A4D0F3CA8EC21C0253E /* SkinDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54411EEA23C91979EEC4796A /* SkinDetailView.swift */; };
@@ -61,11 +66,7 @@
 		E6EBB9FD527115D459030316 /* FaceScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E68B8A2590204BE7F1BE953 /* FaceScanView.swift */; };
 		F14226768E91B9B4FE4740AB /* Config.example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28515B96C7709727306F9B3E /* Config.example.swift */; };
 		F48BB771AF1F5DA1C87A1BAD /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF50994FDF6BCB906DE8ED8 /* HomeViewModel.swift */; };
-		A1B2C3D4E5F60001B0000001 /* CalorieRingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001A0000001 /* CalorieRingCard.swift */; };
-		A1B2C3D4E5F60001B0000002 /* GlowScoreTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001A0000002 /* GlowScoreTile.swift */; };
-		A1B2C3D4E5F60001B0000003 /* HydrationTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001A0000003 /* HydrationTile.swift */; };
-		A1B2C3D4E5F60001B0000004 /* SkinNutrientCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001A0000004 /* SkinNutrientCard.swift */; };
-		A1B2C3D4E5F60001B0000005 /* MealRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001A0000005 /* MealRow.swift */; };
+		FCC9C2804B7F428D9EA7744B /* GlowbiteLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241BBF6DF843429F8D5F9F7C /* GlowbiteLog.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,21 +75,19 @@
 		0DA4111435F1A7F5B55A8626 /* ScanHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanHistoryView.swift; sourceTree = "<group>"; };
 		11FAC2EF0B4C651CE05CC52C /* AnalysisCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisCoordinator.swift; sourceTree = "<group>"; };
 		1C91D6F3C5059158E53AE742 /* Nunito-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-SemiBold.ttf"; sourceTree = "<group>"; };
-		AC11FF00CCCC000200000001 /* Nunito-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-ExtraBold.ttf"; sourceTree = "<group>"; };
-		AC11FF00DDDD000200000001 /* Nunito-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Black.ttf"; sourceTree = "<group>"; };
 		1E68B8A2590204BE7F1BE953 /* FaceScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceScanView.swift; sourceTree = "<group>"; };
 		1F0DD8F2FE49B6697BE3B793 /* GlowbiteSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowbiteSpacing.swift; sourceTree = "<group>"; };
 		1F3F5F523CFDC16E5B6C6780 /* SkinModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinModels.swift; sourceTree = "<group>"; };
 		1FF0AC04361F74E7E940E898 /* GlowbiteComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowbiteComponents.swift; sourceTree = "<group>"; };
 		22B148AF975ECA6186AA7F85 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		AC11FF00AAAA000200000001 /* ActivityCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCards.swift; sourceTree = "<group>"; };
 		2322698B4CE43808BF519A13 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		241BBF6DF843429F8D5F9F7C /* GlowbiteLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowbiteLog.swift; sourceTree = "<group>"; };
 		24E26244F53177526D6C89B9 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		28515B96C7709727306F9B3E /* Config.example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.example.swift; sourceTree = "<group>"; };
 		2AF50994FDF6BCB906DE8ED8 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		2D87C9F11F459C410B8D0A0E /* Nunito-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Medium.ttf"; sourceTree = "<group>"; };
 		3BBB665B5506616422E8D8E8 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
-		40D688BDD9AFD4649F76A205 /* Skinmax.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Skinmax.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		40D688BDD9AFD4649F76A205 /* Skinmax.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Skinmax.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54411EEA23C91979EEC4796A /* SkinDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinDetailView.swift; sourceTree = "<group>"; };
 		60444437FE716295A6FBAB68 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		687A18A53F4E50D8C19653BF /* Nunito-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Regular.ttf"; sourceTree = "<group>"; };
@@ -103,31 +102,34 @@
 		968B3542EFA9211278FEDF5F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9B3C4DB70E7D45D6240FF6F2 /* NotificationSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsView.swift; sourceTree = "<group>"; };
 		A028B16977384E6719862F4D /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
-
-		AE36B60B9F8806215B9D59E8 /* FoodAnalysisService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalysisService.swift; sourceTree = "<group>"; };
-		B798A683F2075CD0B72EB980 /* AnalysisHomeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisHomeCard.swift; sourceTree = "<group>"; };
-		B9609A8F232A1CDC4D15E713 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
-		BFE30112AD5A47636A9E6360 /* Nunito-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Bold.ttf"; sourceTree = "<group>"; };
-		C012FA3DE75DD4EC6F889FA4 /* FoodLogSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLogSheet.swift; sourceTree = "<group>"; };
-		CEAEBDB007C6722C5F580F73 /* GlowbiteColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowbiteColors.swift; sourceTree = "<group>"; };
-		AC11FF00BBBB000200000001 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
-		DF45D3C22D5A27B1B00ABDA2 /* FoodLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLogViewModel.swift; sourceTree = "<group>"; };
-		DF46C6DFAD8C399295A4F5FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		AE3CA0E406A749B99E5FBA21 /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
-		DF94BD712BEA9A2282A01ED5 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
-		E1188B1A9C8C2C5DCE2C386F /* LocalCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCache.swift; sourceTree = "<group>"; };
-		E461395F6A57AD71DD3C33E6 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
-		241BBF6DF843429F8D5F9F7C /* GlowbiteLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowbiteLog.swift; sourceTree = "<group>"; };
-		E6AD93ABE52DFE5AF5A135AC /* FoodScanResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodScanResultView.swift; sourceTree = "<group>"; };
-		EDDF88F48200F3FEBEA2C1F9 /* GlowbiteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowbiteApp.swift; sourceTree = "<group>"; };
-		F2B1A4F14B83115BE86BB147 /* FoodRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodRowView.swift; sourceTree = "<group>"; };
-		F758F2CF96DBEB782C5D7EAD /* FoodLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLogView.swift; sourceTree = "<group>"; };
-		F7623671B5F6783E85000295 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F60001A0000001 /* CalorieRingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieRingCard.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F60001A0000002 /* GlowScoreTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowScoreTile.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F60001A0000003 /* HydrationTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HydrationTile.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F60001A0000004 /* SkinNutrientCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinNutrientCard.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F60001A0000005 /* MealRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealRow.swift; sourceTree = "<group>"; };
+		AC11FF00AAAA000200000001 /* ActivityCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCards.swift; sourceTree = "<group>"; };
+		AC11FF00BBBB000200000001 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
+		AC11FF00CCCC000200000001 /* Nunito-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-ExtraBold.ttf"; sourceTree = "<group>"; };
+		AC11FF00DDDD000200000001 /* Nunito-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Black.ttf"; sourceTree = "<group>"; };
+		AC11FF00EEEE000200000001 /* AppearanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceView.swift; sourceTree = "<group>"; };
+		AC11FF00FFFF000200000001 /* AppIconManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconManager.swift; sourceTree = "<group>"; };
+		AE36B60B9F8806215B9D59E8 /* FoodAnalysisService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAnalysisService.swift; sourceTree = "<group>"; };
+		AE3CA0E406A749B99E5FBA21 /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
+		B798A683F2075CD0B72EB980 /* AnalysisHomeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisHomeCard.swift; sourceTree = "<group>"; };
+		B9609A8F232A1CDC4D15E713 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
+		BFE30112AD5A47636A9E6360 /* Nunito-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Bold.ttf"; sourceTree = "<group>"; };
+		C012FA3DE75DD4EC6F889FA4 /* FoodLogSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLogSheet.swift; sourceTree = "<group>"; };
+		CEAEBDB007C6722C5F580F73 /* GlowbiteColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowbiteColors.swift; sourceTree = "<group>"; };
+		DF45D3C22D5A27B1B00ABDA2 /* FoodLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLogViewModel.swift; sourceTree = "<group>"; };
+		DF46C6DFAD8C399295A4F5FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		DF94BD712BEA9A2282A01ED5 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
+		E1188B1A9C8C2C5DCE2C386F /* LocalCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCache.swift; sourceTree = "<group>"; };
+		E461395F6A57AD71DD3C33E6 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
+		E6AD93ABE52DFE5AF5A135AC /* FoodScanResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodScanResultView.swift; sourceTree = "<group>"; };
+		EDDF88F48200F3FEBEA2C1F9 /* GlowbiteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowbiteApp.swift; sourceTree = "<group>"; };
+		F2B1A4F14B83115BE86BB147 /* FoodRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodRowView.swift; sourceTree = "<group>"; };
+		F758F2CF96DBEB782C5D7EAD /* FoodLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLogView.swift; sourceTree = "<group>"; };
+		F7623671B5F6783E85000295 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +174,7 @@
 			children = (
 				24E26244F53177526D6C89B9 /* AboutView.swift */,
 				F7623671B5F6783E85000295 /* AccountView.swift */,
+				AC11FF00EEEE000200000001 /* AppearanceView.swift */,
 				944584F52D956C7269EF86AA /* DataSettingsView.swift */,
 				9B3C4DB70E7D45D6240FF6F2 /* NotificationSettingsView.swift */,
 				0DA4111435F1A7F5B55A8626 /* ScanHistoryView.swift */,
@@ -189,18 +192,6 @@
 				2AF50994FDF6BCB906DE8ED8 /* HomeViewModel.swift */,
 			);
 			path = Home;
-			sourceTree = "<group>";
-		};
-		A1B2C3D4E5F60001C0000001 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				A1B2C3D4E5F60001A0000001 /* CalorieRingCard.swift */,
-				A1B2C3D4E5F60001A0000002 /* GlowScoreTile.swift */,
-				A1B2C3D4E5F60001A0000003 /* HydrationTile.swift */,
-				A1B2C3D4E5F60001A0000005 /* MealRow.swift */,
-				A1B2C3D4E5F60001A0000004 /* SkinNutrientCard.swift */,
-			);
-			path = Components;
 			sourceTree = "<group>";
 		};
 		455DAC3CF028B99CFFD33D25 /* Skinmax */ = {
@@ -270,6 +261,18 @@
 			path = Trends;
 			sourceTree = "<group>";
 		};
+		A1B2C3D4E5F60001C0000001 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F60001A0000001 /* CalorieRingCard.swift */,
+				A1B2C3D4E5F60001A0000002 /* GlowScoreTile.swift */,
+				A1B2C3D4E5F60001A0000003 /* HydrationTile.swift */,
+				A1B2C3D4E5F60001A0000005 /* MealRow.swift */,
+				A1B2C3D4E5F60001A0000004 /* SkinNutrientCard.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		B82B7AF8B88B3B56724CCF87 /* Analytics */ = {
 			isa = PBXGroup;
 			children = (
@@ -282,6 +285,7 @@
 			isa = PBXGroup;
 			children = (
 				11FAC2EF0B4C651CE05CC52C /* AnalysisCoordinator.swift */,
+				AC11FF00FFFF000200000001 /* AppIconManager.swift */,
 				A028B16977384E6719862F4D /* CameraManager.swift */,
 				28515B96C7709727306F9B3E /* Config.example.swift */,
 				2322698B4CE43808BF519A13 /* Config.swift */,
@@ -296,7 +300,6 @@
 			isa = PBXGroup;
 			children = (
 				C012FA3DE75DD4EC6F889FA4 /* FoodLogSheet.swift */,
-
 				F758F2CF96DBEB782C5D7EAD /* FoodLogView.swift */,
 				DF45D3C22D5A27B1B00ABDA2 /* FoodLogViewModel.swift */,
 				F2B1A4F14B83115BE86BB147 /* FoodRowView.swift */,
@@ -399,7 +402,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1500;
+				LastUpgradeCheck = 2640;
 				TargetAttributes = {
 					3B8263276AD3AB57A3A1056F = {
 						DevelopmentTeam = 6G9QKGZ3ZQ;
@@ -455,6 +458,8 @@
 			files = (
 				CAED5FEE4D41BAC59C27A4F1 /* AboutView.swift in Sources */,
 				A8226DB2BC35CF531FB1F2BD /* AccountView.swift in Sources */,
+				AC11FF00EEEE000200000002 /* AppearanceView.swift in Sources */,
+				AC11FF00FFFF000200000002 /* AppIconManager.swift in Sources */,
 				537CF4CA6CDBD1FDB47B35F1 /* AnalysisCoordinator.swift in Sources */,
 				26E2327AF0850BC97B7EC21A /* AnalysisHomeCard.swift in Sources */,
 				32243F2CD354716E2C3B773D /* AnalyticsContainerView.swift in Sources */,
@@ -471,7 +476,6 @@
 				C095671A41F2FBA97F5E67FB /* FaceScanViewModel.swift in Sources */,
 				5EF83ED54BBCCD0785E5E6EC /* FoodAnalysisService.swift in Sources */,
 				16A45C326274D00833C7D30E /* FoodLogSheet.swift in Sources */,
-
 				1BA73256C51F0077A202FC41 /* FoodLogView.swift in Sources */,
 				5E0F9D46E2E85FE7007973D2 /* FoodLogViewModel.swift in Sources */,
 				C0E43B907000A71C5AA6DB7B /* FoodRowView.swift in Sources */,
@@ -543,8 +547,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 6G9QKGZ3ZQ;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -568,6 +574,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.9;
@@ -610,8 +617,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 6G9QKGZ3ZQ;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -628,6 +637,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.9;
@@ -642,7 +652,6 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6G9QKGZ3ZQ;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Skinmax/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Glowbite;
@@ -664,7 +673,6 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6G9QKGZ3ZQ;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Skinmax/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Glowbite;

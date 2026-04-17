@@ -58,5 +58,10 @@ struct CalorieRingCard: View {
                 animatedProgress = progress
             }
         }
+        .onChange(of: progress) { _, newValue in
+            withAnimation(.spring(response: 0.5, dampingFraction: 0.75)) {
+                animatedProgress = newValue
+            }
+        }
     }
 }
