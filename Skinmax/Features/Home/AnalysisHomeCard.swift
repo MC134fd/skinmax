@@ -18,10 +18,22 @@ struct AnalysisHomeCard: View {
         return false
     }
 
+    private var completedFoodPhoto: UIImage? {
+        guard isComplete,
+              coordinator.kind == .food,
+              let data = coordinator.foodScanResult?.photoData else { return nil }
+        return UIImage(data: data)
+    }
+
     var body: some View {
         HStack(spacing: 14) {
-            progressRing
-                .frame(width: 64, height: 64)
+            if let photo = completedFoodPhoto {
+                foodPhotoThumbnail(photo)
+                    .frame(width: 64, height: 64)
+            } else {
+                progressRing
+                    .frame(width: 64, height: 64)
+            }
 
             VStack(alignment: .leading, spacing: 6) {
                 if isComplete {
@@ -40,6 +52,38 @@ struct AnalysisHomeCard: View {
         .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
         .onAppear {
             startPulse()
+        }
+    }
+
+    // MARK: - Food Photo Thumbnail
+
+    private func foodPhotoThumbnail(_ image: UIImage) -> some View {
+        let score = coordinator.foodScanResult?.skinImpactScore ?? 5
+        let tint: Color = {
+            switch score {
+            case 7...10: return GlowbiteColors.greenGood
+            case 4..<7: return GlowbiteColors.amberFair
+            default: return GlowbiteColors.redAlert
+            }
+        }()
+
+        return ZStack(alignment: .bottomTrailing) {
+            Image(uiImage: image)
+                .resizable()
+                .scaledToFill()
+                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        .stroke(tint.opacity(0.55), lineWidth: 2)
+                )
+
+            Image(systemName: "checkmark")
+                .font(.system(size: 10, weight: .bold))
+                .foregroundStyle(.white)
+                .frame(width: 20, height: 20)
+                .background(tint, in: Circle())
+                .overlay(Circle().stroke(GlowbiteColors.white, lineWidth: 2))
+                .offset(x: 4, y: 4)
         }
     }
 

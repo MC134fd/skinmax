@@ -57,7 +57,7 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
                     ["type": "text", "text": userText],
                     ["type": "image_url", "image_url": [
                         "url": "data:image/jpeg;base64,\(base64Image)",
-                        "detail": mode == .label ? "high" : "low"
+                        "detail": mode == .barcode ? "low" : "high"
                     ]]
                 ] as [Any]]
             ],
@@ -211,7 +211,7 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
             sodium: max(0, sodium),
             benefits: benefits,
             skinEffects: skinEffects,
-            photoData: nil,
+            photoData: imageData,
             aiTip: aiTip
         )
 
@@ -247,33 +247,56 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
     }
 
     private static let commonScoringGuide = """
+    ACCURACY RULES — follow these exactly:
+    1. Base every number on what is actually visible (or on the literal label text for label mode). Do NOT default to a canonical recipe.
+    2. Estimate portion from visual cues: plate/bowl size, utensil, hand, packaging. If the portion looks small (≈0.5 serving), scale calories and macros DOWN. If it looks large (≈1.5–2 servings), scale UP.
+    3. Only list ingredients you can actually see or that are clearly implied by the dish. Never invent toppings, sauces, or sides.
+    4. If you cannot identify the food with reasonable confidence, return food_name = "Unclear food" with conservative neutral values (score ~5, calories ~300) rather than guessing.
+    5. skin_impact_score must be a decimal with ONE meaningful digit (e.g. 6.5, 3.0, 8.5) — not always round numbers.
+
     Scoring guide for skin_impact_score (1-10):
-      9-10: Superfoods for skin (salmon, avocado, berries, leafy greens, nuts)
-      7-8: Good for skin (eggs, sweet potato, olive oil, yogurt, whole grains)
-      5-6: Neutral (chicken breast, rice, pasta, bread, most fruits)
-      3-4: Mildly bad (fried foods, white sugar, processed snacks)
-      1-2: Bad for skin (candy, soda, alcohol, excessive dairy, fast food)
+      9-10: Superfoods for skin (salmon, avocado, berries, leafy greens, nuts, plain greek yogurt)
+      7-8: Good for skin (eggs, sweet potato, olive oil, whole grains, legumes, oily fish)
+      5-6: Neutral (chicken breast, white rice, pasta, bread, most fruits, lean meat)
+      3-4: Mildly bad (fried foods, refined sugar, most packaged snacks, sweetened dairy)
+      1-2: Bad for skin (candy, soda, alcohol, fast food, deep-fried foods, energy drinks)
 
     For skin_effects, use these metric_type values only: hydration, acne, dark_spots, redness, texture, pores, wrinkles
     For direction, use only: improved, worsened
 
-    IMPORTANT nutrition fields:
+    NUTRITION FIELD UNITS:
     - fiber: grams of dietary fiber
     - sugar: grams of total sugar (added + natural)
     - sodium: in GRAMS (not milligrams). E.g., 1500mg = 1.5g. A typical meal has 0.3-1.5g sodium.
 
-    Always provide at least 2 benefits and 2 skin_effects. Return ONLY valid JSON, no markdown.
+    benefits (ALWAYS 2-4 items) — each must describe a CONCRETE property of THIS specific food and how it affects THIS user's skin. No generic "protein is good for you" statements. If the food scored below 5, these items should describe what is bad about it (e.g., "High added sugar (18g) can spike insulin and trigger breakouts").
+
+    skin_effects (ALWAYS 2-4 items) — must line up with the score direction. Low score → mostly "worsened". High score → mostly "improved".
+
+    ai_tip (REQUIRED) — one short sentence (max 22 words) that DIRECTLY references this food and is CONSISTENT with the score and benefits you just listed:
+      • Score ≥ 7: celebrate the specific win (e.g. "Love the omega-3s from the salmon — great anti-inflammatory pick ✨").
+      • Score 4-6: suggest ONE concrete upgrade or pairing (e.g. "Add a side of berries to offset the refined carbs 🫐").
+      • Score ≤ 3: gently call out the downside and suggest a swap (e.g. "That sugar hit can trigger breakouts — try sparkling water next time 💫").
+      DO NOT give generic advice like "eat more protein" or "drink water" that is unrelated to THIS food.
+
+    Return ONLY valid JSON, no markdown.
     """
 
     private static func photoPrompt(userFoodName: String) -> String {
         """
-        You are a nutrition and skin health expert. The user has taken a photo of their meal and identified it as "\(userFoodName)".
+        You are a nutrition and skin health expert. The user described their meal as "\(userFoodName)" and attached a photo.
 
-        Analyze this food image and provide a detailed assessment of its impact on skin health.
+        TRUST THE PHOTO, NOT THE LABEL. If what you see in the photo differs from the user's description, use the photo. If the photo is unclear, say so — do not invent details.
 
-        Return ONLY valid JSON in this exact format:
+        Your job:
+        1. Identify exactly what is on the plate, including visible sauces, oils, toppings, sides, and cooking method (grilled / fried / raw / etc.).
+        2. Estimate the portion from visual cues (plate size, utensil, hand, packaging). State it implicitly through the calorie/macro numbers.
+        3. Compute nutrition FOR THE VISIBLE PORTION, not for a standard recipe.
+        4. Score the food for skin health and produce a tip that matches the score.
+
+        Return ONLY valid JSON in this exact format (no markdown):
         {
-          "food_name": "Confirmed or corrected food name",
+          "food_name": "Concrete name of what is on the plate (e.g. 'Grilled salmon with quinoa and broccoli')",
           "skin_impact_score": 7.5,
           "calories": 480,
           "protein": 35.0,
@@ -290,22 +313,21 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
         }
 
         \(commonScoringGuide)
-
-        Be accurate with all nutrition estimates based on the photo and portion size. If the food photo doesn't match the name, use what you see in the photo.
         """
     }
 
     private static func barcodePrompt() -> String {
         """
-        You are a nutrition and skin health expert. The user has photographed a barcode on a packaged food product.
+        You are a nutrition and skin health expert. The user photographed a barcode on a packaged food product.
 
-        Step 1: Read the barcode digits if they are legible in the image.
-        Step 2: Identify the product from the barcode, the packaging, or any visible branding.
-        Step 3: Estimate typical nutrition values per serving for that product and assess its impact on skin health.
+        Step 1: Read the barcode digits EXACTLY as they appear (8-13 digits). Do not guess missing digits.
+        Step 2: Identify the product from the barcode, packaging colors, or visible branding/text. Include the brand name.
+        Step 3: Provide nutrition values PER SINGLE SERVING for that specific product. Use the typical on-pack values for that SKU, not a generic category average.
+        Step 4: Score the product for skin health and write a tip that matches.
 
-        Return ONLY valid JSON in this exact format:
+        Return ONLY valid JSON in this exact format (no markdown):
         {
-          "food_name": "Confirmed product name (include brand if visible)",
+          "food_name": "Brand + product name (e.g. 'Coca-Cola Classic 330ml')",
           "barcode": "8-13 digit UPC/EAN string, or empty string if unreadable",
           "skin_impact_score": 4.0,
           "calories": 180,
@@ -324,19 +346,22 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
 
         \(commonScoringGuide)
 
-        If the barcode is unreadable AND the packaging gives no product hint, set food_name to "Packaged product" and estimate typical packaged-snack values with a skin_impact_score of 4.
+        If the barcode is unreadable AND the packaging gives no product hint, set food_name to "Unclear packaged product", barcode to "", skin_impact_score to 5.0, and keep all nutrition values conservative and low-confidence.
         """
     }
 
     private static func labelPrompt() -> String {
         """
-        You are a nutrition and skin health expert. The user has photographed the nutrition facts label on a packaged food.
+        You are a nutrition and skin health expert. The user photographed the nutrition facts label on a packaged food.
 
-        Step 1: Read the label's nutrition values carefully — pay attention to serving size and units (mg vs g).
-        Step 2: Identify the product name from the label or packaging.
-        Step 3: Using those exact nutrition values, assess the product's impact on skin health.
+        STRICT LABEL-READING RULES:
+        1. Transcribe the numbers literally from the label. Do NOT substitute category averages.
+        2. Pay attention to the SERVING SIZE printed on the label. Return nutrition values PER ONE SERVING as shown.
+        3. Convert units: sodium must be in GRAMS (divide mg by 1000). If the label shows "Sodium 450mg" return 0.45.
+        4. If a number is unreadable or cut off, set it to 0 rather than inventing a value.
+        5. Identify the product name from the label or surrounding packaging. If you can't read a brand name, use the product type (e.g. "Oat crackers").
 
-        Return ONLY valid JSON in this exact format:
+        Return ONLY valid JSON in this exact format (no markdown):
         {
           "food_name": "Product name from the label",
           "skin_impact_score": 6.0,
@@ -355,8 +380,6 @@ final class FoodAnalysisService: FoodAnalysisServiceProtocol {
         }
 
         \(commonScoringGuide)
-
-        Use the exact numeric values from the label — do not estimate when the label has the answer. Convert milligrams to grams for sodium.
         """
     }
 
