@@ -11,6 +11,8 @@ struct SkinNutrientCard: View {
     let barColor: Color
     let progress: Double
 
+    @State private var animatedProgress: Double = 0
+
     var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -28,10 +30,9 @@ struct SkinNutrientCard: View {
                     .stroke(signatureColor.opacity(0.15), lineWidth: 5.5)
 
                 Circle()
-                    .trim(from: 0, to: min(progress, 1.0))
+                    .trim(from: 0, to: min(animatedProgress, 1.0))
                     .stroke(barColor, style: StrokeStyle(lineWidth: 5.5, lineCap: .round))
                     .rotationEffect(.degrees(-90))
-                    .animation(.easeOut(duration: 0.6), value: progress)
 
                 VStack(spacing: 1) {
                     Text(remainingWithUnit)
@@ -47,6 +48,16 @@ struct SkinNutrientCard: View {
                 .padding(.horizontal, 6)
             }
             .frame(width: 72, height: 72)
+            .onAppear {
+                withAnimation(.easeOut(duration: 0.7)) {
+                    animatedProgress = progress
+                }
+            }
+            .onChange(of: progress) { _, newValue in
+                withAnimation(.easeOut(duration: 0.5)) {
+                    animatedProgress = newValue
+                }
+            }
 
             Spacer()
 
