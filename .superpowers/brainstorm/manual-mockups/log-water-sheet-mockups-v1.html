@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skinmax Log Water Sheet Mockups</title>
+  <style>
+    :root {
+      --coral: #FF7A5C;
+      --coral-soft: #FF9B7D;
+      --peach: #FFB89E;
+      --cream: #FAF6F2;
+      --cream-soft: #FFD3B8;
+      --butter: #FFF8E8;
+      --ink: #2B1F1A;
+      --brown: #4B3D36;
+      --taupe: #9B8C85;
+      --taupe-light: #C8BCB4;
+      --tan: #F0E8E4;
+      --white: #FFFFFF;
+      --sky: #81D4FA;
+      --sky-deep: #4FC3F7;
+      --sky-bg: #E6F6FD;
+      --green: #66BB6A;
+      --amber: #FFB74D;
+      --red: #E57373;
+      --shadow: rgba(255, 122, 92, 0.16);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #f2fbff 0%, var(--cream) 55%, #fff 100%);
+      color: var(--ink);
+    }
+
+    .wrap {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 28px 20px 48px;
+    }
+
+    .hero {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 30px;
+      letter-spacing: -0.4px;
+    }
+
+    .intro {
+      margin: 10px 0 0;
+      color: var(--brown);
+      font-size: 15px;
+      max-width: 820px;
+    }
+
+    .locale {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px;
+      border-radius: 100px;
+      background: #fff;
+      border: 1px solid rgba(43,31,26,0.08);
+      box-shadow: 0 6px 14px rgba(43,31,26,0.06);
+    }
+
+    .locale button {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--taupe);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      padding: 8px 14px;
+      border-radius: 100px;
+      cursor: pointer;
+    }
+
+    .locale button.active {
+      color: var(--white);
+      background: linear-gradient(90deg, var(--sky-deep), var(--sky));
+      box-shadow: 0 4px 10px rgba(79, 195, 247, 0.32);
+    }
+
+    .locale small {
+      color: var(--taupe);
+      font-size: 11px;
+      margin-left: 4px;
+    }
+
+    /* ----------- in-context entry frame ----------- */
+    .entry {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 24px;
+      align-items: center;
+      background: #fff;
+      border: 1px solid rgba(43,31,26,0.06);
+      border-radius: 24px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 26px var(--shadow);
+    }
+
+    .entry-phone {
+      width: 320px;
+      aspect-ratio: 9 / 19;
+      background: var(--cream);
+      border-radius: 38px;
+      border: 12px solid #1b1410;
+      position: relative;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+
+    .entry-phone .notch {
+      position: absolute;
+      top: 6px; left: 50%;
+      transform: translateX(-50%);
+      width: 110px; height: 22px;
+      background: #1b1410;
+      border-radius: 100px;
+      z-index: 10;
+    }
+
+    .entry-phone .home-status {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 20px 8px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .entry-phone .home-title {
+      padding: 8px 20px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .entry-phone .home-title h3 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: -0.2px;
+    }
+
+    .entry-phone .avatar {
+      width: 34px; height: 34px;
+      border-radius: 100px;
+      background: linear-gradient(135deg, var(--peach), var(--cream-soft));
+    }
+
+    .entry-phone .glow-card {
+      margin: 8px 20px 12px;
+      background: #fff;
+      border-radius: 22px;
+      padding: 14px;
+      border: 1px solid rgba(43,31,26,0.05);
+      box-shadow: 0 8px 18px var(--shadow);
+      display: grid;
+      grid-template-columns: 1fr 96px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .glow-card .label {
+      font-size: 9px;
+      letter-spacing: 1.4px;
+      font-weight: 800;
+      color: var(--taupe);
+    }
+
+    .glow-card .value {
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      color: var(--coral);
+      line-height: 1;
+      margin-top: 4px;
+    }
+
+    .glow-card .ring {
+      width: 96px; height: 96px;
+      border-radius: 999px;
+      background:
+        conic-gradient(var(--coral) 0deg 280deg, var(--tan) 280deg 360deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .glow-card .ring::before {
+      content: "🌟";
+      width: 72px; height: 72px;
+      border-radius: 999px;
+      background: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+    }
+
+    .entry-phone .metric-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 0 20px;
+    }
+
+    .entry-phone .calories-tile {
+      background: #fff;
+      border: 1px solid rgba(43,31,26,0.06);
+      border-radius: 18px;
+      padding: 12px;
+      box-shadow: 0 4px 12px rgba(43,31,26,0.05);
+    }
+
+    .calories-tile .mtag {
+      font-size: 9px; letter-spacing: 1.4px; font-weight: 800;
+      color: var(--amber);
+    }
+    .calories-tile .mval {
+      font-size: 22px; font-weight: 800; margin-top: 3px; letter-spacing: -0.3px;
+    }
+    .calories-tile .msub {
+      font-size: 10px; color: var(--taupe); margin-top: 2px;
+    }
+
+    /* tappable water tile */
+    .water-tile {
+      position: relative;
+      background: var(--sky-bg);
+      border: 1px solid rgba(79, 195, 247, 0.35);
+      border-radius: 18px;
+      padding: 12px;
+      box-shadow: 0 4px 12px rgba(79, 195, 247, 0.18);
+      cursor: pointer;
+    }
+
+    .water-tile::after {
+      content: "tap";
+      position: absolute;
+      top: -8px; right: -8px;
+      padding: 3px 7px;
+      background: var(--coral);
+      color: #fff;
+      border-radius: 100px;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 10px rgba(255, 122, 92, 0.4);
+      animation: pulseChip 1.6s ease-in-out infinite;
+    }
+
+    @keyframes pulseChip {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-2px) scale(1.06); }
+    }
+
+    .water-tile .mtag {
+      font-size: 9px; letter-spacing: 1.4px; font-weight: 800;
+      color: var(--sky-deep);
+    }
+    .water-tile .mval {
+      font-size: 22px; font-weight: 800; margin-top: 3px;
+      color: var(--sky-deep); letter-spacing: -0.3px;
+    }
+    .water-tile .msub {
+      font-size: 10px; color: rgba(79,195,247,0.8); margin-top: 2px;
+    }
+
+    .water-tile .dashes {
+      display: flex;
+      gap: 2px;
+      margin-top: 8px;
+    }
+    .water-tile .dashes i {
+      flex: 1;
+      height: 3px;
+      border-radius: 2px;
+      background: rgba(79,195,247,0.22);
+    }
+    .water-tile .dashes i.on {
+      background: var(--sky-deep);
+    }
+
+    .entry-explain {
+      font-size: 14px;
+      color: var(--brown);
+    }
+    .entry-explain h3 {
+      margin: 0 0 6px;
+      font-size: 18px;
+      letter-spacing: -0.2px;
+    }
+    .entry-explain p { margin: 0 0 12px; }
+    .entry-explain ul {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 6px;
+    }
+
+    /* ----------- concept grid ----------- */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(300px, 1fr));
+      gap: 18px;
+    }
+
+    .concept {
+      border-radius: 22px;
+      overflow: hidden;
+      background: var(--white);
+      border: 1px solid rgba(43, 31, 26, 0.06);
+      box-shadow: 0 10px 26px var(--shadow);
+    }
+
+    .concept-head {
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid rgba(43, 31, 26, 0.06);
+      background: linear-gradient(180deg, #fbfeff, #fff9f6);
+    }
+
+    .concept-head .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--sky-deep);
+      background: rgba(79, 195, 247, 0.14);
+      padding: 4px 9px;
+      border-radius: 999px;
+    }
+
+    .concept-head h2 {
+      margin: 8px 0 2px;
+      font-size: 19px;
+      letter-spacing: -0.2px;
+    }
+
+    .concept-head p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--taupe);
+    }
+
+    /* phone frame for sheet preview */
+    .phone {
+      position: relative;
+      aspect-ratio: 9 / 19;
+      background: var(--cream);
+      margin: 14px;
+      border-radius: 30px;
+      border: 10px solid #1b1410;
+      overflow: hidden;
+      box-shadow: 0 16px 30px rgba(43,31,26,0.18);
+    }
+
+    .phone .notch {
+      position: absolute;
+      top: 6px; left: 50%;
+      transform: translateX(-50%);
+      width: 90px; height: 18px;
+      background: #1b1410;
+      border-radius: 100px;
+      z-index: 10;
+    }
+
+    /* dimmed home behind sheet */
+    .dim {
+      position: absolute;
+      inset: 0;
+      background: rgba(43, 31, 26, 0.38);
+      backdrop-filter: blur(1px);
+    }
+
+    .dim-home {
+      position: absolute;
+      inset: 0;
+      opacity: 0.6;
+      padding: 24px 16px;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 10px;
+    }
+
+    .dim-home .mini-card {
+      background: #fff;
+      border-radius: 18px;
+      height: 80px;
+      box-shadow: 0 4px 10px rgba(43,31,26,0.05);
+    }
+
+    .dim-home .mini-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .dim-home .mini-row > div {
+      background: #fff;
+      border-radius: 14px;
+      height: 60px;
+    }
+
+    /* the sheet itself */
+    .sheet {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--cream);
+      border-top-left-radius: 28px;
+      border-top-right-radius: 28px;
+      padding: 10px 16px 18px;
+      z-index: 5;
+      box-shadow: 0 -12px 30px rgba(43,31,26,0.2);
+    }
+
+    .grabber {
+      width: 40px; height: 4px;
+      border-radius: 100px;
+      background: var(--tan);
+      margin: 2px auto 10px;
+    }
+
+    .sheet-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .sheet-head h3 {
+      margin: 0;
+      font-size: 15px;
+      letter-spacing: -0.2px;
+    }
+
+    .unit-pill {
+      display: inline-flex;
+      align-items: center;
+      background: #fff;
+      border-radius: 100px;
+      padding: 3px;
+      border: 1px solid rgba(43,31,26,0.08);
+    }
+    .unit-pill span {
+      padding: 4px 9px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      color: var(--taupe);
+      border-radius: 100px;
+    }
+    .unit-pill span.on {
+      background: var(--sky-bg);
+      color: var(--sky-deep);
+    }
+
+    /* ----- concept 1: stacked pours ----- */
+    .total-block {
+      text-align: center;
+      padding: 14px 0 10px;
+    }
+    .total-block .total {
+      font-size: 44px;
+      font-weight: 900;
+      letter-spacing: -1.2px;
+      color: var(--sky-deep);
+      line-height: 1;
+    }
+    .total-block .total small {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--taupe);
+      margin-left: 2px;
+    }
+    .total-block .goal {
+      font-size: 11px;
+      color: var(--taupe);
+      margin-top: 4px;
+    }
+    .total-block .undo {
+      margin-top: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 100px;
+      background: rgba(79,195,247,0.1);
+      color: var(--sky-deep);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .preset-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 6px 0 10px;
+    }
+    .preset {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid rgba(79,195,247,0.22);
+      padding: 10px 6px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(79,195,247,0.08);
+    }
+    .preset .emoji {
+      font-size: 18px;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .preset .name {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    .preset .amt {
+      font-size: 10px;
+      color: var(--taupe);
+      margin-top: 2px;
+    }
+
+    .custom-link {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--sky-deep);
+      padding: 6px 0 10px;
+    }
+
+    .stepper-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      background: #fff;
+      border: 1px solid rgba(43,31,26,0.08);
+      border-radius: 100px;
+      padding: 2px;
+      margin: 0 auto 10px;
+    }
+    .stepper-row button {
+      appearance: none; border: 0; background: transparent;
+      width: 26px; height: 26px;
+      font-size: 14px; font-weight: 800;
+      color: var(--sky-deep);
+      border-radius: 100px;
+    }
+    .stepper-row .val {
+      min-width: 56px;
+      text-align: center;
+      font-size: 12px; font-weight: 800;
+    }
+
+    .cta {
+      width: 100%;
+      border: 0;
+      border-radius: 100px;
+      padding: 12px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--coral), var(--coral-soft));
+      box-shadow: 0 8px 16px rgba(255,122,92,0.3);
+      cursor: pointer;
+    }
+    .cta.disabled {
+      background: var(--tan);
+      color: var(--taupe);
+      box-shadow: none;
+    }
+
+    /* ----- concept 2: droplet fill ----- */
+    .droplet-wrap {
+      display: flex;
+      justify-content: center;
+      padding: 8px 0 4px;
+    }
+
+    .droplet {
+      position: relative;
+      width: 130px;
+      height: 160px;
+      filter: drop-shadow(0 8px 14px rgba(79,195,247,0.25));
+    }
+
+    .droplet svg { display: block; width: 100%; height: 100%; }
+
+    .droplet .fill-val {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .droplet .fill-val .n {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.8px;
+      line-height: 1;
+    }
+    .droplet .fill-val .u {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      margin-top: 4px;
+      opacity: 0.92;
+    }
+    .droplet .fill-val .g {
+      font-size: 9px;
+      font-weight: 700;
+      margin-top: 6px;
+      opacity: 0.78;
+    }
+
+    .scroll-presets {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 4px 2px 8px;
+      margin: 2px 0 8px;
+      scrollbar-width: none;
+    }
+    .scroll-presets::-webkit-scrollbar { display: none; }
+    .scroll-chip {
+      flex: 0 0 auto;
+      border-radius: 100px;
+      padding: 7px 11px;
+      background: #fff;
+      border: 1px solid rgba(79,195,247,0.22);
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .scroll-chip .plus {
+      color: var(--sky-deep);
+    }
+    .scroll-chip.custom {
+      background: rgba(79,195,247,0.12);
+      color: var(--sky-deep);
+      border-color: rgba(79,195,247,0.3);
+    }
+
+    /* ----- concept 3: cal-ai like ----- */
+    .num-hero {
+      text-align: center;
+      padding: 12px 0 6px;
+      position: relative;
+    }
+    .num-hero .big {
+      font-size: 48px;
+      font-weight: 900;
+      letter-spacing: -1.4px;
+      color: var(--ink);
+      line-height: 1;
+      display: inline-block;
+    }
+    .num-hero .unit {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--taupe);
+      margin-left: 4px;
+      vertical-align: top;
+      margin-top: 10px;
+      display: inline-block;
+    }
+    .num-hero .caret {
+      display: inline-block;
+      width: 2px;
+      height: 36px;
+      background: var(--sky-deep);
+      margin-left: 1px;
+      vertical-align: middle;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+
+    .num-hero .hint {
+      font-size: 10px;
+      color: var(--taupe);
+      margin-top: 6px;
+    }
+
+    .card-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 8px 0 10px;
+    }
+    .pcard {
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid rgba(43,31,26,0.06);
+      padding: 10px 6px;
+      text-align: center;
+      position: relative;
+    }
+    .pcard .emoji { font-size: 18px; }
+    .pcard .name  { font-size: 11px; font-weight: 800; margin-top: 3px; }
+    .pcard .amt   { font-size: 10px; color: var(--taupe); margin-top: 2px; }
+    .pcard .badge {
+      position: absolute;
+      top: 6px; right: 6px;
+      width: 16px; height: 16px;
+      border-radius: 100px;
+      background: var(--sky-deep);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .keypad {
+      margin-top: 6px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+    }
+    .key {
+      background: #fff;
+      border-radius: 10px;
+      padding: 8px 0;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink);
+      border: 1px solid rgba(43,31,26,0.05);
+    }
+    .key.alt { color: var(--taupe); }
+
+    /* notes / caption */
+    .notes {
+      padding: 12px 16px 16px;
+      border-top: 1px solid rgba(43,31,26,0.06);
+      background: #fff;
+    }
+
+    .notes .pro-con {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .notes .pro, .notes .con {
+      border-radius: 12px;
+      padding: 8px 10px;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .notes .pro {
+      background: rgba(102,187,106,0.1);
+      color: #2f6d33;
+    }
+    .notes .con {
+      background: rgba(229,115,115,0.1);
+      color: #95403f;
+    }
+
+    .notes .mini-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+      display: block;
+      opacity: 0.8;
+    }
+
+    .notes ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--brown);
+      font-size: 12.5px;
+      display: grid;
+      gap: 5px;
+    }
+
+    /* ----------- shared legend ----------- */
+    .legend {
+      margin-top: 24px;
+      background: #fff;
+      border-radius: 22px;
+      border: 1px solid rgba(43,31,26,0.06);
+      padding: 18px 20px;
+      box-shadow: 0 8px 18px rgba(43,31,26,0.05);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .legend h4 {
+      margin: 0 0 8px;
+      font-size: 11px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--taupe);
+    }
+    .legend ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 6px;
+      font-size: 12.5px;
+      color: var(--brown);
+    }
+    .legend .swatch {
+      display: inline-block;
+      width: 12px; height: 12px;
+      border-radius: 4px;
+      margin-right: 6px;
+      vertical-align: -2px;
+      border: 1px solid rgba(43,31,26,0.08);
+    }
+
+    @media (max-width: 1100px) {
+      .grid { grid-template-columns: 1fr; }
+      .entry { grid-template-columns: 1fr; }
+      .legend { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <h1>Log Water — Bottom Sheet Concepts</h1>
+        <p class="intro">
+          Three bottom-sheet designs for tapping the Home hydration tile to log water.
+          All concepts support one-tap common amounts + custom entry, and auto-pick
+          units by locale (US → oz, rest of world → ml) with a header toggle.
+          Flip the global unit below to preview both sides.
+        </p>
+      </div>
+      <div class="locale" role="tablist" aria-label="Preview unit">
+        <button id="unit-ml" class="active" type="button">ml</button>
+        <button id="unit-oz" type="button">oz</button>
+        <small>preview unit</small>
+      </div>
+    </div>
+
+    <!-- ============ in-context entry ============ -->
+    <section class="entry">
+      <div class="entry-phone">
+        <div class="notch"></div>
+        <div class="home-status"><span>9:39</span><span>5G 80%</span></div>
+        <div class="home-title">
+          <h3>Skinmax</h3>
+          <div class="avatar"></div>
+        </div>
+        <div class="glow-card">
+          <div>
+            <div class="label">TODAY'S GLOW</div>
+            <div class="value">78</div>
+            <div style="font-size:10px; color:var(--taupe); margin-top:2px;">+4 vs yesterday</div>
+          </div>
+          <div class="ring"></div>
+        </div>
+        <div class="metric-row">
+          <div class="calories-tile">
+            <div class="mtag">🔥 CALORIES</div>
+            <div class="mval">1,240</div>
+            <div class="msub">410 left</div>
+          </div>
+          <div class="water-tile" id="entry-tile">
+            <div class="mtag">💧 WATER</div>
+            <div class="mval"><span data-val="1.2L" data-val-oz="40oz">1.2L</span></div>
+            <div class="msub"><span data-val="of 2.5L" data-val-oz="of 64oz">of 2.5L</span></div>
+            <div class="dashes">
+              <i class="on"></i><i class="on"></i><i class="on"></i>
+              <i></i><i></i><i></i><i></i><i></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="entry-explain">
+        <h3>Entry point: tap the water tile on Home</h3>
+        <p>
+          Right now <code>HydrationTile</code> is read-only placeholder data. All three
+          concepts below use the same trigger: tap the tile on the Home screen → bottom
+          sheet slides up with a 28pt top radius and Soft Tan grabber.
+        </p>
+        <ul>
+          <li>Auto locale: presets swap between ml and oz. Header toggle overrides.</li>
+          <li>Sky Blue <code>#81D4FA</code> is the hero accent (water), Hero Coral is reserved for the primary Log CTA.</li>
+          <li>Haptics: <code>.light</code> on preset tap, <code>.selection</code> on unit toggle, <code>.success</code> on Log.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ concepts ============ -->
+    <div class="grid">
+      <!-- ---------- CONCEPT 1 ---------- -->
+      <article class="concept">
+        <header class="concept-head">
+          <span class="tag">Concept 1 · Recommended</span>
+          <h2>Stacked Pours</h2>
+          <p>Tap preset to add. Stack as many as you want, then Log.</p>
+        </header>
+
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="dim-home">
+            <div class="mini-card"></div>
+            <div class="mini-row"><div></div><div></div></div>
+          </div>
+          <div class="dim"></div>
+
+          <div class="sheet">
+            <div class="grabber"></div>
+            <div class="sheet-head">
+              <h3>Log Water</h3>
+              <div class="unit-pill">
+                <span class="ml on">ML</span>
+                <span class="oz">OZ</span>
+              </div>
+            </div>
+
+            <div class="total-block">
+              <div class="total">
+                <span data-val="350" data-val-oz="12">350</span><small data-val="ml" data-val-oz="oz">ml</small>
+              </div>
+              <div class="goal">
+                <span data-val="of 2,000 ml goal" data-val-oz="of 64 oz goal">of 2,000 ml goal</span>
+              </div>
+              <div class="undo">↶ Undo last pour</div>
+            </div>
+
+            <div class="preset-row">
+              <div class="preset">
+                <div class="emoji">💧</div>
+                <div class="name">Sip</div>
+                <div class="amt"><span data-val="100 ml" data-val-oz="3 oz">100 ml</span></div>
+              </div>
+              <div class="preset" style="border-color: rgba(79,195,247,0.4); background: rgba(79,195,247,0.06);">
+                <div class="emoji">🥛</div>
+                <div class="name">Glass</div>
+                <div class="amt"><span data-val="250 ml" data-val-oz="8 oz">250 ml</span></div>
+              </div>
+              <div class="preset">
+                <div class="emoji">🍼</div>
+                <div class="name">Bottle</div>
+                <div class="amt"><span data-val="500 ml" data-val-oz="16 oz">500 ml</span></div>
+              </div>
+            </div>
+
+            <div class="custom-link">Custom amount…</div>
+
+            <div style="text-align:center;">
+              <div class="stepper-row">
+                <button>−</button>
+                <div class="val"><span data-val="50 ml" data-val-oz="2 oz">50 ml</span></div>
+                <button>+</button>
+              </div>
+            </div>
+
+            <button class="cta">Log 💧</button>
+          </div>
+        </div>
+
+        <div class="notes">
+          <div class="pro-con">
+            <div class="pro"><span class="mini-label">PRO</span>Fastest for the 90% case — tap preset, tap Log. Stacks multiple pours.</div>
+            <div class="con"><span class="mini-label">CON</span>Two screen regions to understand (total + presets). Slightly busier.</div>
+          </div>
+          <ul>
+            <li>Tapping a preset <strong>adds</strong> to the running total with <code>.light</code> haptic + droplet fly-in.</li>
+            <li>Undo chip appears after first add, fades after 3s.</li>
+            <li>Custom expands inline to <code>− ml +</code> stepper (50 ml / 2 oz step). No keypad needed.</li>
+            <li>CTA disabled until total &gt; 0.</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- ---------- CONCEPT 2 ---------- -->
+      <article class="concept">
+        <header class="concept-head">
+          <span class="tag">Concept 2 · Most On-Brand</span>
+          <h2>Droplet Fill Visualizer</h2>
+          <p>A hero droplet that fills as you add. Hydration gets its moment.</p>
+        </header>
+
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="dim-home">
+            <div class="mini-card"></div>
+            <div class="mini-row"><div></div><div></div></div>
+          </div>
+          <div class="dim"></div>
+
+          <div class="sheet">
+            <div class="grabber"></div>
+            <div class="sheet-head">
+              <h3>Log Water</h3>
+              <div class="unit-pill">
+                <span class="ml on">ML</span>
+                <span class="oz">OZ</span>
+              </div>
+            </div>
+
+            <div class="droplet-wrap">
+              <div class="droplet">
+                <svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <clipPath id="drop-clip">
+                      <path d="M60 6 C 60 40, 108 68, 108 102 C 108 128, 86 146, 60 146 C 34 146, 12 128, 12 102 C 12 68, 60 40, 60 6 Z" />
+                    </clipPath>
+                    <linearGradient id="water-grad" x1="0" x2="0" y1="0" y2="1">
+                      <stop offset="0" stop-color="#81D4FA"/>
+                      <stop offset="1" stop-color="#4FC3F7"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M60 6 C 60 40, 108 68, 108 102 C 108 128, 86 146, 60 146 C 34 146, 12 128, 12 102 C 12 68, 60 40, 60 6 Z"
+                    fill="#E6F6FD" stroke="#4FC3F7" stroke-width="2"/>
+                  <g clip-path="url(#drop-clip)">
+                    <rect x="0" y="60" width="120" height="120" fill="url(#water-grad)">
+                    </rect>
+                    <path d="M0 66 Q 30 56, 60 66 T 120 66 V 80 H 0 Z" fill="rgba(255,255,255,0.25)"/>
+                  </g>
+                </svg>
+                <div class="fill-val">
+                  <div class="n"><span data-val="750" data-val-oz="25">750</span></div>
+                  <div class="u"><span data-val="ML" data-val-oz="OZ">ML</span></div>
+                  <div class="g"><span data-val="38% of goal" data-val-oz="39% of goal">38% of goal</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="scroll-presets">
+              <div class="scroll-chip">💧 Sip <span class="plus">+<span data-val="100" data-val-oz="3">100</span></span></div>
+              <div class="scroll-chip">🥛 Glass <span class="plus">+<span data-val="250" data-val-oz="8">250</span></span></div>
+              <div class="scroll-chip">🍼 Bottle <span class="plus">+<span data-val="500" data-val-oz="16">500</span></span></div>
+              <div class="scroll-chip">🍶 Large <span class="plus">+<span data-val="750" data-val-oz="24">750</span></span></div>
+              <div class="scroll-chip custom">⌨︎ Custom</div>
+            </div>
+
+            <button class="cta">Log 💧</button>
+          </div>
+        </div>
+
+        <div class="notes">
+          <div class="pro-con">
+            <div class="pro"><span class="mini-label">PRO</span>Most distinctive and playful — hydration finally feels like a hero, not a sub-tile.</div>
+            <div class="con"><span class="mini-label">CON</span>Slightly more animation work; custom entry is one extra tap.</div>
+          </div>
+          <ul>
+            <li>Droplet fills with a <code>.spring(response: 0.5, dampingFraction: 0.7)</code> bounce on each preset tap.</li>
+            <li>Hero number lives inside the droplet (no text/ui duplication).</li>
+            <li>Custom chip opens a compact keypad overlay; otherwise the keyboard never shows.</li>
+            <li>Preset row is horizontally scrollable so we can add more sizes later.</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- ---------- CONCEPT 3 ---------- -->
+      <article class="concept">
+        <header class="concept-head">
+          <span class="tag">Concept 3 · Familiar</span>
+          <h2>Cal AI Minus the Keyboard</h2>
+          <p>Same layout as the reference — but keypad only appears when you tap in.</p>
+        </header>
+
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="dim-home">
+            <div class="mini-card"></div>
+            <div class="mini-row"><div></div><div></div></div>
+          </div>
+          <div class="dim"></div>
+
+          <div class="sheet">
+            <div class="grabber"></div>
+            <div class="sheet-head">
+              <h3>Log Water</h3>
+              <div class="unit-pill">
+                <span class="ml on">ML</span>
+                <span class="oz">OZ</span>
+              </div>
+            </div>
+
+            <div class="num-hero">
+              <span class="big"><span data-val="0" data-val-oz="0">0</span></span><span class="caret"></span><span class="unit"><span data-val="ml" data-val-oz="oz">ml</span></span>
+              <div class="hint">tap to type a custom amount</div>
+            </div>
+
+            <div class="card-row">
+              <div class="pcard">
+                <div class="badge">+</div>
+                <div class="emoji">💧</div>
+                <div class="name">Glass</div>
+                <div class="amt"><span data-val="250 ml" data-val-oz="8 oz">250 ml</span></div>
+              </div>
+              <div class="pcard">
+                <div class="badge">+</div>
+                <div class="emoji">🍼</div>
+                <div class="name">Bottle</div>
+                <div class="amt"><span data-val="500 ml" data-val-oz="16 oz">500 ml</span></div>
+              </div>
+              <div class="pcard">
+                <div class="badge">+</div>
+                <div class="emoji">🍶</div>
+                <div class="name">Large</div>
+                <div class="amt"><span data-val="750 ml" data-val-oz="24 oz">750 ml</span></div>
+              </div>
+            </div>
+
+            <div class="keypad" style="opacity:0.45">
+              <div class="key">1</div><div class="key">2</div><div class="key">3</div>
+              <div class="key">4</div><div class="key">5</div><div class="key">6</div>
+              <div class="key">7</div><div class="key">8</div><div class="key">9</div>
+              <div class="key alt">.</div><div class="key">0</div><div class="key alt">⌫</div>
+            </div>
+
+            <div style="height:6px;"></div>
+            <button class="cta disabled">Log</button>
+          </div>
+        </div>
+
+        <div class="notes">
+          <div class="pro-con">
+            <div class="pro"><span class="mini-label">PRO</span>Familiar to anyone who's used Cal AI — zero learning curve. Long-press a card to edit its default size.</div>
+            <div class="con"><span class="mini-label">CON</span>Least distinctive — basically the Cal AI layout with Skinmax paint.</div>
+          </div>
+          <ul>
+            <li>Keypad is <strong>hidden</strong> by default (dimmed here for preview). It only slides up when the user taps the number field.</li>
+            <li>Preset cards show <code>+</code> badges — each tap adds that amount to the field.</li>
+            <li>Log CTA uses coral pill when active; disabled grey when total is 0.</li>
+            <li>Lowest animation surface — simplest to build, most predictable.</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+
+    <!-- ============ legend ============ -->
+    <section class="legend">
+      <div>
+        <h4>Color Tokens</h4>
+        <ul>
+          <li><span class="swatch" style="background:#81D4FA"></span>Sky Blue — hero hydration accent</li>
+          <li><span class="swatch" style="background:#4FC3F7"></span>Sky Deep — droplet gradient end</li>
+          <li><span class="swatch" style="background:#FF7A5C"></span>Hero Coral — primary Log CTA only</li>
+          <li><span class="swatch" style="background:#FAF6F2"></span>Cream Base — sheet background</li>
+          <li><span class="swatch" style="background:#F0E8E4"></span>Soft Tan — grabber, dividers</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Auto-Locale Units</h4>
+        <ul>
+          <li><strong>US locale</strong> → default oz. Presets 8 / 16 / 24 oz. Goal 64 oz.</li>
+          <li><strong>Everywhere else</strong> → default ml. Presets 250 / 500 / 750 ml. Goal 2,000 ml.</li>
+          <li>User can override via sheet header chip (persists to settings).</li>
+          <li>Internally stored in ml; oz is a display conversion.</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Haptics</h4>
+        <ul>
+          <li><code>.light</code> on preset tap / pour add</li>
+          <li><code>.selection</code> on unit toggle</li>
+          <li><code>.success</code> on Log commit</li>
+          <li><code>.warning</code> on Undo pour</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Typography</h4>
+        <ul>
+          <li>Total / hero number → <code>.gbDisplayL</code></li>
+          <li>Sheet title → <code>.gbTitleM</code></li>
+          <li>Preset name → <code>.gbCaption</code></li>
+          <li>Preset amount → <code>.gbOverline</code> tracking 1.4</li>
+          <li>CTA → <code>.gbTitleM</code></li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    (function () {
+      const btnMl = document.getElementById('unit-ml');
+      const btnOz = document.getElementById('unit-oz');
+      const nodes = document.querySelectorAll('[data-val]');
+
+      function setUnit(unit) {
+        btnMl.classList.toggle('active', unit === 'ml');
+        btnOz.classList.toggle('active', unit === 'oz');
+
+        nodes.forEach(n => {
+          const mlVal = n.getAttribute('data-val');
+          const ozVal = n.getAttribute('data-val-oz');
+          n.textContent = unit === 'ml' ? mlVal : ozVal;
+        });
+
+        // flip each sheet's unit pill too
+        document.querySelectorAll('.unit-pill').forEach(pill => {
+          pill.querySelector('.ml').classList.toggle('on', unit === 'ml');
+          pill.querySelector('.oz').classList.toggle('on', unit === 'oz');
+        });
+      }
+
+      btnMl.addEventListener('click', () => setUnit('ml'));
+      btnOz.addEventListener('click', () => setUnit('oz'));
+    })();
+  </script>
+</body>
+</html>

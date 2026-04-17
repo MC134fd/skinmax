@@ -67,6 +67,12 @@
 		F14226768E91B9B4FE4740AB /* Config.example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28515B96C7709727306F9B3E /* Config.example.swift */; };
 		F48BB771AF1F5DA1C87A1BAD /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF50994FDF6BCB906DE8ED8 /* HomeViewModel.swift */; };
 		FCC9C2804B7F428D9EA7744B /* GlowbiteLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241BBF6DF843429F8D5F9F7C /* GlowbiteLog.swift */; };
+		CAFEF00D00000001B0000001 /* FoodCaptureMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFEF00D00000001A0000001 /* FoodCaptureMode.swift */; };
+		CAFEF00D00000002B0000002 /* FoodCaptureViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFEF00D00000002A0000002 /* FoodCaptureViewModel.swift */; };
+		CAFEF00D00000003B0000003 /* FoodCameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFEF00D00000003A0000003 /* FoodCameraPreviewView.swift */; };
+		CAFEF00D00000004B0000004 /* FoodCameraChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFEF00D00000004A0000004 /* FoodCameraChrome.swift */; };
+		CAFEF00D00000005B0000005 /* FoodCameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFEF00D00000005A0000005 /* FoodCameraManager.swift */; };
+		CAFEF00D00000006B0000006 /* OpenFoodFactsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFEF00D00000006A0000006 /* OpenFoodFactsClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -130,6 +136,12 @@
 		F2B1A4F14B83115BE86BB147 /* FoodRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodRowView.swift; sourceTree = "<group>"; };
 		F758F2CF96DBEB782C5D7EAD /* FoodLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLogView.swift; sourceTree = "<group>"; };
 		F7623671B5F6783E85000295 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
+		CAFEF00D00000001A0000001 /* FoodCaptureMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodCaptureMode.swift; sourceTree = "<group>"; };
+		CAFEF00D00000002A0000002 /* FoodCaptureViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodCaptureViewModel.swift; sourceTree = "<group>"; };
+		CAFEF00D00000003A0000003 /* FoodCameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodCameraPreviewView.swift; sourceTree = "<group>"; };
+		CAFEF00D00000004A0000004 /* FoodCameraChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodCameraChrome.swift; sourceTree = "<group>"; };
+		CAFEF00D00000005A0000005 /* FoodCameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodCameraManager.swift; sourceTree = "<group>"; };
+		CAFEF00D00000006A0000006 /* OpenFoodFactsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenFoodFactsClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -289,6 +301,7 @@
 				A028B16977384E6719862F4D /* CameraManager.swift */,
 				28515B96C7709727306F9B3E /* Config.example.swift */,
 				2322698B4CE43808BF519A13 /* Config.swift */,
+				CAFEF00D00000005A0000005 /* FoodCameraManager.swift */,
 				E461395F6A57AD71DD3C33E6 /* HapticManager.swift */,
 				241BBF6DF843429F8D5F9F7C /* GlowbiteLog.swift */,
 				6D66257683CC044466A99F3C /* ImageProcessor.swift */,
@@ -299,6 +312,10 @@
 		BCA3D9C64BC1365F2F4FF13D /* FoodScan */ = {
 			isa = PBXGroup;
 			children = (
+				CAFEF00D00000004A0000004 /* FoodCameraChrome.swift */,
+				CAFEF00D00000003A0000003 /* FoodCameraPreviewView.swift */,
+				CAFEF00D00000001A0000001 /* FoodCaptureMode.swift */,
+				CAFEF00D00000002A0000002 /* FoodCaptureViewModel.swift */,
 				C012FA3DE75DD4EC6F889FA4 /* FoodLogSheet.swift */,
 				F758F2CF96DBEB782C5D7EAD /* FoodLogView.swift */,
 				DF45D3C22D5A27B1B00ABDA2 /* FoodLogViewModel.swift */,
@@ -315,6 +332,7 @@
 				3BBB665B5506616422E8D8E8 /* DataStore.swift */,
 				AE36B60B9F8806215B9D59E8 /* FoodAnalysisService.swift */,
 				071559B623555A0978937FBE /* InsightEngine.swift */,
+				CAFEF00D00000006A0000006 /* OpenFoodFactsClient.swift */,
 				8D939DFD2FCB97DAC14A877D /* SkinAnalysisService.swift */,
 			);
 			path = Services;
@@ -506,6 +524,12 @@
 				A1B2C3D4E5F60001B0000003 /* HydrationTile.swift in Sources */,
 				A1B2C3D4E5F60001B0000004 /* SkinNutrientCard.swift in Sources */,
 				A1B2C3D4E5F60001B0000005 /* MealRow.swift in Sources */,
+				CAFEF00D00000001B0000001 /* FoodCaptureMode.swift in Sources */,
+				CAFEF00D00000002B0000002 /* FoodCaptureViewModel.swift in Sources */,
+				CAFEF00D00000003B0000003 /* FoodCameraPreviewView.swift in Sources */,
+				CAFEF00D00000004B0000004 /* FoodCameraChrome.swift in Sources */,
+				CAFEF00D00000005B0000005 /* FoodCameraManager.swift in Sources */,
+				CAFEF00D00000006B0000006 /* OpenFoodFactsClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

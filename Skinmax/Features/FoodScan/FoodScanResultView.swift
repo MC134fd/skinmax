@@ -4,9 +4,11 @@ struct FoodScanResultView: View {
     let scan: FoodScan
     @Environment(\.dismiss) private var dismiss
     @Environment(DataStore.self) private var dataStore
+    @State private var isRevealed = false
     @State private var animatedScore: Double = 0
     @State private var showNutrition = false
     @State private var showBenefits = false
+    @State private var glowPulse = false
 
     private var scoreColor: Color {
         switch scan.skinImpactScore {
@@ -16,11 +18,19 @@ struct FoodScanResultView: View {
         }
     }
 
+    private var scoreEmoji: String {
+        switch scan.skinImpactScore {
+        case 8...10: return "\u{1F31F}"
+        case 5..<8: return "\u{2728}"
+        default: return "\u{1F4AB}"
+        }
+    }
+
     private var scoreLabel: String {
         switch scan.skinImpactScore {
-        case 8...10: return "Great for your skin!"
-        case 5..<8: return "Okay for your skin"
-        default: return "Not ideal for your skin"
+        case 8...10: return "Your skin's gonna love this"
+        case 5..<8: return "Totally okay, bestie"
+        default: return "Eh, not your skin's fave"
         }
     }
 
@@ -65,18 +75,24 @@ struct FoodScanResultView: View {
             .navigationBarBackButtonHidden()
         }
         .onAppear {
-            withAnimation(.easeOut(duration: 0.8)) {
-                animatedScore = scan.skinImpactScore
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                HapticManager.impact(.medium)
+                withAnimation(.spring(response: 0.6, dampingFraction: 0.75)) {
+                    isRevealed = true
+                    animatedScore = scan.skinImpactScore
+                }
+                withAnimation(.easeInOut(duration: 3.0).repeatForever(autoreverses: true)) {
+                    glowPulse = true
+                }
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
                 withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
                     showNutrition = true
                 }
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                 withAnimation { showBenefits = true }
             }
-            HapticManager.impact(.medium)
         }
     }
 
@@ -94,51 +110,111 @@ struct FoodScanResultView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    // MARK: - Skin Impact Score Card (Circular Ring)
+    // MARK: - Skin Impact Score Card (Golden Hour + Ambient Glow)
     private var skinImpactCard: some View {
-        VStack(spacing: 14) {
+        VStack(spacing: 18) {
             Text("SKIN IMPACT")
-                .font(.gbCaption)
-                .foregroundStyle(.white.opacity(0.6))
-                .tracking(1)
+                .font(.gbOverline)
+                .tracking(2.0)
+                .foregroundStyle(GlowbiteColors.coral.opacity(0.85))
 
-            ZStack {
-                Circle()
-                    .stroke(Color.white.opacity(0.15), lineWidth: 8)
-                    .frame(width: 110, height: 110)
+            heroScoreRing
 
-                Circle()
-                    .trim(from: 0, to: animatedScore / 10.0)
-                    .stroke(
-                        scoreColor,
-                        style: StrokeStyle(lineWidth: 8, lineCap: .round)
-                    )
-                    .frame(width: 110, height: 110)
-                    .rotationEffect(.degrees(-90))
-                    .animation(.spring(response: 0.6, dampingFraction: 0.75), value: animatedScore)
-
-                Text(String(format: "%.1f", animatedScore))
-                    .font(.gbDisplayL)
-                    .tracking(-1.0)
-                    .foregroundStyle(scoreColor)
-            }
-
-            Text(scoreLabel)
-                .font(.gbBodyM)
-                .foregroundStyle(.white.opacity(0.8))
-                .multilineTextAlignment(.center)
+            heroReactionRow
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 28)
-        .padding(.horizontal, GlowbiteSpacing.cardPadding)
-        .background(
+        .padding(.horizontal, GlowbiteSpacing.cardPaddingLarge)
+        .background(cardBackground)
+        .clipShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadiusLarge))
+        .shadow(color: GlowbiteColors.elevatedShadowColor, radius: 16, x: 0, y: 6)
+    }
+
+    private var cardBackground: some View {
+        ZStack {
             LinearGradient(
-                colors: [GlowbiteColors.darkBrown, GlowbiteColors.warmBrown],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
+                colors: [
+                    GlowbiteColors.sunnyButter,
+                    GlowbiteColors.peachWash,
+                    GlowbiteColors.coral.opacity(0.20)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
             )
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 22))
+
+            // Soft peach drift blob (top-left) for dynamic warmth
+            Circle()
+                .fill(GlowbiteColors.coral.opacity(0.10))
+                .frame(width: 220, height: 220)
+                .blur(radius: 50)
+                .offset(x: -80, y: -60)
+                .scaleEffect(glowPulse ? 1.08 : 0.95)
+
+            // Sunny butter drift blob (bottom-right) for depth
+            Circle()
+                .fill(GlowbiteColors.sunnyButter.opacity(0.9))
+                .frame(width: 180, height: 180)
+                .blur(radius: 45)
+                .offset(x: 70, y: 80)
+                .scaleEffect(glowPulse ? 0.95 : 1.08)
+        }
+    }
+
+    private var heroScoreRing: some View {
+        ZStack {
+            // Ambient score-colored glow behind ring
+            Circle()
+                .fill(scoreColor.opacity(0.18))
+                .frame(width: 180, height: 180)
+                .blur(radius: 30)
+                .scaleEffect(glowPulse ? 1.08 : 0.96)
+                .opacity(isRevealed ? 1 : 0)
+
+            Circle()
+                .stroke(GlowbiteColors.coral.opacity(0.12), lineWidth: 14)
+                .frame(width: 140, height: 140)
+
+            Circle()
+                .trim(from: 0, to: animatedScore / 10.0)
+                .stroke(
+                    LinearGradient(
+                        colors: [scoreColor, scoreColor.opacity(0.65)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    style: StrokeStyle(lineWidth: 14, lineCap: .round)
+                )
+                .frame(width: 140, height: 140)
+                .rotationEffect(.degrees(-90))
+
+            VStack(spacing: 0) {
+                Text(String(format: "%.1f", animatedScore))
+                    .font(.gbDisplayXL)
+                    .tracking(-1.0)
+                    .foregroundStyle(GlowbiteColors.darkBrown)
+                    .contentTransition(.numericText(countsDown: false))
+                    .opacity(isRevealed ? 1 : 0)
+
+                Text("/ 10")
+                    .font(.gbCaption)
+                    .foregroundStyle(GlowbiteColors.mediumTaupe)
+                    .opacity(isRevealed ? 1 : 0)
+            }
+        }
+    }
+
+    private var heroReactionRow: some View {
+        HStack(spacing: 8) {
+            Text(scoreEmoji)
+                .font(.system(size: 20))
+
+            Text("\(scoreLabel) \u{2728}")
+                .font(.gbBodyM)
+                .foregroundStyle(GlowbiteColors.warmBrown)
+                .multilineTextAlignment(.leading)
+        }
+        .opacity(isRevealed ? 1 : 0)
+        .animation(.easeOut(duration: 0.25).delay(0.45), value: isRevealed)
     }
 
     // MARK: - Nutrition Grid

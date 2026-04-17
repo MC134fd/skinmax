@@ -134,6 +134,7 @@ final class AnalysisCoordinator {
     func startFoodScan(
         imageData: Data,
         foodName: String,
+        mode: FoodCaptureMode = .photo,
         analysisService: FoodAnalysisServiceProtocol,
         dataStore: DataStore
     ) {
@@ -144,16 +145,17 @@ final class AnalysisCoordinator {
         setTargetProgress(0.15)
 
         let runID = analysisID
-        log.info("food-\(runID) started, imageSize=\(imageData.count) bytes")
+        log.info("food-\(runID) started, imageSize=\(imageData.count) bytes, mode=\(mode.rawValue, privacy: .public)")
 
         analysisTask = Task {
-            await runFoodAnalysis(imageData: imageData, foodName: foodName, service: analysisService, dataStore: dataStore, runID: runID)
+            await runFoodAnalysis(imageData: imageData, foodName: foodName, mode: mode, service: analysisService, dataStore: dataStore, runID: runID)
         }
     }
 
     private func runFoodAnalysis(
         imageData: Data,
         foodName: String,
+        mode: FoodCaptureMode,
         service: FoodAnalysisServiceProtocol,
         dataStore: DataStore,
         runID: UInt64
@@ -171,7 +173,7 @@ final class AnalysisCoordinator {
         log.info("food-\(runID) requesting analysis")
 
         do {
-            let scan = try await service.analyzeFood(image: imageData, foodName: foodName)
+            let scan = try await service.analyzeFood(image: imageData, foodName: foodName, mode: mode)
 
             guard !Task.isCancelled, analysisID == runID else {
                 log.notice("food-\(runID) cancelled at=post-analysis (stale write prevented)")
