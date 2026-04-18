@@ -24,6 +24,13 @@
 		<string>Nunito-Bold.ttf</string>
 		<string>Nunito-ExtraBold.ttf</string>
 		<string>Nunito-Black.ttf</string>
+		<string>Fraunces.ttf</string>
+		<string>InstrumentSerif-Italic.ttf</string>
+		<string>DMSerifDisplay-Regular.ttf</string>
+		<string>PlayfairDisplay-Italic.ttf</string>
+		<string>SpaceGrotesk.ttf</string>
+		<string>Unbounded.ttf</string>
+		<string>Caveat.ttf</string>
 	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>

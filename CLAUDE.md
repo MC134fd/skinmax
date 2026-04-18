@@ -34,32 +34,60 @@ Never write:
 
 ## Design System — FOLLOW EXACTLY
 
+### Icon-Derived Visual Language — The Through-Line
+
+The app icon defines the visual language and every screen must feel like a natural extension of it. Five motifs, used consistently, make the system cohere:
+
+**1. Scanner corner brackets** — L-shaped marks in cream/white, rounded caps. The icon has them framing the apple; in-app they frame anything that represents a "moment of measurement": the camera preview, the Glow Score reveal, recent-scan cards, onboarding steps. Default spec: 1.5pt stroke, Cream BG color (#FAF6F0) at 85% opacity (or white at 90% on a coral surface), 24-32pt arm length, rounded stroke caps. Never apply brackets to more than one element per screen — they lose meaning if overused.
+
+**2. Characterful scores** — The apple in the icon has a face (closed-arc eyes + soft smile). Score elements in-app inherit this: the Glow Score ring center shows a tiny emoji-style face that shifts by traffic-light tier (🌟 green 70+ → 😊 amber 40-69 → 💫 red <40). Insight cards, empty states, and achievement badges all get a little character expression.
+
+**3. Sparkles as decorative system** — Static on the icon, animated in-app. Two sizes: "star sparkle" (6pt, 4-point star, filled Sunny Butter #FFF8E8) and "dot sparkle" (3pt, simple circle). Floating pattern around Glow Score >80, around "good food" results, and during streak milestones. Animation: 2s loop, subtle scale 1.0 → 1.1 with fade 0.6 → 1.0. Always in pairs or triplets, never single, never more than 6 per screen.
+
+**4. Soft highlights on coral surfaces** — The apple in the icon has a cream blob highlight on the top-left for dimensionality. Every coral UI surface (score ring, primary button, coral chip, active tab indicator) gets a matching inner highlight: an elliptical overlay at 35-55% opacity of white, positioned top-left at 30-40% of the element's size, rotated roughly -22°. Makes flat color feel hand-painted, not digital.
+
+**5. Warm canvas, no flat whites** — The app's canonical background is not pure white. Use `GlowbiteColors.creamBG` (#FAF6F0) for main surfaces, with optional subtle gradient to Peach Wash (#F2ECE2) at the bottom for hero sections. Cards are white (#FFFFFF) but sit on this warm canvas so everything feels grounded, not sterile.
+
+**Squircle rule:** every RoundedRectangle in SwiftUI must use `style: .continuous`, not the default `.circular`. The icon's corners use iOS's squircle mask; match it everywhere.
+
 ### Color Palette — USE ONLY THESE HEX VALUES
 
+> These are the source-of-truth values. They match `Core/Design/GlowbiteColors.swift` exactly. Do not introduce new hex codes, and never reference the older brighter brand-doc palette (#FF7A5C / #FFB89E / etc.) — the app uses a more sophisticated, muted earth palette.
+
 PRIMARY:
-- Hero Coral: #FF7A5C (primary CTAs, brand mark, active states)
-- Soft Peach: #FFB89E (secondary buttons, chips, gradient end)
-- Cream Peach: #FFD3B8 (background gradients, light fills, tag bg)
-- Cream Base: #FAF6F2 (main app background)
+- Terracotta Coral: #C24A1E (primary CTAs, brand mark, active states) — this is the "coral" in code
+- Peach Light: #C24A1E at 15% opacity (soft coral washes, selected states)
+- Peach Wash: #F2ECE2 (secondary surfaces, chip backgrounds, dividers)
+- Cream BG: #FAF6F0 (main app background, slightly warmer than pure white)
 - Sunny Butter: #FFF8E8 (sparkle highlights, special callouts)
 
 SUPPORTING:
-- Fresh Green: #66BB6A (positive scores, good food 8-10, leaf icons)
-- Gentle Amber: #FFB74D (okay scores 40-69, food scores 5-7)
-- Soft Red: #E57373 (negative/error — never harsh red, scores 0-39, food 1-4)
-- Sky Blue: #81D4FA (hydration tracking)
+- Forest Green: #4A7C59 (positive scores, good food 8-10, leaf icons, "Good" tier)
+- Warm Amber: #C49234 (okay scores 40-69, food scores 5-7, "Fair" tier)
+- Muted Red: #B23A2C (negative/alert, scores 0-39, food 1-4, "Needs work" tier)
+- Hydration Blue: #4A7CB8 (hydration tracking, water metric)
+- Lavender: #CE93D8 (hormone-related insights, rare accent)
+- Deep Purple: #8B5CF6 (premium/analytics accents)
 
 TEXT:
-- Dark Chocolate: #2B1F1A (primary text, headings)
+- Deep Espresso: #1A1510 (primary text, headings — this is the "darkBrown" in code)
 - Warm Brown: #4B3D36 (body text)
 - Medium Taupe: #6B5C54 (secondary/supporting text)
-- Light Taupe: #9B8C85 (captions, timestamps, placeholders)
-- Soft Tan: #F0E8E4 (dividers, borders, inactive elements)
+- Light Taupe: #9A8E82 (captions, timestamps, placeholders)
+- Soft Tan: #F2ECE2 (dividers, borders, inactive elements — same as Peach Wash)
 - White: #FFFFFF (card backgrounds)
 
+NUTRIENT SIGNATURE COLORS (for food breakdown cards, charts):
+- Protein: #C24A1E (same as coral)
+- Carbs: #D4943A (warm gold)
+- Fat: #A68B6B (soft taupe-brown)
+- Fiber: #66BB6A (bright green — differentiates from Forest Green)
+- Sugar: #E57373 (soft pink-red — differentiates from Muted Red)
+- Sodium: #5B9EC4 (sky blue)
+
 KEY GRADIENTS:
-- Hero Gradient: LinearGradient from #FF7A5C to #FFB89E, topLeading to bottomTrailing
-- Button Gradient: LinearGradient from #FF7A5C to #FF9B7D, leading to trailing
+- Hero Gradient: LinearGradient from #C24A1E to #C24A1E at 70% opacity, topLeading to bottomTrailing
+- Button Gradient: LinearGradient from #C24A1E to #D4623A, leading to trailing
 
 ### Typography — NUNITO ONLY
 
@@ -95,11 +123,11 @@ Metric grid: 2-column, 10pt gap
 
 ### Shadows — ALWAYS Warm Coral-Tinted
 
-NEVER use Color.black.opacity(...) for shadows. Always use warm coral:
-- Standard card: .shadow(color: Color(hex: "FF7A5C").opacity(0.10), radius: 12, x: 0, y: 4)
-- Elevated card: .shadow(color: Color(hex: "FF7A5C").opacity(0.15), radius: 16, x: 0, y: 6)
-- Button glow: .shadow(color: Color(hex: "FF7A5C").opacity(0.30), radius: 16, x: 0, y: 6)
-- Subtle: .shadow(color: Color(hex: "FF7A5C").opacity(0.06), radius: 8, x: 0, y: 2)
+NEVER use Color.black.opacity(...) for shadows. Always use the terracotta coral (matches `GlowbiteColors.cardShadowColor` etc. in code):
+- Standard card: .shadow(color: Color(hex: "C24A1E").opacity(0.08), radius: 12, x: 0, y: 4)
+- Elevated card: .shadow(color: Color(hex: "C24A1E").opacity(0.12), radius: 16, x: 0, y: 6)
+- Button glow: .shadow(color: Color(hex: "C24A1E").opacity(0.25), radius: 16, x: 0, y: 6)
+- Subtle: .shadow(color: Color(hex: "C24A1E").opacity(0.05), radius: 8, x: 0, y: 2)
 
 ### Animations
 
@@ -112,24 +140,24 @@ NEVER use Color.black.opacity(...) for shadows. Always use warm coral:
 
 ### Traffic Light Scoring System
 
-ALL circle progress indicators and score displays must use this system:
-- GREEN (#66BB6A): Score 70-100 → "Good" / emoji 🌟
-- AMBER (#FFB74D): Score 40-69 → "Fair" or "Moderate" / emoji ✨
-- RED (#E57373): Score 0-39 → "Needs work" / emoji 💫
+ALL circle progress indicators and score displays must use this system (matches `GlowbiteColors.trafficLight(for:)` in code):
+- FOREST GREEN (#4A7C59): Score 70-100 → "Good" / emoji 🌟
+- WARM AMBER (#C49234): Score 40-69 → "Fair" or "Moderate" / emoji ✨
+- MUTED RED (#B23A2C): Score 0-39 → "Needs work" / emoji 💫
 
 ### Component Patterns
 
 Primary Button (coral pill with gradient + glow):
-Background: LinearGradient #FF7A5C → #FF9B7D, leading to trailing. Padding: vertical 16, horizontal 32. Corner radius: 100 (full pill). Shadow: #FF7A5C at 30% opacity, radius 16, y offset 6. Text: .gbTitleM, white, center aligned. Haptic: .medium on tap.
+Background: LinearGradient #C24A1E → #D4623A, leading to trailing. Padding: vertical 16, horizontal 32. Corner radius: 100 (full pill). Shadow: #C24A1E at 25% opacity, radius 16, y offset 6. Text: .gbTitleM, white, center aligned. Haptic: .medium on tap.
 
 Secondary Button (peach outlined pill):
-Background: Capsule fill #FFD3B8 at 30% opacity. Border: 1.5pt stroke #FF7A5C. Corner radius: 100 (full pill). Text: .gbTitleM, color #FF7A5C.
+Background: Capsule fill #C24A1E at 15% opacity (use `GlowbiteColors.peachLight`). Border: 1.5pt stroke #C24A1E. Corner radius: 100 (full pill). Text: .gbTitleM, color #C24A1E.
 
 Glow Score Card (signature component — large circular progress ring):
-Ring: gradient stroke (Hero Coral → Soft Peach), 12pt stroke width, round cap. Center: score number in .gbDisplayXL. Above ring: "TODAY'S GLOW" label in .gbOverline, Medium Taupe, tracking 2.0. Below ring: emoji reaction based on score (🌟 80+, ✨ 60-79, 💫 <60). Card bg: Cream Base with subtle Cream Peach gradient, corner radius 28. Shadow: warm coral elevated shadow.
+Ring: gradient stroke (Terracotta Coral → 70% opacity coral), 12pt stroke width, round cap. Center: score number in .gbDisplayXL. Above ring: "TODAY'S GLOW" label in .gbOverline, Medium Taupe, tracking 2.0. Below ring: emoji reaction based on score (🌟 80+, ✨ 60-79, 💫 <60). Card bg: Cream BG with subtle Peach Wash gradient, corner radius 28. Shadow: warm coral elevated shadow (#C24A1E at 12%).
 
 Food Chip (compact pill):
-Layout: food emoji + name + impact indicator (+/-). Background: #FFD3B8 at 50% opacity. Corner radius: 100. Text: .gbCaption, Dark Chocolate.
+Layout: food emoji + name + impact indicator (+/-). Background: #F2ECE2 (Peach Wash). Corner radius: 100. Text: .gbCaption, Deep Espresso.
 
 Metric Card (white card with progress ring):
 Ring: traffic light colored, 6pt stroke. Center text: .gbTitleM, score value. Label below: .gbCaption, Medium Taupe. Card: white bg, corner radius 20, warm shadow.
@@ -285,7 +313,7 @@ Skinmax/
 ALWAYS:
 1. Use ONLY Nunito via .gb* font extensions — never system fonts, never raw .custom() inline
 2. Use ONLY hex colors from the palette above — no extra colors, no iOS defaults
-3. Apply warm coral-tinted shadows (Color(hex: "FF7A5C").opacity(...)) — never Color.black
+3. Apply warm coral-tinted shadows (Color(hex: "C24A1E").opacity(...)) — never Color.black
 4. Use corner radius 16-28 for cards, 100 for pills/chips — never below 12
 5. Write copy in playful, emoji-natural, encouraging voice
 6. Use SF Symbols for system icons (with Nunito for all text)
@@ -298,18 +326,28 @@ ALWAYS:
 13. Camera sessions MUST run on background thread
 14. Use .spring(response: 0.4, dampingFraction: 0.75) for interactive animations
 15. ViewModels are @Observable @MainActor classes — Views never hold business logic
+16. Background of every ScrollView is a LinearGradient from Cream Base (top) → Cream Peach (bottom) — never flat white
+17. RoundedRectangle corners MUST use `style: .continuous` — iOS squircle, matches the icon
+18. One Glow Score ring per screen gets the characterful face in the center (🌟/😊/💫 by tier)
+19. Apply scanner corner brackets to exactly ONE "moment of measurement" element per screen — camera preview, score reveal, or onboarding step
+20. Every coral surface (score ring, primary button, coral chip) gets a soft white inner highlight (ellipse, 35-55% opacity, top-left, -22° rotation) for dimensionality
 
 NEVER:
-1. Use default iOS blue .accentColor — always Hero Coral #FF7A5C
+1. Use default iOS blue .accentColor — always Terracotta Coral #C24A1E
 2. Use system fonts (San Francisco, etc.) — always Nunito
 3. Use sharp corners with radius under 12
 4. Use Color.black.opacity(...) for shadows — always warm coral tint
 5. Write clinical, medical, or preachy copy
 6. Use colors outside the defined palette
-7. Use harsh red for errors — use Soft Red #E57373
+7. Use harsh red for errors — use Muted Red #B23A2C
 8. Skip haptic feedback on interactive elements
 9. Put business logic in SwiftUI Views
 10. Use UIKit views when SwiftUI can do the job
+11. Use flat pure-white screen backgrounds — always peach gradient
+12. Use RoundedRectangle without `style: .continuous` — breaks the squircle consistency
+13. Put scanner corner brackets on more than one element per screen — they lose meaning
+14. Put single sparkles — always pairs or triplets, never alone
+15. Use Image(systemName:) for the Glow Score emoji face — that's a custom character slot
 
 ## Supabase Config
 - 90-day data retention policy

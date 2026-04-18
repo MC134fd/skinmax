@@ -61,11 +61,17 @@ struct ContentView: View {
         .fullScreenCover(isPresented: $showFoodCapture) {
             FoodCaptureView()
         }
-        .fullScreenCover(item: $faceResultScan) { scan in
+        .sheet(item: $faceResultScan) { scan in
             FaceScanResultView(scan: scan)
+                .presentationDetents([.large])
+                .presentationCornerRadius(GlowbiteSpacing.cardCornerRadiusLarge)
+                .presentationDragIndicator(.visible)
         }
-        .fullScreenCover(item: $foodResultScan) { scan in
+        .sheet(item: $foodResultScan) { scan in
             FoodScanResultView(scan: scan)
+                .presentationDetents([.large])
+                .presentationCornerRadius(GlowbiteSpacing.cardCornerRadiusLarge)
+                .presentationDragIndicator(.visible)
         }
     }
 

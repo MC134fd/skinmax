@@ -37,9 +37,12 @@ struct ScanHistoryView: View {
         .background(GlowbiteColors.creamBG.ignoresSafeArea())
         .navigationTitle("Scan History")
         .navigationBarTitleDisplayMode(.inline)
-        .fullScreenCover(item: $selectedScan) { scan in
+        .sheet(item: $selectedScan) { scan in
             FaceScanResultView(scan: scan)
                 .environment(dataStore)
+                .presentationDetents([.large])
+                .presentationCornerRadius(GlowbiteSpacing.cardCornerRadiusLarge)
+                .presentationDragIndicator(.visible)
         }
         .alert("Delete Scan", isPresented: Binding(
             get: { scanToDelete != nil },

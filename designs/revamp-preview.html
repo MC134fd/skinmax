@@ -1,0 +1,948 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Glowbite — Revamped Screens</title>
+<style>
+  :root{
+    --coral:#FF7A5C;
+    --coral-light:#FF9B7D;
+    --peach:#FFB89E;
+    --cream-peach:#FFD3B8;
+    --cream:#FAF6F2;
+    --butter:#FFF8E8;
+    --green:#66BB6A;
+    --amber:#FFB74D;
+    --red:#E57373;
+    --sky:#81D4FA;
+    --choco:#2B1F1A;
+    --brown:#4B3D36;
+    --taupe:#6B5C54;
+    --light-taupe:#9B8C85;
+    --tan:#F0E8E4;
+    --white:#fff;
+  }
+  *{box-sizing:border-box; -webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0}
+  body{
+    background:linear-gradient(160deg,#FAF6F2 0%, #FFD3B8 40%, #FFB89E 100%);
+    font-family:-apple-system,"Helvetica Neue",system-ui,sans-serif;
+    color:var(--choco);
+    min-height:100vh;
+    padding:56px 24px 120px;
+  }
+  .page-header{max-width:1400px;margin:0 auto 56px;text-align:center}
+  .page-header h1{font-size:48px;margin:0 0 12px;letter-spacing:-0.03em;font-weight:900}
+  .page-header p{margin:0;font-size:17px;color:var(--brown);max-width:720px;margin:0 auto;line-height:1.55}
+  .page-header .pillset{margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  .page-header .pill{background:#fff;padding:8px 14px;border-radius:100px;font-size:13px;font-weight:700;color:var(--coral);box-shadow:0 4px 12px rgba(255,122,92,.12)}
+
+  .phones{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:40px;
+    max-width:1400px;
+    margin:0 auto;
+  }
+  @media (max-width:1100px){.phones{grid-template-columns:1fr 1fr}}
+  @media (max-width:740px){.phones{grid-template-columns:1fr;max-width:420px}}
+
+  .col{display:flex;flex-direction:column;gap:16px;align-items:center}
+  .col h2{
+    margin:0;font-size:22px;font-weight:800;color:var(--choco);
+  }
+  .col .subhead{margin:0;font-size:13px;color:var(--brown);text-align:center;max-width:320px}
+
+  /* ---------- iPhone frame ---------- */
+  .phone{
+    width:100%;
+    max-width:360px;
+    aspect-ratio:390/844;
+    background:#000;
+    border-radius:52px;
+    padding:12px;
+    box-shadow:
+      0 30px 60px rgba(91,40,20,.18),
+      0 0 0 3px rgba(0,0,0,.15),
+      inset 0 0 0 2px rgba(255,255,255,.08);
+    position:relative;
+  }
+  .screen{
+    width:100%;height:100%;
+    border-radius:42px;
+    overflow:hidden;
+    position:relative;
+    background:linear-gradient(180deg, #FAF6F2 0%, #FFD3B8 100%);
+  }
+  /* Dynamic island */
+  .phone::before{
+    content:"";
+    position:absolute; top:18px; left:50%; transform:translateX(-50%);
+    width:96px; height:28px; background:#000; border-radius:100px; z-index:3;
+  }
+  /* Status bar */
+  .statusbar{
+    position:absolute; top:0; left:0; right:0; height:44px;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:0 28px; font-size:13px; font-weight:700; color:var(--choco); z-index:2;
+  }
+  .statusbar .icons{display:flex; gap:5px}
+  .dot{width:4px; height:4px; border-radius:50%; background:var(--choco)}
+
+  /* Screen content wrapper */
+  .content{
+    position:absolute; top:44px; left:0; right:0; bottom:0;
+    overflow-y:auto; overflow-x:hidden;
+    padding:0 20px 110px;
+  }
+
+  /* ---------- Shared components ---------- */
+
+  /* Scanner corner brackets */
+  .brackets{position:absolute; inset:0; pointer-events:none}
+  .brackets::before, .brackets::after,
+  .brackets span::before, .brackets span::after{
+    content:""; position:absolute; width:22px; height:22px;
+    border:2.5px solid rgba(255,248,232,.95);
+    border-radius:5px;
+  }
+  .brackets::before{top:-6px; left:-6px; border-right:none; border-bottom:none}
+  .brackets::after{top:-6px; right:-6px; border-left:none; border-bottom:none}
+  .brackets span::before{bottom:-6px; left:-6px; border-right:none; border-top:none}
+  .brackets span::after{bottom:-6px; right:-6px; border-left:none; border-top:none}
+  .brackets.dark::before, .brackets.dark::after,
+  .brackets.dark span::before, .brackets.dark span::after{border-color:rgba(43,31,26,.45)}
+
+  .sparkle{
+    position:absolute; color:var(--butter);
+    filter:drop-shadow(0 0 4px rgba(255,248,232,.8));
+    pointer-events:none;
+  }
+
+  /* Headings */
+  .h-title{font-size:22px; font-weight:800; letter-spacing:-0.02em; color:var(--choco); margin:0}
+  .h-sub{font-size:12px; font-weight:800; letter-spacing:0.15em; color:var(--taupe); text-transform:uppercase; margin:0}
+  .h-body{font-size:14px; font-weight:500; color:var(--brown); line-height:1.5; margin:0}
+  .h-caption{font-size:11px; font-weight:700; color:var(--light-taupe); margin:0}
+
+  /* Top app header */
+  .app-header{display:flex; justify-content:space-between; align-items:center; padding-top:6px; margin-bottom:14px}
+  .brandmark{display:flex; align-items:center; gap:8px; font-weight:900; font-size:20px; color:var(--choco)}
+  .brandmark .dotfruit{
+    width:30px; height:30px; border-radius:10px;
+    background:linear-gradient(135deg,var(--coral),var(--peach));
+    box-shadow: 0 4px 8px rgba(255,122,92,.25);
+    position:relative; overflow:hidden;
+  }
+  .brandmark .dotfruit::before{
+    content:""; position:absolute; width:9px; height:9px; border-radius:50%;
+    background:rgba(255,255,255,.7); top:6px; left:6px;
+  }
+  .avatar{
+    width:36px;height:36px;border-radius:12px;
+    background:linear-gradient(135deg,var(--coral),var(--peach));
+    display:grid;place-items:center;font-weight:900;color:#fff;font-size:16px;
+    box-shadow:0 6px 14px rgba(255,122,92,.25);
+    position:relative; overflow:hidden;
+  }
+  .avatar::before{
+    content:""; position:absolute; width:14px; height:14px; border-radius:50%;
+    background:rgba(255,255,255,.55); top:4px; left:4px;
+  }
+
+  /* Week strip */
+  .weekstrip{display:flex; gap:6px; margin-bottom:16px}
+  .weekstrip .daychip{
+    flex:1; aspect-ratio:1/1.4; border-radius:14px;
+    background:#fff; display:flex; flex-direction:column; align-items:center;
+    justify-content:center; gap:2px;
+    box-shadow:0 4px 10px rgba(255,122,92,.08);
+  }
+  .weekstrip .daychip.active{
+    background:linear-gradient(180deg,var(--coral),var(--coral-light));
+    color:#fff; box-shadow:0 8px 16px rgba(255,122,92,.35);
+    position:relative; overflow:hidden;
+  }
+  .weekstrip .daychip.active::before{
+    content:""; position:absolute; top:-10%; left:-10%; width:60%; height:60%;
+    background:rgba(255,255,255,.35); border-radius:50%;
+    transform:rotate(-22deg);
+  }
+  .weekstrip .daychip .d{font-size:9px; font-weight:800; letter-spacing:0.08em; opacity:.7}
+  .weekstrip .daychip .n{font-size:15px; font-weight:900}
+  .weekstrip .daychip.active .d{opacity:.9}
+  .weekstrip .daychip .dot-ind{width:4px;height:4px;border-radius:50%;background:var(--coral);margin-top:3px}
+  .weekstrip .daychip.active .dot-ind{background:#fff}
+
+  /* Glow Score Card */
+  .glow-card{
+    position:relative;
+    background:linear-gradient(160deg,#FFE9D6,#FFD3B8 70%,#FFB89E);
+    border-radius:28px; padding:22px 20px 24px;
+    box-shadow:0 14px 30px rgba(255,122,92,.15);
+    margin-bottom:14px;
+    overflow:hidden;
+  }
+  .glow-card .overline{font-size:10px; font-weight:900; letter-spacing:0.2em; color:var(--coral); text-transform:uppercase}
+  .glow-card .layout{display:flex; align-items:center; gap:18px; margin-top:10px}
+  .glow-card .ring{
+    flex:0 0 auto; width:132px; height:132px; position:relative;
+  }
+  .glow-card .ring svg{width:100%; height:100%; transform:rotate(-90deg)}
+  .glow-card .ring .track{fill:none; stroke:rgba(255,255,255,.55); stroke-width:10}
+  .glow-card .ring .prog{fill:none; stroke-width:10; stroke-linecap:round}
+  .glow-card .ring .center{
+    position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+  }
+  .glow-card .ring .face{font-size:32px; margin-bottom:-4px}
+  .glow-card .ring .num{font-size:30px; font-weight:900; color:var(--choco); letter-spacing:-0.02em}
+  .glow-card .ring .slash{font-size:13px; color:var(--taupe); font-weight:700; margin-top:-4px}
+  .glow-card .copy h3{margin:0; font-size:20px; font-weight:900; color:var(--choco); letter-spacing:-0.01em}
+  .glow-card .copy p{margin:6px 0 0; font-size:13px; color:var(--brown); line-height:1.4}
+  .glow-card .tag-row{display:flex; gap:6px; margin-top:10px}
+  .glow-card .tag{
+    background:rgba(255,255,255,.7); color:var(--coral); font-size:11px; font-weight:800;
+    padding:4px 10px; border-radius:100px;
+  }
+
+  /* Metric carousel */
+  .mrow{display:flex; gap:10px; margin-bottom:14px}
+  .metric{
+    flex:1; background:#fff; border-radius:20px; padding:14px 10px 12px;
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    box-shadow:0 8px 16px rgba(255,122,92,.08);
+    position:relative;
+  }
+  .metric .mring{width:52px; height:52px; position:relative}
+  .metric .mring svg{width:100%; height:100%; transform:rotate(-90deg)}
+  .metric .mring .tk{fill:none; stroke:var(--tan); stroke-width:6}
+  .metric .mring .p{fill:none; stroke-width:6; stroke-linecap:round}
+  .metric .mring .v{position:absolute; inset:0; display:grid; place-items:center; font-size:14px; font-weight:900; color:var(--choco)}
+  .metric .lbl{font-size:11px; font-weight:800; color:var(--brown)}
+
+  /* Scanner-framed section */
+  .scanned-section{position:relative; padding:10px; margin-bottom:14px}
+  .scanned-section .inner{
+    background:#fff; border-radius:20px; padding:16px;
+    box-shadow:0 8px 18px rgba(255,122,92,.1);
+  }
+
+  /* Activity row */
+  .activity h4{margin:0 0 10px; font-size:15px; font-weight:800; color:var(--choco)}
+  .actrow{
+    display:flex; align-items:center; gap:10px; padding:10px; border-radius:14px;
+    background:#fff; box-shadow:0 4px 10px rgba(255,122,92,.06); margin-bottom:6px;
+  }
+  .actrow .ico{
+    width:36px; height:36px; border-radius:12px; display:grid; place-items:center;
+    background:linear-gradient(135deg,var(--coral),var(--peach)); color:#fff; font-size:16px;
+    position:relative; overflow:hidden;
+  }
+  .actrow .ico::before{
+    content:""; position:absolute; width:12px; height:12px; border-radius:50%;
+    background:rgba(255,255,255,.55); top:4px; left:4px;
+  }
+  .actrow .t{font-size:13px; font-weight:800; color:var(--choco)}
+  .actrow .s{font-size:11px; color:var(--taupe)}
+  .actrow .badge{margin-left:auto; font-size:12px; font-weight:900; color:var(--green)}
+
+  /* Insight card */
+  .insight{
+    background:#fff; border-radius:20px; padding:14px; display:flex; gap:12px; align-items:flex-start;
+    box-shadow:0 6px 14px rgba(255,122,92,.08); margin-bottom:14px;
+    position:relative;
+  }
+  .insight .chip{
+    flex:0 0 auto; width:42px; height:42px; border-radius:14px;
+    background:linear-gradient(135deg,#FFD3B8,#FFB89E); display:grid; place-items:center;
+    font-size:20px;
+    position:relative; overflow:hidden;
+  }
+  .insight .chip::before{
+    content:""; position:absolute; width:12px; height:12px; border-radius:50%;
+    background:rgba(255,255,255,.55); top:4px; left:4px;
+  }
+  .insight h5{margin:0; font-size:14px; font-weight:800; color:var(--choco)}
+  .insight p{margin:4px 0 0; font-size:12px; color:var(--brown); line-height:1.4}
+
+  /* =============== ANALYTICS SCREEN =============== */
+
+  .mood-hero{
+    background:linear-gradient(160deg,#FFE9D6,#FFD3B8 60%,#FF9B7D);
+    border-radius:28px; padding:24px 20px; margin-bottom:16px;
+    position:relative; overflow:hidden;
+    box-shadow:0 14px 30px rgba(255,122,92,.2);
+  }
+  .mood-hero .pill{
+    display:inline-block; background:rgba(255,255,255,.55); color:var(--coral);
+    font-size:10px; font-weight:900; letter-spacing:0.15em; text-transform:uppercase;
+    padding:5px 10px; border-radius:100px; margin-bottom:10px;
+  }
+  .mood-hero .character{
+    width:92px; height:92px; border-radius:50%;
+    background:radial-gradient(at 35% 30%, #FFB89E, #FF7A5C 80%);
+    display:grid; place-items:center; font-size:48px;
+    margin:4px 0 14px;
+    position:relative; overflow:hidden;
+    box-shadow:0 10px 20px rgba(255,122,92,.28);
+  }
+  .mood-hero .character::before{
+    content:""; position:absolute; width:24px; height:24px; border-radius:50%;
+    background:rgba(255,255,255,.55); top:10px; left:14px;
+  }
+  .mood-hero h2{margin:0; font-size:24px; font-weight:900; color:var(--choco); letter-spacing:-0.02em}
+  .mood-hero .mood-body{margin:8px 0 0; font-size:14px; color:var(--brown); line-height:1.5; max-width:260px}
+  .mood-hero .strip{display:flex; gap:6px; margin-top:14px}
+  .mood-hero .strip .bar{flex:1; height:44px; border-radius:10px; background:rgba(255,255,255,.5); position:relative; overflow:hidden}
+  .mood-hero .strip .bar .fill{position:absolute; bottom:0; left:0; right:0; border-radius:10px; background:linear-gradient(180deg,#FFF8E8,#FFB89E)}
+  .mood-hero .strip .bar.today::after{
+    content:""; position:absolute; top:-4px; left:50%; transform:translateX(-50%);
+    width:8px; height:8px; border-radius:50%; background:var(--coral);
+  }
+  .mood-hero .strip .lbl{display:flex; gap:6px; margin-top:4px}
+  .mood-hero .strip .lbl span{flex:1; text-align:center; font-size:9px; font-weight:800; color:rgba(43,31,26,.55)}
+
+  /* Food-skin connection card (story) */
+  .connection{
+    background:#fff; border-radius:24px; padding:18px; margin-bottom:14px;
+    box-shadow:0 10px 22px rgba(255,122,92,.1); position:relative;
+  }
+  .connection .top{display:flex; gap:8px; align-items:center; margin-bottom:12px}
+  .connection .top .face-circle{
+    width:36px; height:36px; border-radius:50%;
+    background:linear-gradient(135deg,var(--coral),var(--peach));
+    display:grid; place-items:center; color:#fff; font-size:18px;
+    position:relative; overflow:hidden;
+  }
+  .connection .top .face-circle::before{
+    content:""; position:absolute; width:11px; height:11px; border-radius:50%;
+    background:rgba(255,255,255,.55); top:4px; left:4px;
+  }
+  .connection h4{margin:0; font-size:14px; font-weight:800; color:var(--choco)}
+  .connection .small{margin:2px 0 0; font-size:11px; color:var(--taupe)}
+  .connection .flow{display:flex; gap:0; align-items:stretch; margin-top:8px; height:100px; position:relative}
+  .connection .flow svg{position:absolute; inset:0; width:100%; height:100%}
+  .connection .flow .bar{
+    flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:4px;
+    position:relative; z-index:1;
+  }
+  .connection .flow .bar .h{width:16px; border-radius:100px 100px 6px 6px}
+  .connection .flow .bar.food .h{background:linear-gradient(180deg,#FFB89E,#FF7A5C)}
+  .connection .flow .bar.skin .h{background:linear-gradient(180deg,#9BD89F,#66BB6A)}
+  .connection .flow .bar .d{font-size:9px; color:var(--taupe); font-weight:800}
+  .connection .legend{display:flex; gap:12px; margin-top:10px; font-size:11px; color:var(--brown)}
+  .connection .legend span{display:inline-flex; align-items:center; gap:5px; font-weight:700}
+  .connection .legend .dotf{width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--coral),var(--peach))}
+  .connection .legend .dots{width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#9BD89F,#66BB6A)}
+
+  /* Weekly highlights list */
+  .highlights h4{font-size:15px; font-weight:800; color:var(--choco); margin:0 0 10px}
+  .hl-card{
+    background:#fff; border-radius:20px; padding:14px; margin-bottom:8px;
+    display:flex; gap:12px; align-items:center;
+    box-shadow:0 6px 14px rgba(255,122,92,.08);
+    position:relative;
+  }
+  .hl-card .badge{
+    width:44px; height:44px; border-radius:14px; display:grid; place-items:center; font-size:22px;
+    flex:0 0 auto; position:relative; overflow:hidden;
+  }
+  .hl-card.green .badge{background:linear-gradient(135deg,#B8E8BC,#66BB6A)}
+  .hl-card.amber .badge{background:linear-gradient(135deg,#FFE0B2,#FFB74D)}
+  .hl-card.coral .badge{background:linear-gradient(135deg,#FFD3B8,#FF7A5C)}
+  .hl-card .badge::before{
+    content:""; position:absolute; width:12px; height:12px; border-radius:50%;
+    background:rgba(255,255,255,.55); top:4px; left:4px;
+  }
+  .hl-card h5{margin:0; font-size:13px; font-weight:800; color:var(--choco)}
+  .hl-card p{margin:2px 0 0; font-size:11px; color:var(--taupe); line-height:1.4}
+  .hl-card .arrow{margin-left:auto; color:var(--light-taupe); font-size:14px}
+
+  /* Streak badge */
+  .streak-mega{
+    background:linear-gradient(135deg,#FFD3B8,#FFB89E);
+    border-radius:24px; padding:16px; display:flex; gap:14px; align-items:center;
+    margin-bottom:14px; position:relative; overflow:hidden;
+    box-shadow:0 10px 22px rgba(255,122,92,.12);
+  }
+  .streak-mega .num{
+    font-size:40px; font-weight:900; color:var(--coral); line-height:1; letter-spacing:-0.04em;
+  }
+  .streak-mega .lbl h5{margin:0; font-size:14px; font-weight:800; color:var(--choco)}
+  .streak-mega .lbl p{margin:2px 0 0; font-size:11px; color:var(--brown)}
+  .streak-mega .fire{font-size:28px; margin-left:auto}
+
+  /* =============== PROFILE SCREEN =============== */
+
+  .profile-hero{
+    background:linear-gradient(160deg,#FFE9D6,#FFD3B8 60%,#FF9B7D);
+    border-radius:28px; padding:22px 18px; margin-bottom:14px;
+    position:relative; overflow:hidden;
+    box-shadow:0 14px 30px rgba(255,122,92,.18);
+    text-align:center;
+  }
+  .profile-hero .big-avatar{
+    width:90px; height:90px; border-radius:28px;
+    background:radial-gradient(at 35% 30%, #FFD3B8, #FF7A5C 80%);
+    display:grid; place-items:center; font-size:36px; color:#fff; font-weight:900;
+    margin:0 auto 10px;
+    position:relative; overflow:hidden;
+    box-shadow:0 10px 20px rgba(255,122,92,.28);
+  }
+  .profile-hero .big-avatar::before{
+    content:""; position:absolute; width:22px; height:22px; border-radius:50%;
+    background:rgba(255,255,255,.55); top:12px; left:14px;
+  }
+  .profile-hero .name{font-size:22px; font-weight:900; color:var(--choco); margin:0; letter-spacing:-0.02em}
+  .profile-hero .since{font-size:12px; color:var(--brown); margin:2px 0 0; opacity:.8}
+  .profile-hero .stripe{display:flex; gap:6px; margin-top:12px; justify-content:center}
+  .profile-hero .badge{background:rgba(255,255,255,.6); color:var(--coral); font-size:10px; font-weight:900; padding:5px 9px; border-radius:100px; letter-spacing:0.05em}
+
+  .stat-row{display:flex; gap:8px; margin-bottom:14px}
+  .stat{
+    flex:1; background:#fff; border-radius:20px; padding:14px 10px; text-align:center;
+    box-shadow:0 8px 16px rgba(255,122,92,.08);
+    position:relative;
+  }
+  .stat .n{font-size:24px; font-weight:900; color:var(--choco); letter-spacing:-0.02em; line-height:1}
+  .stat .l{font-size:10px; font-weight:800; color:var(--taupe); letter-spacing:0.1em; text-transform:uppercase; margin-top:4px}
+
+  /* Achievement stamps */
+  .stamps{margin-bottom:14px}
+  .stamps h4{margin:0 0 10px; font-size:14px; font-weight:800; color:var(--choco)}
+  .stamp-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:8px}
+  .stamp{
+    aspect-ratio:1; border-radius:18px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:2px;
+    background:#fff; box-shadow:0 4px 10px rgba(255,122,92,.08);
+    position:relative; overflow:hidden;
+  }
+  .stamp.earned.coral{background:linear-gradient(135deg,#FFD3B8,#FF7A5C); color:#fff}
+  .stamp.earned.green{background:linear-gradient(135deg,#B8E8BC,#66BB6A); color:#fff}
+  .stamp.earned.amber{background:linear-gradient(135deg,#FFE0B2,#FFB74D); color:#fff}
+  .stamp.earned::before{
+    content:""; position:absolute; width:16px; height:16px; border-radius:50%;
+    background:rgba(255,255,255,.45); top:6px; left:6px;
+  }
+  .stamp .ico{font-size:22px; position:relative; z-index:1}
+  .stamp .lbl{font-size:8px; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; position:relative; z-index:1; opacity:.9}
+  .stamp:not(.earned){opacity:.55; filter:grayscale(.5)}
+  .stamp:not(.earned) .ico{filter:grayscale(1); opacity:.4}
+
+  /* Menu */
+  .menu{background:#fff; border-radius:22px; overflow:hidden; box-shadow:0 8px 16px rgba(255,122,92,.08); margin-bottom:14px}
+  .mrow2{display:flex; align-items:center; gap:12px; padding:14px 16px; border-bottom:1px solid var(--tan)}
+  .mrow2:last-child{border-bottom:none}
+  .mrow2 .ico{
+    width:34px; height:34px; border-radius:12px;
+    background:linear-gradient(135deg,var(--cream-peach),var(--peach));
+    display:grid; place-items:center; color:var(--coral); font-size:16px;
+    position:relative; overflow:hidden;
+  }
+  .mrow2 .ico::before{
+    content:""; position:absolute; width:10px; height:10px; border-radius:50%;
+    background:rgba(255,255,255,.55); top:3px; left:3px;
+  }
+  .mrow2 .lbl{flex:1; font-size:14px; font-weight:700; color:var(--choco)}
+  .mrow2 .chev{color:var(--light-taupe); font-size:14px}
+
+  /* Icon switcher tile */
+  .iconswap{
+    background:linear-gradient(160deg,#fff,#FFEFE0); border-radius:22px; padding:16px;
+    margin-bottom:14px; box-shadow:0 8px 16px rgba(255,122,92,.08);
+  }
+  .iconswap h4{margin:0; font-size:14px; font-weight:800; color:var(--choco)}
+  .iconswap p{margin:2px 0 12px; font-size:11px; color:var(--taupe)}
+  .iconswap .options{display:flex; gap:10px}
+  .iconswap .op{
+    flex:1; background:#fff; border-radius:16px; padding:8px; text-align:center;
+    border:2px solid transparent;
+    box-shadow:0 4px 10px rgba(255,122,92,.05);
+  }
+  .iconswap .op.active{border-color:var(--coral); box-shadow:0 6px 14px rgba(255,122,92,.2)}
+  .iconswap .op .img{
+    aspect-ratio:1; border-radius:14px; background:linear-gradient(160deg,var(--cream-peach),var(--peach));
+    display:grid; place-items:center; font-size:28px; margin-bottom:6px;
+    position:relative; overflow:hidden;
+  }
+  .iconswap .op .img::before{
+    content:""; position:absolute; width:18px; height:18px; border-radius:50%;
+    background:rgba(255,255,255,.55); top:8px; left:8px;
+  }
+  .iconswap .op .lbl{font-size:10px; font-weight:800; color:var(--choco)}
+
+  /* =============== TAB BAR =============== */
+  .tabbar{
+    position:absolute; bottom:14px; left:14px; right:14px; height:64px;
+    background:rgba(255,255,255,.65); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+    border-radius:22px;
+    display:flex; align-items:center; justify-content:space-around;
+    box-shadow:0 8px 20px rgba(255,122,92,.12);
+    border:1px solid rgba(255,255,255,.6);
+    z-index:5;
+  }
+  .tab{display:flex; flex-direction:column; align-items:center; gap:2px; font-size:9px; font-weight:800; color:var(--taupe)}
+  .tab.active{color:var(--coral)}
+  .tab.active .ico{
+    background:var(--peach); color:var(--coral); padding:4px 10px; border-radius:100px;
+  }
+  .tab .ico{font-size:18px; padding:4px 10px}
+  .scan-fab{
+    position:absolute; bottom:28px; right:32px;
+    width:56px; height:56px; border-radius:18px;
+    background:linear-gradient(160deg,var(--coral),var(--coral-light));
+    display:grid; place-items:center; font-size:22px; color:#fff;
+    box-shadow:0 12px 24px rgba(255,122,92,.45);
+    z-index:6; position:relative; overflow:hidden;
+  }
+  .scan-fab::before{
+    content:""; position:absolute; width:20px; height:20px; border-radius:50%;
+    background:rgba(255,255,255,.4); top:6px; left:8px;
+  }
+
+  /* Design principles box */
+  .principles{
+    max-width:1100px; margin:72px auto 0;
+    background:rgba(255,255,255,.85);
+    border-radius:28px; padding:32px;
+    box-shadow:0 20px 40px rgba(255,122,92,.08);
+  }
+  .principles h3{font-size:24px; margin:0 0 20px; font-weight:900}
+  .principles .grid5{display:grid; grid-template-columns:repeat(5,1fr); gap:20px}
+  @media (max-width:900px){.principles .grid5{grid-template-columns:repeat(2,1fr)}}
+  .principles .p-item .ic{width:44px; height:44px; background:linear-gradient(135deg,var(--coral),var(--peach)); border-radius:14px; display:grid; place-items:center; font-size:22px; color:#fff; margin-bottom:12px; position:relative; overflow:hidden}
+  .principles .p-item .ic::before{content:""; position:absolute; width:14px; height:14px; border-radius:50%; background:rgba(255,255,255,.45); top:5px; left:5px}
+  .principles .p-item h5{margin:0 0 4px; font-size:14px; font-weight:800}
+  .principles .p-item p{margin:0; font-size:12px; color:var(--brown); line-height:1.45}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Glowbite — Home · Analytics · Profile</h1>
+  <p>All three screens redesigned to inherit the app icon's visual language: warm peach gradients, scanner corner brackets, characterful scores, soft highlights, and sparkles. Nothing clinical, everything rounded.</p>
+  <div class="pillset">
+    <span class="pill">🎯 Scanner brackets</span>
+    <span class="pill">😊 Character scores</span>
+    <span class="pill">✨ Sparkle system</span>
+    <span class="pill">🍑 Peach gradients</span>
+    <span class="pill">⭕ Squircle forms</span>
+  </div>
+</div>
+
+<div class="phones">
+
+<!-- ======================= HOME ======================= -->
+<div class="col">
+  <div class="phone">
+    <div class="screen">
+      <div class="statusbar">
+        <span>9:41</span>
+        <span class="icons"><span class="dot"></span><span class="dot"></span><span class="dot"></span> 📶 100%</span>
+      </div>
+      <div class="content">
+
+        <div class="app-header">
+          <div class="brandmark"><div class="dotfruit"></div>Glowbite</div>
+          <div class="avatar">M</div>
+        </div>
+
+        <!-- Greeting -->
+        <h2 class="h-title" style="margin-bottom:2px">Morning, glow girl 🌅</h2>
+        <p class="h-body" style="margin-bottom:14px">Sat, Apr 18 · Day 12 streak 🔥</p>
+
+        <!-- Week strip -->
+        <div class="weekstrip">
+          <div class="daychip"><span class="d">MON</span><span class="n">13</span><span class="dot-ind"></span></div>
+          <div class="daychip"><span class="d">TUE</span><span class="n">14</span><span class="dot-ind"></span></div>
+          <div class="daychip"><span class="d">WED</span><span class="n">15</span><span class="dot-ind"></span></div>
+          <div class="daychip"><span class="d">THU</span><span class="n">16</span><span class="dot-ind"></span></div>
+          <div class="daychip"><span class="d">FRI</span><span class="n">17</span><span class="dot-ind"></span></div>
+          <div class="daychip active"><span class="d">SAT</span><span class="n">18</span><span class="dot-ind"></span></div>
+          <div class="daychip"><span class="d">SUN</span><span class="n">19</span></div>
+        </div>
+
+        <!-- Glow Score (THE moment of measurement — gets corner brackets) -->
+        <div class="glow-card">
+          <div class="brackets"><span></span></div>
+          <span class="overline">✨ Today's glow</span>
+          <div class="layout">
+            <div class="ring">
+              <svg viewBox="0 0 120 120">
+                <circle class="track" cx="60" cy="60" r="52"/>
+                <circle class="prog" cx="60" cy="60" r="52"
+                        stroke="url(#ringGrad)"
+                        stroke-dasharray="260 327"/>
+                <defs>
+                  <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#FF7A5C"/>
+                    <stop offset="100%" stop-color="#FFB89E"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="center">
+                <div class="face">🌟</div>
+                <div class="num">82</div>
+                <div class="slash">out of 100</div>
+              </div>
+            </div>
+            <div class="copy">
+              <h3>Glowing ✨</h3>
+              <p>Your skin is reading peachy. Cucumber water yesterday definitely helped.</p>
+              <div class="tag-row">
+                <span class="tag">+6 vs avg</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric row -->
+        <div class="mrow">
+          <div class="metric">
+            <div class="mring">
+              <svg viewBox="0 0 60 60">
+                <circle class="tk" cx="30" cy="30" r="24"/>
+                <circle class="p" cx="30" cy="30" r="24" stroke="#66BB6A" stroke-dasharray="120 151"/>
+              </svg>
+              <div class="v">85</div>
+            </div>
+            <span class="lbl">💧 Hydration</span>
+          </div>
+          <div class="metric">
+            <div class="mring">
+              <svg viewBox="0 0 60 60">
+                <circle class="tk" cx="30" cy="30" r="24"/>
+                <circle class="p" cx="30" cy="30" r="24" stroke="#FFB74D" stroke-dasharray="95 151"/>
+              </svg>
+              <div class="v">63</div>
+            </div>
+            <span class="lbl">☀️ Brightness</span>
+          </div>
+          <div class="metric">
+            <div class="mring">
+              <svg viewBox="0 0 60 60">
+                <circle class="tk" cx="30" cy="30" r="24"/>
+                <circle class="p" cx="30" cy="30" r="24" stroke="#66BB6A" stroke-dasharray="115 151"/>
+              </svg>
+              <div class="v">76</div>
+            </div>
+            <span class="lbl">🌱 Calmness</span>
+          </div>
+        </div>
+
+        <!-- Insight -->
+        <div class="insight">
+          <div class="chip">🥑</div>
+          <div>
+            <h5>Ooh, a glow win</h5>
+            <p>The avocado toast yesterday bumped your hydration by 8 pts overnight. Keep that going, bestie.</p>
+          </div>
+        </div>
+
+        <!-- Activity -->
+        <div class="activity">
+          <h4>Today's moments ✨</h4>
+          <div class="actrow">
+            <div class="ico">🧑</div>
+            <div>
+              <div class="t">Face scan</div>
+              <div class="s">8:24 AM · Glow 82</div>
+            </div>
+            <div class="badge">+6</div>
+          </div>
+          <div class="actrow">
+            <div class="ico">🥣</div>
+            <div>
+              <div class="t">Berry smoothie bowl</div>
+              <div class="s">8:40 AM · Skin impact 9</div>
+            </div>
+            <div class="badge" style="color:var(--green)">🌟</div>
+          </div>
+          <div class="actrow">
+            <div class="ico">☕</div>
+            <div>
+              <div class="t">Oat latte</div>
+              <div class="s">9:15 AM · Skin impact 7</div>
+            </div>
+            <div class="badge" style="color:var(--amber)">✨</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Tab bar -->
+      <div class="tabbar">
+        <div class="tab active"><div class="ico">🏠</div>Home</div>
+        <div class="tab"><div class="ico">📊</div>Analytics</div>
+        <div style="width:50px"></div>
+        <div class="tab"><div class="ico">👤</div>Account</div>
+      </div>
+      <div class="scan-fab">📷</div>
+    </div>
+  </div>
+  <h2>Home</h2>
+  <p class="subhead">Scanner brackets frame the day's Glow Score, characterful apple face is the hero, warm peach surfaces throughout.</p>
+</div>
+
+<!-- ======================= ANALYTICS ======================= -->
+<div class="col">
+  <div class="phone">
+    <div class="screen">
+      <div class="statusbar">
+        <span>9:41</span>
+        <span class="icons"><span class="dot"></span><span class="dot"></span><span class="dot"></span> 📶 100%</span>
+      </div>
+      <div class="content">
+
+        <div class="app-header">
+          <div class="brandmark"><div class="dotfruit"></div>Analytics</div>
+          <div class="avatar">M</div>
+        </div>
+
+        <!-- Week selector pills -->
+        <div style="display:flex;gap:6px;margin-bottom:14px">
+          <div style="background:#fff;padding:6px 12px;border-radius:100px;font-size:11px;font-weight:800;color:var(--taupe);box-shadow:0 4px 10px rgba(255,122,92,.08)">Day</div>
+          <div style="background:linear-gradient(135deg,var(--coral),var(--peach));padding:6px 12px;border-radius:100px;font-size:11px;font-weight:800;color:#fff;box-shadow:0 6px 14px rgba(255,122,92,.25)">Week</div>
+          <div style="background:#fff;padding:6px 12px;border-radius:100px;font-size:11px;font-weight:800;color:var(--taupe);box-shadow:0 4px 10px rgba(255,122,92,.08)">Month</div>
+          <div style="background:#fff;padding:6px 12px;border-radius:100px;font-size:11px;font-weight:800;color:var(--taupe);box-shadow:0 4px 10px rgba(255,122,92,.08)">Year</div>
+        </div>
+
+        <!-- Mood hero - THE character-driven replacement for a data dashboard -->
+        <div class="mood-hero">
+          <span class="pill">✨ This week's vibe</span>
+          <div class="character">🌟</div>
+          <h2>Peachy week.</h2>
+          <p class="mood-body">Your glow held steady at <b>78</b> — up 4 from last week. The green smoothie streak is paying off.</p>
+          <div class="strip">
+            <div class="bar"><div class="fill" style="height:72%"></div></div>
+            <div class="bar"><div class="fill" style="height:66%"></div></div>
+            <div class="bar"><div class="fill" style="height:80%"></div></div>
+            <div class="bar"><div class="fill" style="height:88%"></div></div>
+            <div class="bar"><div class="fill" style="height:70%"></div></div>
+            <div class="bar"><div class="fill" style="height:84%"></div></div>
+            <div class="bar today"><div class="fill" style="height:82%"></div></div>
+          </div>
+          <div class="strip lbl">
+            <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+          </div>
+        </div>
+
+        <!-- Food → Skin connection: the unique story -->
+        <div class="connection">
+          <div class="top">
+            <div class="face-circle">🔗</div>
+            <div>
+              <h4>The food → skin connection</h4>
+              <div class="small">How what you ate this week showed up</div>
+            </div>
+          </div>
+          <div class="flow">
+            <div class="bar food"><div class="h" style="height:60%"></div><div class="d">M</div></div>
+            <div class="bar skin"><div class="h" style="height:55%"></div><div class="d"></div></div>
+            <div class="bar food"><div class="h" style="height:40%"></div><div class="d">T</div></div>
+            <div class="bar skin"><div class="h" style="height:48%"></div><div class="d"></div></div>
+            <div class="bar food"><div class="h" style="height:75%"></div><div class="d">W</div></div>
+            <div class="bar skin"><div class="h" style="height:72%"></div><div class="d"></div></div>
+            <div class="bar food"><div class="h" style="height:88%"></div><div class="d">T</div></div>
+            <div class="bar skin"><div class="h" style="height:82%"></div><div class="d"></div></div>
+            <div class="bar food"><div class="h" style="height:52%"></div><div class="d">F</div></div>
+            <div class="bar skin"><div class="h" style="height:68%"></div><div class="d"></div></div>
+            <div class="bar food"><div class="h" style="height:78%"></div><div class="d">S</div></div>
+            <div class="bar skin"><div class="h" style="height:76%"></div><div class="d"></div></div>
+          </div>
+          <div class="legend">
+            <span><span class="dotf"></span>Food impact</span>
+            <span><span class="dots"></span>Skin response</span>
+          </div>
+        </div>
+
+        <!-- Streak mega -->
+        <div class="streak-mega">
+          <div class="num">12</div>
+          <div class="lbl">
+            <h5>day streak</h5>
+            <p>On fire, bestie. 3 more days to your next badge.</p>
+          </div>
+          <div class="fire">🔥</div>
+        </div>
+
+        <!-- Weekly highlights: story-driven not chart-driven -->
+        <div class="highlights">
+          <h4>What we noticed this week ✨</h4>
+          <div class="hl-card green">
+            <div class="badge">🥑</div>
+            <div>
+              <h5>Leafy greens = your glow MVP</h5>
+              <p>Days with 2+ green foods scored 11 pts higher on hydration.</p>
+            </div>
+            <div class="arrow">›</div>
+          </div>
+          <div class="hl-card amber">
+            <div class="badge">☕</div>
+            <div>
+              <h5>Late coffee, tired skin</h5>
+              <p>Your brightness dipped after 3pm caffeine 3 days running.</p>
+            </div>
+            <div class="arrow">›</div>
+          </div>
+          <div class="hl-card coral">
+            <div class="badge">💤</div>
+            <div>
+              <h5>8 hours = peachy skin</h5>
+              <p>Nights with 8+ hrs sleep bumped your glow by 6 pts on avg.</p>
+            </div>
+            <div class="arrow">›</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="tabbar">
+        <div class="tab"><div class="ico">🏠</div>Home</div>
+        <div class="tab active"><div class="ico">📊</div>Analytics</div>
+        <div style="width:50px"></div>
+        <div class="tab"><div class="ico">👤</div>Account</div>
+      </div>
+      <div class="scan-fab">📷</div>
+    </div>
+  </div>
+  <h2>Analytics (fully revamped)</h2>
+  <p class="subhead">Not a data dashboard — a weekly check-in. Character mood at the top, food→skin story in the middle, AI highlights as chat-like insights at the bottom.</p>
+</div>
+
+<!-- ======================= PROFILE ======================= -->
+<div class="col">
+  <div class="phone">
+    <div class="screen">
+      <div class="statusbar">
+        <span>9:41</span>
+        <span class="icons"><span class="dot"></span><span class="dot"></span><span class="dot"></span> 📶 100%</span>
+      </div>
+      <div class="content">
+
+        <div class="app-header">
+          <div class="brandmark"><div class="dotfruit"></div>Account</div>
+          <div class="avatar">M</div>
+        </div>
+
+        <!-- Profile hero -->
+        <div class="profile-hero">
+          <div class="big-avatar">M</div>
+          <h2 class="name">Marcus</h2>
+          <p class="since">Glowing since April 2026 ✨</p>
+          <div class="stripe">
+            <span class="badge">🔥 12-day streak</span>
+            <span class="badge">✨ glow level 4</span>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stat-row">
+          <div class="stat">
+            <div class="n">28</div>
+            <div class="l">Scans</div>
+          </div>
+          <div class="stat">
+            <div class="n">42</div>
+            <div class="l">Meals</div>
+          </div>
+          <div class="stat">
+            <div class="n">🔥 12</div>
+            <div class="l">Streak</div>
+          </div>
+        </div>
+
+        <!-- Achievement stamps (characterful) -->
+        <div class="stamps">
+          <h4>Your badges ✨</h4>
+          <div class="stamp-grid">
+            <div class="stamp earned coral"><div class="ico">🍑</div><div class="lbl">1st scan</div></div>
+            <div class="stamp earned green"><div class="ico">🥬</div><div class="lbl">Glow pro</div></div>
+            <div class="stamp earned amber"><div class="ico">🔥</div><div class="lbl">7-day</div></div>
+            <div class="stamp earned coral"><div class="ico">💧</div><div class="lbl">Hydrated</div></div>
+            <div class="stamp"><div class="ico">🌟</div><div class="lbl">90 glow</div></div>
+            <div class="stamp"><div class="ico">🧘</div><div class="lbl">30-day</div></div>
+            <div class="stamp"><div class="ico">🍓</div><div class="lbl">Foodie</div></div>
+            <div class="stamp"><div class="ico">✨</div><div class="lbl">Perfect</div></div>
+          </div>
+        </div>
+
+        <!-- Icon switcher tile -->
+        <div class="iconswap">
+          <h4>Your app icon 🍑</h4>
+          <p>Tap to switch anytime</p>
+          <div class="options">
+            <div class="op active">
+              <div class="img">🍑</div>
+              <div class="lbl">Classic</div>
+            </div>
+            <div class="op">
+              <div class="img" style="background:radial-gradient(at 30% 30%, #FFF8E8, #FFB89E 80%)">✨</div>
+              <div class="lbl">Glow Aura</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Menu -->
+        <div class="menu">
+          <div class="mrow2"><div class="ico">📸</div><div class="lbl">Progress Photos</div><div class="chev">›</div></div>
+          <div class="mrow2"><div class="ico">📋</div><div class="lbl">Scan History</div><div class="chev">›</div></div>
+          <div class="mrow2"><div class="ico">🔔</div><div class="lbl">Notifications</div><div class="chev">›</div></div>
+          <div class="mrow2"><div class="ico">🔒</div><div class="lbl">Data & Storage</div><div class="chev">›</div></div>
+          <div class="mrow2"><div class="ico">ℹ️</div><div class="lbl">About Glowbite</div><div class="chev">›</div></div>
+          <div class="mrow2"><div class="ico">⭐</div><div class="lbl">Rate the App</div><div class="chev">›</div></div>
+        </div>
+
+      </div>
+
+      <div class="tabbar">
+        <div class="tab"><div class="ico">🏠</div>Home</div>
+        <div class="tab"><div class="ico">📊</div>Analytics</div>
+        <div style="width:50px"></div>
+        <div class="tab active"><div class="ico">👤</div>Account</div>
+      </div>
+      <div class="scan-fab">📷</div>
+    </div>
+  </div>
+  <h2>Profile</h2>
+  <p class="subhead">Peachy hero with characterful avatar (matches apple dimensionality), achievement stamps as character badges, dual-icon switcher tile.</p>
+</div>
+
+</div><!-- /phones -->
+
+<!-- ============== PRINCIPLES BOX ============== -->
+<div class="principles">
+  <h3>The 5 motifs, every screen inherits them</h3>
+  <div class="grid5">
+    <div class="p-item">
+      <div class="ic">⌞⌟</div>
+      <h5>Scanner brackets</h5>
+      <p>L-shaped marks frame the "moment of measurement" — Glow Score, scan previews, achievements.</p>
+    </div>
+    <div class="p-item">
+      <div class="ic">😊</div>
+      <h5>Character scores</h5>
+      <p>The ring always has a face (🌟/😊/💫 by tier). No plain numbers without personality.</p>
+    </div>
+    <div class="p-item">
+      <div class="ic">✨</div>
+      <h5>Sparkles</h5>
+      <p>Pairs/triplets only. Float around high scores, good food, streak milestones.</p>
+    </div>
+    <div class="p-item">
+      <div class="ic">⚪</div>
+      <h5>Soft highlights</h5>
+      <p>Every coral surface gets a white ellipse top-left. Makes flat color feel hand-painted.</p>
+    </div>
+    <div class="p-item">
+      <div class="ic">🍑</div>
+      <h5>Peach gradients</h5>
+      <p>No flat white screens. Every ScrollView goes cream→peach top to bottom.</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

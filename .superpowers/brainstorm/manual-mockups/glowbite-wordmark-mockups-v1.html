@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Glowbite — Wordmark Lockup Explorations</title>
+
+<!-- Web fonts used only for mockup. App itself stays on Nunito. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Fraunces:opsz,wght,SOFT@9..144,600..900,50..100&family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=Playfair+Display:ital,wght@0,900;1,900&family=Space+Grotesk:wght@500..700&family=Unbounded:wght@700..900&family=Caveat:wght@600..700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --cream-bg:     #FAF6F2;
+    --cream-peach:  #FFD3B8;
+    --sunny:        #FFF8E8;
+    --coral:        #FF7A5C;
+    --coral-light:  #FFB89E;
+    --coral-dark:   #E06A4E;
+    --dark:         #2B1F1A;
+    --warm-brown:   #4B3D36;
+    --medium-taupe: #6B5C54;
+    --light-taupe:  #9B8C85;
+    --soft-tan:     #F0E8E4;
+    --white:        #FFFFFF;
+    --green:        #66BB6A;
+    --green-dark:   #4A8D4E;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--cream-bg);
+    font-family: 'Nunito', system-ui;
+    color: var(--dark);
+    padding: 48px 24px 96px;
+  }
+
+  .page-head {
+    max-width: 960px;
+    margin: 0 auto 32px;
+    text-align: center;
+  }
+  .page-head h1 {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 32px;
+    letter-spacing: -0.5px;
+    margin: 0 0 8px;
+  }
+  .page-head p {
+    font-size: 15px;
+    color: var(--medium-taupe);
+    margin: 0 auto;
+    max-width: 540px;
+    line-height: 1.5;
+  }
+
+  .grid {
+    max-width: 960px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 720px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 28px 24px 20px;
+    box-shadow: 0 6px 16px rgba(255, 122, 92, 0.10);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  /* The mock "home header row" — scaled roughly to the real app (393pt wide) */
+  .header-row {
+    background: var(--cream-bg);
+    border-radius: 16px;
+    padding: 22px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px dashed var(--soft-tan);
+  }
+
+  .lockup {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .lockup svg.apple {
+    flex-shrink: 0;
+  }
+
+  /* Base wordmark styles; each variant overrides font-family / weight / tracking */
+  .wordmark {
+    color: var(--dark);
+    line-height: 1;
+    white-space: nowrap;
+    display: inline-block;
+  }
+
+  /* ---- variant typography ---- */
+
+  .v-nunito .wordmark {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 34px;
+    letter-spacing: -1px;
+  }
+
+  .v-fraunces .wordmark {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 34px;
+    letter-spacing: -0.8px;
+    font-variation-settings: "SOFT" 60, "opsz" 144;
+  }
+
+  .v-instrument .wordmark {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 40px;
+    letter-spacing: -0.4px;
+  }
+
+  .v-dm-serif .wordmark {
+    font-family: 'DM Serif Display', serif;
+    font-weight: 400;
+    font-size: 38px;
+    letter-spacing: -0.6px;
+  }
+
+  .v-playfair .wordmark {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 34px;
+    letter-spacing: -0.8px;
+  }
+
+  .v-space .wordmark {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    letter-spacing: -1.3px;
+  }
+
+  .v-unbounded .wordmark {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 800;
+    font-size: 28px;
+    letter-spacing: -0.8px;
+  }
+
+  .v-caveat .wordmark {
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 44px;
+    letter-spacing: 0px;
+  }
+
+  /* Small avatar circle on the right of the header (like the real home view) */
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--cream-peach), var(--coral-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 4px;
+  }
+  .meta .label {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--medium-taupe);
+  }
+  .meta .note {
+    font-family: 'Nunito', sans-serif;
+    font-size: 12px;
+    color: var(--light-taupe);
+  }
+
+  /* Color chip showing a coral option — optional accent if you want the "Glow" part colored */
+  .tint-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .tint-row .chip {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <h1>Glowbite — wordmark lockup v1</h1>
+  <p>Eight typography explorations for the home header. Same apple icon, same vertical rhythm; only the wordmark font + weight changes. Rendered on the real <code style="background:var(--soft-tan);padding:1px 6px;border-radius:4px;">#FAF6F2</code> cream background, next to a mock avatar, so you can judge balance in context.</p>
+</header>
+
+<div class="grid">
+
+  <!-- 1. NUNITO BLACK — in-brand baseline -->
+  <article class="card v-nunito">
+    <div class="meta">
+      <div class="label">01 · Nunito Black</div>
+      <div class="note">Brand-safe · in-house</div>
+    </div>
+    <div class="header-row">
+      <div class="lockup">
+        <svg class="apple" width="34" height="38" viewBox="0 0 34 38" aria-hidden="true">
+          <defs>
+            <radialGradient id="body1" cx="70%" cy="28%" r="80%">
+              <stop offset="0%" stop-color="#FFCFB8"/>
+              <stop offset="50%" stop-color="#F5A488"/>
+              <stop offset="100%" stop-color="#E68A6A"/>
+            </radialGradient>
+            <linearGradient id="leaf1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#66BB6A"/>
+              <stop offset="100%" stop-color="#4A8D4E"/>
+            </linearGradient>
+            <mask id="bite1">
+              <rect width="34" height="38" fill="white"/>
+              <circle cx="29" cy="24" r="5.5" fill="black"/>
+            </mask>
+          </defs>
+          <!-- leaf -->
+          <path d="M17.5 6 C 22 2, 27 3.5, 26.5 9 C 22 11.5, 17.5 11, 17.5 6 Z" fill="url(#leaf1)"/>
+          <!-- stem -->
+          <rect x="16" y="4" width="2.2" height="5" rx="1" fill="#4B3D36" transform="rotate(-10 17.1 6.5)"/>
+          <!-- body -->
+          <g mask="url(#bite1)">
+            <circle cx="17" cy="24" r="13.5" fill="url(#body1)"/>
+            <ellipse cx="12" cy="20" rx="1.8" ry="3.6" fill="white" opacity="0.72" transform="rotate(-18 12 20)"/>
+          </g>
+        </svg>
+        <span class="wordmark">Glowbite</span>
+      </div>
+      <div class="avatar">🥑</div>
+    </div>
+    <div class="tint-row"><div class="chip" style="background:#2B1F1A"></div><div class="note">Solid Dark Chocolate · currently matches body text</div></div>
+  </article>
+
+  <!-- 2. FRAUNCES EXTRABOLD (SOFT) — warm editorial serif -->
+  <article class="card v-fraunces">
+    <div class="meta">
+      <div class="label">02 · Fraunces ExtraBold (soft)</div>
+      <div class="note">Warm editorial serif</div>
+    </div>
+    <div class="header-row">
+      <div class="lockup">
+        <svg class="apple" width="34" height="38" viewBox="0 0 34 38" aria-hidden="true">
+          <defs>
+            <radialGradient id="body2" cx="70%" cy="28%" r="80%">
+              <stop offset="0%" stop-color="#FFCFB8"/>
+              <stop offset="50%" stop-color="#F5A488"/>
+              <stop offset="100%" stop-color="#E68A6A"/>
+            </radialGradient>
+            <linearGradient id="leaf2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#66BB6A"/>
+              <stop offset="100%" stop-color="#4A8D4E"/>
+            </linearGradient>
+            <mask id="bite2">
+              <rect width="34" height="38" fill="white"/>
+              <circle cx="29" cy="24" r="5.5" fill="black"/>
+            </mask>
+          </defs>
+          <path d="M17.5 6 C 22 2, 27 3.5, 26.5 9 C 22 11.5, 17.5 11, 17.5 6 Z" fill="url(#leaf2)"/>
+          <rect x="16" y="4" width="2.2" height="5" rx="1" fill="#4B3D36" transform="rotate(-10 17.1 6.5)"/>
+          <g mask="url(#bite2)">
+            <circle cx="17" cy="24" r="13.5" fill="url(#body2)"/>
+            <ellipse cx="12" cy="20" rx="1.8" ry="3.6" fill="white" opacity="0.72" transform="rotate(-18 12 20)"/>
+          </g>
+        </svg>
+        <span class="wordmark">Glowbite</span>
+      </div>
+      <div class="avatar">🥑</div>
+    </div>
+    <div class="tint-row"><div class="note">Soft, curvy, very popular in skincare + wellness brands (e.g. Topicals, Merit).</div></div>
+  </article>
+
+  <!-- 3. INSTRUMENT SERIF ITALIC — elegant editorial -->
+  <article class="card v-instrument">
+    <div class="meta">
+      <div class="label">03 · Instrument Serif Italic</div>
+      <div class="note">Elegant · luxury-editorial</div>
+    </div>
+    <div class="header-row">
+      <div class="lockup">
+        <svg class="apple" width="34" height="38" viewBox="0 0 34 38" aria-hidden="true">
+          <defs>
+            <radialGradient id="body3" cx="70%" cy="28%" r="80%">
+              <stop offset="0%" stop-color="#FFCFB8"/>
+              <stop offset="50%" stop-color="#F5A488"/>
+              <stop offset="100%" stop-color="#E68A6A"/>
+            </radialGradient>
+            <linearGradient id="leaf3" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#66BB6A"/>
+              <stop offset="100%" stop-color="#4A8D4E"/>
+            </linearGradient>
+            <mask id="bite3">
+              <rect width="34" height="38" fill="white"/>
+              <circle cx="29" cy="24" r="5.5" fill="black"/>
+            </mask>
+          </defs>
+          <path d="M17.5 6 C 22 2, 27 3.5, 26.5 9 C 22 11.5, 17.5 11, 17.5 6 Z" fill="url(#leaf3)"/>
+          <rect x="16" y="4" width="2.2" height="5" rx="1" fill="#4B3D36" transform="rotate(-10 17.1 6.5)"/>
+          <g mask="url(#bite3)">
+            <circle cx="17" cy="24" r="13.5" fill="url(#body3)"/>
+            <ellipse cx="12" cy="20" rx="1.8" ry="3.6" fill="white" opacity="0.72" transform="rotate(-18 12 20)"/>
+          </g>
+        </svg>
+        <span class="wordmark">Glowbite</span>
+      </div>
+      <div class="avatar">🥑</div>
+    </div>
+    <div class="tint-row"><div class="note">Thin strokes + italic = signature magazine feel, feels premium.</div></div>
+  </article>
+
+  <!-- 4. DM SERIF DISPLAY — bold editorial serif -->
+  <article class="card v-dm-serif">
+    <div class="meta">
+      <div class="label">04 · DM Serif Display</div>
+      <div class="note">Bold · confident · editorial</div>
+    </div>
+    <div class="header-row">
+      <div class="lockup">
+        <svg class="apple" width="34" height="38" viewBox="0 0 34 38" aria-hidden="true">
+          <defs>
+            <radialGradient id="body4" cx="70%" cy="28%" r="80%">
+              <stop offset="0%" stop-color="#FFCFB8"/>
+              <stop offset="50%" stop-color="#F5A488"/>
+              <stop offset="100%" stop-color="#E68A6A"/>
+            </radialGradient>
+            <linearGradient id="leaf4" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#66BB6A"/>
+              <stop offset="100%" stop-color="#4A8D4E"/>
+            </linearGradient>
+            <mask id="bite4">
+              <rect width="34" height="38" fill="white"/>
+              <circle cx="29" cy="24" r="5.5" fill="black"/>
+            </mask>
+          </defs>
+          <path d="M17.5 6 C 22 2, 27 3.5, 26.5 9 C 22 11.5, 17.5 11, 17.5 6 Z" fill="url(#leaf4)"/>
+          <rect x="16" y="4" width="2.2" height="5" rx="1" fill="#4B3D36" transform="rotate(-10 17.1 6.5)"/>
+          <g mask="url(#bite4)">
+            <circle cx="17" cy="24" r="13.5" fill="url(#body4)"/>
+            <ellipse cx="12" cy="20" rx="1.8" ry="3.6" fill="white" opacity="0.72" transform="rotate(-18 12 20)"/>
+          </g>
+        </svg>
+        <span class="wordmark">Glowbite</span>
+      </div>
+      <div class="avatar">🥑</div>
+    </div>
+    <div class="tint-row"><div class="note">Chunky serif with personality — similar feel to "Glossier" / "LOEWE" wordmarks.</div></div>
+  </article>
+
+  <!-- 5. PLAYFAIR DISPLAY BLACK ITALIC — classic fashion-editorial -->
+  <article class="card v-playfair">
+    <div class="meta">
+      <div class="label">05 · Playfair Display Black Italic</div>
+      <div class="note">Classic fashion-editorial</div>
+    </div>
+    <div class="header-row">
+      <div class="lockup">
+        <svg class="apple" width="34" height="38" viewBox="0 0 34 38" aria-hidden="true">
+          <defs>
+            <radialGradient id="body5" cx="70%" cy="28%" r="80%">
+              <stop offset="0%" stop-color="#FFCFB8"/>
+              <stop offset="50%" stop-color="#F5A488"/>
+              <stop offset="100%" stop-color="#E68A6A"/>
+            </radialGradient>
+            <linearGradient id="leaf5" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#66BB6A"/>
+              <stop offset="100%" stop-color="#4A8D4E"/>
+            </linearGradient>
+            <mask id="bite5">
+              <rect width="34" height="38" fill="white"/>
+              <circle cx="29" cy="24" r="5.5" fill="black"/>
+            </mask>
+          </defs>
+          <path d="M17.5 6 C 22 2, 27 3.5, 26.5 9 C 22 11.5, 17.5 11, 17.5 6 Z" fill="url(#leaf5)"/>
+          <rect x="16" y="4" width="2.2" height="5" rx="1" fill="#4B3D36" transform="rotate(-10 17.1 6.5)"/>
+          <g mask="url(#bite5)">
+            <circle cx="17" cy="24" r="13.5" fill="url(#body5)"/>
+            <ellipse cx="12" cy="20" rx="1.8" ry="3.6" fill="white" opacity="0.72" transform="rotate(-18 12 20)"/>
+          </g>
+        </svg>
+        <span class="wordmark">Glowbite</span>
+      </div>
+      <div class="avatar">🥑</div>
+    </div>
+    <div class="tint-row"><div class="note">High contrast strokes — feels like a Vogue masthead.</div></div>
+  </article>
+
+  <!-- 6. SPACE GROTESK BOLD — modern geometric -->
+  <article class="card v-space">
+    <div class="meta">
+      <div class="label">06 · Space Grotesk Bold</div>
+      <div class="note">Modern · clean · startup</div>
+    </div>
+    <div class="header-row">
+      <div class="lockup">
+        <svg class="apple" width="34" height="38" viewBox="0 0 34 38" aria-hidden="true">
+          <defs>
+            <radialGradient id="body6" cx="70%" cy="28%" r="80%">
+              <stop offset="0%" stop-color="#FFCFB8"/>
+              <stop offset="50%" stop-color="#F5A488"/>
+              <stop offset="100%" stop-color="#E68A6A"/>
+            </radialGradient>
+            <linearGradient id="leaf6" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#66BB6A"/>
+              <stop offset="100%" stop-color="#4A8D4E"/>
+            </linearGradient>
+            <mask id="bite6">
+              <rect width="34" height="38" fill="white"/>
+              <circle cx="29" cy="24" r="5.5" fill="black"/>
+            </mask>
+          </defs>
+          <path d="M17.5 6 C 22 2, 27 3.5, 26.5 9 C 22 11.5, 17.5 11, 17.5 6 Z" fill="url(#leaf6)"/>
+          <rect x="16" y="4" width="2.2" height="5" rx="1" fill="#4B3D36" transform="rotate(-10 17.1 6.5)"/>
+          <g mask="url(#bite6)">
+            <circle cx="17" cy="24" r="13.5" fill="url(#body6)"/>
+            <ellipse cx="12" cy="20" rx="1.8" ry="3.6" fill="white" opacity="0.72" transform="rotate(-18 12 20)"/>
+          </g>
+        </svg>
+        <span class="wordmark">Glowbite</span>
+      </div>
+      <div class="avatar">🥑</div>
+    </div>
+    <div class="tint-row"><div class="note">Geometric double-story "g" gives it character. Closest to the Cal AI reference energy.</div></div>
+  </article>
+
+  <!-- 7. UNBOUNDED BLACK — quirky futuristic display -->
+  <article class="card v-unbounded">
+    <div class="meta">
+      <div class="label">07 · Unbounded Black</div>
+      <div class="note">Display · quirky · Gen-Z</div>
+    </div>
+    <div class="header-row">
+      <div class="lockup">
+        <svg class="apple" width="34" height="38" viewBox="0 0 34 38" aria-hidden="true">
+          <defs>
+            <radialGradient id="body7" cx="70%" cy="28%" r="80%">
+              <stop offset="0%" stop-color="#FFCFB8"/>
+              <stop offset="50%" stop-color="#F5A488"/>
+              <stop offset="100%" stop-color="#E68A6A"/>
+            </radialGradient>
+            <linearGradient id="leaf7" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#66BB6A"/>
+              <stop offset="100%" stop-color="#4A8D4E"/>
+            </linearGradient>
+            <mask id="bite7">
+              <rect width="34" height="38" fill="white"/>
+              <circle cx="29" cy="24" r="5.5" fill="black"/>
+            </mask>
+          </defs>
+          <path d="M17.5 6 C 22 2, 27 3.5, 26.5 9 C 22 11.5, 17.5 11, 17.5 6 Z" fill="url(#leaf7)"/>
+          <rect x="16" y="4" width="2.2" height="5" rx="1" fill="#4B3D36" transform="rotate(-10 17.1 6.5)"/>
+          <g mask="url(#bite7)">
+            <circle cx="17" cy="24" r="13.5" fill="url(#body7)"/>
+            <ellipse cx="12" cy="20" rx="1.8" ry="3.6" fill="white" opacity="0.72" transform="rotate(-18 12 20)"/>
+          </g>
+        </svg>
+        <span class="wordmark">Glowbite</span>
+      </div>
+      <div class="avatar">🥑</div>
+    </div>
+    <div class="tint-row"><div class="note">Rounded caps + wide counters = very 2024-trendy. More "tech" than "beauty."</div></div>
+  </article>
+
+  <!-- 8. CAVEAT BOLD — handwritten script -->
+  <article class="card v-caveat">
+    <div class="meta">
+      <div class="label">08 · Caveat Bold</div>
+      <div class="note">Handwritten · friendly · BFF</div>
+    </div>
+    <div class="header-row">
+      <div class="lockup">
+        <svg class="apple" width="34" height="38" viewBox="0 0 34 38" aria-hidden="true">
+          <defs>
+            <radialGradient id="body8" cx="70%" cy="28%" r="80%">
+              <stop offset="0%" stop-color="#FFCFB8"/>
+              <stop offset="50%" stop-color="#F5A488"/>
+              <stop offset="100%" stop-color="#E68A6A"/>
+            </radialGradient>
+            <linearGradient id="leaf8" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#66BB6A"/>
+              <stop offset="100%" stop-color="#4A8D4E"/>
+            </linearGradient>
+            <mask id="bite8">
+              <rect width="34" height="38" fill="white"/>
+              <circle cx="29" cy="24" r="5.5" fill="black"/>
+            </mask>
+          </defs>
+          <path d="M17.5 6 C 22 2, 27 3.5, 26.5 9 C 22 11.5, 17.5 11, 17.5 6 Z" fill="url(#leaf8)"/>
+          <rect x="16" y="4" width="2.2" height="5" rx="1" fill="#4B3D36" transform="rotate(-10 17.1 6.5)"/>
+          <g mask="url(#bite8)">
+            <circle cx="17" cy="24" r="13.5" fill="url(#body8)"/>
+            <ellipse cx="12" cy="20" rx="1.8" ry="3.6" fill="white" opacity="0.72" transform="rotate(-18 12 20)"/>
+          </g>
+        </svg>
+        <span class="wordmark">Glowbite</span>
+      </div>
+      <div class="avatar">🥑</div>
+    </div>
+    <div class="tint-row"><div class="note">Feels like a personal note from a friend — leans hardest into the brand's "BFF" voice, but may feel less premium.</div></div>
+  </article>
+
+</div>
+
+<section style="max-width:960px;margin:40px auto 0;padding:24px 28px;background:var(--sunny);border-radius:20px;">
+  <h2 style="font-family:'Nunito';font-weight:900;font-size:20px;margin:0 0 8px;">My read on the shortlist</h2>
+  <ul style="margin:0;padding-left:20px;color:var(--warm-brown);font-size:14px;line-height:1.6;">
+    <li><b>Top pick — 02 Fraunces ExtraBold (soft):</b> feels modern, feminine, warm, sits beautifully next to the coral apple without competing with it. Huge in the skincare space right now.</li>
+    <li><b>Runner-up — 04 DM Serif Display:</b> more graphic punch, reads as "confident brand" not "clinical app."</li>
+    <li><b>If you want Cal-AI-clean — 06 Space Grotesk Bold:</b> closest to the reference screenshot, stays neutral so the apple carries the personality.</li>
+    <li><b>Avoid — 07 Unbounded:</b> too "SaaS," doesn't match the warm palette.</li>
+  </ul>
+  <p style="margin:16px 0 0;font-size:13px;color:var(--medium-taupe);">
+    Once you pick one, next step is: bundle the font's .ttf, register it in Info.plist / Typography.swift (e.g. <code style="background:var(--soft-tan);padding:1px 6px;border-radius:4px;">.gbBrand</code>), and swap the greeting row in <code style="background:var(--soft-tan);padding:1px 6px;border-radius:4px;">HomeView.swift</code> for the lockup. Apple icon stays as SwiftUI vector (same shapes we built for the mascot, just smaller + no face).
+  </p>
+</section>
+
+</body>
+</html>

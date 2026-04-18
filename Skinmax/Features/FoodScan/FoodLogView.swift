@@ -30,9 +30,12 @@ struct FoodLogView: View {
             FoodCaptureView()
                 .environment(dataStore)
         }
-        .fullScreenCover(item: $selectedFoodScan) { scan in
+        .sheet(item: $selectedFoodScan) { scan in
             FoodScanResultView(scan: scan)
                 .environment(dataStore)
+                .presentationDetents([.large])
+                .presentationCornerRadius(GlowbiteSpacing.cardCornerRadiusLarge)
+                .presentationDragIndicator(.visible)
         }
     }
 

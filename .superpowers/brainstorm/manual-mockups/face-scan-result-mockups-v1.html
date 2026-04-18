@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Skinmax — Face Scan Result Redesign (3 Concepts)</title>
+<meta name="viewport" content="width=1400, initial-scale=1" />
+<style>
+  /* ===============================================================
+     Skinmax palette (locked from CLAUDE.md)
+     =============================================================== */
+  :root {
+    --coral:        #FF7A5C;
+    --coral-dark:   #C24A1E;
+    --coral-soft:   #FFB89E;
+    --peach:        #FFD3B8;
+    --cream:        #FAF6F2;
+    --butter:       #FFF8E8;
+    --paper:        #FFFFFF;
+
+    --green:        #66BB6A;
+    --amber:        #FFB74D;
+    --red:          #E57373;
+    --blue:         #81D4FA;
+
+    --text-ink:     #2B1F1A;
+    --text-body:    #4B3D36;
+    --text-sub:     #6B5C54;
+    --text-mute:    #9B8C85;
+    --border:       #F0E8E4;
+
+    --shadow-card:    0 4px 12px rgba(255,122,92,0.10);
+    --shadow-card-lg: 0 6px 16px rgba(255,122,92,0.15);
+    --shadow-btn:     0 6px 16px rgba(255,122,92,0.30);
+    --shadow-soft:    0 2px 8px rgba(255,122,92,0.06);
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: var(--cream);
+    color: var(--text-ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+  }
+
+  /* ========== Header ========== */
+  .page-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: center;
+    padding: 24px 28px;
+    background: linear-gradient(135deg, var(--butter), var(--peach));
+    border-radius: 28px;
+    box-shadow: var(--shadow-card-lg);
+    margin-bottom: 40px;
+  }
+  .page-head h1 {
+    font-size: 28px;
+    font-weight: 800;
+    margin: 0 0 6px 0;
+    letter-spacing: -0.5px;
+  }
+  .page-head p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-body);
+    max-width: 640px;
+  }
+  .head-mascot {
+    width: 96px; height: 96px;
+    background: var(--paper);
+    border-radius: 50%;
+    box-shadow: var(--shadow-card);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .head-mascot img { width: 110%; height: auto; }
+
+  /* ========== Control bar ========== */
+  .control-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 24px;
+    background: var(--paper);
+    border-radius: 20px;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 32px;
+  }
+  .control-bar .label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--text-sub);
+    text-transform: uppercase;
+  }
+  .scan-switch {
+    display: flex;
+    gap: 6px;
+    background: var(--cream);
+    padding: 5px;
+    border-radius: 100px;
+  }
+  .scan-switch button {
+    appearance: none;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-sub);
+    padding: 8px 14px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all .2s ease;
+  }
+  .scan-switch button .dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .scan-switch button[data-scan="good"] .dot    { background: var(--green); }
+  .scan-switch button[data-scan="fair"] .dot    { background: var(--amber); }
+  .scan-switch button[data-scan="needs"] .dot   { background: var(--red); }
+  .scan-switch button.active {
+    background: var(--paper);
+    color: var(--text-ink);
+    box-shadow: var(--shadow-soft);
+  }
+  .control-help {
+    font-size: 12px;
+    color: var(--text-mute);
+    margin-left: auto;
+  }
+
+  /* ========== Concept grid ========== */
+  .concept-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-bottom: 48px;
+  }
+
+  .concept {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .concept-title {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .concept-title .tag {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 100px;
+    background: var(--peach);
+    color: var(--coral-dark);
+  }
+  .concept-title h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+  .concept-sub {
+    font-size: 13px;
+    color: var(--text-sub);
+    line-height: 1.5;
+    margin: -4px 0 4px;
+  }
+
+  /* ========== iPhone frame ========== */
+  .iphone {
+    width: 100%;
+    max-width: 380px;
+    aspect-ratio: 390 / 844;
+    margin: 0 auto;
+    background: #111;
+    border-radius: 56px;
+    padding: 10px;
+    box-shadow:
+      0 18px 48px rgba(43,31,26,0.25),
+      inset 0 0 0 2px #2a2a2a;
+    position: relative;
+  }
+  .iphone::before { /* notch */
+    content: "";
+    position: absolute;
+    top: 20px; left: 50%;
+    transform: translateX(-50%);
+    width: 110px; height: 30px;
+    background: #000;
+    border-radius: 100px;
+    z-index: 10;
+  }
+  .screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 48px;
+    overflow: hidden;
+    position: relative;
+    background: var(--cream);
+  }
+  .screen-scroll {
+    height: 100%;
+    overflow-y: auto;
+    padding: 64px 20px 28px;
+    scrollbar-width: none;
+  }
+  .screen-scroll::-webkit-scrollbar { display: none; }
+
+  /* Status bar area inside screen */
+  .status-bar {
+    position: absolute;
+    top: 16px; left: 24px; right: 24px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-ink);
+    z-index: 12;
+  }
+
+  /* ========== Apple mascot stage ========== */
+  .apple-stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    display: grid;
+    place-items: center;
+  }
+  .apple-img {
+    width: 88%;
+    height: 88%;
+    object-fit: contain;
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+  /* Blemish overlays live inside .apple-stage */
+  .blemish-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+  }
+  /* Glossy shine (hydration good) */
+  .shine {
+    position: absolute;
+    top: 22%; left: 30%;
+    width: 12%; height: 22%;
+    background: radial-gradient(ellipse at center,
+      rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 70%);
+    transform: rotate(-18deg);
+    transition: opacity .35s ease;
+  }
+  .sparkle {
+    position: absolute;
+    font-size: 22px;
+    opacity: 0;
+    transition: opacity .35s ease;
+  }
+  .sparkle.s1 { top: 18%; right: 18%; }
+  .sparkle.s2 { bottom: 26%; left: 14%; font-size: 16px; }
+
+  /* Acne bumps: clustered on cheeks */
+  .acne {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%,
+      #F08579 0%, #C94A3C 70%, #A83428 100%);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    opacity: 0;
+    transition: opacity .35s ease, transform .35s ease;
+  }
+
+  /* Dark spots */
+  .darkspot {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+      rgba(90,50,30,0.7) 0%, rgba(90,50,30,0) 75%);
+    filter: blur(1.5px);
+    opacity: 0;
+    transition: opacity .35s ease;
+  }
+
+  /* Redness (cheek blush) */
+  .redness {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+      rgba(229,115,115,0.55) 0%, rgba(229,115,115,0) 70%);
+    filter: blur(6px);
+    opacity: 0;
+    transition: opacity .35s ease;
+  }
+
+  /* Matte / dry veil (hydration bad) */
+  .matte-veil {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center,
+      rgba(250,246,242,0.25) 30%, rgba(250,246,242,0) 75%);
+    mix-blend-mode: soft-light;
+    opacity: 0;
+    transition: opacity .35s ease;
+  }
+  .dry-line {
+    position: absolute;
+    height: 1px;
+    background: rgba(255,255,255,0.55);
+    opacity: 0;
+    transition: opacity .35s ease;
+  }
+
+  /* Texture stippling (small dots all over cheek zones) */
+  .texture-dot {
+    position: absolute;
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: rgba(130,60,40,0.35);
+    opacity: 0;
+    transition: opacity .35s ease;
+  }
+
+  /* Pores (tiny dots around nose center) */
+  .pore {
+    position: absolute;
+    width: 2px; height: 2px;
+    border-radius: 50%;
+    background: rgba(70,30,20,0.45);
+    opacity: 0;
+    transition: opacity .35s ease;
+  }
+
+  /* Wrinkles (thin lines near forehead + eye crease) */
+  .wrinkle {
+    position: absolute;
+    height: 1px;
+    background: linear-gradient(90deg,
+      rgba(70,30,20,0) 0%, rgba(70,30,20,0.5) 50%, rgba(70,30,20,0) 100%);
+    opacity: 0;
+    transition: opacity .35s ease;
+  }
+
+  /* Sag (elasticity) — a soft bottom-pull shadow */
+  .sag {
+    position: absolute;
+    bottom: 8%; left: 18%; right: 18%;
+    height: 10%;
+    background: radial-gradient(ellipse at center top,
+      rgba(70,30,20,0.12) 0%, rgba(70,30,20,0) 70%);
+    transform: translateY(6%);
+    opacity: 0;
+    transition: opacity .35s ease;
+  }
+
+  /* Highlight pulse when a metric pill is hovered/tapped */
+  .highlight-pulse {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid var(--coral);
+    box-shadow: 0 0 0 4px rgba(255,122,92,0.25);
+    opacity: 0;
+    z-index: 5;
+    transition: opacity .2s ease, transform .25s ease;
+    pointer-events: none;
+  }
+  .highlight-pulse.active {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  /* ===============================================================
+     CONCEPT A — Portrait Frame
+     =============================================================== */
+  .concept-a .frame {
+    background: var(--cream);
+    border: 6px solid var(--paper);
+    outline: 2px solid var(--coral);
+    outline-offset: -12px;
+    border-radius: 24px;
+    padding: 22px 14px 14px;
+    box-shadow: var(--shadow-card-lg);
+    position: relative;
+  }
+  .concept-a .frame-caption {
+    text-align: center;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    color: var(--text-sub);
+    text-transform: uppercase;
+    padding-top: 6px;
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+  }
+  .concept-a .frame-subcap {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-body);
+    margin-top: 4px;
+  }
+  .concept-a .glow-badge {
+    position: absolute;
+    top: -14px; right: -10px;
+    width: 82px; height: 82px;
+    border-radius: 50%;
+    background: conic-gradient(var(--coral) 0 var(--glow-deg, 223deg), var(--border) var(--glow-deg, 223deg) 360deg);
+    display: grid;
+    place-items: center;
+    box-shadow: var(--shadow-btn);
+  }
+  .concept-a .glow-badge::before {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border-radius: 50%;
+    background: var(--paper);
+  }
+  .concept-a .glow-badge .score {
+    position: relative;
+    font-size: 26px;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--text-ink);
+  }
+  .concept-a .glow-badge .lbl {
+    position: absolute;
+    bottom: 14px;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text-sub);
+    text-transform: uppercase;
+  }
+  .concept-a .hero-greet {
+    margin-top: 16px;
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.25;
+    color: var(--text-ink);
+  }
+  .concept-a .hero-greet .emoji { font-size: 22px; }
+  .concept-a .hero-sub {
+    font-size: 13px;
+    color: var(--text-sub);
+    margin-top: 4px;
+    line-height: 1.45;
+  }
+  .concept-a .metric-grid-2 {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .mini-card {
+    background: var(--paper);
+    border-radius: 14px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--shadow-soft);
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .mini-card:hover { transform: translateY(-1px); box-shadow: var(--shadow-card); }
+  .mini-card .ring {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: conic-gradient(var(--r-color, var(--green)) 0 var(--r-deg, 300deg), var(--border) var(--r-deg, 300deg) 360deg);
+    display: grid; place-items: center;
+  }
+  .mini-card .ring::before {
+    content: ""; width: 22px; height: 22px; border-radius: 50%; background: var(--paper);
+  }
+  .mini-card .ring .val {
+    position: absolute;
+    font-size: 10px; font-weight: 800; color: var(--text-ink);
+  }
+  .mini-card .m-info { flex: 1; min-width: 0; }
+  .mini-card .m-name {
+    font-size: 12px; font-weight: 700; color: var(--text-ink);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .mini-card .m-sev {
+    font-size: 10px; font-weight: 700; color: var(--text-sub);
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+
+  /* ===============================================================
+     CONCEPT B — Annotated Apple
+     =============================================================== */
+  .concept-b .annot-wrap {
+    position: relative;
+    padding: 12px 4px 8px;
+  }
+  .concept-b .glow-ring-tr {
+    position: absolute;
+    top: 0; right: 8px;
+    width: 76px; height: 76px;
+    border-radius: 50%;
+    background: conic-gradient(var(--coral) 0 var(--glow-deg, 223deg), var(--border) var(--glow-deg, 223deg) 360deg);
+    display: grid; place-items: center;
+    box-shadow: var(--shadow-card);
+    z-index: 4;
+  }
+  .concept-b .glow-ring-tr::before {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border-radius: 50%;
+    background: var(--paper);
+  }
+  .concept-b .glow-ring-tr .score {
+    position: relative;
+    font-size: 22px; font-weight: 900; color: var(--text-ink);
+  }
+  .concept-b .glow-ring-tr .lbl {
+    position: absolute;
+    bottom: 12px;
+    font-size: 7px; font-weight: 800; letter-spacing: 1px;
+    color: var(--text-sub); text-transform: uppercase;
+  }
+  .concept-b .apple-stage { margin-top: 22px; }
+
+  .callout-pill {
+    position: absolute;
+    background: var(--paper);
+    border-radius: 100px;
+    padding: 5px 9px;
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--text-ink);
+    box-shadow: var(--shadow-soft);
+    display: inline-flex; align-items: center; gap: 5px;
+    cursor: pointer;
+    z-index: 4;
+    white-space: nowrap;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .callout-pill:hover { transform: scale(1.06); box-shadow: var(--shadow-card); }
+  .callout-pill .score-v { color: var(--coral-dark); }
+  .callout-pill .sev-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+  }
+  .callout-pill.good .sev-dot    { background: var(--green); }
+  .callout-pill.fair .sev-dot    { background: var(--amber); }
+  .callout-pill.needs .sev-dot   { background: var(--red); }
+
+  /* SVG connector lines drawn over the apple */
+  .annot-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 3;
+  }
+  .annot-svg line {
+    stroke: var(--coral);
+    stroke-width: 1.2;
+    opacity: 0.55;
+    stroke-dasharray: 2 3;
+  }
+  .concept-b .b-sub {
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--text-body);
+    line-height: 1.45;
+    text-align: center;
+  }
+
+  /* ===============================================================
+     CONCEPT C — Apple Reaction
+     =============================================================== */
+  .concept-c .hero {
+    background: linear-gradient(180deg, var(--butter) 0%, var(--cream) 100%);
+    border-radius: 24px;
+    padding: 14px 14px 10px;
+    position: relative;
+    box-shadow: var(--shadow-card);
+  }
+  .concept-c .bubble {
+    background: var(--paper);
+    border-radius: 20px;
+    padding: 12px 14px;
+    box-shadow: var(--shadow-soft);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-ink);
+    line-height: 1.35;
+    max-width: 82%;
+    position: relative;
+    margin: 4px auto 2px;
+  }
+  .concept-c .bubble::after {
+    content: "";
+    position: absolute;
+    bottom: -7px; left: 30%;
+    width: 14px; height: 14px;
+    background: var(--paper);
+    transform: rotate(45deg);
+    border-radius: 3px;
+    box-shadow: 3px 3px 6px rgba(255,122,92,0.05);
+  }
+  .concept-c .bubble .reaction {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    color: var(--coral-dark);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .concept-c .glow-inline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    margin-top: 10px;
+    background: var(--paper);
+    border-radius: 18px;
+    box-shadow: var(--shadow-soft);
+  }
+  .concept-c .glow-inline .ring {
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    background: conic-gradient(var(--coral) 0 var(--glow-deg, 223deg), var(--border) var(--glow-deg, 223deg) 360deg);
+    display: grid; place-items: center;
+  }
+  .concept-c .glow-inline .ring::before {
+    content: ""; position: absolute;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--paper);
+  }
+  .concept-c .glow-inline .ring .val {
+    position: relative;
+    font-size: 18px; font-weight: 900; color: var(--text-ink);
+  }
+  .concept-c .glow-inline .meta { flex: 1; }
+  .concept-c .glow-inline .meta .lbl {
+    font-size: 10px; font-weight: 800; letter-spacing: 1.5px;
+    color: var(--text-sub); text-transform: uppercase;
+  }
+  .concept-c .glow-inline .meta .title {
+    font-size: 15px; font-weight: 800; color: var(--text-ink);
+    margin-top: 1px;
+  }
+
+  .concept-c .section-head {
+    font-size: 10px; font-weight: 800; letter-spacing: 2px;
+    color: var(--text-sub); text-transform: uppercase;
+    margin: 16px 4px 8px;
+  }
+  .concept-c .metric-row {
+    background: var(--paper);
+    border-radius: 14px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--shadow-soft);
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .concept-c .metric-row:hover { transform: translateX(2px); box-shadow: var(--shadow-card); }
+  .concept-c .metric-row .emo {
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    background: var(--peach);
+    display: grid; place-items: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .concept-c .metric-row .info { flex: 1; min-width: 0; }
+  .concept-c .metric-row .name { font-size: 13px; font-weight: 800; color: var(--text-ink); }
+  .concept-c .metric-row .msg  { font-size: 11px; font-weight: 600; color: var(--text-sub); margin-top: 1px; }
+  .concept-c .metric-row .sev-pill {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.5px;
+    padding: 3px 8px; border-radius: 100px;
+    color: var(--paper);
+  }
+  .concept-c .metric-row .sev-pill.good   { background: var(--green); }
+  .concept-c .metric-row .sev-pill.fair   { background: var(--amber); }
+  .concept-c .metric-row .sev-pill.needs  { background: var(--red); }
+
+  .concept-c .insight-card {
+    background: linear-gradient(135deg, var(--peach), var(--cream));
+    border-radius: 16px;
+    padding: 12px 14px;
+    margin-top: 12px;
+    display: flex;
+    gap: 10px;
+  }
+  .concept-c .insight-card .icon-bubble {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    background: var(--paper);
+    display: grid; place-items: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-soft);
+  }
+  .concept-c .insight-card .ic-body { flex: 1; }
+  .concept-c .insight-card .ic-title { font-size: 12px; font-weight: 800; color: var(--text-ink); }
+  .concept-c .insight-card .ic-msg { font-size: 12px; color: var(--text-body); line-height: 1.4; margin-top: 2px; }
+
+  /* ========== Pro/Con + metric bullets ========== */
+  .concept-analysis {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .pc-card {
+    border-radius: 16px;
+    padding: 12px 14px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .pc-card h4 {
+    margin: 0 0 6px; font-size: 10px; font-weight: 800;
+    letter-spacing: 1.5px; text-transform: uppercase;
+  }
+  .pc-card.pro { background: rgba(102,187,106,0.12); color: var(--text-body); }
+  .pc-card.pro h4 { color: #3D8B42; }
+  .pc-card.con { background: rgba(229,115,115,0.12); color: var(--text-body); }
+  .pc-card.con h4 { color: #B85252; }
+  .pc-card ul { margin: 0; padding-left: 16px; }
+  .pc-card li + li { margin-top: 3px; }
+
+  .metric-handling {
+    background: var(--paper);
+    border-radius: 16px;
+    padding: 12px 14px;
+    box-shadow: var(--shadow-soft);
+  }
+  .metric-handling h4 {
+    margin: 0 0 6px; font-size: 10px; font-weight: 800;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--text-sub);
+  }
+  .metric-handling p {
+    margin: 0; font-size: 12px; line-height: 1.5; color: var(--text-body);
+  }
+
+  /* ========== Legend ========== */
+  .legend {
+    background: var(--paper);
+    border-radius: 24px;
+    padding: 28px 32px;
+    box-shadow: var(--shadow-card);
+  }
+  .legend h2 {
+    margin: 0 0 6px;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+  .legend p.intro {
+    margin: 0 0 22px;
+    font-size: 13px;
+    color: var(--text-sub);
+  }
+  .legend-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr;
+    gap: 24px;
+  }
+  .leg-col h3 {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--text-sub);
+    text-transform: uppercase;
+    margin: 0 0 10px;
+  }
+  .blemish-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .blemish-table td {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .blemish-table td:first-child {
+    font-weight: 800; color: var(--text-ink); width: 100px;
+  }
+  .blemish-table td:last-child {
+    color: var(--text-body); line-height: 1.4;
+  }
+  .color-row {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .color-sw {
+    width: 22px; height: 22px; border-radius: 7px;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+  }
+  .color-row .name { font-weight: 800; color: var(--text-ink); min-width: 80px; }
+  .color-row .hex  { color: var(--text-mute); font-family: 'SF Mono', Menlo, monospace; margin-left: auto; font-size: 11px; }
+  .reuse-list {
+    list-style: none; padding: 0; margin: 0;
+    font-size: 12px;
+  }
+  .reuse-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.4;
+  }
+  .reuse-list code {
+    background: var(--cream);
+    padding: 2px 6px; border-radius: 5px;
+    font-size: 11px;
+    color: var(--coral-dark);
+    font-weight: 700;
+  }
+
+  /* Small screens: stack concepts */
+  @media (max-width: 1100px) {
+    .concept-grid { grid-template-columns: 1fr; }
+    .legend-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ============ Page Head ============ -->
+  <header class="page-head">
+    <div>
+      <h1>Skinmax — Face Scan Result Redesign</h1>
+      <p>Three concepts that put our apple mascot front-and-center as the emotional hero of the result page. Blemishes on the apple mirror the user's real scan 1:1 — mild glow or needs-work, the apple reflects it. Swap the scan below to preview how each concept handles good / fair / needs-work.</p>
+    </div>
+    <div class="head-mascot">
+      <img src="../mascot-v1/apple-base.png" alt="Skinmax apple mascot" />
+    </div>
+  </header>
+
+  <!-- ============ Control bar ============ -->
+  <div class="control-bar">
+    <span class="label">Glow Score Preview</span>
+    <div class="scan-switch" id="scan-switch">
+      <button data-scan="good"  class="active"><span class="dot"></span>Glow 88 · Good</button>
+      <button data-scan="fair"><span class="dot"></span>Glow 62 · Fair</button>
+      <button data-scan="needs"><span class="dot"></span>Glow 34 · Needs work</button>
+    </div>
+    <span class="control-help">Tap metric pills in any concept to highlight the matching blemish on the apple.</span>
+  </div>
+
+  <!-- ============ 3 Concepts ============ -->
+  <div class="concept-grid">
+
+    <!-- ============ Concept A ============ -->
+    <section class="concept concept-a" data-concept="A">
+      <div class="concept-title">
+        <span class="tag">Concept A</span>
+        <h2>Apple Portrait Frame</h2>
+      </div>
+      <p class="concept-sub">Apple as a framed keepsake. Calm, minimal, shareable — like a "skin photo of the day."</p>
+
+      <div class="iphone">
+        <div class="screen">
+          <div class="status-bar"><span>9:41</span><span>●●● 🔋</span></div>
+          <div class="screen-scroll">
+
+            <div class="frame">
+              <div class="glow-badge">
+                <span class="score" data-bind="glow">62</span>
+                <span class="lbl">Glow</span>
+              </div>
+
+              <!-- Apple + blemishes -->
+              <div class="apple-stage" data-stage>
+                <img class="apple-img" src="../mascot-v1/apple-base.png" alt="Apple mascot" />
+                <div class="blemish-layer">
+                  <div class="shine" data-bl="shine"></div>
+                  <span class="sparkle s1" data-bl="sparkle">✨</span>
+                  <span class="sparkle s2" data-bl="sparkle">✨</span>
+                  <div class="matte-veil" data-bl="matte"></div>
+                  <!-- dry lines -->
+                  <div class="dry-line" data-bl="matte" style="top:58%; left:26%; width:10%; transform: rotate(-14deg);"></div>
+                  <div class="dry-line" data-bl="matte" style="top:62%; left:64%; width:10%; transform: rotate(18deg);"></div>
+                  <!-- acne bumps (cheek L) -->
+                  <div class="acne" data-bl="acne" style="top:52%; left:26%; width:5%; height:5%;"></div>
+                  <div class="acne" data-bl="acne" style="top:57%; left:22%; width:4%; height:4%;"></div>
+                  <div class="acne" data-bl="acne" style="top:54%; left:32%; width:3.5%; height:3.5%;"></div>
+                  <!-- acne bumps (cheek R) -->
+                  <div class="acne" data-bl="acne" style="top:53%; left:66%; width:5%; height:5%;"></div>
+                  <div class="acne" data-bl="acne" style="top:58%; left:72%; width:4%; height:4%;"></div>
+                  <!-- dark spots (temples) -->
+                  <div class="darkspot" data-bl="dark_spots" style="top:38%; left:18%; width:10%; height:7%;"></div>
+                  <div class="darkspot" data-bl="dark_spots" style="top:41%; left:74%; width:8%; height:6%;"></div>
+                  <!-- redness (cheeks flush) -->
+                  <div class="redness" data-bl="redness" style="top:47%; left:18%; width:22%; height:18%;"></div>
+                  <div class="redness" data-bl="redness" style="top:47%; left:60%; width:22%; height:18%;"></div>
+                  <!-- texture stippling across nose + cheek -->
+                  <div class="texture-dot" data-bl="texture" style="top:48%; left:44%;"></div>
+                  <div class="texture-dot" data-bl="texture" style="top:50%; left:48%;"></div>
+                  <div class="texture-dot" data-bl="texture" style="top:52%; left:46%;"></div>
+                  <div class="texture-dot" data-bl="texture" style="top:55%; left:52%;"></div>
+                  <div class="texture-dot" data-bl="texture" style="top:58%; left:50%;"></div>
+                  <!-- pores around nose zone -->
+                  <div class="pore" data-bl="pores" style="top:48%; left:47%;"></div>
+                  <div class="pore" data-bl="pores" style="top:50%; left:51%;"></div>
+                  <div class="pore" data-bl="pores" style="top:52%; left:48%;"></div>
+                  <div class="pore" data-bl="pores" style="top:54%; left:52%;"></div>
+                  <div class="pore" data-bl="pores" style="top:56%; left:49%;"></div>
+                  <!-- wrinkles forehead + eye crease -->
+                  <div class="wrinkle" data-bl="wrinkles" style="top:30%; left:35%; width:30%;"></div>
+                  <div class="wrinkle" data-bl="wrinkles" style="top:34%; left:38%; width:24%;"></div>
+                  <div class="wrinkle" data-bl="wrinkles" style="top:46%; left:30%; width:12%;"></div>
+                  <div class="wrinkle" data-bl="wrinkles" style="top:46%; left:58%; width:12%;"></div>
+                  <!-- sag -->
+                  <div class="sag" data-bl="elasticity"></div>
+
+                  <!-- highlight pulse (JS-positioned) -->
+                  <div class="highlight-pulse" id="pulse-A"></div>
+                </div>
+              </div>
+
+              <div class="frame-caption">Your skin today</div>
+              <div class="frame-subcap" data-bind="subcap">Dewy and happy</div>
+            </div>
+
+            <div class="hero-greet"><span class="emoji" data-bind="emoji">🌟</span> <span data-bind="greet">You're glowing, bestie</span></div>
+            <div class="hero-sub" data-bind="sub">Your skin looks fresh and hydrated today. Keep doing whatever you're doing.</div>
+
+            <div class="metric-grid-2">
+              <!-- 8 metric mini-cards; populated by JS via data-metric -->
+              <div class="mini-card" data-metric="acne">
+                <div class="ring"><span class="val">70</span></div>
+                <div class="m-info">
+                  <div class="m-name">💧 Acne</div>
+                  <div class="m-sev">Good</div>
+                </div>
+              </div>
+              <div class="mini-card" data-metric="hydration">
+                <div class="ring"><span class="val">70</span></div>
+                <div class="m-info">
+                  <div class="m-name">💦 Hydration</div>
+                  <div class="m-sev">Good</div>
+                </div>
+              </div>
+              <div class="mini-card" data-metric="dark_spots">
+                <div class="ring"><span class="val">70</span></div>
+                <div class="m-info">
+                  <div class="m-name">☀️ Dark spots</div>
+                  <div class="m-sev">Good</div>
+                </div>
+              </div>
+              <div class="mini-card" data-metric="redness">
+                <div class="ring"><span class="val">70</span></div>
+                <div class="m-info">
+                  <div class="m-name">🌹 Redness</div>
+                  <div class="m-sev">Good</div>
+                </div>
+              </div>
+              <div class="mini-card" data-metric="texture">
+                <div class="ring"><span class="val">70</span></div>
+                <div class="m-info">
+                  <div class="m-name">🎨 Texture</div>
+                  <div class="m-sev">Good</div>
+                </div>
+              </div>
+              <div class="mini-card" data-metric="pores">
+                <div class="ring"><span class="val">70</span></div>
+                <div class="m-info">
+                  <div class="m-name">🔍 Pores</div>
+                  <div class="m-sev">Good</div>
+                </div>
+              </div>
+              <div class="mini-card" data-metric="elasticity">
+                <div class="ring"><span class="val">70</span></div>
+                <div class="m-info">
+                  <div class="m-name">🌿 Elasticity</div>
+                  <div class="m-sev">Good</div>
+                </div>
+              </div>
+              <div class="mini-card" data-metric="wrinkles">
+                <div class="ring"><span class="val">70</span></div>
+                <div class="m-info">
+                  <div class="m-name">〰️ Wrinkles</div>
+                  <div class="m-sev">Good</div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /screen-scroll -->
+        </div><!-- /screen -->
+      </div><!-- /iphone -->
+
+      <div class="concept-analysis">
+        <div class="pc-card pro">
+          <h4>Pro</h4>
+          <ul>
+            <li>Emotional + shareable "portrait of my skin today."</li>
+            <li>Clean layout, apple is unmissable.</li>
+            <li>Scales beautifully to lock-screen widget later.</li>
+          </ul>
+        </div>
+        <div class="pc-card con">
+          <h4>Con</h4>
+          <ul>
+            <li>Less informational on first glance.</li>
+            <li>Glow badge crowds the frame corner on small devices.</li>
+            <li>Relies on user tapping metrics to learn more.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="metric-handling">
+        <h4>How it handles 8 metrics</h4>
+        <p>All 8 metrics live as a 2-column grid of mini cards under the portrait. Tap any mini card → opens existing <code>SkinDetailView</code>. Blemish on the apple visibly corresponds to that card's metric.</p>
+      </div>
+    </section>
+
+    <!-- ============ Concept B ============ -->
+    <section class="concept concept-b" data-concept="B">
+      <div class="concept-title">
+        <span class="tag">Concept B</span>
+        <h2>Annotated Apple</h2>
+      </div>
+      <p class="concept-sub">Fashion-ad style. Thin coral lines connect each blemish zone to a floating score pill.</p>
+
+      <div class="iphone">
+        <div class="screen">
+          <div class="status-bar"><span>9:41</span><span>●●● 🔋</span></div>
+          <div class="screen-scroll">
+
+            <div class="annot-wrap">
+
+              <div class="glow-ring-tr">
+                <span class="score" data-bind="glow">62</span>
+                <span class="lbl">Glow</span>
+              </div>
+
+              <div class="apple-stage" data-stage>
+                <img class="apple-img" src="../mascot-v1/apple-base.png" alt="Apple mascot" />
+                <div class="blemish-layer">
+                  <div class="shine" data-bl="shine"></div>
+                  <span class="sparkle s1" data-bl="sparkle">✨</span>
+                  <span class="sparkle s2" data-bl="sparkle">✨</span>
+                  <div class="matte-veil" data-bl="matte"></div>
+                  <div class="dry-line" data-bl="matte" style="top:58%; left:26%; width:10%; transform: rotate(-14deg);"></div>
+                  <div class="dry-line" data-bl="matte" style="top:62%; left:64%; width:10%; transform: rotate(18deg);"></div>
+                  <!-- acne -->
+                  <div class="acne" data-bl="acne" style="top:52%; left:26%; width:5%; height:5%;"></div>
+                  <div class="acne" data-bl="acne" style="top:57%; left:22%; width:4%; height:4%;"></div>
+                  <div class="acne" data-bl="acne" style="top:54%; left:32%; width:3.5%; height:3.5%;"></div>
+                  <div class="acne" data-bl="acne" style="top:53%; left:66%; width:5%; height:5%;"></div>
+                  <div class="acne" data-bl="acne" style="top:58%; left:72%; width:4%; height:4%;"></div>
+                  <!-- dark spots -->
+                  <div class="darkspot" data-bl="dark_spots" style="top:38%; left:18%; width:10%; height:7%;"></div>
+                  <div class="darkspot" data-bl="dark_spots" style="top:41%; left:74%; width:8%; height:6%;"></div>
+                  <!-- redness -->
+                  <div class="redness" data-bl="redness" style="top:47%; left:18%; width:22%; height:18%;"></div>
+                  <div class="redness" data-bl="redness" style="top:47%; left:60%; width:22%; height:18%;"></div>
+                  <!-- texture -->
+                  <div class="texture-dot" data-bl="texture" style="top:48%; left:44%;"></div>
+                  <div class="texture-dot" data-bl="texture" style="top:50%; left:48%;"></div>
+                  <div class="texture-dot" data-bl="texture" style="top:52%; left:46%;"></div>
+                  <div class="texture-dot" data-bl="texture" style="top:55%; left:52%;"></div>
+                  <div class="texture-dot" data-bl="texture" style="top:58%; left:50%;"></div>
+                  <!-- pores -->
+                  <div class="pore" data-bl="pores" style="top:48%; left:47%;"></div>
+                  <div class="pore" data-bl="pores" style="top:50%; left:51%;"></div>
+                  <div class="pore" data-bl="pores" style="top:52%; left:48%;"></div>
+                  <div class="pore" data-bl="pores" style="top:54%; left:52%;"></div>
+                  <div class="pore" data-bl="pores" style="top:56%; left:49%;"></div>
+                  <!-- wrinkles -->
+                  <div class="wrinkle" data-bl="wrinkles" style="top:30%; left:35%; width:30%;"></div>
+                  <div class="wrinkle" data-bl="wrinkles" style="top:34%; left:38%; width:24%;"></div>
+                  <div class="wrinkle" data-bl="wrinkles" style="top:46%; left:30%; width:12%;"></div>
+                  <div class="wrinkle" data-bl="wrinkles" style="top:46%; left:58%; width:12%;"></div>
+                  <!-- sag -->
+                  <div class="sag" data-bl="elasticity"></div>
+
+                  <div class="highlight-pulse" id="pulse-B"></div>
+                </div>
+
+                <!-- SVG connector lines (coord system 0–100) -->
+                <svg class="annot-svg" viewBox="0 0 100 100" preserveAspectRatio="none" data-svg>
+                  <!-- acne left -->
+                  <line x1="5"  y1="52" x2="28" y2="55" data-line="acne" />
+                  <!-- hydration -->
+                  <line x1="6"  y1="68" x2="35" y2="66" data-line="hydration" />
+                  <!-- dark_spots -->
+                  <line x1="95" y1="32" x2="78" y2="40" data-line="dark_spots" />
+                  <!-- redness -->
+                  <line x1="94" y1="50" x2="72" y2="55" data-line="redness" />
+                  <!-- texture -->
+                  <line x1="8"  y1="85" x2="44" y2="56" data-line="texture" />
+                  <!-- pores -->
+                  <line x1="50" y1="5"  x2="50" y2="50" data-line="pores" />
+                  <!-- elasticity -->
+                  <line x1="92" y1="86" x2="65" y2="86" data-line="elasticity" />
+                  <!-- wrinkles -->
+                  <line x1="92" y1="18" x2="55" y2="32" data-line="wrinkles" />
+                </svg>
+
+                <!-- Floating pills positioned around apple -->
+                <span class="callout-pill fair" data-metric="acne"       style="top:47%; left:-2%;">
+                  <span class="sev-dot"></span>Acne <span class="score-v">65</span>
+                </span>
+                <span class="callout-pill fair" data-metric="hydration"  style="top:66%; left:-4%;">
+                  <span class="sev-dot"></span>Hydration <span class="score-v">64</span>
+                </span>
+                <span class="callout-pill fair" data-metric="dark_spots" style="top:26%; right:-4%;">
+                  <span class="sev-dot"></span>Dark spots <span class="score-v">60</span>
+                </span>
+                <span class="callout-pill fair" data-metric="redness"    style="top:48%; right:-4%;">
+                  <span class="sev-dot"></span>Redness <span class="score-v">58</span>
+                </span>
+                <span class="callout-pill good" data-metric="texture"    style="bottom:10%; left:-4%;">
+                  <span class="sev-dot"></span>Texture <span class="score-v">74</span>
+                </span>
+                <span class="callout-pill good" data-metric="pores"      style="top:-4%; left:36%;">
+                  <span class="sev-dot"></span>Pores <span class="score-v">78</span>
+                </span>
+                <span class="callout-pill good" data-metric="elasticity" style="bottom:10%; right:-4%;">
+                  <span class="sev-dot"></span>Elasticity <span class="score-v">80</span>
+                </span>
+                <span class="callout-pill good" data-metric="wrinkles"   style="top:12%; right:-4%;">
+                  <span class="sev-dot"></span>Wrinkles <span class="score-v">76</span>
+                </span>
+              </div><!-- /apple-stage -->
+
+              <p class="b-sub" data-bind="sub">A few cheeky spots — we see you. Tap a callout to get the breakdown.</p>
+
+            </div>
+
+          </div><!-- /screen-scroll -->
+        </div><!-- /screen -->
+      </div><!-- /iphone -->
+
+      <div class="concept-analysis">
+        <div class="pc-card pro">
+          <h4>Pro</h4>
+          <ul>
+            <li>Most informational — every issue is explicitly annotated.</li>
+            <li>Premium, editorial feel.</li>
+            <li>Great for "show receipts" in screenshots.</li>
+          </ul>
+        </div>
+        <div class="pc-card con">
+          <h4>Con</h4>
+          <ul>
+            <li>Dense on small screens — 8 pills + lines is a lot.</li>
+            <li>Easy to feel clinical if copy drifts.</li>
+            <li>Connector lines harder to maintain as scans vary.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="metric-handling">
+        <h4>How it handles 8 metrics</h4>
+        <p>Each metric is a floating pill anchored to its blemish zone via a dashed coral line. Pills are <code>TagPill</code>-style with a severity dot. Tap pill → opens <code>SkinDetailView</code>. Glow Score sits top-right as a compact <code>ScoreRing</code>.</p>
+      </div>
+    </section>
+
+    <!-- ============ Concept C ============ -->
+    <section class="concept concept-c" data-concept="C">
+      <div class="concept-title">
+        <span class="tag">Concept C</span>
+        <h2>Apple Reaction</h2>
+      </div>
+      <p class="concept-sub">The apple talks. A speech bubble delivers the vibe, then cards explain what's going on.</p>
+
+      <div class="iphone">
+        <div class="screen">
+          <div class="status-bar"><span>9:41</span><span>●●● 🔋</span></div>
+          <div class="screen-scroll">
+
+            <div class="hero">
+              <div class="bubble">
+                <span class="reaction" data-bind="reaction">Feeling a little dry today</span>
+                <span data-bind="bubbleMsg">— but still glowing ✨. Let's hydrate and mellow those cheeks.</span>
+              </div>
+              <div class="apple-stage" data-stage>
+                <img class="apple-img" src="../mascot-v1/apple-base.png" alt="Apple mascot" />
+                <div class="blemish-layer">
+                  <div class="shine" data-bl="shine"></div>
+                  <span class="sparkle s1" data-bl="sparkle">✨</span>
+                  <span class="sparkle s2" data-bl="sparkle">✨</span>
+                  <div class="matte-veil" data-bl="matte"></div>
+                  <div class="dry-line" data-bl="matte" style="top:58%; left:26%; width:10%; transform: rotate(-14deg);"></div>
+                  <div class="dry-line" data-bl="matte" style="top:62%; left:64%; width:10%; transform: rotate(18deg);"></div>
+                  <div class="acne" data-bl="acne" style="top:52%; left:26%; width:5%; height:5%;"></div>
+                  <div class="acne" data-bl="acne" style="top:57%; left:22%; width:4%; height:4%;"></div>
+                  <div class="acne" data-bl="acne" style="top:54%; left:32%; width:3.5%; height:3.5%;"></div>
+                  <div class="acne" data-bl="acne" style="top:53%; left:66%; width:5%; height:5%;"></div>
+                  <div class="acne" data-bl="acne" style="top:58%; left:72%; width:4%; height:4%;"></div>
+                  <div class="darkspot" data-bl="dark_spots" style="top:38%; left:18%; width:10%; height:7%;"></div>
+                  <div class="darkspot" data-bl="dark_spots" style="top:41%; left:74%; width:8%; height:6%;"></div>
+                  <div class="redness" data-bl="redness" style="top:47%; left:18%; width:22%; height:18%;"></div>
+                  <div class="redness" data-bl="redness" style="top:47%; left:60%; width:22%; height:18%;"></div>
+                  <div class="texture-dot" data-bl="texture" style="top:48%; left:44%;"></div>
+                  <div class="texture-dot" data-bl="texture" style="top:50%; left:48%;"></div>
+                  <div class="texture-dot" data-bl="texture" style="top:52%; left:46%;"></div>
+                  <div class="texture-dot" data-bl="texture" style="top:55%; left:52%;"></div>
+                  <div class="texture-dot" data-bl="texture" style="top:58%; left:50%;"></div>
+                  <div class="pore" data-bl="pores" style="top:48%; left:47%;"></div>
+                  <div class="pore" data-bl="pores" style="top:50%; left:51%;"></div>
+                  <div class="pore" data-bl="pores" style="top:52%; left:48%;"></div>
+                  <div class="pore" data-bl="pores" style="top:54%; left:52%;"></div>
+                  <div class="pore" data-bl="pores" style="top:56%; left:49%;"></div>
+                  <div class="wrinkle" data-bl="wrinkles" style="top:30%; left:35%; width:30%;"></div>
+                  <div class="wrinkle" data-bl="wrinkles" style="top:34%; left:38%; width:24%;"></div>
+                  <div class="wrinkle" data-bl="wrinkles" style="top:46%; left:30%; width:12%;"></div>
+                  <div class="wrinkle" data-bl="wrinkles" style="top:46%; left:58%; width:12%;"></div>
+                  <div class="sag" data-bl="elasticity"></div>
+
+                  <div class="highlight-pulse" id="pulse-C"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="glow-inline">
+              <div class="ring"><span class="val" data-bind="glow">62</span></div>
+              <div class="meta">
+                <div class="lbl">Today's Glow</div>
+                <div class="title" data-bind="greet">Doing alright</div>
+              </div>
+            </div>
+
+            <div class="section-head">What your skin is telling us</div>
+
+            <div class="metric-row" data-metric="hydration">
+              <div class="emo">💦</div>
+              <div class="info">
+                <div class="name">Hydration</div>
+                <div class="msg">Grab your water bottle, bestie.</div>
+              </div>
+              <div class="sev-pill fair">Fair</div>
+            </div>
+            <div class="metric-row" data-metric="acne">
+              <div class="emo">💧</div>
+              <div class="info">
+                <div class="name">Acne</div>
+                <div class="msg">A little cheek party happening.</div>
+              </div>
+              <div class="sev-pill fair">Fair</div>
+            </div>
+            <div class="metric-row" data-metric="dark_spots">
+              <div class="emo">☀️</div>
+              <div class="info">
+                <div class="name">Dark spots</div>
+                <div class="msg">Sunscreen pls — your temples are asking.</div>
+              </div>
+              <div class="sev-pill fair">Fair</div>
+            </div>
+            <div class="metric-row" data-metric="redness">
+              <div class="emo">🌹</div>
+              <div class="info">
+                <div class="name">Redness</div>
+                <div class="msg">Cheeks running hot. Soothe mode on.</div>
+              </div>
+              <div class="sev-pill fair">Fair</div>
+            </div>
+            <div class="metric-row" data-metric="texture">
+              <div class="emo">🎨</div>
+              <div class="info">
+                <div class="name">Texture</div>
+                <div class="msg">Pretty smooth, keep it up.</div>
+              </div>
+              <div class="sev-pill good">Good</div>
+            </div>
+            <div class="metric-row" data-metric="pores">
+              <div class="emo">🔍</div>
+              <div class="info">
+                <div class="name">Pores</div>
+                <div class="msg">Tight as a drum. Nice.</div>
+              </div>
+              <div class="sev-pill good">Good</div>
+            </div>
+            <div class="metric-row" data-metric="elasticity">
+              <div class="emo">🌿</div>
+              <div class="info">
+                <div class="name">Elasticity</div>
+                <div class="msg">Bouncy bounce.</div>
+              </div>
+              <div class="sev-pill good">Good</div>
+            </div>
+            <div class="metric-row" data-metric="wrinkles">
+              <div class="emo">〰️</div>
+              <div class="info">
+                <div class="name">Wrinkles</div>
+                <div class="msg">Smooth as the cream base.</div>
+              </div>
+              <div class="sev-pill good">Good</div>
+            </div>
+
+            <div class="insight-card">
+              <div class="icon-bubble">🍎</div>
+              <div class="ic-body">
+                <div class="ic-title">Apple says</div>
+                <div class="ic-msg" data-bind="insight">Drink 2 extra glasses of water and skip hot showers tonight — your skin's asking nicely.</div>
+              </div>
+            </div>
+
+          </div><!-- /screen-scroll -->
+        </div><!-- /screen -->
+      </div><!-- /iphone -->
+
+      <div class="concept-analysis">
+        <div class="pc-card pro">
+          <h4>Pro</h4>
+          <ul>
+            <li>Most personality-driven. Users will bond with the apple.</li>
+            <li>On-brand "best-friend voice" baked into the UI.</li>
+            <li>Scales to notifications / streak / daily check-in.</li>
+          </ul>
+        </div>
+        <div class="pc-card con">
+          <h4>Con</h4>
+          <ul>
+            <li>Copy cost: every scan state needs 3+ voice variants.</li>
+            <li>Speech bubble can feel childish if pitched wrong.</li>
+            <li>Glow Score less hero-y vs. A.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="metric-handling">
+        <h4>How it handles 8 metrics</h4>
+        <p>All 8 metrics shown as vertical <code>MetricRow</code>s under the hero. Each row has emoji, short voiceover line, and a severity pill. Tap row → opens <code>SkinDetailView</code>. Apple-labeled insight card at the bottom replaces the generic AI insight.</p>
+      </div>
+    </section>
+
+  </div><!-- /.concept-grid -->
+
+  <!-- ============ Legend ============ -->
+  <section class="legend">
+    <h2>Shared foundations</h2>
+    <p class="intro">All three concepts share the same blemish-mapping, palette, and reusable primitives. Only the layout / framing changes.</p>
+    <div class="legend-grid">
+
+      <div class="leg-col">
+        <h3>Blemish mapping</h3>
+        <table class="blemish-table">
+          <tr><td>Acne</td><td>Red/pink bumps on cheeks, density scales with severity.</td></tr>
+          <tr><td>Dark spots</td><td>Soft brown patches near temple / cheekbone.</td></tr>
+          <tr><td>Redness</td><td>Pink blush flush across both cheeks.</td></tr>
+          <tr><td>Hydration</td><td>Matte veil + faint dry lines (glossy shine + sparkle when good).</td></tr>
+          <tr><td>Texture</td><td>Subtle stippling across cheek/nose zones.</td></tr>
+          <tr><td>Elasticity</td><td>Soft sag shadow at apple bottom.</td></tr>
+          <tr><td>Pores</td><td>Tiny dot cluster on nose zone.</td></tr>
+          <tr><td>Wrinkles</td><td>Thin fading lines at forehead + eye crease.</td></tr>
+        </table>
+      </div>
+
+      <div class="leg-col">
+        <h3>Color tokens</h3>
+        <div class="color-row"><span class="color-sw" style="background:#FF7A5C"></span><span class="name">Hero Coral</span><span class="hex">#FF7A5C</span></div>
+        <div class="color-row"><span class="color-sw" style="background:#FFB89E"></span><span class="name">Soft Peach</span><span class="hex">#FFB89E</span></div>
+        <div class="color-row"><span class="color-sw" style="background:#FFD3B8"></span><span class="name">Cream Peach</span><span class="hex">#FFD3B8</span></div>
+        <div class="color-row"><span class="color-sw" style="background:#FAF6F2"></span><span class="name">Cream Base</span><span class="hex">#FAF6F2</span></div>
+        <div class="color-row"><span class="color-sw" style="background:#66BB6A"></span><span class="name">Fresh Green</span><span class="hex">#66BB6A</span></div>
+        <div class="color-row"><span class="color-sw" style="background:#FFB74D"></span><span class="name">Gentle Amber</span><span class="hex">#FFB74D</span></div>
+        <div class="color-row"><span class="color-sw" style="background:#E57373"></span><span class="name">Soft Red</span><span class="hex">#E57373</span></div>
+        <div class="color-row"><span class="color-sw" style="background:#2B1F1A"></span><span class="name">Dark Choc</span><span class="hex">#2B1F1A</span></div>
+      </div>
+
+      <div class="leg-col">
+        <h3>What we reuse</h3>
+        <ul class="reuse-list">
+          <li><code>ScoreRing</code> — used for Glow badge (A), top-right ring (B), inline ring (C).</li>
+          <li><code>TagPill</code> — metric pills in Concept B, severity pills in C.</li>
+          <li><code>InsightCard</code> — "Apple says" card in C.</li>
+          <li><code>HapticManager</code> — <code>.selection</code> on metric tap, <code>.success</code> on result reveal.</li>
+          <li><code>SkinDetailView</code> — tapping any metric (in any concept) opens the existing sheet.</li>
+          <li><code>GlowbiteColors.trafficLight(for:)</code> — drives pill + ring color per score.</li>
+          <li>Typography: <code>.gbDisplayL</code> for Glow, <code>.gbTitleM</code> for section heads, <code>.gbCaption</code> for metric labels.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+</div><!-- /page -->
+
+<script>
+/* =====================================================================
+   Sample scans — drives every concept at once.
+   Scores are per-metric 0–100. Severity band derived from score:
+     good  ≥ 70
+     fair  40–69
+     needs  < 40
+   ===================================================================== */
+
+const SCANS = {
+  good: {
+    glow: 88,
+    subcap: "Dewy and happy",
+    emoji: "🌟",
+    greet: "You're glowing, bestie",
+    sub: "Your skin looks fresh and hydrated today. Keep doing whatever you're doing.",
+    reaction: "Feeling amazing today",
+    bubbleMsg: "— glow is glowing ✨ Keep your routine, we love it.",
+    insight: "Your hydration is chef's kiss. Keep that water bottle close and you'll stay in this zone.",
+    metrics: {
+      acne:       { score: 82, msg: "Clear as a bell." },
+      hydration:  { score: 90, msg: "Dewy queen." },
+      dark_spots: { score: 85, msg: "Even as can be." },
+      redness:    { score: 88, msg: "Calm and cool." },
+      texture:    { score: 84, msg: "Silky smooth." },
+      pores:      { score: 80, msg: "Tight and tidy." },
+      elasticity: { score: 91, msg: "Bouncy bounce." },
+      wrinkles:   { score: 86, msg: "Smooth as cream." }
+    }
+  },
+  fair: {
+    glow: 62,
+    subcap: "A little off, still cute",
+    emoji: "✨",
+    greet: "Doing alright",
+    sub: "A few cheeky spots — nothing dramatic. Let's give your skin a little extra love.",
+    reaction: "Feeling a little dry today",
+    bubbleMsg: "— but still glowing ✨. Let's hydrate and mellow those cheeks.",
+    insight: "Drink 2 extra glasses of water and skip hot showers tonight — your skin's asking nicely.",
+    metrics: {
+      acne:       { score: 65, msg: "A little cheek party happening." },
+      hydration:  { score: 64, msg: "Grab your water bottle, bestie." },
+      dark_spots: { score: 60, msg: "Sunscreen pls — your temples are asking." },
+      redness:    { score: 58, msg: "Cheeks running hot. Soothe mode on." },
+      texture:    { score: 74, msg: "Pretty smooth, keep it up." },
+      pores:      { score: 78, msg: "Tight as a drum. Nice." },
+      elasticity: { score: 80, msg: "Bouncy bounce." },
+      wrinkles:   { score: 76, msg: "Smooth as the cream base." }
+    }
+  },
+  needs: {
+    glow: 34,
+    subcap: "Tired but loved",
+    emoji: "💫",
+    greet: "Rough day, bestie?",
+    sub: "Your skin's a bit worn out — we've got you. Small wins today, not a full routine reboot.",
+    reaction: "Feeling worn out",
+    bubbleMsg: "— can we hydrate, rest, and skip the bar tonight? Pretty please.",
+    insight: "Big ask: hydrate, sleep 8 hrs, SPF tomorrow. We'll rescan in 3 days and watch the glow come back.",
+    metrics: {
+      acne:       { score: 32, msg: "Breakout city. We see you." },
+      hydration:  { score: 28, msg: "Parched. Water and serum, stat." },
+      dark_spots: { score: 36, msg: "SPF is the one ask." },
+      redness:    { score: 30, msg: "Angry cheeks. Cool compress vibes." },
+      texture:    { score: 44, msg: "Bumpy this week." },
+      pores:      { score: 42, msg: "Looking a bit stretched." },
+      elasticity: { score: 38, msg: "Could use some bounce." },
+      wrinkles:   { score: 48, msg: "Dry lines showing — moisture will help." }
+    }
+  }
+};
+
+const METRICS_ORDER = ["acne","hydration","dark_spots","redness","texture","pores","elasticity","wrinkles"];
+const EMOJI = {
+  acne: "💧", hydration: "💦", dark_spots: "☀️", redness: "🌹",
+  texture: "🎨", pores: "🔍", elasticity: "🌿", wrinkles: "〰️"
+};
+const NAME = {
+  acne: "Acne", hydration: "Hydration", dark_spots: "Dark spots", redness: "Redness",
+  texture: "Texture", pores: "Pores", elasticity: "Elasticity", wrinkles: "Wrinkles"
+};
+
+/* Blemish → which metric toggles it */
+function severity(score) {
+  if (score >= 70) return "good";
+  if (score >= 40) return "fair";
+  return "needs";
+}
+
+function severityLabel(sev) {
+  return sev === "good" ? "Good" : sev === "fair" ? "Fair" : "Needs work";
+}
+
+function blemishOpacity(score) {
+  // 0 opacity when score ≥ 70, ramps up as score drops.
+  if (score >= 70) return 0;
+  if (score >= 55) return 0.35;
+  if (score >= 40) return 0.6;
+  if (score >= 25) return 0.85;
+  return 1;
+}
+
+/* Apply a scan state to the whole page */
+function applyScan(scanKey) {
+  const scan = SCANS[scanKey];
+
+  // 1) Update every data-bind="glow" / "subcap" / etc.
+  document.querySelectorAll('[data-bind]').forEach(el => {
+    const key = el.getAttribute('data-bind');
+    if (scan[key] !== undefined) el.textContent = scan[key];
+  });
+
+  // 2) Update glow rings (conic-gradient deg)
+  document.querySelectorAll('.glow-badge, .glow-ring-tr, .glow-inline .ring').forEach(el => {
+    const deg = Math.round((scan.glow / 100) * 360);
+    el.style.setProperty('--glow-deg', deg + 'deg');
+  });
+
+  // 3) Update blemish overlays across all stages
+  document.querySelectorAll('[data-stage]').forEach(stage => {
+    const m = scan.metrics;
+
+    // Hydration drives both matte + shine/sparkle
+    const hydGood = m.hydration.score >= 70;
+    stage.querySelectorAll('[data-bl="shine"], [data-bl="sparkle"]').forEach(el => {
+      el.style.opacity = hydGood ? 1 : 0;
+    });
+    stage.querySelectorAll('[data-bl="matte"]').forEach(el => {
+      el.style.opacity = hydGood ? 0 : blemishOpacity(m.hydration.score);
+    });
+
+    // Simple map for visual-only blemishes
+    const BL_MAP = {
+      acne:       m.acne.score,
+      dark_spots: m.dark_spots.score,
+      redness:    m.redness.score,
+      texture:    m.texture.score,
+      pores:      m.pores.score,
+      elasticity: m.elasticity.score,
+      wrinkles:   m.wrinkles.score
+    };
+    Object.entries(BL_MAP).forEach(([key, score]) => {
+      const op = blemishOpacity(score);
+      stage.querySelectorAll(`[data-bl="${key}"]`).forEach(el => {
+        el.style.opacity = op;
+      });
+    });
+  });
+
+  // 4) Concept A — mini cards
+  document.querySelectorAll('.concept-a .mini-card').forEach(card => {
+    const mKey = card.dataset.metric;
+    const mData = scan.metrics[mKey];
+    const sev = severity(mData.score);
+    const color = sev === "good" ? '#66BB6A' : sev === "fair" ? '#FFB74D' : '#E57373';
+    const ring = card.querySelector('.ring');
+    const val = card.querySelector('.val');
+    const sevEl = card.querySelector('.m-sev');
+    const nameEl = card.querySelector('.m-name');
+    const deg = Math.round((mData.score / 100) * 360);
+    ring.style.setProperty('--r-color', color);
+    ring.style.setProperty('--r-deg', deg + 'deg');
+    val.textContent = mData.score;
+    sevEl.textContent = severityLabel(sev);
+    sevEl.style.color = color;
+    nameEl.textContent = `${EMOJI[mKey]} ${NAME[mKey]}`;
+  });
+
+  // 5) Concept B — callout pills
+  document.querySelectorAll('.concept-b .callout-pill').forEach(pill => {
+    const mKey = pill.dataset.metric;
+    const mData = scan.metrics[mKey];
+    const sev = severity(mData.score);
+    pill.classList.remove('good', 'fair', 'needs');
+    pill.classList.add(sev);
+    const sv = pill.querySelector('.score-v');
+    if (sv) sv.textContent = mData.score;
+  });
+
+  // 6) Concept C — metric rows
+  document.querySelectorAll('.concept-c .metric-row').forEach(row => {
+    const mKey = row.dataset.metric;
+    const mData = scan.metrics[mKey];
+    const sev = severity(mData.score);
+    row.querySelector('.msg').textContent = mData.msg;
+    const pill = row.querySelector('.sev-pill');
+    pill.classList.remove('good', 'fair', 'needs');
+    pill.classList.add(sev);
+    pill.textContent = severityLabel(sev);
+  });
+
+  // 7) Concept B — connector lines only visible for metrics < 70 (so good metrics don't clutter)
+  document.querySelectorAll('.concept-b [data-line]').forEach(line => {
+    const mKey = line.getAttribute('data-line');
+    const sc = scan.metrics[mKey].score;
+    line.style.opacity = sc >= 70 ? 0.15 : 0.55;
+  });
+}
+
+/* ---------- Scan switch ---------- */
+document.querySelectorAll('#scan-switch button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#scan-switch button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyScan(btn.dataset.scan);
+  });
+});
+
+/* ---------- Metric pill → blemish highlight ---------- */
+/* Approximate centroid (% in stage) for each metric's blemish zone. */
+const BLEMISH_CENTROID = {
+  acne:       { x: 50, y: 55, r: 46 },
+  hydration:  { x: 50, y: 48, r: 60 },
+  dark_spots: { x: 50, y: 40, r: 58 },
+  redness:    { x: 50, y: 54, r: 58 },
+  texture:    { x: 49, y: 52, r: 22 },
+  pores:      { x: 50, y: 52, r: 14 },
+  elasticity: { x: 50, y: 86, r: 40 },
+  wrinkles:   { x: 50, y: 32, r: 40 }
+};
+
+function highlightMetric(concept, mKey) {
+  const stage = document.querySelector(`.concept-${concept.toLowerCase()} [data-stage]`);
+  if (!stage) return;
+  const pulse = stage.querySelector('.highlight-pulse');
+  const c = BLEMISH_CENTROID[mKey];
+  if (!c) return;
+  const box = stage.getBoundingClientRect();
+  const size = c.r * box.width / 100;
+  pulse.style.width  = size + 'px';
+  pulse.style.height = size + 'px';
+  pulse.style.left = `calc(${c.x}% - ${size/2}px)`;
+  pulse.style.top  = `calc(${c.y}% - ${size/2}px)`;
+  pulse.classList.add('active');
+  clearTimeout(pulse._t);
+  pulse._t = setTimeout(() => pulse.classList.remove('active'), 1200);
+}
+
+function wirePillTapping(conceptLetter, selector) {
+  document.querySelectorAll(`.concept-${conceptLetter.toLowerCase()} ${selector}`).forEach(el => {
+    el.addEventListener('click', () => highlightMetric(conceptLetter, el.dataset.metric));
+    el.addEventListener('mouseenter', () => highlightMetric(conceptLetter, el.dataset.metric));
+  });
+}
+
+wirePillTapping('A', '.mini-card');
+wirePillTapping('B', '.callout-pill');
+wirePillTapping('C', '.metric-row');
+
+/* ---------- Init ---------- */
+applyScan('good');
+</script>
+
+</body>
+</html>

@@ -2,13 +2,13 @@ import SwiftUI
 
 struct FoodScanResultView: View {
     let scan: FoodScan
-    @Environment(\.dismiss) private var dismiss
     @Environment(DataStore.self) private var dataStore
     @State private var isRevealed = false
     @State private var animatedScore: Double = 0
     @State private var showNutrition = false
     @State private var showBenefits = false
     @State private var glowPulse = false
+    @State private var selectedNutrient: NutrientType?
 
     private var scoreColor: Color {
         switch scan.skinImpactScore {
@@ -43,37 +43,20 @@ struct FoodScanResultView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 18) {
-                    foodNameSection
-                    skinImpactCard
-                    nutritionGrid
-                    benefitsSection
-                    skinEffectsSection
-                    aiTipCard
-                }
-                .padding(.horizontal, GlowbiteSpacing.screenPadding)
-                .padding(.bottom, 40)
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 18) {
+                foodNameSection
+                skinImpactCard
+                nutritionGrid
+                benefitsSection
+                skinEffectsSection
+                aiTipCard
             }
-            .background(GlowbiteColors.creamBG.ignoresSafeArea())
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        HStack(spacing: 4) {
-                            Image(systemName: "chevron.left")
-                            Text("Back")
-                        }
-                        .font(.gbBodyM)
-                        .foregroundStyle(GlowbiteColors.coral)
-                    }
-                }
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden()
+            .padding(.horizontal, GlowbiteSpacing.screenPadding)
+            .padding(.top, 12)
+            .padding(.bottom, 40)
         }
+        .background(GlowbiteColors.creamBG.ignoresSafeArea())
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                 HapticManager.impact(.medium)
@@ -220,13 +203,13 @@ struct FoodScanResultView: View {
     // MARK: - Nutrition Grid
     private var nutritionGrid: some View {
         LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 4), spacing: 8) {
-            ForEach(Array(nutritionItems.enumerated()), id: \.offset) { index, item in
-                VStack(spacing: 4) {
-                    Text(item.value)
+            ForEach(Array(nutritionTiles.enumerated()), id: \.offset) { index, tile in
+                let content = VStack(spacing: 4) {
+                    Text(tile.value)
                         .font(.gbBodyL)
                         .foregroundStyle(GlowbiteColors.darkBrown)
 
-                    Text(item.label)
+                    Text(tile.label)
                         .font(.gbOverline)
                         .tracking(2.0)
                         .foregroundStyle(GlowbiteColors.lightTaupe)
@@ -235,7 +218,7 @@ struct FoodScanResultView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
                 .background(GlowbiteColors.white)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                 .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
                 .opacity(showNutrition ? 1 : 0)
                 .offset(y: showNutrition ? 0 : 16)
@@ -244,20 +227,59 @@ struct FoodScanResultView: View {
                     .delay(Double(index) * 0.08),
                     value: showNutrition
                 )
+
+                if let nutrient = tile.nutrient {
+                    Button {
+                        HapticManager.impact(.medium)
+                        selectedNutrient = nutrient
+                    } label: {
+                        content
+                    }
+                    .buttonStyle(.plain)
+                } else {
+                    content
+                }
             }
+        }
+        .sheet(item: $selectedNutrient) { nutrient in
+            NutrientDetailSheet(
+                nutrient: nutrient,
+                amount: nutrientAmount(for: nutrient),
+                onDismiss: { selectedNutrient = nil }
+            )
+            .presentationDetents([.large])
+            .presentationCornerRadius(GlowbiteSpacing.cardCornerRadiusLarge)
+            .presentationDragIndicator(.visible)
         }
     }
 
-    private var nutritionItems: [(value: String, label: String)] {
+    private struct NutritionTile {
+        let value: String
+        let label: String
+        let nutrient: NutrientType?
+    }
+
+    private var nutritionTiles: [NutritionTile] {
         [
-            ("\(scan.calories)", "CAL"),
-            (String(format: "%.0fg", scan.protein), "PROTEIN"),
-            (String(format: "%.0fg", scan.fat), "FAT"),
-            (String(format: "%.0fg", scan.carbs), "CARBS"),
-            (String(format: "%.0fg", scan.fiber), "FIBER"),
-            (String(format: "%.0fg", scan.sugar), "SUGAR"),
-            (String(format: "%.1fg", scan.sodium), "SODIUM"),
+            NutritionTile(value: "\(scan.calories)", label: "CAL", nutrient: nil),
+            NutritionTile(value: String(format: "%.0fg", scan.protein), label: "PROTEIN", nutrient: .protein),
+            NutritionTile(value: String(format: "%.0fg", scan.fat), label: "FAT", nutrient: .fat),
+            NutritionTile(value: String(format: "%.0fg", scan.carbs), label: "CARBS", nutrient: .carbs),
+            NutritionTile(value: String(format: "%.0fg", scan.fiber), label: "FIBER", nutrient: .fiber),
+            NutritionTile(value: String(format: "%.0fg", scan.sugar), label: "SUGAR", nutrient: .sugar),
+            NutritionTile(value: String(format: "%.1fg", scan.sodium), label: "SODIUM", nutrient: .sodium),
         ]
+    }
+
+    private func nutrientAmount(for nutrient: NutrientType) -> Double {
+        switch nutrient {
+        case .protein: return scan.protein
+        case .fat: return scan.fat
+        case .carbs: return scan.carbs
+        case .fiber: return scan.fiber
+        case .sugar: return scan.sugar
+        case .sodium: return scan.sodium
+        }
     }
 
     // MARK: - Benefits Section

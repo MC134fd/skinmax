@@ -39,9 +39,12 @@ struct HomeView: View {
         .onAppear {
             viewModel.dataStore = dataStore
         }
-        .fullScreenCover(item: $selectedFoodResult) { scan in
+        .sheet(item: $selectedFoodResult) { scan in
             FoodScanResultView(scan: scan)
                 .environment(dataStore)
+                .presentationDetents([.large])
+                .presentationCornerRadius(GlowbiteSpacing.cardCornerRadiusLarge)
+                .presentationDragIndicator(.visible)
         }
         .sheet(isPresented: $showWaterLogSheet) {
             if let waterLogViewModel {
@@ -76,17 +79,9 @@ struct HomeView: View {
     // MARK: - Top Bar
 
     private var topBar: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(viewModel.selectedDate.formatted(.dateTime.weekday(.wide).month(.abbreviated).day()))
-                    .font(.gbCaption)
-                    .foregroundStyle(GlowbiteColors.lightTaupe)
-
-                Text(greetingText)
-                    .font(.gbTitleL)
-                    .tracking(-0.3)
-                    .foregroundStyle(GlowbiteColors.darkBrown)
-            }
+        HStack(alignment: .center) {
+            GlowbiteLockup(variant: .caveat, iconSize: 30, gap: 7, wordmarkSize: 34)
+                .padding(.vertical, 2)
 
             Spacer()
 
@@ -107,16 +102,6 @@ struct HomeView: View {
             )
         }
         .padding(.top, 8)
-    }
-
-    private var greetingText: String {
-        let hour = Calendar.current.component(.hour, from: Date())
-        switch hour {
-        case 5..<12: return "Good morning"
-        case 12..<17: return "Good afternoon"
-        case 17..<22: return "Good evening"
-        default: return "Good night"
-        }
     }
 
     // MARK: - Week Strip
