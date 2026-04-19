@@ -21,10 +21,15 @@ struct HomeView: View {
         return Calendar.current.isDate(analysisDate, inSameDayAs: viewModel.selectedDate)
     }
 
-    private var shouldShowFoodAnalyzing: Bool {
+    private var shouldShowFoodLiveCard: Bool {
         guard coordinator.isActive, coordinator.kind == .food else { return false }
-        if case .complete = coordinator.phase { return false }
         return Calendar.current.isDate(Date(), inSameDayAs: viewModel.selectedDate)
+    }
+
+    /// The ID of the scan being shown by MealRowLive, so we don't duplicate it in the meals list.
+    private var liveFoodScanID: UUID? {
+        guard shouldShowFoodLiveCard else { return nil }
+        return coordinator.foodScanResult?.id
     }
 
     var body: some View {
@@ -322,19 +327,24 @@ struct HomeView: View {
                 ))
             }
 
-            if shouldShowFoodAnalyzing {
-                MealRowAnalyzing(coordinator: coordinator)
-                    .transition(.asymmetric(
-                        insertion: .move(edge: .top).combined(with: .opacity),
-                        removal: .opacity
-                    ))
+            if shouldShowFoodLiveCard {
+                MealRowLive(coordinator: coordinator, onTapCard: {
+                    if let scan = coordinator.foodScanResult {
+                        selectedFoodResult = scan
+                    }
+                })
+                .transition(.asymmetric(
+                    insertion: .move(edge: .top).combined(with: .opacity),
+                    removal: .opacity
+                ))
             }
 
-            if meals.isEmpty && !shouldShowFoodAnalyzing {
+            if meals.isEmpty && !shouldShowFoodLiveCard {
                 mealsEmptyState
             } else {
+                let filteredMeals = meals.filter { $0.id != liveFoodScanID }
                 VStack(spacing: 8) {
-                    ForEach(meals) { meal in
+                    ForEach(filteredMeals) { meal in
                         SwipeToDeleteRow {
                             MealRow(foodScan: meal, onTapCard: {
                                 selectedFoodResult = meal
@@ -349,7 +359,7 @@ struct HomeView: View {
                 }
             }
         }
-        .animation(.spring(response: 0.4, dampingFraction: 0.75), value: shouldShowFoodAnalyzing)
+        .animation(.spring(response: 0.4, dampingFraction: 0.75), value: shouldShowFoodLiveCard)
     }
 
     private var mealsEmptyState: some View {
