@@ -1,0 +1,763 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Glowbite — Analytics v7 (Viral)</title>
+<style>
+  :root{
+    --coral:#C24A1E;
+    --coral-lt:#D4623A;
+    --coral-pink:#E07A5C;
+    --blush:#FFE5D9;
+    --blush-deep:#F5C9B8;
+    --peach-wash:#F2ECE2;
+    --cream:#FAF6F0;
+    --butter:#FFF8E8;
+    --gold:#C9A24E;
+    --gold-lt:#E8C878;
+    --green:#4A7C59;
+    --amber:#C49234;
+    --red:#B23A2C;
+    --blue:#4A7CB8;
+    --purple:#8B5CF6;
+    --ink:#1A1510;
+    --warm-brown:#4B3D36;
+    --taupe:#6B5C54;
+    --lt-taupe:#9A8E82;
+    --tan:#F2ECE2;
+    --hairline:rgba(26,21,16,0.06);
+  }
+  *{box-sizing:border-box;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0}
+  body{
+    background:#EDE5DA;
+    font-family:-apple-system,"Helvetica Neue",system-ui,sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    padding:48px 24px 120px;
+  }
+
+  .sitehead{max-width:1280px;margin:0 auto 36px}
+  .sitehead .eyebrow{font-size:11px;font-weight:900;letter-spacing:0.22em;color:var(--coral);text-transform:uppercase;margin-bottom:10px;text-align:center}
+  .sitehead h1{font-size:42px;margin:0 0 12px;letter-spacing:-0.035em;font-weight:900;text-align:center;color:var(--ink)}
+  .sitehead .lede{margin:0 auto;font-size:16px;color:var(--warm-brown);max-width:720px;line-height:1.6;text-align:center}
+  .viral-levers{max-width:1240px;margin:24px auto 0;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  @media(max-width:820px){.viral-levers{grid-template-columns:1fr 1fr}}
+  .viral-levers .lv{background:#fff;padding:14px 16px;border-radius:12px;box-shadow:0 4px 12px rgba(194,74,30,.07);border-left:3px solid var(--coral)}
+  .viral-levers .lv .k{font-size:10px;font-weight:900;color:var(--coral);letter-spacing:0.12em;text-transform:uppercase}
+  .viral-levers .lv .t{font-size:13px;font-weight:800;color:var(--ink);margin-top:4px}
+
+  .two-col{display:grid;grid-template-columns:minmax(400px,480px) 1fr;gap:48px;max-width:1300px;margin:48px auto 0;align-items:flex-start}
+  @media(max-width:920px){.two-col{grid-template-columns:1fr}}
+
+  /* Phone frame */
+  .phone{
+    width:440px;max-width:100%;
+    aspect-ratio:390/844;
+    background:var(--ink);
+    border-radius:58px;
+    padding:14px;
+    box-shadow:0 30px 70px rgba(91,40,20,.22),0 0 0 3px rgba(0,0,0,.15),inset 0 0 0 2px rgba(255,255,255,.08);
+    position:relative;margin:0 auto;position:sticky;top:48px;
+  }
+  .screen{width:100%;height:100%;border-radius:44px;overflow:hidden;position:relative;background:var(--cream)}
+  .phone::before{content:"";position:absolute;top:22px;left:50%;transform:translateX(-50%);width:108px;height:32px;background:var(--ink);border-radius:100px;z-index:3}
+  .statusbar{position:absolute;top:0;left:0;right:0;height:48px;display:flex;justify-content:space-between;align-items:center;padding:0 30px;font-size:14px;font-weight:700;color:var(--ink);z-index:2}
+  .content{position:absolute;top:48px;left:0;right:0;bottom:0;overflow-y:auto;overflow-x:hidden}
+  .content::-webkit-scrollbar{width:4px}
+  .content::-webkit-scrollbar-thumb{background:var(--tan);border-radius:4px}
+
+  /* App header + time toggle */
+  .app-header{display:flex;justify-content:space-between;align-items:center;padding:10px 20px 14px;background:var(--cream)}
+  .brand{display:flex;gap:8px;align-items:center;font-weight:900;font-size:18px;color:var(--ink);letter-spacing:-0.01em}
+  .brand .mk{width:28px;height:28px;border-radius:9px;background:linear-gradient(135deg,var(--coral-pink),var(--coral));position:relative;overflow:hidden;box-shadow:0 3px 7px rgba(194,74,30,.22)}
+  .brand .mk::before{content:"";position:absolute;width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.55);top:5px;left:5px}
+  .av{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,var(--coral-pink),var(--coral));display:grid;place-items:center;font-weight:900;color:#fff;font-size:14px;box-shadow:0 3px 8px rgba(194,74,30,.22)}
+
+  .time-toggle{display:flex;padding:0 20px 14px;gap:0}
+  .time-toggle .pill{flex:1;padding:9px;font-size:11px;font-weight:900;color:var(--lt-taupe);text-align:center;background:#fff;letter-spacing:0.05em;border-top:1px solid var(--hairline);border-bottom:1px solid var(--hairline)}
+  .time-toggle .pill:first-child{border-left:1px solid var(--hairline);border-radius:100px 0 0 100px}
+  .time-toggle .pill:last-child{border-right:1px solid var(--hairline);border-radius:0 100px 100px 0}
+  .time-toggle .pill.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  /* =============== VIRAL MOMENT ROW (new, top) =============== */
+  .moments-wrap{padding:0 20px 18px;background:var(--cream)}
+  .moments-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .moments-head .label{font-size:10px;font-weight:900;letter-spacing:0.22em;color:var(--coral);text-transform:uppercase}
+  .moments-head .label .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--coral);margin-right:6px;animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  .moments-head .count{font-size:11px;color:var(--taupe);font-weight:700}
+
+  .moments{
+    display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;margin:0 -20px;padding-left:20px;padding-right:20px;
+    scroll-snap-type:x mandatory;
+  }
+  .moments::-webkit-scrollbar{display:none}
+  .moment{
+    flex:0 0 auto;width:120px;aspect-ratio:9/16;border-radius:16px;overflow:hidden;position:relative;
+    scroll-snap-align:start;box-shadow:0 6px 16px rgba(194,74,30,.14);
+  }
+  .moment.new::before{
+    content:"NEW";position:absolute;top:8px;right:8px;z-index:2;
+    background:var(--gold);color:#fff;font-size:8px;font-weight:900;letter-spacing:0.15em;
+    padding:3px 6px;border-radius:100px;
+  }
+  .moment .cover{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:10px;color:#fff}
+  .moment.glow-up .cover{background:linear-gradient(180deg,rgba(0,0,0,.2) 0%,rgba(0,0,0,.7) 100%),linear-gradient(135deg,#DDBE9C,#C9A484)}
+  .moment.trend .cover{background:linear-gradient(135deg,var(--ink),#2A221B)}
+  .moment.food .cover{background:linear-gradient(135deg,#5B8A63,var(--green))}
+  .moment.streak .cover{background:linear-gradient(135deg,var(--coral-pink),var(--coral))}
+  .moment .top-em{font-size:22px;line-height:1}
+  .moment .bot .t{font-size:9px;font-weight:900;letter-spacing:0.12em;opacity:.85;text-transform:uppercase}
+  .moment .bot .big{font-size:20px;font-weight:900;letter-spacing:-0.03em;line-height:1;margin-top:2px}
+  .moment .bot .sm{font-size:9px;opacity:.75;margin-top:2px}
+
+  /* =============== SECTION SYSTEM (from v6) =============== */
+  section.feat{padding:28px 20px 32px;position:relative}
+  section.feat.white{background:#fff}
+  section.feat.cream{background:var(--cream)}
+  section.feat.blush{background:var(--blush)}
+  section.feat + section.feat{border-top:1px solid var(--hairline)}
+
+  .sect-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+  .sect-head .tag{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:900;letter-spacing:0.22em;text-transform:uppercase;color:var(--coral)}
+  .sect-head .tag .n{width:18px;height:18px;border-radius:50%;background:var(--coral);color:#fff;display:grid;place-items:center;font-size:10px;letter-spacing:0}
+  .sect-head .more{font-size:11px;color:var(--taupe);font-weight:800}
+  .sect-title{font-size:24px;font-weight:900;color:var(--ink);letter-spacing:-0.03em;margin:0 0 4px;line-height:1.15}
+  .sect-sub{font-size:13px;color:var(--taupe);margin:0 0 18px;line-height:1.5}
+
+  /* =============== 1. GLOW-UP =============== */
+  .photo-pair{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
+  .photo{aspect-ratio:1/1.3;border-radius:10px;overflow:hidden;position:relative}
+  .photo.b{background:radial-gradient(ellipse at 50% 38%, rgba(180,58,44,.18) 0%, transparent 35%),radial-gradient(ellipse at 50% 55%, rgba(120,80,65,.75) 0%, rgba(100,70,55,.95) 80%),linear-gradient(135deg,#9B7860,#7A5A46)}
+  .photo.a{background:radial-gradient(ellipse at 50% 38%, rgba(255,255,255,.18) 0%, transparent 40%),radial-gradient(ellipse at 50% 55%, rgba(215,178,148,.95) 0%, rgba(195,158,128,.98) 80%),linear-gradient(135deg,#DDBE9C,#C9A484)}
+  .photo .cap{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;color:rgba(255,255,255,.95);font-size:9px;font-weight:900;letter-spacing:0.12em;text-shadow:0 1px 3px rgba(0,0,0,.4)}
+  .photo .score-tag{position:absolute;bottom:10px;left:10px;background:rgba(255,255,255,.92);color:var(--ink);font-size:10px;font-weight:900;padding:4px 8px;border-radius:100px}
+  .photo.a .score-tag{color:var(--coral)}
+  .delta-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:14px 0;border-top:1px solid var(--hairline);border-bottom:1px solid var(--hairline);margin-bottom:14px}
+  .d-item{text-align:center}
+  .d-item .k{font-size:9px;font-weight:900;letter-spacing:0.15em;color:var(--lt-taupe);text-transform:uppercase;margin-bottom:5px}
+  .d-item .v{font-size:22px;font-weight:900;color:var(--ink);letter-spacing:-0.035em;line-height:0.95}
+  .d-item .v .arrow{display:inline-block;font-size:12px;margin-right:2px;font-weight:900}
+  .d-item .v .arrow.up{color:var(--green)}
+  .d-item .v .arrow.dn{color:var(--coral)}
+
+  /* Share preview panel (NEW in v7) */
+  .share-preview{
+    background:var(--ink);color:#fff;border-radius:18px;padding:16px;
+    display:flex;gap:14px;align-items:center;
+  }
+  .share-preview .thumb{
+    flex:0 0 auto;width:64px;aspect-ratio:9/16;border-radius:10px;overflow:hidden;
+    background:linear-gradient(135deg,#DDBE9C,#C9A484);position:relative;
+    box-shadow:0 4px 10px rgba(0,0,0,.3);
+  }
+  .share-preview .thumb::after{
+    content:"Glowbite ✨";position:absolute;bottom:4px;left:4px;right:4px;
+    color:#fff;font-size:6px;font-weight:900;text-align:center;letter-spacing:0.1em;
+  }
+  .share-preview .thumb .mini-stat{
+    position:absolute;top:6px;left:4px;right:4px;
+    color:#fff;font-size:7px;font-weight:900;letter-spacing:0.1em;text-align:center;
+  }
+  .share-preview .info{flex:1}
+  .share-preview .info h5{margin:0;font-size:13px;font-weight:900;letter-spacing:-0.01em}
+  .share-preview .info p{margin:3px 0 10px;font-size:10px;color:rgba(255,255,255,.65);line-height:1.45}
+  .share-preview .btns{display:flex;gap:6px}
+  .share-preview .btns span{
+    padding:6px 10px;border-radius:100px;font-size:10px;font-weight:900;letter-spacing:0.02em;
+    display:flex;align-items:center;gap:4px;
+  }
+  .share-preview .btns span.primary{background:#fff;color:var(--ink)}
+  .share-preview .btns span.secondary{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.18)}
+
+  /* =============== 2. TREND + STREAK =============== */
+  .trend-hero{display:flex;align-items:flex-end;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid var(--hairline);margin-bottom:14px}
+  .trend-hero .big{font-size:68px;font-weight:900;color:var(--ink);letter-spacing:-0.055em;line-height:0.85}
+  .trend-hero .meta{text-align:right}
+  .trend-hero .meta .delta{display:inline-block;background:rgba(74,124,89,.12);color:var(--green);padding:5px 10px;border-radius:100px;font-size:12px;font-weight:900;margin-bottom:4px}
+  .trend-hero .meta .cap{font-size:10px;font-weight:700;color:var(--lt-taupe);letter-spacing:0.05em}
+
+  .spark-wrap{position:relative;margin:8px -4px 4px;padding:0 4px}
+  .spark{width:100%;height:140px;display:block}
+  .spark-axis{display:flex;justify-content:space-between;padding:0 2px;font-size:9px;color:var(--lt-taupe);font-weight:800;letter-spacing:0.05em;text-transform:uppercase;margin-top:4px}
+
+  /* Personal best callout (NEW in v7) */
+  .pb-callout{
+    display:flex;align-items:center;gap:10px;
+    background:linear-gradient(135deg,#FFF3D4,#F5E3B3);
+    border:1px solid rgba(201,162,78,.25);
+    padding:10px 12px;border-radius:12px;margin-top:12px;
+  }
+  .pb-callout .medal{font-size:22px;line-height:1}
+  .pb-callout .info{flex:1}
+  .pb-callout h5{margin:0;font-size:12px;font-weight:900;color:var(--ink)}
+  .pb-callout p{margin:2px 0 0;font-size:10px;color:var(--warm-brown);line-height:1.4}
+  .pb-callout .share{
+    background:#fff;color:var(--ink);padding:5px 10px;border-radius:100px;font-size:10px;font-weight:900;
+    border:1px solid rgba(201,162,78,.35);
+  }
+
+  /* Metric grid */
+  .metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+  .m-card{background:#fff;border-radius:14px;padding:14px;box-shadow:0 3px 8px rgba(194,74,30,.06);border:1px solid var(--hairline)}
+  .m-card .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .m-card .nm{font-size:11px;font-weight:800;color:var(--taupe);letter-spacing:0.05em;display:flex;align-items:center;gap:5px}
+  .m-card .nm .dot{width:7px;height:7px;border-radius:50%}
+  .m-card.blue .nm .dot{background:var(--blue)}
+  .m-card.green .nm .dot{background:var(--green)}
+  .m-card.coral .nm .dot{background:var(--coral)}
+  .m-card.amber .nm .dot{background:var(--amber)}
+  .m-card .dl{font-size:10px;font-weight:900;letter-spacing:0.04em}
+  .m-card .dl.up{color:var(--green)}
+  .m-card .v{font-size:24px;font-weight:900;color:var(--ink);letter-spacing:-0.035em;line-height:1}
+  .m-card .bar{height:3px;border-radius:100px;background:var(--tan);margin-top:8px;position:relative;overflow:hidden}
+  .m-card .bar .fl{position:absolute;top:0;left:0;bottom:0;border-radius:100px}
+  .m-card.blue .bar .fl{background:var(--blue)}
+  .m-card.green .bar .fl{background:var(--green)}
+  .m-card.coral .bar .fl{background:var(--coral)}
+  .m-card.amber .bar .fl{background:var(--amber)}
+
+  /* Streak + milestone tile (NEW IN v7) */
+  .streak-milestone{
+    display:flex;align-items:center;gap:14px;
+    background:linear-gradient(135deg,var(--coral-pink),var(--coral));
+    color:#fff;padding:14px;border-radius:14px;margin-top:14px;
+    position:relative;overflow:hidden;
+  }
+  .streak-milestone::before{content:"";position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.08)}
+  .streak-milestone .fire{font-size:32px;flex:0 0 auto;position:relative;z-index:1}
+  .streak-milestone .info{flex:1;position:relative;z-index:1}
+  .streak-milestone .info h5{margin:0;font-size:14px;font-weight:900}
+  .streak-milestone .info p{margin:2px 0 0;font-size:10px;opacity:.85;line-height:1.4}
+  .streak-milestone .next-badge{
+    flex:0 0 auto;width:50px;height:50px;border-radius:50%;
+    background:rgba(255,255,255,.15);border:2px dashed rgba(255,255,255,.4);
+    display:grid;place-items:center;font-size:22px;position:relative;z-index:1;
+  }
+  .streak-milestone .progress-bar{
+    position:absolute;bottom:0;left:0;height:3px;background:rgba(255,255,255,.4);
+    width:80%;
+  }
+
+  /* =============== 3. WHAT'S WORKING =============== */
+  .mvp-tile{background:#fff;border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 6px 14px rgba(194,74,30,.08);border:1px solid var(--hairline);position:relative}
+  .mvp-tile .stamp{position:absolute;top:14px;right:14px;background:var(--green);color:#fff;font-size:8px;font-weight:900;letter-spacing:0.15em;padding:3px 7px;border-radius:100px;text-transform:uppercase}
+  .mvp-tile .row{display:flex;align-items:center;gap:14px}
+  .mvp-tile .em{flex:0 0 auto;font-size:40px;width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,#E8F0E8,#C5DFC5);display:grid;place-items:center}
+  .mvp-tile .txt h4{margin:0;font-size:18px;font-weight:900;color:var(--ink);letter-spacing:-0.02em}
+  .mvp-tile .txt p{margin:3px 0 0;font-size:11px;color:var(--taupe);line-height:1.45}
+  .mvp-tile .stat-row{display:flex;gap:16px;margin-top:12px;padding-top:12px;border-top:1px solid var(--hairline)}
+  .mvp-tile .stat-row .sx{flex:1}
+  .mvp-tile .stat-row .sx .k{font-size:9px;font-weight:900;letter-spacing:0.12em;color:var(--lt-taupe);text-transform:uppercase}
+  .mvp-tile .stat-row .sx .v{font-size:15px;font-weight:900;color:var(--ink);margin-top:3px;letter-spacing:-0.02em}
+  .mvp-tile .stat-row .sx .v.green{color:var(--green)}
+
+  .rank-list{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 4px 10px rgba(194,74,30,.06);border:1px solid var(--hairline);margin-bottom:14px}
+  .rank-list h5{margin:0;padding:12px 16px 10px;font-size:10px;font-weight:900;letter-spacing:0.15em;text-transform:uppercase;color:var(--taupe);border-bottom:1px solid var(--hairline)}
+  .rank{display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid var(--hairline)}
+  .rank:last-child{border-bottom:none}
+  .rank .rnk{width:22px;height:22px;border-radius:50%;background:var(--peach-wash);color:var(--coral);display:grid;place-items:center;font-size:11px;font-weight:900;flex:0 0 auto}
+  .rank .em{font-size:18px;width:24px;text-align:center;flex:0 0 auto}
+  .rank .info{flex:1;min-width:0}
+  .rank .info .n{font-size:13px;font-weight:800;color:var(--ink);letter-spacing:-0.01em}
+  .rank .info .w{font-size:10px;color:var(--lt-taupe);font-weight:700;margin-top:1px;font-style:italic}
+  .rank .val{font-size:13px;font-weight:900;color:var(--green);flex:0 0 auto;letter-spacing:-0.01em}
+
+  /* =============== 4. CYCLE =============== */
+  .cycle-hero{display:flex;align-items:center;gap:16px;padding:14px 0;margin-bottom:14px;border-bottom:1px solid var(--hairline)}
+  .cycle-hero svg{flex:0 0 auto;width:84px;height:84px}
+  .cycle-hero .info{flex:1}
+  .cycle-hero .info .phase{display:inline-block;background:rgba(139,92,246,.12);color:var(--purple);font-size:9px;font-weight:900;letter-spacing:0.18em;padding:4px 9px;border-radius:100px;text-transform:uppercase}
+  .cycle-hero .info h4{margin:8px 0 0;font-size:16px;font-weight:900;color:var(--ink);letter-spacing:-0.02em;line-height:1.2}
+  .cycle-hero .info p{margin:3px 0 0;font-size:11px;color:var(--taupe);line-height:1.4}
+
+  .phases{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:4px}
+  .ph{padding:11px 6px;text-align:center;border-radius:10px;background:var(--cream);border:1px solid var(--hairline)}
+  .ph.on{background:var(--purple);color:#fff;border-color:var(--purple)}
+  .ph .d{font-size:8px;font-weight:900;color:var(--lt-taupe);letter-spacing:0.1em;text-transform:uppercase}
+  .ph.on .d{color:rgba(255,255,255,.75)}
+  .ph .nm{font-size:10px;font-weight:800;color:var(--ink);margin-top:3px}
+  .ph.on .nm{color:#fff}
+
+  .cycle-insight{margin-top:16px;padding:14px;border-radius:12px;background:rgba(139,92,246,.07);display:flex;gap:12px;align-items:flex-start;border:1px solid rgba(139,92,246,.15)}
+  .cycle-insight .icon{flex:0 0 auto;width:30px;height:30px;border-radius:9px;background:#fff;display:grid;place-items:center;font-size:14px}
+  .cycle-insight h5{margin:0;font-size:12px;font-weight:900;color:var(--ink)}
+  .cycle-insight p{margin:3px 0 0;font-size:11px;color:var(--warm-brown);line-height:1.5}
+  .cycle-insight p b{color:var(--purple);font-weight:900}
+
+  /* =============== 5. MONTHLY WRAPPED (NEW BOTTOM SECTION) =============== */
+  section.wrapped{
+    padding:32px 20px 36px;
+    background:linear-gradient(160deg,var(--ink),#2A221B);
+    color:#fff;position:relative;overflow:hidden;
+  }
+  section.wrapped::before{content:"";position:absolute;top:-100px;left:-50px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(224,122,92,.35),transparent 60%)}
+  section.wrapped::after{content:"";position:absolute;bottom:-80px;right:-40px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(201,162,78,.25),transparent 60%)}
+
+  .wrapped-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;position:relative;z-index:1}
+  .wrapped-head .tag{font-size:10px;font-weight:900;letter-spacing:0.22em;color:#FFD3B8;text-transform:uppercase}
+  .wrapped-head .month{font-size:11px;color:rgba(255,255,255,.6);font-weight:800;letter-spacing:0.1em;text-transform:uppercase}
+
+  .wrapped-title{font-size:30px;font-weight:900;letter-spacing:-0.04em;line-height:1;margin:0 0 4px;position:relative;z-index:1}
+  .wrapped-title em{font-style:italic;color:var(--gold-lt);font-weight:900}
+  .wrapped-sub{font-size:13px;color:rgba(255,255,255,.6);margin:0 0 18px;position:relative;z-index:1}
+
+  .wrapped-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:relative;z-index:1;margin-bottom:16px}
+  .wg-card{background:rgba(255,255,255,.06);border-radius:14px;padding:12px;border:1px solid rgba(255,255,255,.08)}
+  .wg-card .k{font-size:8px;font-weight:900;color:#FFD3B8;letter-spacing:0.15em;text-transform:uppercase}
+  .wg-card .v{font-size:18px;font-weight:900;letter-spacing:-0.02em;margin-top:3px;line-height:1}
+  .wg-card .s{font-size:10px;color:rgba(255,255,255,.55);margin-top:2px}
+
+  .wrapped-cta{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 16px;background:#fff;color:var(--ink);border-radius:14px;
+    font-size:14px;font-weight:900;position:relative;z-index:1;
+    box-shadow:0 10px 20px rgba(0,0,0,.2);
+  }
+  .wrapped-cta .em{font-size:18px}
+  .wrapped-cta .go{color:var(--coral);font-size:18px}
+
+  /* Tab bar */
+  .tabbar{position:absolute;bottom:14px;left:14px;right:14px;height:64px;background:rgba(255,255,255,.82);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border-radius:22px;display:flex;align-items:center;justify-content:space-around;box-shadow:0 6px 18px rgba(194,74,30,.1);border:1px solid rgba(255,255,255,.7);z-index:5}
+  .tab{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;font-weight:800;color:var(--taupe)}
+  .tab.active{color:var(--coral)}
+  .tab.active .ico{background:var(--peach-wash);color:var(--coral);padding:5px 12px;border-radius:100px}
+  .tab .ico{font-size:17px;padding:5px 12px}
+  .scan-fab{position:absolute;bottom:30px;right:34px;width:56px;height:56px;border-radius:18px;background:linear-gradient(160deg,var(--coral-pink),var(--coral));display:grid;place-items:center;font-size:22px;color:#fff;box-shadow:0 12px 24px rgba(194,74,30,.38);z-index:6}
+
+  /* Sidebar */
+  .sidebar{display:flex;flex-direction:column;gap:20px}
+  .sb{background:#fff;padding:28px;border-radius:10px;box-shadow:0 6px 18px rgba(91,40,20,.08);border-top:4px solid var(--coral)}
+  .sb.gold{border-top-color:var(--gold)}
+  .sb.ink{background:var(--ink);color:#fff;border-top:none}
+  .sb.ink h3{color:#fff}
+  .sb.ink p{color:rgba(255,255,255,.78)}
+  .sb.ink p b{color:#FFD3B8}
+  .sb .key{font-size:10px;font-weight:900;letter-spacing:0.22em;text-transform:uppercase;color:var(--lt-taupe);margin-bottom:6px}
+  .sb.ink .key{color:#FFD3B8}
+  .sb h3{margin:0 0 14px;font-size:22px;font-weight:900;letter-spacing:-0.02em;color:var(--ink)}
+  .sb p{margin:8px 0;font-size:14px;color:var(--warm-brown);line-height:1.65}
+  .sb p b{color:var(--ink);font-weight:800}
+  .sb ul{margin:10px 0 0;padding-left:18px;font-size:13px;color:var(--warm-brown);line-height:1.65}
+  .sb.ink ul{color:rgba(255,255,255,.78)}
+  .sb ul li{margin-bottom:6px}
+  .sb ul li b{color:var(--ink);font-weight:800}
+  .sb.ink ul li b{color:#fff}
+  .hilite{background:var(--blush);border-radius:12px;padding:14px;margin-top:14px}
+  .hilite .n{font-size:10px;font-weight:900;letter-spacing:0.1em;text-transform:uppercase;color:var(--coral);margin-bottom:4px}
+  .hilite .t{font-size:13px;font-weight:800;color:var(--ink);line-height:1.4}
+</style>
+</head>
+<body>
+
+<div class="sitehead">
+  <div class="eyebrow">Version 7 · Built for sharing</div>
+  <h1>Every section now has a viral lever.</h1>
+  <p class="lede">Same 4 features, same Flo-inspired structure, same clear sections — plus visible share-card previews, personal-best badges, streak milestones, and a dark-mode "April Wrapped" card at the bottom. Virality doesn't come from yelling "SHARE" louder — it comes from showing users exactly what they're about to share and making it look like something they'd screenshot on purpose.</p>
+  <div class="viral-levers">
+    <div class="lv"><div class="k">Lever 1</div><div class="t">Shareable Moments row at top</div></div>
+    <div class="lv"><div class="k">Lever 2</div><div class="t">Share-card preview in each section</div></div>
+    <div class="lv"><div class="k">Lever 3</div><div class="t">Personal-best medals + milestone tiles</div></div>
+    <div class="lv"><div class="k">Lever 4</div><div class="t">Monthly Wrapped card at the bottom</div></div>
+  </div>
+</div>
+
+<div class="two-col">
+
+  <div>
+    <div class="phone">
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><span>📶 100%</span></div>
+        <div class="content">
+
+          <div class="app-header">
+            <div class="brand"><div class="mk"></div>Progress</div>
+            <div class="av">M</div>
+          </div>
+
+          <div class="time-toggle">
+            <div class="pill">Today</div>
+            <div class="pill on">Week</div>
+            <div class="pill">Month</div>
+            <div class="pill">Year</div>
+          </div>
+
+          <!-- ===== SHAREABLE MOMENTS ROW (NEW TOP OF PAGE) ===== -->
+          <div class="moments-wrap">
+            <div class="moments-head">
+              <div class="label"><span class="dot"></span>Shareable moments</div>
+              <div class="count">4 ready</div>
+            </div>
+            <div class="moments">
+              <div class="moment glow-up new">
+                <div class="cover">
+                  <div class="top-em">✨</div>
+                  <div class="bot">
+                    <div class="t">Glow-up</div>
+                    <div class="big">+18</div>
+                    <div class="sm">30 days</div>
+                  </div>
+                </div>
+              </div>
+              <div class="moment trend new">
+                <div class="cover">
+                  <div class="top-em">🏆</div>
+                  <div class="bot">
+                    <div class="t">Best month</div>
+                    <div class="big">78</div>
+                    <div class="sm">personal best</div>
+                  </div>
+                </div>
+              </div>
+              <div class="moment food">
+                <div class="cover">
+                  <div class="top-em">🥑</div>
+                  <div class="bot">
+                    <div class="t">MVP</div>
+                    <div class="big">+8.8</div>
+                    <div class="sm">avocado</div>
+                  </div>
+                </div>
+              </div>
+              <div class="moment streak">
+                <div class="cover">
+                  <div class="top-em">🔥</div>
+                  <div class="bot">
+                    <div class="t">Streak</div>
+                    <div class="big">12</div>
+                    <div class="sm">days</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== 1. GLOW-UP ===== -->
+          <section class="feat blush">
+            <div class="sect-head">
+              <div class="tag"><span class="n">1</span>The glow-up</div>
+              <div class="more">Change range →</div>
+            </div>
+            <h2 class="sect-title">A month of progress</h2>
+            <p class="sect-sub">Your skin between March 19 and today.</p>
+
+            <div class="photo-pair">
+              <div class="photo b"><div class="cap"><span>MAR 19</span></div><div class="score-tag">glow 64</div></div>
+              <div class="photo a"><div class="cap"><span>APR 18</span></div><div class="score-tag">glow 82</div></div>
+            </div>
+
+            <div class="delta-grid">
+              <div class="d-item"><div class="k">Glow</div><div class="v"><span class="arrow up">↑</span>18</div></div>
+              <div class="d-item"><div class="k">Clarity</div><div class="v"><span class="arrow up">↑</span>18</div></div>
+              <div class="d-item"><div class="k">Redness</div><div class="v"><span class="arrow dn">↓</span>15</div></div>
+            </div>
+
+            <!-- SHARE PREVIEW (NEW IN v7) -->
+            <div class="share-preview">
+              <div class="thumb">
+                <div class="mini-stat">+18 GLOW</div>
+              </div>
+              <div class="info">
+                <h5>Share your glow-up</h5>
+                <p>A 9:16 before/after reel for TikTok or Reels, ready in one tap.</p>
+                <div class="btns">
+                  <span class="primary">📲 Share</span>
+                  <span class="secondary">Edit</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===== 2. TREND ===== -->
+          <section class="feat cream">
+            <div class="sect-head">
+              <div class="tag"><span class="n">2</span>The trend</div>
+              <div class="more">Metrics →</div>
+            </div>
+
+            <div class="trend-hero">
+              <div class="big">78</div>
+              <div class="meta">
+                <div class="delta">▲ +8 pts</div>
+                <div class="cap">30-DAY AVG · WAS 70</div>
+              </div>
+            </div>
+
+            <div class="spark-wrap">
+              <svg class="spark" viewBox="0 0 320 140" preserveAspectRatio="none">
+                <line x1="0" y1="35" x2="320" y2="35" stroke="#E8DFD0" stroke-dasharray="1,4"/>
+                <line x1="0" y1="70" x2="320" y2="70" stroke="#E8DFD0" stroke-dasharray="1,4"/>
+                <line x1="0" y1="105" x2="320" y2="105" stroke="#E8DFD0" stroke-dasharray="1,4"/>
+                <path d="M0,100 L15,85 L32,92 L48,76 L64,86 L80,65 L96,75 L112,58 L128,68 L144,52 L160,62 L176,42 L192,52 L208,36 L224,46 L240,28 L256,36 L272,18 L288,24 L304,10 L320,16"
+                      fill="none" stroke="#1A1510" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <line x1="0" y1="52" x2="320" y2="52" stroke="#9A8E82" stroke-dasharray="2,4"/>
+                <!-- Personal best marker (gold) -->
+                <circle cx="272" cy="18" r="7" fill="#C9A24E" stroke="#fff" stroke-width="2.5"/>
+                <text x="272" y="8" text-anchor="middle" font-size="9" font-weight="900" fill="#C9A24E">🏆</text>
+                <!-- Today -->
+                <circle cx="320" cy="16" r="5" fill="#C24A1E" stroke="#fff" stroke-width="2.5"/>
+              </svg>
+              <div class="spark-axis">
+                <span>Mar 19</span>
+                <span>Apr 2</span>
+                <span>Apr 18</span>
+              </div>
+            </div>
+
+            <!-- PERSONAL BEST CALLOUT (NEW in v7) -->
+            <div class="pb-callout">
+              <div class="medal">🏆</div>
+              <div class="info">
+                <h5>New personal best: 89 on April 10</h5>
+                <p>Your highest glow score ever. Salmon lunch + 8h sleep.</p>
+              </div>
+              <div class="share">📲 Share</div>
+            </div>
+
+            <div class="metric-grid">
+              <div class="m-card blue">
+                <div class="top"><div class="nm"><span class="dot"></span>Hydration</div><div class="dl up">+8</div></div>
+                <div class="v">85</div>
+                <div class="bar"><div class="fl" style="width:85%"></div></div>
+              </div>
+              <div class="m-card green">
+                <div class="top"><div class="nm"><span class="dot"></span>Texture</div><div class="dl up">+12</div></div>
+                <div class="v">82</div>
+                <div class="bar"><div class="fl" style="width:82%"></div></div>
+              </div>
+              <div class="m-card coral">
+                <div class="top"><div class="nm"><span class="dot"></span>Clarity</div><div class="dl up">+4</div></div>
+                <div class="v">76</div>
+                <div class="bar"><div class="fl" style="width:76%"></div></div>
+              </div>
+              <div class="m-card amber">
+                <div class="top"><div class="nm"><span class="dot"></span>Redness</div><div class="dl up">-15</div></div>
+                <div class="v">32</div>
+                <div class="bar"><div class="fl" style="width:32%"></div></div>
+              </div>
+            </div>
+
+            <!-- STREAK + MILESTONE TILE (upgraded in v7) -->
+            <div class="streak-milestone">
+              <span class="fire">🔥</span>
+              <div class="info">
+                <h5>12-day streak</h5>
+                <p>3 more days until your 15-DAY BLAZE badge 🏅</p>
+              </div>
+              <div class="next-badge">🏅</div>
+              <div class="progress-bar"></div>
+            </div>
+          </section>
+
+          <!-- ===== 3. WHAT'S WORKING ===== -->
+          <section class="feat white">
+            <div class="sect-head">
+              <div class="tag"><span class="n">3</span>What's working</div>
+              <div class="more">All foods →</div>
+            </div>
+            <h2 class="sect-title">Your skin loves avocado.</h2>
+            <p class="sect-sub">Foods ranked by glow impact 24 hours later.</p>
+
+            <div class="mvp-tile">
+              <div class="stamp">MVP</div>
+              <div class="row">
+                <div class="em">🥑</div>
+                <div class="txt">
+                  <h4>Avocado</h4>
+                  <p>Healthy fats help your skin barrier hold moisture.</p>
+                </div>
+              </div>
+              <div class="stat-row">
+                <div class="sx"><div class="k">Avg glow lift</div><div class="v green">+8.8</div></div>
+                <div class="sx"><div class="k">Times eaten</div><div class="v">14</div></div>
+                <div class="sx"><div class="k">Best streak</div><div class="v">6 days</div></div>
+              </div>
+            </div>
+
+            <div class="rank-list">
+              <h5>Next-best foods for you</h5>
+              <div class="rank"><div class="rnk">2</div><div class="em">🐟</div><div class="info"><div class="n">Salmon</div><div class="w">Omega-3s calm inflammation</div></div><div class="val">+7.6</div></div>
+              <div class="rank"><div class="rnk">3</div><div class="em">🥬</div><div class="info"><div class="n">Spinach</div><div class="w">Iron, vitamin C</div></div><div class="val">+6.4</div></div>
+              <div class="rank"><div class="rnk">4</div><div class="em">🫐</div><div class="info"><div class="n">Berries</div><div class="w">Antioxidants</div></div><div class="val">+5.8</div></div>
+            </div>
+
+            <!-- SHARE PREVIEW (NEW IN v7) -->
+            <div class="share-preview">
+              <div class="thumb" style="background:linear-gradient(135deg,#5B8A63,#4A7C59)">
+                <div class="mini-stat">MY GLOW RECIPE</div>
+              </div>
+              <div class="info">
+                <h5>Share your glow recipe</h5>
+                <p>A TikTok-ready card with your top 3 skin-loving foods.</p>
+                <div class="btns">
+                  <span class="primary">📲 Share</span>
+                  <span class="secondary">Edit</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===== 4. CYCLE ===== -->
+          <section class="feat cream">
+            <div class="sect-head">
+              <div class="tag" style="color:var(--purple)"><span class="n" style="background:var(--purple)">4</span>Cycle &amp; skin</div>
+              <div class="more">Connect Flo →</div>
+            </div>
+            <h2 class="sect-title">You're in luteal.</h2>
+            <p class="sect-sub">Day 18 of 28. Your skin usually pushes back now.</p>
+
+            <div class="cycle-hero">
+              <svg viewBox="0 0 84 84">
+                <defs>
+                  <linearGradient id="pg" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#CE93D8"/><stop offset="100%" stop-color="#8B5CF6"/>
+                  </linearGradient>
+                </defs>
+                <circle cx="42" cy="42" r="32" fill="none" stroke="rgba(139,92,246,.12)" stroke-width="7"/>
+                <circle cx="42" cy="42" r="32" fill="none" stroke="url(#pg)" stroke-width="7" stroke-linecap="round" stroke-dasharray="129 201" transform="rotate(-90 42 42)"/>
+                <text x="42" y="43" text-anchor="middle" font-size="19" font-weight="900" fill="#8B5CF6">18</text>
+                <text x="42" y="56" text-anchor="middle" font-size="8" font-weight="800" fill="#8B5CF6" opacity="0.6">of 28</text>
+              </svg>
+              <div class="info">
+                <span class="phase">Luteal phase</span>
+                <h4>Breakout window</h4>
+                <p>Sebum up, skin more sensitive. Next 4 days may run oilier.</p>
+              </div>
+            </div>
+
+            <div class="phases">
+              <div class="ph"><div class="d">Day 1-5</div><div class="nm">Period</div></div>
+              <div class="ph"><div class="d">Day 6-14</div><div class="nm">Follicular</div></div>
+              <div class="ph on"><div class="d">Day 15-22</div><div class="nm">Luteal</div></div>
+              <div class="ph"><div class="d">Day 23-28</div><div class="nm">Pre-flow</div></div>
+            </div>
+
+            <div class="cycle-insight">
+              <div class="icon">💡</div>
+              <div>
+                <h5>Tonight's move</h5>
+                <p><b>Skip retinol</b> — your skin's more reactive this phase. Layer hyaluronic acid + a barrier cream instead.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===== MONTHLY WRAPPED (NEW BOTTOM SECTION) ===== -->
+          <section class="wrapped">
+            <div class="wrapped-head">
+              <div class="tag">✨ Your April in glowbite</div>
+              <div class="month">APR 2026</div>
+            </div>
+
+            <h3 class="wrapped-title">Your <em>glowiest</em> month yet.</h3>
+            <p class="wrapped-sub">Tap to see your full April story · shareable</p>
+
+            <div class="wrapped-grid">
+              <div class="wg-card"><div class="k">Avg glow</div><div class="v">78 · +8</div><div class="s">highest monthly avg</div></div>
+              <div class="wg-card"><div class="k">Best day</div><div class="v">Apr 10</div><div class="s">scored 89 🏆</div></div>
+              <div class="wg-card"><div class="k">MVP food</div><div class="v">🥑 Avocado</div><div class="s">+8.8 avg lift</div></div>
+              <div class="wg-card"><div class="k">Streak</div><div class="v">🔥 12 days</div><div class="s">new record</div></div>
+            </div>
+
+            <div class="wrapped-cta">
+              <span>📲 Share my April wrap</span>
+              <span class="go">→</span>
+            </div>
+          </section>
+
+        </div>
+
+        <div class="tabbar">
+          <div class="tab"><div class="ico">🏠</div>Home</div>
+          <div class="tab active"><div class="ico">📊</div>Progress</div>
+          <div style="width:50px"></div>
+          <div class="tab"><div class="ico">👤</div>Account</div>
+        </div>
+        <div class="scan-fab">📷</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <div class="sb gold">
+      <div class="key">The core insight</div>
+      <h3>Show what the share card looks like</h3>
+      <p>Every study I did of viral apps shows the same thing: <b>users share more when they see exactly what they're about to share</b>. Spotify Wrapped shows you each slide before the share option. Strava's Year in Sport shows the full card preview. Sweatcoin shows the exact post.</p>
+      <p>v6 had a "Share →" button that did nothing visible. v7 replaces it with a <b>dark share-preview panel</b> showing a 9:16 mini-thumbnail of the actual card that will post. Users can see it matches their aesthetic before committing. Drops the mental friction of "I wonder what this will look like" to zero.</p>
+      <div class="hilite">
+        <div class="n">Where it shows up</div>
+        <div class="t">Bottom of Section 1 (Glow-Up → before/after reel) and bottom of Section 3 (Food → glow recipe card). Both mini-preview 9:16 thumbnails.</div>
+      </div>
+    </div>
+
+    <div class="sb">
+      <div class="key">Top of screen</div>
+      <h3>Shareable Moments row</h3>
+      <p>Before any analytics, there's a horizontal scrollable row of <b>4 pre-generated share cards</b>, each 9:16. Like a Stories tray but for your own data. Tap → see full-size → share.</p>
+      <p>This is the pattern that made Instagram Stories work: <b>"look how easy it is to share — here are 4 things already made for you."</b> Same friction model. Research showed pre-optimized share formats drive 10× higher share rates than raw data.</p>
+      <ul>
+        <li><b>Glow-up</b> card (+18 over 30 days)</li>
+        <li><b>Best month</b> card (78 personal record)</li>
+        <li><b>MVP food</b> card (🥑 +8.8)</li>
+        <li><b>Streak</b> card (🔥 12 days)</li>
+      </ul>
+      <p>"NEW" gold badge on cards the user hasn't tapped yet — creates curiosity. Subtle pulse dot on the header for "something new to share."</p>
+    </div>
+
+    <div class="sb gold">
+      <div class="key">Milestones + trophies</div>
+      <h3>Personal-best medals create shareable moments</h3>
+      <p>Whoop and Strava do this brilliantly: when you hit a personal record, the chart gets a <b>gold medal marker</b> on that exact point. It's visible, celebratory, and screenshot-worthy.</p>
+      <p>In v7, the best-day (89 on April 10) gets a 🏆 marker on the chart. Below the chart, a <b>gold-tinted callout card</b> announces it: "New personal best: 89 on April 10" with its own share button. Users don't even need to share the whole analytics — they can share just the trophy moment.</p>
+      <p>Pattern applies to every PB: best week, best month, new cycle-prediction accuracy, etc. Each triggers a shareable card at the time of unlock.</p>
+    </div>
+
+    <div class="sb">
+      <div class="key">Streak gamification</div>
+      <h3>Milestone tile with progress + next badge</h3>
+      <p>Duolingo proved streaks drive 3× next-day return. But Duolingo also <b>shows you the next streak badge</b> as a preview — a dashed circle with a placeholder icon, plus a progress bar underneath. That "almost there" tension is what brings people back.</p>
+      <p>v7's streak tile (coral gradient, fire + next-badge placeholder) adds:</p>
+      <ul>
+        <li>Current streak (12 days)</li>
+        <li><b>Next badge preview</b> (15-day BLAZE, shown as a dashed-outline circle)</li>
+        <li>Progress bar (80% filled)</li>
+        <li>Countdown copy ("3 more days")</li>
+      </ul>
+      <p>When they earn the badge, it unlocks with a celebration + new shareable card. The unlock moment itself is a viral trigger.</p>
+    </div>
+
+    <div class="sb ink">
+      <div class="key">The virality anchor</div>
+      <h3>April in Glowbite — bottom Wrapped card</h3>
+      <p>Spotify Wrapped is a once-a-year event with <b>200M shares in 24 hours</b>. The monthly version of this — <b>much less frequent than weekly, much more frequent than yearly</b> — is a known retention lever that apps like Oura, Lose It, and Fitbod use.</p>
+      <p>v7's bottom card is a dark-mode "April in Glowbite" stats card: avg glow, best day, MVP food, streak. Tap → opens a full 9:16 Wrapped-style swipable sequence users can share as a reel.</p>
+      <p>This gives users a <b>monthly reason to post</b>. At 3-5% share rate, a user base of 100k → 3-5k monthly organic impressions → cheaper acquisition than paid.</p>
+      <ul>
+        <li><b>Copy the Spotify emotional beats:</b> top stats → "here's what made it happen" → milestone reveal → share.</li>
+        <li><b>Gold + coral palette</b> distinguishes it from the rest of the app visually — users know this is the "special" card.</li>
+        <li><b>Auto-generates on the 1st of each month</b> — notification push: "Your March wrap is ready ✨".</li>
+      </ul>
+    </div>
+
+    <div class="sb">
+      <div class="key">Honest tradeoff</div>
+      <h3>What v7 risks</h3>
+      <p>Adding the Shareable Moments row + share previews + milestone tiles + Wrapped card adds <b>~30% more content</b> to the analytics screen. That's a longer scroll, more for users to look at.</p>
+      <p>Risk: if nothing surprising has happened (flat week, no PB, no streak milestone), a lot of this real estate feels empty. <b>Counter-design:</b> each viral element should be <b>conditional</b> — only render when there's something genuinely worth sharing:</p>
+      <ul>
+        <li>Shareable Moments row only shows if ≥2 moments qualify</li>
+        <li>PB callout only shows if an actual PB was set this time range</li>
+        <li>Streak milestone only shows in the 48h before hitting a new tier</li>
+        <li>Wrapped card only unlocks on the 1st of each month and sits for 7 days</li>
+      </ul>
+      <p>Build these as optional modules in SwiftUI so AnalyticsViewModel can decide what to render.</p>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

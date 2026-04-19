@@ -205,6 +205,23 @@ final class DataStore {
         }
     }
 
+    func deleteFoodScan(id: UUID) {
+        let predicate = #Predicate<CachedFoodScan> { scan in
+            scan.id == id
+        }
+        let descriptor = FetchDescriptor<CachedFoodScan>(predicate: predicate)
+        if let results = try? modelContext.fetch(descriptor) {
+            for item in results { modelContext.delete(item) }
+            do {
+                try modelContext.save()
+                dataVersion += 1
+                log.info("Deleted food scan, id=\(id)")
+            } catch {
+                log.error("Failed to delete food scan, id=\(id): \(error.localizedDescription)")
+            }
+        }
+    }
+
     func deleteAllData() {
         do {
             try modelContext.delete(model: CachedSkinScan.self)

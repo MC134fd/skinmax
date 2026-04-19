@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Glowbite — Analytics v5 (Editorial)</title>
+<style>
+  :root{
+    --coral:#C24A1E;
+    --coral-lt:#D4623A;
+    --peach-wash:#F2ECE2;
+    --cream:#FAF6F0;
+    --butter:#FFF8E8;
+    --green:#4A7C59;
+    --amber:#C49234;
+    --red:#B23A2C;
+    --blue:#4A7CB8;
+    --purple:#8B5CF6;
+    --ink:#1A1510;
+    --warm-brown:#4B3D36;
+    --taupe:#6B5C54;
+    --lt-taupe:#9A8E82;
+    --tan:#F2ECE2;
+  }
+  *{box-sizing:border-box;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0}
+  body{
+    background:#EDE5DA;
+    font-family:-apple-system,"Helvetica Neue",system-ui,sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    padding:48px 24px 120px;
+  }
+
+  .sitehead{max-width:1200px;margin:0 auto 40px}
+  .sitehead .eyebrow{font-size:12px;font-weight:900;letter-spacing:0.2em;color:var(--coral);text-transform:uppercase;margin-bottom:8px;text-align:center}
+  .sitehead h1{font-size:42px;margin:0 0 12px;letter-spacing:-0.035em;font-weight:900;text-align:center;color:var(--ink)}
+  .sitehead p{margin:0;font-size:16px;color:var(--warm-brown);max-width:680px;margin:0 auto;line-height:1.6;text-align:center}
+
+  .two-col{display:grid;grid-template-columns:minmax(390px,460px) 1fr;gap:48px;max-width:1280px;margin:48px auto 0;align-items:flex-start}
+  @media(max-width:920px){.two-col{grid-template-columns:1fr}}
+
+  .phone{
+    width:420px;max-width:100%;
+    aspect-ratio:390/844;
+    background:var(--ink);
+    border-radius:56px;
+    padding:13px;
+    box-shadow:0 30px 70px rgba(91,40,20,.22),0 0 0 3px rgba(0,0,0,.15),inset 0 0 0 2px rgba(255,255,255,.08);
+    position:relative;margin:0 auto;position:sticky;top:48px;
+  }
+  .screen{width:100%;height:100%;border-radius:43px;overflow:hidden;position:relative;background:var(--cream)}
+  .phone::before{
+    content:"";position:absolute;top:20px;left:50%;transform:translateX(-50%);
+    width:104px;height:30px;background:var(--ink);border-radius:100px;z-index:3;
+  }
+  .statusbar{
+    position:absolute;top:0;left:0;right:0;height:46px;display:flex;justify-content:space-between;align-items:center;
+    padding:0 28px;font-size:14px;font-weight:700;color:var(--ink);z-index:2;
+  }
+  .content{
+    position:absolute;top:46px;left:0;right:0;bottom:0;overflow-y:auto;overflow-x:hidden;padding:12px 24px 120px;
+  }
+  .content::-webkit-scrollbar{width:4px}
+  .content::-webkit-scrollbar-thumb{background:var(--tan);border-radius:4px}
+
+  /* =============== TOP MASTHEAD =============== */
+  .masthead{
+    display:flex;justify-content:space-between;align-items:baseline;
+    padding:6px 0 22px;border-bottom:1px solid rgba(26,21,16,.08);
+    margin-bottom:4px;
+  }
+  .masthead .title{
+    font-size:26px;font-weight:900;color:var(--ink);letter-spacing:-0.025em;line-height:1;
+  }
+  .masthead .date{
+    font-size:11px;font-weight:700;color:var(--lt-taupe);letter-spacing:0.05em;
+  }
+
+  /* Section style (editorial — typography-led) */
+  .section{padding:28px 0 24px;border-bottom:1px solid rgba(26,21,16,.08)}
+  .section:last-child{border-bottom:none;padding-bottom:24px}
+  .section-eyebrow{
+    font-size:10px;font-weight:900;letter-spacing:0.22em;text-transform:uppercase;
+    color:var(--coral);margin-bottom:14px;
+  }
+  .section-number{
+    display:inline-block;font-size:10px;font-weight:900;color:var(--lt-taupe);
+    margin-right:10px;letter-spacing:0.1em;
+  }
+
+  /* =============== 1. BEFORE / AFTER ============== */
+
+  /* Big editorial headline for section 1 */
+  .head1{
+    font-size:32px;font-weight:900;color:var(--ink);letter-spacing:-0.035em;line-height:1.05;
+    margin:0 0 4px;
+  }
+  .head1 em{font-style:italic;color:var(--coral);font-weight:900}
+  .sub1{
+    font-size:13px;color:var(--taupe);line-height:1.5;margin:0 0 18px;
+    max-width:300px;
+  }
+
+  /* Photo pair — NO slider gimmick, just two photos side by side */
+  .photo-pair{
+    display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;
+  }
+  .photo{
+    aspect-ratio:1/1.25;border-radius:8px;overflow:hidden;position:relative;
+  }
+  .photo .face{
+    position:absolute;inset:0;display:block;
+  }
+  .photo.before .face{
+    background:
+      radial-gradient(ellipse at 50% 38%, rgba(180,58,44,.2) 0%, transparent 35%),
+      radial-gradient(ellipse at 50% 55%, rgba(120,80,65,.7) 0%, rgba(100,70,55,.9) 80%),
+      linear-gradient(135deg,#9B7860,#7A5A46);
+  }
+  .photo.after .face{
+    background:
+      radial-gradient(ellipse at 50% 38%, rgba(255,255,255,.18) 0%, transparent 40%),
+      radial-gradient(ellipse at 50% 55%, rgba(210,170,140,.95) 0%, rgba(190,150,120,.98) 80%),
+      linear-gradient(135deg,#D8B896,#C49E7E);
+  }
+  .photo .caption{
+    position:absolute;bottom:10px;left:10px;right:10px;
+    color:#fff;font-size:10px;font-weight:800;letter-spacing:0.05em;
+    text-shadow:0 1px 3px rgba(0,0,0,.4);
+    display:flex;justify-content:space-between;
+  }
+
+  /* Stat strip — clean, simple, no gradient boxes */
+  .deltas{
+    display:flex;justify-content:space-between;padding:14px 0;
+    border-top:1px solid rgba(26,21,16,.08);
+    border-bottom:1px solid rgba(26,21,16,.08);
+    margin-bottom:14px;
+  }
+  .delta-item{flex:1;text-align:center;border-right:1px solid rgba(26,21,16,.06);padding:0 4px}
+  .delta-item:last-child{border-right:none}
+  .delta-item .k{font-size:9px;font-weight:900;letter-spacing:0.12em;color:var(--lt-taupe);text-transform:uppercase;margin-bottom:4px}
+  .delta-item .v{font-size:20px;font-weight:900;color:var(--ink);letter-spacing:-0.03em;line-height:1}
+  .delta-item .v .arrow{font-size:11px;margin-right:2px}
+  .delta-item .v .arrow.up{color:var(--green)}
+  .delta-item .v .arrow.dn{color:var(--coral)}
+
+  /* Share line — text link, not button */
+  .share-line{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:6px 0;font-size:13px;
+  }
+  .share-line .l{color:var(--taupe);font-weight:700}
+  .share-line .link{
+    color:var(--coral);font-weight:900;text-decoration:underline;
+    text-decoration-thickness:1.5px;text-underline-offset:3px;
+  }
+
+  /* =============== 2. GLOW TREND =============== */
+
+  .big-number-row{
+    display:flex;align-items:flex-end;justify-content:space-between;
+    padding:0 0 4px;
+  }
+  .big-number-row .num{
+    font-size:72px;font-weight:900;color:var(--ink);letter-spacing:-0.06em;line-height:0.85;
+  }
+  .big-number-row .suffix{
+    padding-bottom:6px;
+  }
+  .big-number-row .suffix .k{font-size:10px;font-weight:900;letter-spacing:0.15em;color:var(--lt-taupe);text-transform:uppercase}
+  .big-number-row .suffix .v{font-size:13px;font-weight:700;color:var(--taupe);margin-top:2px}
+
+  .trend-quote{
+    font-size:16px;font-weight:500;font-style:italic;color:var(--warm-brown);
+    line-height:1.5;padding:16px 0;margin:14px 0;
+    border-top:1px solid rgba(26,21,16,.08);
+    border-bottom:1px solid rgba(26,21,16,.08);
+  }
+  .trend-quote b{font-style:normal;font-weight:900;color:var(--coral)}
+
+  /* Clean chart */
+  .chart-svg{width:100%;height:130px;display:block;margin:16px 0 8px}
+  .chart-axis{
+    display:flex;justify-content:space-between;
+    font-size:10px;color:var(--lt-taupe);font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
+  }
+
+  /* Metric table — no pills, just numbers */
+  .metric-table{margin-top:20px;border-top:1px solid rgba(26,21,16,.08)}
+  .metric-row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:11px 0;border-bottom:1px solid rgba(26,21,16,.08);
+  }
+  .metric-row:last-child{border-bottom:none}
+  .metric-row .nm{font-size:13px;font-weight:700;color:var(--ink);flex:1;letter-spacing:-0.01em}
+  .metric-row .sp{display:flex;align-items:baseline;gap:14px}
+  .metric-row .v{font-size:18px;font-weight:900;color:var(--ink);letter-spacing:-0.02em;min-width:32px;text-align:right}
+  .metric-row .d{font-size:11px;font-weight:700;min-width:38px;text-align:right}
+  .metric-row .d.up{color:var(--green)}
+  .metric-row .d.dn{color:var(--amber)}
+
+  /* Streak line — bottom, subtle */
+  .streak-line{
+    margin-top:18px;padding:12px 0 2px;
+    display:flex;align-items:center;gap:10px;
+    font-size:13px;color:var(--warm-brown);
+  }
+  .streak-line .fire{font-size:18px}
+  .streak-line b{color:var(--ink);font-weight:900}
+
+  /* =============== 3. FOOD → SKIN =============== */
+
+  /* Heart section */
+  .heart{
+    display:flex;gap:16px;align-items:flex-start;
+    padding:10px 0 18px;
+  }
+  .heart .big-emj{
+    font-size:56px;line-height:1;flex:0 0 auto;
+  }
+  .heart .copy{flex:1}
+  .heart .copy .k{font-size:10px;font-weight:900;letter-spacing:0.15em;color:var(--green);text-transform:uppercase;margin-bottom:6px}
+  .heart .copy .statement{
+    font-size:22px;font-weight:900;color:var(--ink);letter-spacing:-0.025em;line-height:1.2;
+  }
+  .heart .copy .statement em{font-style:italic;color:var(--coral);font-weight:900}
+  .heart .copy .proof{
+    margin-top:8px;font-size:12px;color:var(--taupe);line-height:1.5;
+  }
+
+  /* List — minimal, no bars */
+  .food-list2{
+    margin-top:4px;
+    border-top:1px solid rgba(26,21,16,.08);
+  }
+  .food-row2{
+    display:flex;align-items:center;gap:12px;padding:12px 0;
+    border-bottom:1px solid rgba(26,21,16,.08);
+  }
+  .food-row2:last-child{border-bottom:none}
+  .food-row2 .em{font-size:20px;width:26px;text-align:center}
+  .food-row2 .info{flex:1;min-width:0}
+  .food-row2 .info .n{font-size:13px;font-weight:800;color:var(--ink)}
+  .food-row2 .info .why{font-size:11px;color:var(--lt-taupe);font-weight:600;margin-top:1px;font-style:italic}
+  .food-row2 .score{
+    display:flex;flex-direction:column;align-items:flex-end;
+  }
+  .food-row2 .score .v{font-size:14px;font-weight:900;color:var(--green);letter-spacing:-0.02em}
+  .food-row2 .score .k{font-size:9px;font-weight:700;color:var(--lt-taupe);letter-spacing:0.05em;text-transform:uppercase;margin-top:1px}
+
+  .switch{
+    margin-top:14px;font-size:12px;color:var(--taupe);text-align:center;
+  }
+  .switch a{color:var(--coral);font-weight:800;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:3px}
+
+  /* =============== 4. CYCLE SYNC =============== */
+
+  .cycle-sub{
+    font-size:10px;font-weight:900;letter-spacing:0.22em;text-transform:uppercase;
+    color:var(--purple);margin-bottom:14px;
+  }
+  .cycle-copy{
+    font-size:20px;font-weight:900;color:var(--ink);letter-spacing:-0.025em;line-height:1.3;
+    margin:0 0 4px;
+  }
+  .cycle-copy em{font-style:italic;color:var(--purple);font-weight:900}
+  .cycle-prov{font-size:12px;color:var(--taupe);margin:0 0 18px;line-height:1.5}
+
+  /* Phase strip — simplified, no gradient boxes */
+  .phase-line{
+    position:relative;padding:8px 0 32px;
+    border-top:1px solid rgba(26,21,16,.08);
+  }
+  .phase-line .bar{
+    position:relative;height:3px;background:var(--tan);margin:14px 0 0;border-radius:3px;
+  }
+  .phase-line .bar .done{
+    position:absolute;top:0;left:0;height:3px;background:var(--purple);border-radius:3px;
+  }
+  .phase-line .bar .now{
+    position:absolute;top:-4px;width:11px;height:11px;border-radius:50%;
+    background:var(--purple);border:2px solid #fff;box-shadow:0 2px 5px rgba(139,92,246,.4);
+  }
+  .phase-line .labels{
+    display:flex;justify-content:space-between;margin-top:14px;
+    font-size:9px;font-weight:700;letter-spacing:0.1em;color:var(--lt-taupe);text-transform:uppercase;
+  }
+  .phase-line .labels .on{color:var(--purple);font-weight:900}
+
+  /* Tip — quote style */
+  .cycle-tip{
+    margin-top:20px;padding:14px 0;font-size:13px;color:var(--warm-brown);
+    border-top:1px solid rgba(26,21,16,.08);line-height:1.5;
+    display:flex;gap:10px;
+  }
+  .cycle-tip .lightbulb{font-size:16px;flex:0 0 auto}
+  .cycle-tip b{color:var(--ink);font-weight:900}
+
+  /* =============== TAB BAR (unchanged) =============== */
+  .tabbar{
+    position:absolute;bottom:14px;left:14px;right:14px;height:64px;
+    background:rgba(255,255,255,.85);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
+    border-radius:22px;display:flex;align-items:center;justify-content:space-around;
+    box-shadow:0 6px 18px rgba(194,74,30,.1);border:1px solid rgba(255,255,255,.7);z-index:5;
+  }
+  .tab{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;font-weight:800;color:var(--taupe)}
+  .tab.active{color:var(--coral)}
+  .tab.active .ico{background:var(--peach-wash);color:var(--coral);padding:5px 12px;border-radius:100px}
+  .tab .ico{font-size:17px;padding:5px 12px}
+  .scan-fab{
+    position:absolute;bottom:30px;right:34px;width:56px;height:56px;border-radius:18px;
+    background:var(--coral);
+    display:grid;place-items:center;font-size:22px;color:#fff;
+    box-shadow:0 10px 20px rgba(194,74,30,.35);z-index:6;
+  }
+
+  /* =============== SIDEBAR (notes) =============== */
+  .sidebar{display:flex;flex-direction:column;gap:20px}
+  .sb{
+    background:#fff;padding:28px;border-radius:4px;
+    box-shadow:0 6px 18px rgba(91,40,20,.08);
+    border-top:3px solid var(--ink);
+  }
+  .sb.coral{border-top-color:var(--coral)}
+  .sb.green{border-top-color:var(--green)}
+  .sb.purple{border-top-color:var(--purple)}
+  .sb .key{
+    font-size:10px;font-weight:900;letter-spacing:0.22em;text-transform:uppercase;
+    color:var(--lt-taupe);margin-bottom:6px;
+  }
+  .sb h3{margin:0 0 14px;font-size:22px;font-weight:900;letter-spacing:-0.02em;color:var(--ink)}
+  .sb p{margin:8px 0;font-size:14px;color:var(--warm-brown);line-height:1.65}
+  .sb p b{color:var(--ink);font-weight:800}
+  .sb .changes{border-top:1px solid rgba(26,21,16,.08);padding-top:16px;margin-top:16px}
+  .sb .changes h5{margin:0 0 10px;font-size:11px;font-weight:900;letter-spacing:0.15em;color:var(--coral);text-transform:uppercase}
+  .sb .changes ul{margin:0;padding-left:16px;font-size:13px;color:var(--warm-brown);line-height:1.65}
+  .sb .changes ul li{margin-bottom:6px}
+  .sb .changes ul li b{color:var(--ink);font-weight:800}
+
+  .comparison-box{
+    background:var(--ink);color:#fff;padding:28px;border-radius:4px;
+  }
+  .comparison-box h3{margin:0 0 16px;font-size:22px;font-weight:900;color:#fff;letter-spacing:-0.02em}
+  .comparison-box .key{color:#FFB89E;font-size:10px;font-weight:900;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:6px}
+  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+  .col-head{font-size:12px;font-weight:900;color:#FFB89E;letter-spacing:0.1em;text-transform:uppercase;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.15);margin-bottom:10px}
+  .col ul{margin:0;padding-left:16px;font-size:12px;color:rgba(255,255,255,.8);line-height:1.7}
+  .col ul li{margin-bottom:4px}
+  .col.old ul li{color:rgba(255,255,255,.55)}
+</style>
+</head>
+<body>
+
+<div class="sitehead">
+  <div class="eyebrow">Version 5 · Editorial</div>
+  <h1>Same 4 features, half the chrome</h1>
+  <p>The SaaS-dashboard look is the tell that something was AI-generated. Gradients on every surface, emoji badges as decoration, cards nested in cards, delta chips shouting. This version strips all of that out. Typography carries the weight; color is used sparingly; copy sounds like a friend not an assistant. Closer to a magazine page than a product UI.</p>
+</div>
+
+<div class="two-col">
+
+  <!-- =========== PHONE =========== -->
+  <div>
+    <div class="phone">
+      <div class="screen">
+        <div class="statusbar">
+          <span>9:41</span>
+          <span>📶 100%</span>
+        </div>
+        <div class="content">
+
+          <!-- Masthead (masthead, not "app header") -->
+          <div class="masthead">
+            <div class="title">Your progress</div>
+            <div class="date">APR 18 · 30 DAYS</div>
+          </div>
+
+          <!-- ============== 1. BEFORE / AFTER ============== -->
+          <section class="section">
+            <div class="section-eyebrow"><span class="section-number">01</span>The glow-up</div>
+            <h2 class="head1">You, one month ago. <em>You, today.</em></h2>
+            <p class="sub1">Your skin has taken its time. The camera sees it.</p>
+
+            <div class="photo-pair">
+              <div class="photo before">
+                <div class="face"></div>
+                <div class="caption"><span>MAR 19</span><span>glow 64</span></div>
+              </div>
+              <div class="photo after">
+                <div class="face"></div>
+                <div class="caption"><span>APR 18</span><span>glow 82</span></div>
+              </div>
+            </div>
+
+            <div class="deltas">
+              <div class="delta-item">
+                <div class="k">Glow</div>
+                <div class="v"><span class="arrow up">↑</span>18</div>
+              </div>
+              <div class="delta-item">
+                <div class="k">Clarity</div>
+                <div class="v"><span class="arrow up">↑</span>18</div>
+              </div>
+              <div class="delta-item">
+                <div class="k">Redness</div>
+                <div class="v"><span class="arrow dn">↓</span>15</div>
+              </div>
+            </div>
+
+            <div class="share-line">
+              <span class="l">Screenshot-worthy?</span>
+              <span class="link">Share this →</span>
+            </div>
+          </section>
+
+          <!-- ============== 2. TREND ============== -->
+          <section class="section">
+            <div class="section-eyebrow"><span class="section-number">02</span>The trend</div>
+
+            <div class="big-number-row">
+              <div class="num">78</div>
+              <div class="suffix">
+                <div class="k">30-day avg</div>
+                <div class="v">+8 from last month</div>
+              </div>
+            </div>
+
+            <p class="trend-quote">You've climbed <b>8 points</b> in 30 days. Your best day was Thursday, April 10 — 89, after salmon and 8 hours of sleep.</p>
+
+            <svg class="chart-svg" viewBox="0 0 320 130" preserveAspectRatio="none">
+              <line x1="0" y1="40" x2="320" y2="40" stroke="#E8DFD0" stroke-dasharray="1,4" stroke-width="1"/>
+              <line x1="0" y1="80" x2="320" y2="80" stroke="#E8DFD0" stroke-dasharray="1,4" stroke-width="1"/>
+              <!-- line only, no area fill for cleaner look -->
+              <path d="M0,92 L14,80 L30,86 L46,72 L62,78 L78,62 L94,70 L110,54 L126,62 L142,50 L158,58 L174,42 L190,50 L206,36 L222,44 L238,30 L254,36 L270,22 L286,28 L302,14 L318,20"
+                    fill="none" stroke="#1A1510" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- avg line subtle -->
+              <line x1="0" y1="50" x2="320" y2="50" stroke="#9A8E82" stroke-dasharray="2,4" stroke-width="1"/>
+              <!-- Today dot -->
+              <circle cx="318" cy="20" r="4.5" fill="#C24A1E" stroke="#fff" stroke-width="2"/>
+              <!-- Best day marker -->
+              <circle cx="286" cy="28" r="3" fill="#fff" stroke="#1A1510" stroke-width="1.5"/>
+            </svg>
+            <div class="chart-axis">
+              <span>Mar 19</span>
+              <span>Mar 29</span>
+              <span>Apr 8</span>
+              <span>Apr 18</span>
+            </div>
+
+            <div class="metric-table">
+              <div class="metric-row"><span class="nm">Hydration</span><span class="sp"><span class="v">85</span><span class="d up">+8</span></span></div>
+              <div class="metric-row"><span class="nm">Texture</span><span class="sp"><span class="v">82</span><span class="d up">+12</span></span></div>
+              <div class="metric-row"><span class="nm">Clarity</span><span class="sp"><span class="v">76</span><span class="d up">+4</span></span></div>
+              <div class="metric-row"><span class="nm">Redness</span><span class="sp"><span class="v">32</span><span class="d up">-15</span></span></div>
+            </div>
+
+            <div class="streak-line">
+              <span class="fire">🔥</span>
+              <span><b>12 days</b> in a row. Three more until your next badge.</span>
+            </div>
+          </section>
+
+          <!-- ============== 3. FOOD → SKIN ============== -->
+          <section class="section">
+            <div class="section-eyebrow"><span class="section-number">03</span>What your skin loves</div>
+
+            <div class="heart">
+              <div class="big-emj">🥑</div>
+              <div class="copy">
+                <div class="k">Most often, it's this</div>
+                <div class="statement">Your skin loves <em>avocado</em>.</div>
+                <div class="proof">You've had it 14 times this month. Scans 24 hours later averaged +8.8 glow — more than any other food.</div>
+              </div>
+            </div>
+
+            <div class="food-list2">
+              <div class="food-row2">
+                <div class="em">🐟</div>
+                <div class="info">
+                  <div class="n">Salmon</div>
+                  <div class="why">Omega-3s calm inflammation</div>
+                </div>
+                <div class="score">
+                  <div class="v">+7.6</div>
+                  <div class="k">5 meals</div>
+                </div>
+              </div>
+              <div class="food-row2">
+                <div class="em">🥬</div>
+                <div class="info">
+                  <div class="n">Spinach</div>
+                  <div class="why">Iron and vitamin C</div>
+                </div>
+                <div class="score">
+                  <div class="v">+6.4</div>
+                  <div class="k">8 meals</div>
+                </div>
+              </div>
+              <div class="food-row2">
+                <div class="em">🫐</div>
+                <div class="info">
+                  <div class="n">Berries</div>
+                  <div class="why">Antioxidants</div>
+                </div>
+                <div class="score">
+                  <div class="v">+5.8</div>
+                  <div class="k">6 meals</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="switch">
+              or <a>show the ones that hurt →</a>
+            </div>
+          </section>
+
+          <!-- ============== 4. CYCLE ============== -->
+          <section class="section">
+            <div class="cycle-sub"><span class="section-number">04</span>Cycle & skin</div>
+            <h2 class="cycle-copy">You're in your <em>luteal</em> phase.</h2>
+            <p class="cycle-prov">Day 18 of 28. This is usually when your skin pushes back.</p>
+
+            <div class="phase-line">
+              <div class="bar">
+                <div class="done" style="width:64%"></div>
+                <div class="now" style="left:calc(64% - 6px)"></div>
+              </div>
+              <div class="labels">
+                <span>Period</span>
+                <span>Follicular</span>
+                <span class="on">Luteal</span>
+                <span>Pre-flow</span>
+              </div>
+            </div>
+
+            <div class="cycle-tip">
+              <span class="lightbulb">💡</span>
+              <div>Expect a little more oil in your T-zone this week. <b>Consider skipping retinol tonight</b> — your skin's more sensitive during the luteal phase.</div>
+            </div>
+          </section>
+
+        </div>
+
+        <div class="tabbar">
+          <div class="tab"><div class="ico">🏠</div>Home</div>
+          <div class="tab active"><div class="ico">📊</div>Analytics</div>
+          <div style="width:50px"></div>
+          <div class="tab"><div class="ico">👤</div>Account</div>
+        </div>
+        <div class="scan-fab">📷</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========== SIDEBAR =========== -->
+  <div class="sidebar">
+
+    <div class="sb coral">
+      <div class="key">The design principle</div>
+      <h3>Typography does the heavy lifting</h3>
+      <p>AI-stamped designs lean on chrome — gradients, rounded cards, colored badges, drop shadows. A good human design uses <b>one heavy typeface at 3-4 sizes</b> and lets the words carry the hierarchy. That's the biggest single change here.</p>
+      <p>Nothing sits in a card. Sections are separated by thin 1-pixel rules instead. The eye moves down the page like it would a magazine article, not a Trello board.</p>
+    </div>
+
+    <div class="sb green">
+      <div class="key">Copywriting shift</div>
+      <h3>Sentences, not stat blocks</h3>
+      <p>v4 said "Your MVP: Avocado · +8.8 glow avg · 14 meals." That reads like analytics output.</p>
+      <p>v5 says <b>"Your skin loves avocado. You've had it 14 times this month."</b> Same data. The sentence frame does three things: makes it personal, implies ongoing knowledge, and — critically — sounds like something a human editor wrote, not an ML model.</p>
+      <div class="changes">
+        <h5>Voice rules I followed</h5>
+        <ul>
+          <li><b>No "your [metric] is [delta]"</b> — that pattern is AI-stamped.</li>
+          <li><b>Italic pull-quotes</b> for warmth — "Your skin loves <i>avocado</i>."</li>
+          <li><b>Dates written out</b> ("Thursday, April 10") instead of "Thu 4/10".</li>
+          <li><b>Observations, not announcements</b> — "Your skin has taken its time" vs "Your glow is up 18 points."</li>
+          <li><b>Questions that invite a share</b> — "Screenshot-worthy?" vs "Share my glow-up ✨".</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sb">
+      <div class="key">Chrome removed</div>
+      <h3>What I cut</h3>
+      <div class="changes" style="border-top:none;padding-top:0;margin-top:0">
+        <ul>
+          <li><b>All gradient backgrounds.</b> v4 had 6+ gradient surfaces. v5 has one: the app background stays slightly warm. Everything else is flat.</li>
+          <li><b>All "card" containers</b> except the phone itself. Content flows in one column, separated by thin horizontal rules. Mirrors how a newspaper article breaks sections.</li>
+          <li><b>All colored badge pills.</b> Delta arrows (↑18) replace "+8 pts" chips. Numbers are smaller and quieter. The old pills were attention-grabbing at the cost of looking templated.</li>
+          <li><b>Emoji as decoration</b> (the "✨" at the end of every button label). Kept only when it represents an actual thing — 🥑 for avocado, 🔥 for the streak tally, 💡 for a tip.</li>
+          <li><b>The "Share my glow-up ✨" primary button.</b> Replaced with a text link at the end of the section — "Share this →". Less button, more magazine footer.</li>
+          <li><b>The big "78" with delta chip next to it.</b> Replaced with a 72pt number anchored to a secondary line that reads "+8 from last month". Feels like a stat on a running-shoe page, not a dashboard widget.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sb purple">
+      <div class="key">Still here, just quieter</div>
+      <h3>The 4 features survive</h3>
+      <p>Every feature from v4 is in v5. I didn't cut scope — I cut decoration. <b>Before/After</b> is still the viral hero, just as two photos instead of a draggable slider. <b>Glow Trend + Streak</b> is still the retention anchor, just written as a sentence with a minimal chart below. <b>Food → Skin Impact</b> is still the USP, just opened with a headline. <b>Cycle Sync</b> is still the differentiator, just rendered as a thin progress bar instead of a lavender gradient card.</p>
+      <p>The data displayed is identical. The user can still see exactly what they could in v4. The only things I took away are <b>the things that were doing the design's talking for it</b>.</p>
+    </div>
+
+    <div class="comparison-box">
+      <div class="key">Side-by-side</div>
+      <h3>v4 vs v5, same data</h3>
+      <div class="compare-grid">
+        <div class="col old">
+          <div class="col-head">v4 · "AI-stamped"</div>
+          <ul>
+            <li>Gradient cards everywhere</li>
+            <li>"+8 pts" delta chips</li>
+            <li>Emoji badges on all buttons</li>
+            <li>Drop shadows on everything</li>
+            <li>Rounded corners 20-28pt</li>
+            <li>"Your MVP: 🥑 Avocado"</li>
+            <li>Primary CTA button with gradient fill</li>
+            <li>Dashboard vibe</li>
+          </ul>
+        </div>
+        <div class="col">
+          <div class="col-head">v5 · editorial</div>
+          <ul>
+            <li>Flat, one warm canvas</li>
+            <li>Arrow glyphs (↑18)</li>
+            <li>Emoji only when representing a real thing</li>
+            <li>Subtle 1px rules between sections</li>
+            <li>Minimal radius (4-8pt)</li>
+            <li>"Your skin loves avocado."</li>
+            <li>Text link ("Share this →")</li>
+            <li>Magazine vibe</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb green">
+      <div class="key">Tradeoff — be honest</div>
+      <h3>When v5 is wrong</h3>
+      <p>v5 is quieter. It requires more attention from the user to understand. <b>If the target demographic expects the app to do the talking</b> (a lot of 18-22 year olds expect this), v4 will convert better on first-open.</p>
+      <p>v5 wins if your audience is design-literate, pays for premium apps, and screenshots things because they find them interesting — not because the UI told them to. My read is that for a "Cal AI for skincare" positioning pitched at 18-35 women, <b>v5 is the better shelf — v4 is the better ad</b>. You might actually want the marketing to look like v4 and the product itself to look like v5.</p>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

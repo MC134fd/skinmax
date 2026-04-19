@@ -217,9 +217,7 @@ struct FoodScanResultView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
-                .background(GlowbiteColors.white)
-                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
+                .glassCard(cornerRadius: 16)
                 .opacity(showNutrition ? 1 : 0)
                 .offset(y: showNutrition ? 0 : 16)
                 .animation(
@@ -247,7 +245,7 @@ struct FoodScanResultView: View {
                 amount: nutrientAmount(for: nutrient),
                 onDismiss: { selectedNutrient = nil }
             )
-            .presentationDetents([.large])
+            .presentationDetents([.medium, .large])
             .presentationCornerRadius(GlowbiteSpacing.cardCornerRadiusLarge)
             .presentationDragIndicator(.visible)
         }
@@ -267,7 +265,7 @@ struct FoodScanResultView: View {
             NutritionTile(value: String(format: "%.0fg", scan.carbs), label: "CARBS", nutrient: .carbs),
             NutritionTile(value: String(format: "%.0fg", scan.fiber), label: "FIBER", nutrient: .fiber),
             NutritionTile(value: String(format: "%.0fg", scan.sugar), label: "SUGAR", nutrient: .sugar),
-            NutritionTile(value: String(format: "%.1fg", scan.sodium), label: "SODIUM", nutrient: .sodium),
+            NutritionTile(value: String(format: "%.0fmg", scan.sodium * 1000), label: "SODIUM", nutrient: .sodium),
         ]
     }
 
@@ -304,9 +302,7 @@ struct FoodScanResultView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(GlowbiteSpacing.cardPadding)
-        .background(GlowbiteColors.white)
-        .clipShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadius))
-        .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
+        .glassCard()
         .opacity(showBenefits ? 1 : 0)
         .animation(.easeIn(duration: 0.3), value: showBenefits)
     }
@@ -339,9 +335,7 @@ struct FoodScanResultView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(GlowbiteSpacing.cardPadding)
-        .background(GlowbiteColors.white)
-        .clipShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadius))
-        .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
+        .glassCard()
         .opacity(showBenefits ? 1 : 0)
         .animation(.easeIn(duration: 0.3).delay(0.1), value: showBenefits)
     }
@@ -361,8 +355,7 @@ struct FoodScanResultView: View {
             }
             .padding(14)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(GlowbiteColors.peachWash)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .glassCard(cornerRadius: 16)
         }
     }
 }

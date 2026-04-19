@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skinmax — Food Log Card Explorations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ── Skinmax Palette (from CLAUDE.md) ── */
+:root {
+  --coral: #C24A1E;
+  --coral-15: rgba(194,74,30,0.15);
+  --coral-08: rgba(194,74,30,0.08);
+  --coral-25: rgba(194,74,30,0.25);
+  --peach-wash: #F2ECE2;
+  --cream-bg: #FAF6F0;
+  --sunny-butter: #FFF8E8;
+  --green: #4A7C59;
+  --amber: #C49234;
+  --red: #B23A2C;
+  --blue: #4A7CB8;
+  --espresso: #1A1510;
+  --warm-brown: #4B3D36;
+  --med-taupe: #6B5C54;
+  --light-taupe: #9A8E82;
+  --soft-tan: #F2ECE2;
+  --white: #FFFFFF;
+  --protein: #C24A1E;
+  --carbs: #D4943A;
+  --fat: #A68B6B;
+  --fiber: #66BB6A;
+  --sugar: #E57373;
+  --sodium: #5B9EC4;
+
+  /* shadows — always coral-tinted per CLAUDE.md */
+  --shadow-card: 0 4px 12px rgba(194,74,30,0.08);
+  --shadow-elevated: 0 6px 16px rgba(194,74,30,0.12);
+  --shadow-subtle: 0 2px 8px rgba(194,74,30,0.05);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: linear-gradient(180deg, var(--cream-bg) 0%, var(--peach-wash) 100%);
+  min-height: 100vh;
+  color: var(--espresso);
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 20px 20px 60px;
+}
+
+/* ── Section Header ── */
+.style-header {
+  margin-top: 48px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.style-header:first-child { margin-top: 0; }
+
+.style-num {
+  font-weight: 900;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--coral);
+  background: var(--coral-15);
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+.style-label {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--med-taupe);
+  letter-spacing: 0.5px;
+}
+.style-desc {
+  font-size: 12px;
+  color: var(--light-taupe);
+  margin-bottom: 16px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+/* ── Shared Card Skeleton ── */
+.card-list { display: flex; flex-direction: column; gap: 12px; }
+
+.card {
+  display: flex;
+  border-radius: 20px;
+  overflow: hidden;
+  min-height: 120px;
+  transition: transform 0.2s ease;
+}
+.card:active { transform: scale(0.98); }
+
+.card-img {
+  width: 38%;
+  min-width: 38%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-img .placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+}
+
+.card-body {
+  flex: 1;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.card-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.card-title {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--espresso);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
+}
+.card-time {
+  font-weight: 600;
+  font-size: 11px;
+  color: var(--light-taupe);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.card-cal {
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--espresso);
+  line-height: 1.1;
+}
+.card-cal span {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--light-taupe);
+  margin-left: 2px;
+}
+
+.card-macros {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ── Macro Pill (default) ── */
+.macro {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 100px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  line-height: 1.3;
+}
+.macro .val { font-weight: 800; }
+.macro .unit { font-weight: 600; opacity: 0.7; }
+
+/* Skin impact chip */
+.skin-chip {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 100px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  letter-spacing: 0.3px;
+}
+.skin-chip.good { background: rgba(74,124,89,0.12); color: var(--green); }
+.skin-chip.fair { background: rgba(196,146,52,0.12); color: var(--amber); }
+.skin-chip.bad  { background: rgba(178,58,44,0.12); color: var(--red); }
+
+/* ── Scanner Bracket Motif ── */
+.brackets {
+  position: absolute;
+  inset: 8px;
+  pointer-events: none;
+}
+.brackets::before, .brackets::after,
+.brackets span::before, .brackets span::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-color: rgba(250,246,240,0.85);
+  border-style: solid;
+  border-width: 0;
+  border-radius: 3px;
+}
+.brackets::before { top: 0; left: 0; border-top-width: 2px; border-left-width: 2px; }
+.brackets::after  { top: 0; right: 0; border-top-width: 2px; border-right-width: 2px; }
+.brackets span::before { bottom: 0; left: 0; border-bottom-width: 2px; border-left-width: 2px; }
+.brackets span::after  { bottom: 0; right: 0; border-bottom-width: 2px; border-right-width: 2px; }
+
+/* ========================================================
+   STYLE 1 — Cream Classic
+   Clean white cards on cream canvas, soft coral shadows,
+   nutrient-colored macro pills
+   ======================================================== */
+.s1 .card {
+  background: var(--white);
+  box-shadow: var(--shadow-card);
+}
+.s1 .card-img .placeholder {
+  background: linear-gradient(135deg, var(--peach-wash), var(--soft-tan));
+}
+.s1 .macro {
+  background: var(--cream-bg);
+  color: var(--warm-brown);
+}
+.s1 .macro.p { color: var(--protein); background: rgba(194,74,30,0.08); }
+.s1 .macro.c { color: var(--carbs);   background: rgba(212,148,58,0.10); }
+.s1 .macro.f { color: var(--fat);     background: rgba(166,139,107,0.12); }
+
+/* ========================================================
+   STYLE 2 — Peach Wash + Coral Accent
+   Peach-wash card bg, coral left border stripe,
+   bold calorie emphasis, compact macro labels
+   ======================================================== */
+.s2 .card {
+  background: var(--peach-wash);
+  box-shadow: var(--shadow-subtle);
+  border-left: 3px solid var(--coral);
+  border-radius: 4px 20px 20px 4px;
+}
+.s2 .card-img .placeholder {
+  background: linear-gradient(160deg, rgba(194,74,30,0.12), rgba(212,148,58,0.10));
+}
+.s2 .card-cal { color: var(--coral); }
+.s2 .macro {
+  background: transparent;
+  padding: 0;
+  color: var(--med-taupe);
+  font-weight: 600;
+  font-size: 11px;
+}
+.s2 .macro .val { color: var(--warm-brown); font-weight: 800; }
+.s2 .card-macros { gap: 12px; }
+
+/* ========================================================
+   STYLE 3 — Frosted Glass
+   Ultra-thin material feel, translucent white,
+   glass border, blurred placeholder
+   ======================================================== */
+.s3 .card {
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  box-shadow: var(--shadow-subtle), inset 0 0 0 1px rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.4);
+}
+.s3 .card-img .placeholder {
+  background: linear-gradient(140deg, var(--cream-bg), var(--peach-wash), rgba(194,74,30,0.08));
+}
+.s3 .macro {
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(242,236,226,0.8);
+}
+.s3 .macro.p { color: var(--protein); }
+.s3 .macro.c { color: var(--carbs); }
+.s3 .macro.f { color: var(--fat); }
+
+/* ========================================================
+   STYLE 4 — Atmospheric Gradient
+   Warm gradient background per card (faded, not photo),
+   white text overlay feel, dreamy
+   ======================================================== */
+.s4 .card {
+  background: var(--white);
+  box-shadow: var(--shadow-elevated);
+  position: relative;
+}
+.s4 .card-img .placeholder {
+  background: linear-gradient(145deg, #C24A1E 0%, #D4943A 50%, #A68B6B 100%);
+}
+.s4 .card-img .placeholder::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 40%, rgba(255,248,232,0.4), transparent 60%);
+}
+.s4 .card-cal { color: var(--coral); }
+.s4 .macro {
+  background: var(--sunny-butter);
+  color: var(--warm-brown);
+  font-weight: 700;
+}
+.s4 .macro .val { font-weight: 800; }
+.s4 .macro.p .val { color: var(--protein); }
+.s4 .macro.c .val { color: var(--carbs); }
+.s4 .macro.f .val { color: var(--fat); }
+
+/* ========================================================
+   STYLE 5 — Solid White + Nutrient Color Bar
+   Minimal white card, thin colored bottom border
+   per-dominant-macro, clean hierarchy
+   ======================================================== */
+.s5 .card {
+  background: var(--white);
+  box-shadow: var(--shadow-card);
+  border-bottom: 3px solid var(--protein);
+}
+.s5 .card.carb-heavy { border-bottom-color: var(--carbs); }
+.s5 .card-img .placeholder {
+  background: var(--cream-bg);
+}
+.s5 .card-body { gap: 8px; }
+.s5 .card-cal { font-size: 20px; }
+.s5 .card-cal span { font-size: 11px; }
+.s5 .macro {
+  background: transparent;
+  padding: 0;
+  font-size: 12px;
+  color: var(--med-taupe);
+}
+.s5 .macro .val { font-weight: 800; }
+.s5 .macro.p .val { color: var(--protein); }
+.s5 .macro.c .val { color: var(--carbs); }
+.s5 .macro.f .val { color: var(--fat); }
+.s5 .card-macros { gap: 14px; }
+
+/* ========================================================
+   STYLE 6 — Warm Sunny Butter
+   Sunny butter background, coral accents,
+   rounded macro badges with nutrient colors,
+   scanner brackets on the image
+   ======================================================== */
+.s6 .card {
+  background: var(--sunny-butter);
+  box-shadow: var(--shadow-card);
+}
+.s6 .card-img .placeholder {
+  background: linear-gradient(130deg, var(--peach-wash), rgba(194,74,30,0.15));
+}
+.s6 .card-cal { color: var(--coral); }
+.s6 .macro {
+  padding: 4px 10px;
+  font-size: 11px;
+  border-radius: 100px;
+  font-weight: 700;
+}
+.s6 .macro.p { background: rgba(194,74,30,0.12); color: var(--protein); }
+.s6 .macro.c { background: rgba(212,148,58,0.12); color: var(--carbs); }
+.s6 .macro.f { background: rgba(166,139,107,0.15); color: var(--fat); }
+
+/* ========================================================
+   STYLE 7 — Compact Dense
+   Tighter vertical spacing, smaller image ratio (~30%),
+   two-line macro row with fiber/sugar extras,
+   peach-wash bg, skin impact chip prominent
+   ======================================================== */
+.s7 .card {
+  background: var(--white);
+  box-shadow: var(--shadow-card);
+  min-height: 110px;
+}
+.s7 .card-img {
+  width: 30%;
+  min-width: 30%;
+}
+.s7 .card-img .placeholder {
+  background: linear-gradient(135deg, var(--cream-bg), var(--peach-wash));
+}
+.s7 .card-body { padding: 12px 14px; gap: 4px; }
+.s7 .card-title { font-size: 14px; }
+.s7 .card-cal { font-size: 18px; }
+.s7 .card-cal span { font-size: 10px; }
+.s7 .macro {
+  font-size: 10px;
+  padding: 2px 6px;
+  background: var(--cream-bg);
+  color: var(--warm-brown);
+}
+.s7 .macro .val { font-weight: 800; }
+.s7 .macro.p .val { color: var(--protein); }
+.s7 .macro.c .val { color: var(--carbs); }
+.s7 .macro.f .val { color: var(--fat); }
+.s7 .macro.fi .val { color: var(--fiber); }
+.s7 .macro.su .val { color: var(--sugar); }
+
+/* ========================================================
+   STYLE 8 — Elevated Premium
+   Deep warm-brown card, light text,
+   coral gradient image overlay, premium feel,
+   subtle inner highlight on image area
+   ======================================================== */
+.s8 .card {
+  background: linear-gradient(135deg, var(--warm-brown), var(--espresso));
+  box-shadow: var(--shadow-elevated);
+}
+.s8 .card-img .placeholder {
+  background: linear-gradient(145deg, #C24A1E, #D4623A);
+  position: relative;
+}
+.s8 .card-img .placeholder::after {
+  content: '';
+  position: absolute;
+  top: 15%;
+  left: 15%;
+  width: 40%;
+  height: 35%;
+  background: rgba(255,255,255,0.15);
+  border-radius: 50%;
+  transform: rotate(-22deg);
+  filter: blur(12px);
+}
+.s8 .card-title { color: var(--cream-bg); }
+.s8 .card-time { color: var(--light-taupe); }
+.s8 .card-cal { color: var(--cream-bg); }
+.s8 .card-cal span { color: var(--light-taupe); }
+.s8 .macro {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--peach-wash);
+  font-size: 11px;
+}
+.s8 .macro .val { color: var(--cream-bg); font-weight: 800; }
+
+/* ── Placeholder icon inside image area ── */
+.ph-icon {
+  font-size: 28px;
+  opacity: 0.4;
+  position: relative;
+  z-index: 1;
+}
+.s4 .ph-icon, .s8 .ph-icon { opacity: 0.35; filter: brightness(2); }
+.s6 .ph-icon { opacity: 0.3; }
+
+/* ── Page Title ── */
+.page-title {
+  font-weight: 900;
+  font-size: 24px;
+  color: var(--espresso);
+  margin-bottom: 4px;
+}
+.page-subtitle {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--light-taupe);
+  margin-bottom: 32px;
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="page-title">Food Log Cards</div>
+  <div class="page-subtitle">8 visual explorations for Skinmax</div>
+
+  <!-- ═══ STYLE 1 — Cream Classic ═══ -->
+  <div class="style-header">
+    <span class="style-num">Style 1</span>
+    <span class="style-label">Cream Classic</span>
+  </div>
+  <div class="style-desc">White cards, cream canvas, nutrient-colored macro pills, standard coral shadow.</div>
+  <div class="card-list s1">
+    <div class="card">
+      <div class="card-img"><div class="placeholder"><span class="ph-icon">🥗</span></div></div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-title">Grilled Salmon Bowl</div>
+          <div class="card-time">12:34 PM</div>
+        </div>
+        <div class="card-cal">520<span>kcal</span></div>
+        <div class="card-macros">
+          <span class="macro p"><span class="val">38g</span> P</span>
+          <span class="macro c"><span class="val">42g</span> C</span>
+          <span class="macro f"><span class="val">18g</span> F</span>
+          <span class="skin-chip good">🌟 8/10</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img"><div class="placeholder"><span class="ph-icon">🥑</span></div></div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-title">Avocado Toast with Poached Eggs</div>
+          <div class="card-time">8:15 AM</div>
+        </div>
+        <div class="card-cal">380<span>kcal</span></div>
+        <div class="card-macros">
+          <span class="macro p"><span class="val">14g</span> P</span>
+          <span class="macro c"><span class="val">32g</span> C</span>
+          <span class="macro f"><span class="val">22g</span> F</span>
+          <span class="skin-chip good">🌟 9/10</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STYLE 2 — Peach Wash + Coral Accent ═══ -->
+  <div class="style-header">
+    <span class="style-num">Style 2</span>
+    <span class="style-label">Peach Wash + Coral Accent</span>
+  </div>
+  <div class="style-desc">Peach-wash background, coral left-border stripe, inline macro labels.</div>
+  <div class="card-list s2">
+    <div class="card">
+      <div class="card-img"><div class="placeholder"><span class="ph-icon">🍛</span></div></div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-title">Chicken Tikka Masala</div>
+          <div class="card-time">7:20 PM</div>
+        </div>
+        <div class="card-cal">610<span>kcal</span></div>
+        <div class="card-macros">
+          <span class="macro p"><span class="val">34g</span> protein</span>
+          <span class="macro c"><span class="val">52g</span> carbs</span>
+          <span class="macro f"><span class="val">24g</span> fat</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img"><div class="placeholder"><span class="ph-icon">🥤</span></div></div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-title">Green Detox Smoothie</div>
+          <div class="card-time">3:45 PM</div>
+        </div>
+        <div class="card-cal">180<span>kcal</span></div>
+        <div class="card-macros">
+          <span class="macro p"><span class="val">6g</span> protein</span>
+          <span class="macro c"><span class="val">28g</span> carbs</span>
+          <span class="macro f"><span class="val">4g</span> fat</span>
+        </div>
+        <div style="margin-top:2px"><span class="skin-chip good">🌟 9/10 glow</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STYLE 3 — Frosted Glass ═══ -->
+  <div class="style-header">
+    <span class="style-num">Style 3</span>
+    <span class="style-label">Frosted Glass</span>
+  </div>
+  <div class="style-desc">Translucent glass cards with backdrop blur, soft white borders, ethereal feel.</div>
+  <div class="card-list s3">
+    <div class="card">
+      <div class="card-img"><div class="placeholder"><span class="ph-icon">🍣</span></div></div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-title">Salmon Sashimi Platter</div>
+          <div class="card-time">1:10 PM</div>
+        </div>
+        <div class="card-cal">340<span>kcal</span></div>
+        <div class="card-macros">
+          <span class="macro p"><span class="val">42g</span> P</span>
+          <span class="macro c"><span class="val">8g</span> C</span>
+          <span class="macro f"><span class="val">16g</span> F</span>
+          <span class="skin-chip good">🌟 9/10</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img"><div class="placeholder"><span class="ph-icon">🍝</span></div></div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-title">Creamy Carbonara Pasta</div>
+          <div class="card-time">12:00 PM</div>
+        </div>
+        <div class="card-cal">720<span>kcal</span></div>
+        <div class="card-macros">
+          <span class="macro p"><span class="val">22g</span> P</span>
+          <span class="macro c"><span class="val">68g</span> C</span>
+          <span class="macro f"><span class="val">36g</span> F</span>
+          <span class="skin-chip fair">✨ 5/10</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STYLE 4 — Atmospheric Gradient ═══ -->
+  <div class="style-header">
+    <span class="style-num">Style 4</span>
+    <span class="style-label">Atmospheric Gradient</span>
+  </div>
+  <div class="style-desc">Warm coral-to-gold gradient image area, radial highlight, sunny-butter macro pills.</div>
+  <div class="card-list s4">
+    <div class="card">
+      <div class="card-img">
+        <div class="placeholder"><span class="ph-icon">🫐</span></div>
+        <div class="brackets"><span></span></div>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-title">Berry Acai Bowl</div>
+          <div class="card-time">9:00 AM</div>
+        </div>
+        <div class="card-cal">290<span>kcal</span></div>
+        <div class="card-macros">
+          <span class="macro p"><span class="val">8g</span> P</span>
+          <span class="macro c"><span class="val">48g</span> C</span>
+          <span class="macro f"><span class="val">10g</span> F</span>
+        </div>
+        <div style="margin-top:2px"><span class="skin-chip good">🌟 8/10 glow</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img"><div class="placeholder"><span class="ph-icon">🍔</span></div></div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-title">Double Smash Burger</div>
+          <div class="card-time">6:30 PM</div>
+        </div>
+        <div class="card-cal">840<span>kcal</span></div>
+        <div class="card-macros">
+          <span class="macro p"><span class="val">44g</span> P</span>
+          <span class="macro c"><span class="val">52g</span> C</span>
+          <span class="macro f"><span class="val">48g</span> F</span>
+        </div>
+        <div style="margin-top:2px"><span class="skin-chip bad">💫 3/10 glow</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STYLE 5 — Solid White + Nutrient Color Bar ═══ -->
+  <div class="style-header">
+    <span class="style-num">Style 5</span>
+    <span class="style-label">Nutrient Color Bar</span>
+  </div>
+  <div class="style-desc">Minimal white, colored bottom border keyed to dominant macro, inline colored values.</div>
+  <div class="card-list s5">
+    <div class="card">
+      <div class="card-img"><div class="placeholder"><span class="ph-icon">🥩</span></div></div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-title">Grilled Steak with Greens</div>
+          <div class="card-time">7:45 PM</div>
+        </div>
+        <div class="card-cal">480<span>kcal</span></div>
+        <div class="card-macros">
+          <span class="macro p"><span class="val">52g</span> P</span>
+          <span class="macro c"><span class="val">6g</span> C</span>
+          <span class="macro f"><span class="val">28g</span> F</span>
+        </div>
+      </div>
+    </div>
+    <div class="card carb-heavy">
+      <div class="card-img"><div class="placeholder"><span class="ph-icon">🍜</span></div></div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-title">Veggie Ramen with Soft Egg</div>
+          <div class="card-time">12:50 PM</div>
+        </div>
+        <div class="card-cal">550<span>kcal</span></div>
+        <div class="card-macros">
+          <span class="macro p"><span class="val">18g</span> P</span>
+          <span class="macro c"><span class="val">62g</span> C</span>
+          <span class="macro f"><span class="val">22g</span> F</span>
+        </div>
+        <div style="margin-top:2px"><span class="skin-chip fair">✨ 6/10</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STYLE 6 — Warm Sunny Butter ═══ -->
+  <div class="style-header">
+    <span class="style-num">Style 6</span>
+    <span class="style-label">Warm Sunny Butter</span>
+  </div>
+  <div class="style-desc">Sunny-butter card fill, coral calorie number, scanner brackets on image, bright macro badges.</div>
+  <div class="card-list s6">
+    <div class="card">
+      <div class="card-img">
+        <div class="placeholder"><span class="ph-icon">🥙</span></div>
+        <div class="brackets"><span></span></div>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-title">Mediterranean Falafel Wrap</div>
+          <div class="card-time">1:30 PM</div>
+        </div>
+        <div class="card-cal">410<span>kcal</span></div>
+        <div class="card-macros">
+          <span class="macro p"><span class="val">16g</span> P</span>
+          <span class="macro c"><span class="val">44g</span> C</span>
+          <span class="macro f"><span class="val">18g</span> F</span>
+          <span class="skin-chip good">🌟 7/10</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img"><div class="placeholder"><span class="ph-icon">🍓</span></div></div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-title">Greek Yogurt Parfait</div>
+          <div class="card-time">10:00 AM</div>
+        </div>
+        <div class="card-cal">240<span>kcal</span></div>
+        <div class="card-macros">
+          <span class="macro p"><span class="val">18g</span> P</span>
+          <span class="macro c"><span class="val">28g</span> C</span>
+          <span class="macro f"><span class="val">6g</span> F</span>
+          <span class="skin-chip good">🌟 9/10</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STYLE 7 — Compact Dense ═══ -->
+  <div class="style-header">
+    <span class="style-num">Style 7</span>
+    <span class="style-label">Compact Dense</span>
+  </div>
+  <div class="style-desc">Narrower image (30%), tighter spacing, 5-macro row (P/C/F/fiber/sugar), skin chip prominent.</div>
+  <div class="card-list s7">
+    <div class="card">
+      <div class="card-img"><div class="placeholder"><span class="ph-icon">🥦</span></div></div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-title">Teriyaki Tofu Stir-Fry</div>
+          <div class="card-time">6:15 PM</div>
+        </div>
+        <div class="card-cal">360<span>kcal</span></div>
+        <div class="card-macros">
+          <span class="macro p"><span class="val">22g</span> P</span>
+          <span class="macro c"><span class="val">38g</span> C</span>
+          <span class="macro f"><span class="val">12g</span> F</span>
+          <span class="macro fi"><span class="val">6g</span> Fib</span>
+          <span class="macro su"><span class="val">8g</span> Sug</span>
+        </div>
+        <div style="margin-top:2px"><span class="skin-chip good">🌟 8/10 skin glow</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img"><div class="placeholder"><span class="ph-icon">🍩</span></div></div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-title">Glazed Donut</div>
+          <div class="card-time">3:00 PM</div>
+        </div>
+        <div class="card-cal">260<span>kcal</span></div>
+        <div class="card-macros">
+          <span class="macro p"><span class="val">3g</span> P</span>
+          <span class="macro c"><span class="val">34g</span> C</span>
+          <span class="macro f"><span class="val">14g</span> F</span>
+          <span class="macro fi"><span class="val">1g</span> Fib</span>
+          <span class="macro su"><span class="val">18g</span> Sug</span>
+        </div>
+        <div style="margin-top:2px"><span class="skin-chip bad">💫 2/10 skin glow</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STYLE 8 — Elevated Premium ═══ -->
+  <div class="style-header">
+    <span class="style-num">Style 8</span>
+    <span class="style-label">Elevated Premium</span>
+  </div>
+  <div class="style-desc">Dark warm-brown card, coral gradient image with inner highlight, light text, glass-border macros.</div>
+  <div class="card-list s8">
+    <div class="card">
+      <div class="card-img">
+        <div class="placeholder"><span class="ph-icon">🍷</span></div>
+        <div class="brackets"><span></span></div>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-title">Pan-Seared Duck Breast</div>
+          <div class="card-time">8:30 PM</div>
+        </div>
+        <div class="card-cal">580<span>kcal</span></div>
+        <div class="card-macros">
+          <span class="macro"><span class="val">42g</span> P</span>
+          <span class="macro"><span class="val">12g</span> C</span>
+          <span class="macro"><span class="val">38g</span> F</span>
+        </div>
+        <div style="margin-top:2px"><span class="skin-chip fair">✨ 5/10</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img"><div class="placeholder"><span class="ph-icon">🫒</span></div></div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-title">Quinoa Power Bowl</div>
+          <div class="card-time">12:15 PM</div>
+        </div>
+        <div class="card-cal">420<span>kcal</span></div>
+        <div class="card-macros">
+          <span class="macro"><span class="val">18g</span> P</span>
+          <span class="macro"><span class="val">52g</span> C</span>
+          <span class="macro"><span class="val">14g</span> F</span>
+        </div>
+        <div style="margin-top:2px"><span class="skin-chip good">🌟 8/10</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

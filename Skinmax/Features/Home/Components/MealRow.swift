@@ -1,9 +1,12 @@
 import SwiftUI
 
+// MARK: - Completed meal card (data from saved FoodScan)
 struct MealRow: View {
     let foodScan: FoodScan
+    var onTapCard: () -> Void = {}
+    @State private var selectedNutrient: NutrientType?
 
-    private var dotColor: Color {
+    private var scoreColor: Color {
         switch foodScan.skinImpactScore {
         case 7...10: return GlowbiteColors.greenGood
         case 4..<7: return GlowbiteColors.amberFair
@@ -11,46 +14,238 @@ struct MealRow: View {
         }
     }
 
+    private var scoreEmoji: String {
+        switch foodScan.skinImpactScore {
+        case 7...10: return "\u{1F31F}"
+        case 4..<7: return "\u{2728}"
+        default: return "\u{1F4AB}"
+        }
+    }
+
+    private var foodImage: UIImage? {
+        guard let data = foodScan.photoData else { return nil }
+        return UIImage(data: data)
+    }
+
     var body: some View {
-        HStack(spacing: 10) {
-            RoundedRectangle(cornerRadius: 9)
-                .fill(GlowbiteColors.softTan)
-                .frame(width: 36, height: 36)
-                .overlay(
-                    Text("🍽")
-                        .font(.system(size: 16))
-                )
+        HStack(spacing: 0) {
+            // Photo
+            FoodCardPhoto(image: foodImage)
 
-            VStack(alignment: .leading, spacing: 2) {
-                HStack(spacing: 5) {
-                    Circle()
-                        .fill(dotColor)
-                        .frame(width: 5, height: 5)
-
+            // Info + score
+            HStack(spacing: 0) {
+                // Left: food details
+                VStack(alignment: .leading, spacing: 5) {
+                    // Title (leaves room for time on the right)
                     Text(foodScan.name)
                         .font(.gbCaption)
                         .foregroundStyle(GlowbiteColors.darkBrown)
+                        .lineLimit(1)
+
+                    HStack(alignment: .firstTextBaseline, spacing: 2) {
+                        Text("\(foodScan.calories)")
+                            .font(.gbTitleM)
+                            .foregroundStyle(GlowbiteColors.darkBrown)
+                        Text("kcal")
+                            .font(.gbCaption)
+                            .foregroundStyle(GlowbiteColors.lightTaupe)
+                    }
+
+                    HStack(spacing: 5) {
+                        MacroPill(value: foodScan.protein, label: "P", color: GlowbiteColors.nutrientProtein) {
+                            selectedNutrient = .protein
+                        }
+                        MacroPill(value: foodScan.carbs, label: "C", color: GlowbiteColors.nutrientCarbs) {
+                            selectedNutrient = .carbs
+                        }
+                        MacroPill(value: foodScan.fat, label: "F", color: GlowbiteColors.nutrientFat) {
+                            selectedNutrient = .fat
+                        }
+                    }
                 }
+                .padding(.leading, 14)
+                .padding(.vertical, 12)
 
-                Text("\(foodScan.calories) cal · \(foodScan.createdAt.formatted(date: .omitted, time: .shortened))")
-                    .font(.gbCaption)
-                    .foregroundStyle(GlowbiteColors.lightTaupe)
+                Spacer(minLength: 8)
+
+                // Right: score + time stacked
+                VStack(spacing: 4) {
+                    Text(foodScan.createdAt.formatted(date: .omitted, time: .shortened))
+                        .font(.gbCaption)
+                        .foregroundStyle(GlowbiteColors.lightTaupe)
+
+                    Text(String(format: "%.0f", foodScan.skinImpactScore))
+                        .font(.gbDisplayM)
+                        .foregroundStyle(scoreColor)
+
+                    Text("/10")
+                        .font(.gbCaption)
+                        .foregroundStyle(GlowbiteColors.lightTaupe)
+                }
+                .padding(.trailing, 14)
             }
-
-            Spacer()
-
-            Text(String(format: "%.1f", foodScan.skinImpactScore))
-                .font(.gbTitleL)
-                .tracking(-0.3)
-                .foregroundStyle(dotColor)
         }
-        .padding(.vertical, 9)
-        .padding(.horizontal, 12)
-        .background(GlowbiteColors.paper)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(GlowbiteColors.border, lineWidth: 1)
+        .frame(height: 120)
+        .background(
+            LinearGradient(
+                colors: [.white, GlowbiteColors.sunnyButter],
+                startPoint: .leading,
+                endPoint: .trailing
+            )
         )
+        .clipShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadius, style: .continuous))
+        .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
+        .contentShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadius, style: .continuous))
+        .onTapGesture {
+            onTapCard()
+        }
+        .sheet(item: $selectedNutrient) { nutrient in
+            NutrientDetailSheet(
+                nutrient: nutrient,
+                amount: nutrientAmount(for: nutrient),
+                onDismiss: { selectedNutrient = nil }
+            )
+            .presentationDetents([.medium, .large])
+            .presentationCornerRadius(GlowbiteSpacing.cardCornerRadiusLarge)
+            .presentationDragIndicator(.visible)
+        }
+    }
+
+    private func nutrientAmount(for nutrient: NutrientType) -> Double {
+        switch nutrient {
+        case .protein: return foodScan.protein
+        case .fat: return foodScan.fat
+        case .carbs: return foodScan.carbs
+        case .fiber: return foodScan.fiber
+        case .sugar: return foodScan.sugar
+        case .sodium: return foodScan.sodium
+        }
+    }
+}
+
+// MARK: - Analyzing meal card (in-progress, shown during scan)
+struct MealRowAnalyzing: View {
+    let coordinator: AnalysisCoordinator
+
+    @State private var pulseOpacity: Double = 1.0
+
+    private var pendingImage: UIImage? {
+        guard let data = coordinator.pendingFoodImageData else { return nil }
+        return UIImage(data: data)
+    }
+
+    private var isError: Bool {
+        if case .error = coordinator.phase { return true }
+        return false
+    }
+
+    var body: some View {
+        HStack(spacing: 0) {
+            // Photo (same left column as MealRow)
+            FoodCardPhoto(image: pendingImage)
+
+            // Analyzing state
+            VStack(alignment: .leading, spacing: 8) {
+                if isError, case .error(let msg) = coordinator.phase {
+                    Text(msg)
+                        .font(.gbCaption)
+                        .foregroundStyle(GlowbiteColors.redAlert)
+                        .lineLimit(2)
+                } else {
+                    Text("Analyzing Food")
+                        .font(.gbTitleM)
+                        .foregroundStyle(GlowbiteColors.darkBrown)
+                        .opacity(pulseOpacity)
+
+                    Text(coordinator.phase.label)
+                        .font(.gbCaption)
+                        .foregroundStyle(GlowbiteColors.lightTaupe)
+
+                    // Progress bar
+                    GeometryReader { geo in
+                        ZStack(alignment: .leading) {
+                            RoundedRectangle(cornerRadius: 4, style: .continuous)
+                                .fill(GlowbiteColors.softTan)
+                                .frame(height: 6)
+
+                            RoundedRectangle(cornerRadius: 4, style: .continuous)
+                                .fill(GlowbiteColors.coral)
+                                .frame(width: geo.size.width * coordinator.progress, height: 6)
+                                .animation(.spring(response: 0.4, dampingFraction: 0.75), value: coordinator.progress)
+                        }
+                    }
+                    .frame(height: 6)
+                }
+            }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 12)
+        }
+        .frame(height: 120)
+        .glassCard()
+        .onAppear {
+            withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+                pulseOpacity = 0.4
+            }
+        }
+    }
+}
+
+// MARK: - Shared photo column
+private struct FoodCardPhoto: View {
+    let image: UIImage?
+
+    var body: some View {
+        Group {
+            if let image {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+            } else {
+                ZStack {
+                    LinearGradient(
+                        colors: [GlowbiteColors.peachWash, GlowbiteColors.creamBG],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    Text("\u{1F37D}")
+                        .font(.gbDisplayM)
+                        .opacity(0.5)
+                }
+            }
+        }
+        .frame(width: 120)
+        .clipped()
+    }
+}
+
+// MARK: - Macro Pill
+private struct MacroPill: View {
+    let value: Double
+    let label: String
+    let color: Color
+    var onTap: (() -> Void)?
+
+    var body: some View {
+        Button {
+            HapticManager.impact(.medium)
+            onTap?()
+        } label: {
+            HStack(spacing: 2) {
+                Text(String(format: "%.0fg", value))
+                    .fontWeight(.heavy)
+                Text(label)
+            }
+            .font(.gbCaption)
+            .foregroundStyle(color)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 3)
+            .background(color.opacity(0.12))
+            .overlay(
+                Capsule()
+                    .stroke(color.opacity(0.3), lineWidth: 1)
+            )
+            .clipShape(Capsule())
+        }
+        .buttonStyle(.plain)
     }
 }

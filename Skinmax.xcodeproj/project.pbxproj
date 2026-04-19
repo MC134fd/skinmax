@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A1C2D3E4F5061728394A5B6D /* GlowbiteGlassModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D3E4F50617283A4B5C6D7E /* GlowbiteGlassModifier.swift */; };
 		00063F4278241B2FB0DA4CB4 /* GlowbiteSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BE4B9C36BB4720FEB0C41C /* GlowbiteSpacing.swift */; };
 		003134F6F87AABF04682A229 /* GlowbiteLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6493BE9DEC03EB61EDB7C1 /* GlowbiteLog.swift */; };
 		0103CA69767DC34AFA987CBF /* Nunito-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1C91D6F3C5059158E53AE742 /* Nunito-SemiBold.ttf */; };
@@ -97,6 +98,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B2D3E4F50617283A4B5C6D7E /* GlowbiteGlassModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowbiteGlassModifier.swift; sourceTree = "<group>"; };
 		071559B623555A0978937FBE /* InsightEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightEngine.swift; sourceTree = "<group>"; };
 		088143F0EF0A7F3A18D4B0F7 /* ProgressView_.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView_.swift; sourceTree = "<group>"; };
 		0D75D96519F05F9A4F0DD9B7 /* GlowbiteColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowbiteColors.swift; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 			children = (
 				0D75D96519F05F9A4F0DD9B7 /* GlowbiteColors.swift */,
 				2C3B12D0AAEAD6740F4364BC /* GlowbiteComponents.swift */,
+				B2D3E4F50617283A4B5C6D7E /* GlowbiteGlassModifier.swift */,
 				49BE4B9C36BB4720FEB0C41C /* GlowbiteSpacing.swift */,
 				AB4F077F1943778434665869 /* Typography.swift */,
 				CEBA3424A7B57BAC7A23F610 /* Branding */,
@@ -586,6 +589,7 @@
 				1AF7445E7658048BD1613054 /* GlowbiteApp.swift in Sources */,
 				73C5580605AEF8462F186C3F /* GlowbiteColors.swift in Sources */,
 				ED5C8D8719B4C849B60A687D /* GlowbiteComponents.swift in Sources */,
+				A1C2D3E4F5061728394A5B6D /* GlowbiteGlassModifier.swift in Sources */,
 				3A0FE1A8E6007DDD67115DA9 /* GlowbiteIcon.swift in Sources */,
 				AA95F9ADE5E95693AC738B2C /* GlowbiteLockup.swift in Sources */,
 				003134F6F87AABF04682A229 /* GlowbiteLog.swift in Sources */,

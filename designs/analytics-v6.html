@@ -1,0 +1,839 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Glowbite — Analytics v6 (Structured · Peachy · Professional)</title>
+<style>
+  :root{
+    /* Muted palette (from code) + softer peach-pink accents for warmth */
+    --coral:#C24A1E;
+    --coral-lt:#D4623A;
+    --coral-pink:#E07A5C;        /* softer pink-leaning coral for hero areas */
+    --blush:#FFE5D9;              /* soft peachy pink surface */
+    --blush-deep:#F5C9B8;
+    --peach-wash:#F2ECE2;
+    --cream:#FAF6F0;
+    --butter:#FFF8E8;
+    --green:#4A7C59;
+    --amber:#C49234;
+    --red:#B23A2C;
+    --blue:#4A7CB8;
+    --purple:#8B5CF6;
+    --ink:#1A1510;
+    --warm-brown:#4B3D36;
+    --taupe:#6B5C54;
+    --lt-taupe:#9A8E82;
+    --tan:#F2ECE2;
+    --hairline:rgba(26,21,16,0.06);
+  }
+  *{box-sizing:border-box;-webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0}
+  body{
+    background:#EDE5DA;
+    font-family:-apple-system,"Helvetica Neue",system-ui,sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    padding:48px 24px 120px;
+  }
+
+  .sitehead{max-width:1240px;margin:0 auto 36px}
+  .sitehead .eyebrow{font-size:11px;font-weight:900;letter-spacing:0.22em;color:var(--coral);text-transform:uppercase;margin-bottom:10px;text-align:center}
+  .sitehead h1{font-size:42px;margin:0 0 12px;letter-spacing:-0.035em;font-weight:900;text-align:center;color:var(--ink)}
+  .sitehead .lede{margin:0 auto;font-size:16px;color:var(--warm-brown);max-width:680px;line-height:1.6;text-align:center}
+  .refs{max-width:1240px;margin:24px auto 0;display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+  .refs span{background:#fff;padding:8px 14px;border-radius:100px;font-size:12px;font-weight:800;color:var(--warm-brown);box-shadow:0 3px 8px rgba(194,74,30,.07)}
+  .refs span b{color:var(--coral)}
+
+  .two-col{display:grid;grid-template-columns:minmax(400px,480px) 1fr;gap:48px;max-width:1280px;margin:48px auto 0;align-items:flex-start}
+  @media(max-width:920px){.two-col{grid-template-columns:1fr}}
+
+  /* Phone frame */
+  .phone{
+    width:440px;max-width:100%;
+    aspect-ratio:390/844;
+    background:var(--ink);
+    border-radius:58px;
+    padding:14px;
+    box-shadow:0 30px 70px rgba(91,40,20,.22),0 0 0 3px rgba(0,0,0,.15),inset 0 0 0 2px rgba(255,255,255,.08);
+    position:relative;margin:0 auto;position:sticky;top:48px;
+  }
+  .screen{width:100%;height:100%;border-radius:44px;overflow:hidden;position:relative;background:var(--cream)}
+  .phone::before{
+    content:"";position:absolute;top:22px;left:50%;transform:translateX(-50%);
+    width:108px;height:32px;background:var(--ink);border-radius:100px;z-index:3;
+  }
+  .statusbar{
+    position:absolute;top:0;left:0;right:0;height:48px;display:flex;justify-content:space-between;align-items:center;
+    padding:0 30px;font-size:14px;font-weight:700;color:var(--ink);z-index:2;
+  }
+  .content{position:absolute;top:48px;left:0;right:0;bottom:0;overflow-y:auto;overflow-x:hidden}
+  .content::-webkit-scrollbar{width:4px}
+  .content::-webkit-scrollbar-thumb{background:var(--tan);border-radius:4px}
+
+  /* =============== APP HEADER + TIME TOGGLE (sticky) =============== */
+  .app-header{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:10px 20px 14px;background:var(--cream);
+  }
+  .brand{display:flex;gap:8px;align-items:center;font-weight:900;font-size:18px;color:var(--ink);letter-spacing:-0.01em}
+  .brand .mk{
+    width:28px;height:28px;border-radius:9px;
+    background:linear-gradient(135deg,var(--coral-pink),var(--coral));
+    position:relative;overflow:hidden;box-shadow:0 3px 7px rgba(194,74,30,.22);
+  }
+  .brand .mk::before{content:"";position:absolute;width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.55);top:5px;left:5px}
+  .av{
+    width:34px;height:34px;border-radius:11px;
+    background:linear-gradient(135deg,var(--coral-pink),var(--coral));
+    display:grid;place-items:center;font-weight:900;color:#fff;font-size:14px;
+    box-shadow:0 3px 8px rgba(194,74,30,.22);
+  }
+
+  /* Time range toggle — subtle, top-right pattern */
+  .time-toggle{
+    display:flex;padding:0 20px 12px;gap:0;
+  }
+  .time-toggle .pill{
+    flex:1;padding:9px;font-size:11px;font-weight:900;color:var(--lt-taupe);text-align:center;
+    background:#fff;letter-spacing:0.05em;
+    border-top:1px solid var(--hairline);
+    border-bottom:1px solid var(--hairline);
+  }
+  .time-toggle .pill:first-child{border-left:1px solid var(--hairline);border-radius:100px 0 0 100px}
+  .time-toggle .pill:last-child{border-right:1px solid var(--hairline);border-radius:0 100px 100px 0}
+  .time-toggle .pill.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  /* =============== SECTION SYSTEM =============== */
+  /* Each of the 4 features lives in its own section with very clear separation */
+  section.feat{
+    padding:28px 20px 32px;
+    position:relative;
+  }
+  /* Alternating backgrounds to separate sections like Flo */
+  section.feat.white{background:#fff}
+  section.feat.cream{background:var(--cream)}
+  section.feat.blush{background:var(--blush)}
+  section.feat + section.feat{border-top:1px solid var(--hairline)}
+
+  /* Section header pattern (mirrors Flo/Oura) */
+  .sect-head{
+    display:flex;justify-content:space-between;align-items:flex-start;
+    margin-bottom:16px;
+  }
+  .sect-head .tag{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:10px;font-weight:900;letter-spacing:0.22em;text-transform:uppercase;
+    color:var(--coral);
+  }
+  .sect-head .tag .n{
+    width:18px;height:18px;border-radius:50%;background:var(--coral);color:#fff;
+    display:grid;place-items:center;font-size:10px;letter-spacing:0;
+  }
+  .sect-head .more{font-size:11px;color:var(--taupe);font-weight:800}
+
+  .sect-title{
+    font-size:24px;font-weight:900;color:var(--ink);letter-spacing:-0.03em;margin:0 0 4px;line-height:1.15;
+  }
+  .sect-sub{
+    font-size:13px;color:var(--taupe);margin:0 0 18px;line-height:1.5;
+  }
+
+  /* =============== 1. GLOW-UP (PHOTOS) =============== */
+
+  .photo-pair{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
+  .photo{
+    aspect-ratio:1/1.3;border-radius:10px;overflow:hidden;position:relative;
+  }
+  .photo.b{
+    background:
+      radial-gradient(ellipse at 50% 38%, rgba(180,58,44,.18) 0%, transparent 35%),
+      radial-gradient(ellipse at 50% 55%, rgba(120,80,65,.75) 0%, rgba(100,70,55,.95) 80%),
+      linear-gradient(135deg,#9B7860,#7A5A46);
+  }
+  .photo.a{
+    background:
+      radial-gradient(ellipse at 50% 38%, rgba(255,255,255,.18) 0%, transparent 40%),
+      radial-gradient(ellipse at 50% 55%, rgba(215,178,148,.95) 0%, rgba(195,158,128,.98) 80%),
+      linear-gradient(135deg,#DDBE9C,#C9A484);
+  }
+  .photo .cap{
+    position:absolute;top:10px;left:10px;right:10px;
+    display:flex;justify-content:space-between;
+    color:rgba(255,255,255,.95);font-size:9px;font-weight:900;letter-spacing:0.12em;
+    text-shadow:0 1px 3px rgba(0,0,0,.4);
+  }
+  .photo .score-tag{
+    position:absolute;bottom:10px;left:10px;
+    background:rgba(255,255,255,.92);color:var(--ink);
+    font-size:10px;font-weight:900;padding:4px 8px;border-radius:100px;
+    display:flex;align-items:center;gap:4px;
+  }
+  .photo.a .score-tag{color:var(--coral)}
+
+  /* 3 delta stats — clean grid */
+  .delta-grid{
+    display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;
+    padding:14px 0;
+    border-top:1px solid var(--hairline);
+    border-bottom:1px solid var(--hairline);
+    margin-bottom:14px;
+  }
+  .d-item{text-align:center}
+  .d-item .k{font-size:9px;font-weight:900;letter-spacing:0.15em;color:var(--lt-taupe);text-transform:uppercase;margin-bottom:5px}
+  .d-item .v{font-size:22px;font-weight:900;color:var(--ink);letter-spacing:-0.035em;line-height:0.95}
+  .d-item .v .arrow{display:inline-block;font-size:12px;margin-right:2px;font-weight:900}
+  .d-item .v .arrow.up{color:var(--green)}
+  .d-item .v .arrow.dn{color:var(--coral)}
+
+  /* Share CTA — reserved look */
+  .share-cta{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 16px;
+    background:var(--ink);color:#fff;
+    border-radius:12px;font-size:13px;font-weight:900;
+  }
+  .share-cta .r{color:#FFD3B8;font-size:16px}
+
+  /* =============== 2. TREND + STREAK (Cream bg) =============== */
+
+  .trend-hero{
+    display:flex;align-items:flex-end;justify-content:space-between;
+    padding-bottom:14px;border-bottom:1px solid var(--hairline);margin-bottom:14px;
+  }
+  .trend-hero .big{
+    font-size:68px;font-weight:900;color:var(--ink);letter-spacing:-0.055em;line-height:0.85;
+  }
+  .trend-hero .meta{text-align:right}
+  .trend-hero .meta .delta{
+    display:inline-block;background:rgba(74,124,89,.12);color:var(--green);
+    padding:5px 10px;border-radius:100px;font-size:12px;font-weight:900;
+    margin-bottom:4px;
+  }
+  .trend-hero .meta .cap{font-size:10px;font-weight:700;color:var(--lt-taupe);letter-spacing:0.05em}
+
+  /* Sparkline chart */
+  .spark-wrap{position:relative;margin:8px -4px 4px;padding:0 4px}
+  .spark{width:100%;height:120px;display:block}
+  .spark-axis{
+    display:flex;justify-content:space-between;padding:0 2px;
+    font-size:9px;color:var(--lt-taupe);font-weight:800;letter-spacing:0.05em;text-transform:uppercase;
+    margin-top:4px;
+  }
+
+  /* 2-column metric grid (main pattern from research) */
+  .metric-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;
+    margin-top:18px;
+  }
+  .m-card{
+    background:#fff;border-radius:14px;padding:14px;
+    box-shadow:0 3px 8px rgba(194,74,30,.06);
+    border:1px solid var(--hairline);
+  }
+  .m-card .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .m-card .nm{font-size:11px;font-weight:800;color:var(--taupe);letter-spacing:0.05em;display:flex;align-items:center;gap:5px}
+  .m-card .nm .dot{width:7px;height:7px;border-radius:50%}
+  .m-card.blue .nm .dot{background:var(--blue)}
+  .m-card.green .nm .dot{background:var(--green)}
+  .m-card.coral .nm .dot{background:var(--coral)}
+  .m-card.amber .nm .dot{background:var(--amber)}
+  .m-card .dl{font-size:10px;font-weight:900;letter-spacing:0.04em}
+  .m-card .dl.up{color:var(--green)}
+  .m-card .dl.dn{color:var(--amber)}
+  .m-card .v{font-size:24px;font-weight:900;color:var(--ink);letter-spacing:-0.035em;line-height:1}
+  .m-card .bar{height:3px;border-radius:100px;background:var(--tan);margin-top:8px;position:relative;overflow:hidden}
+  .m-card .bar .fl{position:absolute;top:0;left:0;bottom:0;border-radius:100px}
+  .m-card.blue .bar .fl{background:var(--blue)}
+  .m-card.green .bar .fl{background:var(--green)}
+  .m-card.coral .bar .fl{background:var(--coral)}
+  .m-card.amber .bar .fl{background:var(--amber)}
+
+  /* Streak row — minimal */
+  .streak-row{
+    display:flex;align-items:center;gap:12px;
+    padding:14px 0 0;margin-top:16px;
+    border-top:1px solid var(--hairline);
+  }
+  .streak-row .em{font-size:22px}
+  .streak-row .info{flex:1}
+  .streak-row .info .big{font-size:14px;font-weight:900;color:var(--ink);letter-spacing:-0.01em}
+  .streak-row .info .sm{font-size:11px;color:var(--taupe);margin-top:1px}
+
+  /* Insight callout — Oura-style */
+  .insight{
+    margin-top:16px;padding:14px;border-radius:12px;
+    background:var(--blush);
+    display:flex;gap:12px;align-items:flex-start;
+    border:1px solid var(--blush-deep);
+  }
+  .insight .icon{
+    flex:0 0 auto;width:30px;height:30px;border-radius:9px;background:#fff;
+    display:grid;place-items:center;font-size:16px;
+  }
+  .insight h5{margin:0;font-size:12px;font-weight:900;color:var(--ink);letter-spacing:-0.005em}
+  .insight p{margin:3px 0 0;font-size:11px;color:var(--warm-brown);line-height:1.5}
+
+  /* =============== 3. WHAT'S WORKING (Blush bg — USP gets its own color) =============== */
+
+  /* MVP tile */
+  .mvp-tile{
+    background:#fff;border-radius:18px;padding:16px;margin-bottom:14px;
+    box-shadow:0 6px 14px rgba(194,74,30,.08);
+    border:1px solid var(--hairline);
+    position:relative;
+  }
+  .mvp-tile .stamp{
+    position:absolute;top:14px;right:14px;
+    background:var(--green);color:#fff;font-size:8px;font-weight:900;letter-spacing:0.15em;
+    padding:3px 7px;border-radius:100px;text-transform:uppercase;
+  }
+  .mvp-tile .row{display:flex;align-items:center;gap:14px}
+  .mvp-tile .em{
+    flex:0 0 auto;font-size:40px;width:64px;height:64px;border-radius:14px;
+    background:linear-gradient(135deg,#E8F0E8,#C5DFC5);
+    display:grid;place-items:center;
+  }
+  .mvp-tile .txt h4{margin:0;font-size:18px;font-weight:900;color:var(--ink);letter-spacing:-0.02em}
+  .mvp-tile .txt p{margin:3px 0 0;font-size:11px;color:var(--taupe);line-height:1.45}
+  .mvp-tile .stat-row{
+    display:flex;gap:16px;margin-top:12px;padding-top:12px;
+    border-top:1px solid var(--hairline);
+  }
+  .mvp-tile .stat-row .sx{flex:1}
+  .mvp-tile .stat-row .sx .k{font-size:9px;font-weight:900;letter-spacing:0.12em;color:var(--lt-taupe);text-transform:uppercase}
+  .mvp-tile .stat-row .sx .v{font-size:15px;font-weight:900;color:var(--ink);margin-top:3px;letter-spacing:-0.02em}
+  .mvp-tile .stat-row .sx .v.green{color:var(--green)}
+
+  /* Ranked list */
+  .rank-list{
+    background:#fff;border-radius:18px;overflow:hidden;
+    box-shadow:0 4px 10px rgba(194,74,30,.06);
+    border:1px solid var(--hairline);
+  }
+  .rank-list h5{
+    margin:0;padding:12px 16px 10px;
+    font-size:10px;font-weight:900;letter-spacing:0.15em;text-transform:uppercase;
+    color:var(--taupe);
+    border-bottom:1px solid var(--hairline);
+  }
+  .rank{
+    display:flex;align-items:center;gap:12px;padding:11px 16px;
+    border-bottom:1px solid var(--hairline);
+  }
+  .rank:last-child{border-bottom:none}
+  .rank .rnk{
+    width:22px;height:22px;border-radius:50%;background:var(--peach-wash);color:var(--coral);
+    display:grid;place-items:center;font-size:11px;font-weight:900;flex:0 0 auto;
+  }
+  .rank .em{font-size:18px;width:24px;text-align:center;flex:0 0 auto}
+  .rank .info{flex:1;min-width:0}
+  .rank .info .n{font-size:13px;font-weight:800;color:var(--ink);letter-spacing:-0.01em}
+  .rank .info .w{font-size:10px;color:var(--lt-taupe);font-weight:700;margin-top:1px;font-style:italic}
+  .rank .val{font-size:13px;font-weight:900;color:var(--green);flex:0 0 auto;letter-spacing:-0.01em}
+
+  .toggle-row{
+    display:flex;justify-content:center;margin-top:14px;
+    font-size:11px;color:var(--taupe);
+  }
+  .toggle-row a{color:var(--coral);font-weight:900;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:3px;margin-left:5px}
+
+  /* =============== 4. CYCLE (White bg) =============== */
+
+  .cycle-hero{
+    display:flex;align-items:center;gap:16px;
+    padding:14px 0;margin-bottom:14px;
+    border-bottom:1px solid var(--hairline);
+  }
+  .cycle-hero svg{flex:0 0 auto;width:84px;height:84px}
+  .cycle-hero .info{flex:1}
+  .cycle-hero .info .phase{
+    display:inline-block;background:rgba(139,92,246,.12);color:var(--purple);
+    font-size:9px;font-weight:900;letter-spacing:0.18em;padding:4px 9px;border-radius:100px;
+    text-transform:uppercase;
+  }
+  .cycle-hero .info h4{
+    margin:8px 0 0;font-size:16px;font-weight:900;color:var(--ink);letter-spacing:-0.02em;line-height:1.2;
+  }
+  .cycle-hero .info p{margin:3px 0 0;font-size:11px;color:var(--taupe);line-height:1.4}
+
+  /* Phase timeline (clean) */
+  .phases{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:4px;
+  }
+  .ph{
+    padding:11px 6px;text-align:center;border-radius:10px;
+    background:var(--cream);border:1px solid var(--hairline);
+  }
+  .ph.on{background:var(--purple);color:#fff;border-color:var(--purple)}
+  .ph .d{font-size:8px;font-weight:900;color:var(--lt-taupe);letter-spacing:0.1em;text-transform:uppercase}
+  .ph.on .d{color:rgba(255,255,255,.75)}
+  .ph .nm{font-size:10px;font-weight:800;color:var(--ink);margin-top:3px}
+  .ph.on .nm{color:#fff}
+
+  /* Cycle insight */
+  .cycle-insight{
+    margin-top:16px;padding:14px;border-radius:12px;
+    background:rgba(139,92,246,.07);
+    display:flex;gap:12px;align-items:flex-start;
+    border:1px solid rgba(139,92,246,.15);
+  }
+  .cycle-insight .icon{
+    flex:0 0 auto;width:30px;height:30px;border-radius:9px;background:#fff;
+    display:grid;place-items:center;font-size:14px;
+  }
+  .cycle-insight h5{margin:0;font-size:12px;font-weight:900;color:var(--ink)}
+  .cycle-insight p{margin:3px 0 0;font-size:11px;color:var(--warm-brown);line-height:1.5}
+  .cycle-insight p b{color:var(--purple);font-weight:900}
+
+  /* =============== TAB BAR =============== */
+  .tabbar{
+    position:absolute;bottom:14px;left:14px;right:14px;height:64px;
+    background:rgba(255,255,255,.82);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
+    border-radius:22px;display:flex;align-items:center;justify-content:space-around;
+    box-shadow:0 6px 18px rgba(194,74,30,.1);border:1px solid rgba(255,255,255,.7);z-index:5;
+  }
+  .tab{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;font-weight:800;color:var(--taupe)}
+  .tab.active{color:var(--coral)}
+  .tab.active .ico{background:var(--peach-wash);color:var(--coral);padding:5px 12px;border-radius:100px}
+  .tab .ico{font-size:17px;padding:5px 12px}
+  .scan-fab{
+    position:absolute;bottom:30px;right:34px;
+    width:56px;height:56px;border-radius:18px;
+    background:linear-gradient(160deg,var(--coral-pink),var(--coral));
+    display:grid;place-items:center;font-size:22px;color:#fff;
+    box-shadow:0 12px 24px rgba(194,74,30,.38);z-index:6;
+  }
+
+  /* =============== SIDEBAR NOTES =============== */
+  .sidebar{display:flex;flex-direction:column;gap:20px}
+  .sb{
+    background:#fff;padding:28px;border-radius:10px;
+    box-shadow:0 6px 18px rgba(91,40,20,.08);
+    border-top:4px solid var(--coral);
+  }
+  .sb.b{border-top-color:var(--ink)}
+  .sb.c{border-top-color:var(--green)}
+  .sb.d{border-top-color:var(--purple)}
+  .sb .key{
+    font-size:10px;font-weight:900;letter-spacing:0.22em;text-transform:uppercase;
+    color:var(--lt-taupe);margin-bottom:6px;
+  }
+  .sb h3{margin:0 0 14px;font-size:22px;font-weight:900;letter-spacing:-0.02em;color:var(--ink)}
+  .sb p{margin:8px 0;font-size:14px;color:var(--warm-brown);line-height:1.65}
+  .sb p b{color:var(--ink);font-weight:800}
+  .principles{
+    display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;
+  }
+  .principles .pr{
+    background:var(--cream);border-radius:10px;padding:12px;
+  }
+  .principles .pr .n{font-size:10px;font-weight:900;letter-spacing:0.1em;text-transform:uppercase;color:var(--coral);margin-bottom:4px}
+  .principles .pr .t{font-size:12px;font-weight:800;color:var(--ink);line-height:1.3}
+  .principles .pr .s{font-size:11px;color:var(--warm-brown);margin-top:4px;line-height:1.4}
+
+  .bench{
+    background:var(--ink);color:#fff;padding:28px;border-radius:10px;
+  }
+  .bench h3{margin:0 0 14px;font-size:20px;font-weight:900;color:#fff;letter-spacing:-0.02em}
+  .bench .key{color:#FFD3B8;font-size:10px;font-weight:900;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:6px}
+  .bench .bench-row{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:12px;color:rgba(255,255,255,.78);line-height:1.55}
+  .bench .bench-row:last-child{border-bottom:none}
+  .bench .bench-row .app{flex:0 0 80px;font-weight:900;color:#FFD3B8}
+  .bench .bench-row .note{flex:1}
+
+  .changes{border-top:1px solid var(--hairline);padding-top:16px;margin-top:16px}
+  .changes h5{margin:0 0 10px;font-size:11px;font-weight:900;letter-spacing:0.15em;color:var(--coral);text-transform:uppercase}
+  .changes ul{margin:0;padding-left:16px;font-size:13px;color:var(--warm-brown);line-height:1.65}
+  .changes ul li{margin-bottom:6px}
+  .changes ul li b{color:var(--ink);font-weight:800}
+</style>
+</head>
+<body>
+
+<div class="sitehead">
+  <div class="eyebrow">Version 6 · Structured</div>
+  <h1>Clear sections, peachy-professional, inspired by Flo + Oura</h1>
+  <p class="lede">Rebuilt around the structural patterns that every successful analytics page shares. Four distinct sections. Alternating backgrounds so your eye can find each one in one glance. Hero-stat-first hierarchy. 2-column metric grids. Insight copy under every number. Peachy pink accents on white — the Flo-style "cute but pitchable to investors" balance.</p>
+  <div class="refs">
+    <span>Structural DNA: <b>Flo</b></span>
+    <span>Hero-stat pattern: <b>Oura</b></span>
+    <span>Toggle placement: <b>MyFitnessPal</b></span>
+    <span>2-col grid: <b>Apple Health</b></span>
+  </div>
+</div>
+
+<div class="two-col">
+
+  <!-- =========== PHONE =========== -->
+  <div>
+    <div class="phone">
+      <div class="screen">
+        <div class="statusbar">
+          <span>9:41</span>
+          <span>📶 100%</span>
+        </div>
+        <div class="content">
+
+          <!-- Sticky top: brand + avatar -->
+          <div class="app-header">
+            <div class="brand"><div class="mk"></div>Progress</div>
+            <div class="av">M</div>
+          </div>
+
+          <!-- Time toggle directly under header (Flo/MFP pattern) -->
+          <div class="time-toggle">
+            <div class="pill">Today</div>
+            <div class="pill on">Week</div>
+            <div class="pill">Month</div>
+            <div class="pill">Year</div>
+          </div>
+
+          <!-- =============== 1. GLOW-UP (Blush bg) =============== -->
+          <section class="feat blush">
+            <div class="sect-head">
+              <div class="tag"><span class="n">1</span>The glow-up</div>
+              <div class="more">Change range →</div>
+            </div>
+            <h2 class="sect-title">A month of progress</h2>
+            <p class="sect-sub">Your skin between March 19 and today.</p>
+
+            <div class="photo-pair">
+              <div class="photo b">
+                <div class="cap"><span>MAR 19</span></div>
+                <div class="score-tag">glow 64</div>
+              </div>
+              <div class="photo a">
+                <div class="cap"><span>APR 18</span></div>
+                <div class="score-tag">glow 82</div>
+              </div>
+            </div>
+
+            <div class="delta-grid">
+              <div class="d-item">
+                <div class="k">Glow</div>
+                <div class="v"><span class="arrow up">↑</span>18</div>
+              </div>
+              <div class="d-item">
+                <div class="k">Clarity</div>
+                <div class="v"><span class="arrow up">↑</span>18</div>
+              </div>
+              <div class="d-item">
+                <div class="k">Redness</div>
+                <div class="v"><span class="arrow dn">↓</span>15</div>
+              </div>
+            </div>
+
+            <div class="share-cta">
+              <span>Share your glow-up</span>
+              <span class="r">→</span>
+            </div>
+          </section>
+
+          <!-- =============== 2. TREND + STREAK (Cream bg) =============== -->
+          <section class="feat cream">
+            <div class="sect-head">
+              <div class="tag"><span class="n">2</span>The trend</div>
+              <div class="more">Metrics →</div>
+            </div>
+
+            <div class="trend-hero">
+              <div class="big">78</div>
+              <div class="meta">
+                <div class="delta">▲ +8 pts</div>
+                <div class="cap">30-DAY AVG · WAS 70</div>
+              </div>
+            </div>
+
+            <div class="spark-wrap">
+              <svg class="spark" viewBox="0 0 320 120" preserveAspectRatio="none">
+                <line x1="0" y1="30" x2="320" y2="30" stroke="#E8DFD0" stroke-dasharray="1,4"/>
+                <line x1="0" y1="60" x2="320" y2="60" stroke="#E8DFD0" stroke-dasharray="1,4"/>
+                <line x1="0" y1="90" x2="320" y2="90" stroke="#E8DFD0" stroke-dasharray="1,4"/>
+                <path d="M0,85 L15,72 L32,80 L48,66 L64,74 L80,56 L96,66 L112,50 L128,58 L144,46 L160,54 L176,38 L192,46 L208,32 L224,40 L240,26 L256,32 L272,18 L288,24 L304,12 L320,18"
+                      fill="none" stroke="#1A1510" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <line x1="0" y1="44" x2="320" y2="44" stroke="#9A8E82" stroke-dasharray="2,4" stroke-width="1"/>
+                <circle cx="320" cy="18" r="5" fill="#C24A1E" stroke="#fff" stroke-width="2.5"/>
+              </svg>
+              <div class="spark-axis">
+                <span>Mar 19</span>
+                <span>Apr 2</span>
+                <span>Apr 18</span>
+              </div>
+            </div>
+
+            <!-- 2-column metric grid (like Oura) -->
+            <div class="metric-grid">
+              <div class="m-card blue">
+                <div class="top">
+                  <div class="nm"><span class="dot"></span>Hydration</div>
+                  <div class="dl up">+8</div>
+                </div>
+                <div class="v">85</div>
+                <div class="bar"><div class="fl" style="width:85%"></div></div>
+              </div>
+              <div class="m-card green">
+                <div class="top">
+                  <div class="nm"><span class="dot"></span>Texture</div>
+                  <div class="dl up">+12</div>
+                </div>
+                <div class="v">82</div>
+                <div class="bar"><div class="fl" style="width:82%"></div></div>
+              </div>
+              <div class="m-card coral">
+                <div class="top">
+                  <div class="nm"><span class="dot"></span>Clarity</div>
+                  <div class="dl up">+4</div>
+                </div>
+                <div class="v">76</div>
+                <div class="bar"><div class="fl" style="width:76%"></div></div>
+              </div>
+              <div class="m-card amber">
+                <div class="top">
+                  <div class="nm"><span class="dot"></span>Redness</div>
+                  <div class="dl up">-15</div>
+                </div>
+                <div class="v">32</div>
+                <div class="bar"><div class="fl" style="width:32%"></div></div>
+              </div>
+            </div>
+
+            <!-- Streak anchored here, subtle -->
+            <div class="streak-row">
+              <span class="em">🔥</span>
+              <div class="info">
+                <div class="big">12-day streak</div>
+                <div class="sm">Three more days to your next badge.</div>
+              </div>
+            </div>
+
+            <!-- Insight -->
+            <div class="insight">
+              <div class="icon">💡</div>
+              <div>
+                <h5>Your best day was Thursday</h5>
+                <p>Glow hit 89 after salmon for lunch and 8 hours of sleep. Both are top performers for you this month.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- =============== 3. WHAT'S WORKING (White bg) =============== -->
+          <section class="feat white">
+            <div class="sect-head">
+              <div class="tag"><span class="n">3</span>What's working</div>
+              <div class="more">All foods →</div>
+            </div>
+            <h2 class="sect-title">Your skin loves avocado.</h2>
+            <p class="sect-sub">Foods ranked by glow impact 24 hours later.</p>
+
+            <div class="mvp-tile">
+              <div class="stamp">MVP</div>
+              <div class="row">
+                <div class="em">🥑</div>
+                <div class="txt">
+                  <h4>Avocado</h4>
+                  <p>Healthy fats help your skin barrier hold moisture.</p>
+                </div>
+              </div>
+              <div class="stat-row">
+                <div class="sx"><div class="k">Avg glow lift</div><div class="v green">+8.8</div></div>
+                <div class="sx"><div class="k">Times eaten</div><div class="v">14</div></div>
+                <div class="sx"><div class="k">Streak</div><div class="v">6 days</div></div>
+              </div>
+            </div>
+
+            <div class="rank-list">
+              <h5>Next-best foods for you</h5>
+              <div class="rank">
+                <div class="rnk">2</div>
+                <div class="em">🐟</div>
+                <div class="info">
+                  <div class="n">Salmon</div>
+                  <div class="w">Omega-3s calm inflammation</div>
+                </div>
+                <div class="val">+7.6</div>
+              </div>
+              <div class="rank">
+                <div class="rnk">3</div>
+                <div class="em">🥬</div>
+                <div class="info">
+                  <div class="n">Spinach</div>
+                  <div class="w">Iron, vitamin C</div>
+                </div>
+                <div class="val">+6.4</div>
+              </div>
+              <div class="rank">
+                <div class="rnk">4</div>
+                <div class="em">🫐</div>
+                <div class="info">
+                  <div class="n">Berries</div>
+                  <div class="w">Antioxidants</div>
+                </div>
+                <div class="val">+5.8</div>
+              </div>
+            </div>
+
+            <div class="toggle-row">
+              Want to see what's hurting? <a>Flip to offenders →</a>
+            </div>
+          </section>
+
+          <!-- =============== 4. CYCLE SYNC (Cream bg) =============== -->
+          <section class="feat cream">
+            <div class="sect-head">
+              <div class="tag" style="color:var(--purple)"><span class="n" style="background:var(--purple)">4</span>Cycle &amp; skin</div>
+              <div class="more">Connect Flo →</div>
+            </div>
+            <h2 class="sect-title">You're in luteal.</h2>
+            <p class="sect-sub">Day 18 of 28. Your skin usually pushes back now.</p>
+
+            <div class="cycle-hero">
+              <svg viewBox="0 0 84 84">
+                <defs>
+                  <linearGradient id="pg" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#CE93D8"/><stop offset="100%" stop-color="#8B5CF6"/>
+                  </linearGradient>
+                </defs>
+                <circle cx="42" cy="42" r="32" fill="none" stroke="rgba(139,92,246,.12)" stroke-width="7"/>
+                <circle cx="42" cy="42" r="32" fill="none" stroke="url(#pg)" stroke-width="7" stroke-linecap="round"
+                        stroke-dasharray="129 201" transform="rotate(-90 42 42)"/>
+                <text x="42" y="43" text-anchor="middle" font-size="19" font-weight="900" fill="#8B5CF6">18</text>
+                <text x="42" y="56" text-anchor="middle" font-size="8" font-weight="800" fill="#8B5CF6" opacity="0.6">of 28</text>
+              </svg>
+              <div class="info">
+                <span class="phase">Luteal phase</span>
+                <h4>Breakout window</h4>
+                <p>Sebum up, skin more sensitive. Next 4 days may run oilier.</p>
+              </div>
+            </div>
+
+            <div class="phases">
+              <div class="ph"><div class="d">Day 1-5</div><div class="nm">Period</div></div>
+              <div class="ph"><div class="d">Day 6-14</div><div class="nm">Follicular</div></div>
+              <div class="ph on"><div class="d">Day 15-22</div><div class="nm">Luteal</div></div>
+              <div class="ph"><div class="d">Day 23-28</div><div class="nm">Pre-flow</div></div>
+            </div>
+
+            <div class="cycle-insight">
+              <div class="icon">💡</div>
+              <div>
+                <h5>Tonight's move</h5>
+                <p><b>Skip retinol</b> — your skin's more reactive this phase. Layer hyaluronic acid + a barrier cream instead.</p>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+        <div class="tabbar">
+          <div class="tab"><div class="ico">🏠</div>Home</div>
+          <div class="tab active"><div class="ico">📊</div>Progress</div>
+          <div style="width:50px"></div>
+          <div class="tab"><div class="ico">👤</div>Account</div>
+        </div>
+        <div class="scan-fab">📷</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========== SIDEBAR =========== -->
+  <div class="sidebar">
+
+    <div class="sb">
+      <div class="key">The fix</div>
+      <h3>Alternating section backgrounds do the job</h3>
+      <p>v5 used thin 1-pixel rules to separate the 4 features. Too subtle — users had to work to find where one ended and the next began. v6 uses <b>four distinct background colors</b> (blush → cream → white → cream) so sections are obvious the moment you land. This is Flo's exact trick.</p>
+      <p>Each section also gets a <b>numbered eyebrow label</b> in coral ("1 · THE GLOW-UP") and a <b>big bold headline</b>. Three signals of "new section" at once: color change, numbered tag, headline.</p>
+      <div class="changes">
+        <h5>Structural changes from v5</h5>
+        <ul>
+          <li><b>Alternating section backgrounds</b> — blush / cream / white / cream</li>
+          <li><b>Numbered section labels</b> — "1 THE GLOW-UP" in coral caps</li>
+          <li><b>Headline + subhead pattern</b> in every section, copied from Flo</li>
+          <li><b>Right-side "more →" link</b> on every section head (Apple Health pattern)</li>
+          <li><b>Time range toggle</b> (Today/Week/Month/Year) at top — top-right pattern from MyFitnessPal</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sb b">
+      <div class="key">Hero stat anchoring</div>
+      <h3>Every section has one dominant visual</h3>
+      <p>Across all 10+ apps I studied, the winning pattern is: <b>one hero visual per section</b>, everything else supports it. v6 follows this exactly.</p>
+      <div class="principles">
+        <div class="pr">
+          <div class="n">Section 1</div>
+          <div class="t">Before/after photo pair</div>
+          <div class="s">Dominant visual. Delta stats are supporting.</div>
+        </div>
+        <div class="pr">
+          <div class="n">Section 2</div>
+          <div class="t">68pt "78" hero</div>
+          <div class="s">Biggest number on the page. Chart and grid support it.</div>
+        </div>
+        <div class="pr">
+          <div class="n">Section 3</div>
+          <div class="t">MVP tile (Avocado)</div>
+          <div class="s">One food hero-sized. Next 3 are compact rows.</div>
+        </div>
+        <div class="pr">
+          <div class="n">Section 4</div>
+          <div class="t">Cycle ring + phase strip</div>
+          <div class="s">Lavender ring plus 4-phase timeline = full-arc story.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb c">
+      <div class="key">Peachy + pitchable</div>
+      <h3>Flo is the north star — here's why</h3>
+      <p>Flo (70M MAU, female-first, data-dense but never clinical) nails the exact tone you described: <b>cute but professional, warm but legit, safe for a Series A pitch deck</b>.</p>
+      <p>Their three tricks I borrowed:</p>
+      <div class="changes" style="border-top:none;padding-top:0;margin-top:0">
+        <ul>
+          <li><b>Rose/coral on white/cream</b> — never bright hot pink. Always soft and warm. v6 palette stays in your existing terracotta with a softer pink-leaning accent (<b>--coral-pink</b>) for hero elements.</li>
+          <li><b>Clean sans-serif typography</b> — no cursive, no serifs, no cute fonts. Data-grade fonts dressed up by warm color.</li>
+          <li><b>Emojis earn their spot</b> — only when representing a real thing (🥑 for avocado, 💡 for insight, 🔥 for streak). Never decorative sparkles.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sb d">
+      <div class="key">Scanability check</div>
+      <h3>3-second rule applied</h3>
+      <p>The research benchmark: users should understand what they're looking at in 3 seconds without reading. v6 passes because the hierarchy cascades cleanly:</p>
+      <div class="changes" style="border-top:none;padding-top:0;margin-top:0">
+        <ul>
+          <li><b>1.0s</b> — see the background color change → "new section"</li>
+          <li><b>1.5s</b> — see the numbered coral eyebrow → "this is section 2"</li>
+          <li><b>2.0s</b> — see the headline → "it's about my trend"</li>
+          <li><b>2.5s</b> — see the big "78" → "I'm at 78, up from 70"</li>
+          <li><b>3.0s</b> — scan the 2-col metric grid → "four things improved this month"</li>
+        </ul>
+      </div>
+      <p>v5 couldn't do this because nothing announced a new section. v6 announces it three ways.</p>
+    </div>
+
+    <div class="bench">
+      <div class="key">Pattern origins</div>
+      <h3>Which pattern came from where</h3>
+      <div class="bench-row"><span class="app">Flo</span><span class="note">Alternating section backgrounds (blush/cream/white) + numbered eyebrow labels + subhead under headline.</span></div>
+      <div class="bench-row"><span class="app">Oura</span><span class="note">Minimalist metric cards, 2-column grid, colored dot + name + delta pattern (blue/green/coral/amber).</span></div>
+      <div class="bench-row"><span class="app">MyFitnessPal</span><span class="note">Time range toggle at top — Today/Week/Month/Year as a 4-pill segmented control.</span></div>
+      <div class="bench-row"><span class="app">Apple Health</span><span class="note">"More →" link at section-header right edge for progressive disclosure without burying content.</span></div>
+      <div class="bench-row"><span class="app">Strava</span><span class="note">Hero visual first (photo/chart), stats grid second, insight callout third. Every section in v6 follows this 3-step cascade.</span></div>
+      <div class="bench-row"><span class="app">Calm</span><span class="note">Insight callout boxes with soft-tinted backgrounds (the blush and lavender info cards at the bottom of sections 2 and 4).</span></div>
+    </div>
+
+    <div class="sb">
+      <div class="key">Honest tradeoff</div>
+      <h3>What v6 gives up</h3>
+      <p>v5's editorial, magazine feel is quieter and more "design-lit" than v6. <b>v6 is more conventional</b> — it looks like a real shipping app because it follows the patterns real shipping apps use. That's deliberate.</p>
+      <p>If you pitch this to investors, v6 is safer. If you win design Twitter, v5 is stronger. For a first product launch where you need users to understand the screen instantly and for the data to feel trustworthy, <b>v6 is the right choice</b>.</p>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

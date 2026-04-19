@@ -13,12 +13,16 @@ struct HomeView: View {
     var onViewFoodResult: (FoodScan) -> Void = { _ in }
     var onScanMeal: () -> Void = {}
 
-    private var shouldShowAnalysisCard: Bool {
-        guard coordinator.isActive else { return false }
-        let analysisDate: Date = coordinator.faceScanResult?.createdAt
-            ?? coordinator.foodScanResult?.createdAt
-            ?? Date()
+    private var shouldShowFaceAnalysisCard: Bool {
+        guard coordinator.isActive, coordinator.kind == .face else { return false }
+        let analysisDate: Date = coordinator.faceScanResult?.createdAt ?? Date()
         return Calendar.current.isDate(analysisDate, inSameDayAs: viewModel.selectedDate)
+    }
+
+    private var shouldShowFoodAnalyzing: Bool {
+        guard coordinator.isActive, coordinator.kind == .food else { return false }
+        if case .complete = coordinator.phase { return false }
+        return Calendar.current.isDate(Date(), inSameDayAs: viewModel.selectedDate)
     }
 
     var body: some View {
@@ -284,7 +288,7 @@ struct HomeView: View {
                 .tracking(2.0)
                 .foregroundStyle(GlowbiteColors.lightTaupe)
 
-            if shouldShowAnalysisCard {
+            if shouldShowFaceAnalysisCard {
                 AnalysisHomeCard(
                     coordinator: coordinator,
                     onViewFaceResult: onViewFaceResult,
@@ -299,22 +303,34 @@ struct HomeView: View {
                 ))
             }
 
-            if meals.isEmpty {
+            if shouldShowFoodAnalyzing {
+                MealRowAnalyzing(coordinator: coordinator)
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .top).combined(with: .opacity),
+                        removal: .opacity
+                    ))
+            }
+
+            if meals.isEmpty && !shouldShowFoodAnalyzing {
                 mealsEmptyState
             } else {
-                VStack(spacing: 5) {
+                VStack(spacing: 8) {
                     ForEach(meals) { meal in
-                        Button {
-                            selectedFoodResult = meal
-                        } label: {
-                            MealRow(foodScan: meal)
+                        SwipeToDeleteRow {
+                            MealRow(foodScan: meal, onTapCard: {
+                                selectedFoodResult = meal
+                            })
+                        } onDelete: {
+                            HapticManager.notification(.warning)
+                            withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
+                                dataStore.deleteFoodScan(id: meal.id)
+                            }
                         }
-                        .buttonStyle(.plain)
                     }
                 }
             }
         }
-        .animation(.spring(response: 0.4, dampingFraction: 0.75), value: shouldShowAnalysisCard)
+        .animation(.spring(response: 0.4, dampingFraction: 0.75), value: shouldShowFoodAnalyzing)
     }
 
     private var mealsEmptyState: some View {

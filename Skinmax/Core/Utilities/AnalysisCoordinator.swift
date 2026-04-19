@@ -38,6 +38,10 @@ final class AnalysisCoordinator {
     var faceScanResult: SkinScan?
     var foodScanResult: FoodScan?
 
+    /// The captured image data, available immediately when a food scan starts
+    /// so the UI can show the photo before analysis completes.
+    var pendingFoodImageData: Data?
+
     private var progressTimer: Timer?
     private var targetProgress: Double = 0
     private var analysisTask: Task<Void, Never>?
@@ -141,6 +145,7 @@ final class AnalysisCoordinator {
         kind = .food
         isActive = true
         phase = .preparing
+        pendingFoodImageData = imageData
         setTargetProgress(0.15)
 
         let runID = analysisID
@@ -260,5 +265,6 @@ final class AnalysisCoordinator {
         phase = .preparing
         faceScanResult = nil
         foodScanResult = nil
+        pendingFoodImageData = nil
     }
 }

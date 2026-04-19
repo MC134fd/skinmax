@@ -49,6 +49,7 @@ class CachedFoodScan {
     var benefitsJSON: Data
     var skinEffectsJSON: Data
     var aiTip: String?
+    var photoData: Data?
 
     init(from scan: FoodScan) {
         self.id = scan.id
@@ -65,6 +66,7 @@ class CachedFoodScan {
         self.benefitsJSON = (try? JSONEncoder().encode(scan.benefits)) ?? Data()
         self.skinEffectsJSON = (try? JSONEncoder().encode(scan.skinEffects)) ?? Data()
         self.aiTip = scan.aiTip
+        self.photoData = scan.photoData
     }
 
     func toFoodScan() -> FoodScan {
@@ -83,7 +85,7 @@ class CachedFoodScan {
             sodium: sodium,
             benefits: benefits,
             skinEffects: skinEffects,
-            photoData: nil,
+            photoData: photoData,
             aiTip: aiTip,
             createdAt: date
         )

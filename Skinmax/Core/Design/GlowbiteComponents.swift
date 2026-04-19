@@ -309,3 +309,78 @@ struct ScanPopupOverlay: View {
         .transition(.opacity)
     }
 }
+
+// MARK: - Swipe-to-Delete Row
+struct SwipeToDeleteRow<Content: View>: View {
+    @ViewBuilder var content: Content
+    var onDelete: () -> Void
+
+    @State private var offset: CGFloat = 0
+    @State private var isDragging = false
+
+    private let deleteWidth: CGFloat = 80
+
+    var body: some View {
+        ZStack(alignment: .trailing) {
+            // Delete button revealed behind the card
+            Button {
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                    offset = -UIScreen.main.bounds.width
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                    onDelete()
+                }
+            } label: {
+                VStack {
+                    Spacer()
+                    Image(systemName: "trash")
+                        .font(.gbTitleM)
+                        .foregroundStyle(.white)
+                    Text("Delete")
+                        .font(.gbCaption)
+                        .foregroundStyle(.white)
+                    Spacer()
+                }
+                .frame(width: deleteWidth)
+                .frame(maxHeight: .infinity)
+            }
+            .background(
+                RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadius, style: .continuous)
+                    .fill(GlowbiteColors.redAlert)
+            )
+
+            // Main content slides left
+            content
+                .offset(x: offset)
+                .highPriorityGesture(
+                    DragGesture(minimumDistance: 15, coordinateSpace: .local)
+                        .onChanged { value in
+                            // Only respond to horizontal swipes
+                            let horizontal = abs(value.translation.width)
+                            let vertical = abs(value.translation.height)
+                            guard horizontal > vertical else { return }
+
+                            isDragging = true
+                            let drag = value.translation.width
+                            if drag < 0 {
+                                // Swiping left: rubber-band past deleteWidth
+                                offset = drag > -deleteWidth ? drag : -deleteWidth + (drag + deleteWidth) * 0.2
+                            } else if offset < 0 {
+                                // Swiping right to close
+                                offset = min(0, offset + drag)
+                            }
+                        }
+                        .onEnded { value in
+                            isDragging = false
+                            withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
+                                if -offset > deleteWidth * 0.4 {
+                                    offset = -deleteWidth
+                                } else {
+                                    offset = 0
+                                }
+                            }
+                        }
+                )
+        }
+    }
+}
