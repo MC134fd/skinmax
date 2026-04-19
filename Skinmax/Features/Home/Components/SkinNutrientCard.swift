@@ -25,7 +25,7 @@ struct SkinNutrientCard: View {
 
             ZStack {
                 Circle()
-                    .stroke(signatureColor.opacity(0.15), lineWidth: 5.5)
+                    .stroke(GlowbiteColors.peachWash, lineWidth: 5.5)
 
                 Circle()
                     .trim(from: 0, to: min(animatedProgress, 1.0))
@@ -61,7 +61,7 @@ struct SkinNutrientCard: View {
 
             Text(descriptor)
                 .font(.gbOverline)
-                .foregroundStyle(signatureColor.opacity(0.65))
+                .foregroundStyle(GlowbiteColors.lightTaupe)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(.vertical, 12)
