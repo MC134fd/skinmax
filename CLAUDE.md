@@ -361,3 +361,11 @@ NEVER:
 - Face scan → results: < 4 seconds
 - Food scan → results: < 3 seconds
 - App size: < 50MB
+
+## Git Workflow — ALWAYS Follow
+- **Never commit directly to main.** Every new feature or fix gets its own branch.
+- Branch off `main` with naming: `feature/<short-description>` or `fix/<short-description>`
+- Make focused, atomic commits within the branch — one logical change per commit.
+- When the feature is complete and verified, merge into `main` (fast-forward or squash merge at user's discretion) and delete the feature branch.
+- This keeps `main` clean and every feature independently revertable.
+- **Only merge and prune branches when the user explicitly asks.** Do not auto-merge or auto-push.
