@@ -36,38 +36,80 @@ struct GlowbiteWordmark: View {
         .fixedSize(horizontal: true, vertical: true)
         // Layout margin so script tails aren’t flush against the next sibling
         // (narrow screens + HStack can otherwise clip the last pixel column).
-        .padding(.trailing, 4)
+        // Caveat Bold’s terminal "e" swash extends well past the layout box;
+        // 6pt was not enough at 34pt+ sizes.
+        .padding(.trailing, 12)
     }
 }
 
 // MARK: - UIKit bridge (avoids SwiftUI Text clipping script overshoot)
+
+/// Wrapper view that measures the actual glyph bounding box (not just
+/// typographic metrics) so SwiftUI allocates enough width for script
+/// font tails that extend past the layout bounds.
+private class GlowbiteWordmarkLabel: UIView {
+    let label = UILabel()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        label.numberOfLines = 1
+        label.lineBreakMode = .byClipping
+        label.clipsToBounds = false
+        label.backgroundColor = .clear
+        clipsToBounds = false
+        addSubview(label)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { fatalError() }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        label.frame = bounds
+    }
+
+    override var intrinsicContentSize: CGSize {
+        guard let attrText = label.attributedText, attrText.length > 0 else {
+            return label.intrinsicContentSize
+        }
+        // Typographic size (what UILabel would normally report)
+        let typoSize = label.intrinsicContentSize
+        // Actual glyph bounding box (includes script overshoot)
+        let glyphRect = attrText.boundingRect(
+            with: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude),
+            options: [.usesLineFragmentOrigin, .usesFontLeading],
+            context: nil
+        )
+        // Use whichever is wider, plus a small safety margin
+        let width = max(typoSize.width, ceil(glyphRect.width)) + 4
+        let height = max(typoSize.height, ceil(glyphRect.height))
+        return CGSize(width: width, height: height)
+    }
+}
 
 private struct GlowbiteWordmarkRepresentable: UIViewRepresentable {
     let variant: GlowbiteFontVariant
     let pointSize: CGFloat
     let color: Color
 
-    func makeUIView(context: Context) -> UILabel {
-        let label = UILabel()
-        label.numberOfLines = 1
-        label.lineBreakMode = .byClipping
-        label.clipsToBounds = false
-        label.backgroundColor = .clear
-        label.setContentHuggingPriority(.required, for: .horizontal)
-        label.setContentHuggingPriority(.required, for: .vertical)
-        label.setContentCompressionResistancePriority(.required, for: .horizontal)
-        label.setContentCompressionResistancePriority(.required, for: .vertical)
-        return label
+    func makeUIView(context: Context) -> GlowbiteWordmarkLabel {
+        let wrapper = GlowbiteWordmarkLabel()
+        wrapper.setContentHuggingPriority(.required, for: .horizontal)
+        wrapper.setContentHuggingPriority(.required, for: .vertical)
+        wrapper.setContentCompressionResistancePriority(.required, for: .horizontal)
+        wrapper.setContentCompressionResistancePriority(.required, for: .vertical)
+        return wrapper
     }
 
-    func updateUIView(_ label: UILabel, context: Context) {
+    func updateUIView(_ wrapper: GlowbiteWordmarkLabel, context: Context) {
         let font = variant.uiFont(size: pointSize)
         let attrs: [NSAttributedString.Key: Any] = [
             .font: font,
             .foregroundColor: UIColor(color),
             .kern: variant.tracking
         ]
-        label.attributedText = NSAttributedString(string: "Glowbite", attributes: attrs)
+        wrapper.label.attributedText = NSAttributedString(string: "Glowbite", attributes: attrs)
+        wrapper.invalidateIntrinsicContentSize()
     }
 }
 
