@@ -32,6 +32,15 @@
 		<string>Unbounded.ttf</string>
 		<string>Caveat.ttf</string>
 	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.720550174954-c4ooercqhljf9n0hnem5uprf6n8oa8qo</string>
+			</array>
+		</dict>
+	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

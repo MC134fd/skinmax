@@ -7,6 +7,8 @@ struct HomeView: View {
     @State private var selectedFoodResult: FoodScan?
     @State private var nutrientPage: Int = 0
     @State private var showWaterLogSheet: Bool = false
+    @State private var selectedNutrient: NutrientType?
+    @State private var selectedNutrientAmount: Double = 0
     @State private var waterLogViewModel: WaterLogViewModel?
 
     var onViewFaceResult: (SkinScan) -> Void = { _ in }
@@ -65,6 +67,16 @@ struct HomeView: View {
                 .presentationCornerRadius(GlowbiteSpacing.cardCornerRadiusLarge)
                 .presentationDragIndicator(.visible)
             }
+        }
+        .sheet(item: $selectedNutrient) { nutrient in
+            NutrientDetailSheet(
+                nutrient: nutrient,
+                amount: selectedNutrientAmount,
+                onDismiss: { selectedNutrient = nil }
+            )
+            .presentationDetents([.medium, .large])
+            .presentationCornerRadius(GlowbiteSpacing.cardCornerRadiusLarge)
+            .presentationDragIndicator(.visible)
         }
     }
 
@@ -206,6 +218,13 @@ struct HomeView: View {
                     barColor: nutrient.barColor,
                     progress: nutrient.progress
                 )
+                .onTapGesture {
+                    if let type = nutrient.nutrientType {
+                        HapticManager.impact(.medium)
+                        selectedNutrientAmount = nutrient.currentValue
+                        selectedNutrient = type
+                    }
+                }
             }
         }
         .frame(maxHeight: .infinity)

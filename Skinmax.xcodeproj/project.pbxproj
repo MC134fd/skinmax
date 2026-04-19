@@ -26,6 +26,9 @@
 		3048A0AEF2B110786A09D4FA /* OpenFoodFactsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CDAE7D0D999433F26694F5 /* OpenFoodFactsClient.swift */; };
 		32243F2CD354716E2C3B773D /* AnalyticsContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB45A0EC14BB78679326126 /* AnalyticsContainerView.swift */; };
 		36E480F7A356D96EB64BE34B /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB665B5506616422E8D8E8 /* DataStore.swift */; };
+		AA11BB22CC33DD44EE55FF66 /* SupabaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB22CC33DD44EE55FF667788 /* SupabaseClient.swift */; };
+		CC33DD44EE55FF66AA11BB22 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD44EE55FF66AA11BB22CC33 /* AuthService.swift */; };
+		EE55FF66AA11BB22CC33DD44 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF66AA11BB22CC33DD44EE55 /* AuthView.swift */; };
 		38257A4AC62420B1CAAB6B23 /* AppleMascotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1A9EA29ECD374C05433C45 /* AppleMascotView.swift */; };
 		3A0FE1A8E6007DDD67115DA9 /* GlowbiteIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC165741EDD399152F69B246 /* GlowbiteIcon.swift */; };
 		3C408273759283582680FF76 /* WaterLogSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E9E3185F5188264CA88498 /* WaterLogSheet.swift */; };
@@ -122,6 +125,9 @@
 		2DB23D96D0143136A6E81732 /* PlayfairDisplay-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PlayfairDisplay-Italic.ttf"; sourceTree = "<group>"; };
 		377BB38AA13E75D53BF000DE /* GlowbiteWordmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowbiteWordmark.swift; sourceTree = "<group>"; };
 		3BBB665B5506616422E8D8E8 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
+		BB22CC33DD44EE55FF667788 /* SupabaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseClient.swift; sourceTree = "<group>"; };
+		DD44EE55FF66AA11BB22CC33 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		FF66AA11BB22CC33DD44EE55 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
 		3E1A9EA29ECD374C05433C45 /* AppleMascotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMascotView.swift; sourceTree = "<group>"; };
 		40D688BDD9AFD4649F76A205 /* Skinmax.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Skinmax.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		480693CB3D085B5ADB70FE5F /* FoodCaptureViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodCaptureViewModel.swift; sourceTree = "<group>"; };
@@ -361,11 +367,13 @@
 		BDA4F65B91BF17EEDAE41334 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				DD44EE55FF66AA11BB22CC33 /* AuthService.swift */,
 				3BBB665B5506616422E8D8E8 /* DataStore.swift */,
 				AE36B60B9F8806215B9D59E8 /* FoodAnalysisService.swift */,
 				071559B623555A0978937FBE /* InsightEngine.swift */,
 				62CDAE7D0D999433F26694F5 /* OpenFoodFactsClient.swift */,
 				8D939DFD2FCB97DAC14A877D /* SkinAnalysisService.swift */,
+				BB22CC33DD44EE55FF667788 /* SupabaseClient.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -434,9 +442,18 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		AA99BB88CC77DD66 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				FF66AA11BB22CC33DD44EE55 /* AuthView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
 		F409F110DC1A9917F4DE5F2C /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				AA99BB88CC77DD66 /* Auth */,
 				B82B7AF8B88B3B56724CCF87 /* Analytics */,
 				D310F2F449B5F3A205EBA625 /* FaceScan */,
 				BCA3D9C64BC1365F2F4FF13D /* FoodScan */,
@@ -475,6 +492,7 @@
 			packageProductDependencies = (
 				AA9F624F542675F07337C662 /* Supabase */,
 				889E9FEED91467D41D13F8E9 /* Kingfisher */,
+				C3D4E5F60718293A4B5C6D7E /* GoogleSignIn */,
 			);
 			productName = Skinmax;
 			productReference = 40D688BDD9AFD4649F76A205 /* Skinmax.app */;
@@ -507,6 +525,7 @@
 			packageReferences = (
 				E08C220018B8F19B2E2F63E5 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				D6B7BF37199026BDB49E3E23 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				F1A2B3C4D5E6F7081920A1B2 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F5A0EF7CE76CA0010A1A4416 /* Products */;
@@ -571,6 +590,9 @@
 				1F7BEDDB0AA0E8477F11567C /* ContentView.swift in Sources */,
 				ACE04C0C03288E45B626AC8C /* DataSettingsView.swift in Sources */,
 				36E480F7A356D96EB64BE34B /* DataStore.swift in Sources */,
+				AA11BB22CC33DD44EE55FF66 /* SupabaseClient.swift in Sources */,
+				CC33DD44EE55FF66AA11BB22 /* AuthService.swift in Sources */,
+				EE55FF66AA11BB22CC33DD44 /* AuthView.swift in Sources */,
 				66CA29CAF0CAB7F5DB3A3C20 /* FaceScanResultView.swift in Sources */,
 				E6EBB9FD527115D459030316 /* FaceScanView.swift in Sources */,
 				C095671A41F2FBA97F5E67FB /* FaceScanViewModel.swift in Sources */,
@@ -836,6 +858,14 @@
 				minimumVersion = 8.0.0;
 			};
 		};
+		F1A2B3C4D5E6F7081920A1B2 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -848,6 +878,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D6B7BF37199026BDB49E3E23 /* XCRemoteSwiftPackageReference "supabase-swift" */;
 			productName = Supabase;
+		};
+		C3D4E5F60718293A4B5C6D7E /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1A2B3C4D5E6F7081920A1B2 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -4,21 +4,12 @@ import SwiftUI
 struct MealRow: View {
     let foodScan: FoodScan
     var onTapCard: () -> Void = {}
-    @State private var selectedNutrient: NutrientType?
 
     private var scoreColor: Color {
         switch foodScan.skinImpactScore {
         case 7...10: return GlowbiteColors.greenGood
         case 4..<7: return GlowbiteColors.amberFair
         default: return GlowbiteColors.redAlert
-        }
-    }
-
-    private var scoreEmoji: String {
-        switch foodScan.skinImpactScore {
-        case 7...10: return "\u{1F31F}"
-        case 4..<7: return "\u{2728}"
-        default: return "\u{1F4AB}"
         }
     }
 
@@ -36,7 +27,6 @@ struct MealRow: View {
             HStack(spacing: 0) {
                 // Left: food details
                 VStack(alignment: .leading, spacing: 5) {
-                    // Title (leaves room for time on the right)
                     Text(foodScan.name)
                         .font(.gbCaption)
                         .foregroundStyle(GlowbiteColors.darkBrown)
@@ -52,15 +42,9 @@ struct MealRow: View {
                     }
 
                     HStack(spacing: 5) {
-                        MacroPill(value: foodScan.protein, label: "P", color: GlowbiteColors.nutrientProtein) {
-                            selectedNutrient = .protein
-                        }
-                        MacroPill(value: foodScan.carbs, label: "C", color: GlowbiteColors.nutrientCarbs) {
-                            selectedNutrient = .carbs
-                        }
-                        MacroPill(value: foodScan.fat, label: "F", color: GlowbiteColors.nutrientFat) {
-                            selectedNutrient = .fat
-                        }
+                        MacroPill(value: foodScan.protein, label: "P", color: GlowbiteColors.nutrientProtein)
+                        MacroPill(value: foodScan.carbs, label: "C", color: GlowbiteColors.nutrientCarbs)
+                        MacroPill(value: foodScan.fat, label: "F", color: GlowbiteColors.nutrientFat)
                     }
                 }
                 .padding(.leading, 14)
@@ -98,27 +82,6 @@ struct MealRow: View {
         .contentShape(RoundedRectangle(cornerRadius: GlowbiteSpacing.cardCornerRadius, style: .continuous))
         .onTapGesture {
             onTapCard()
-        }
-        .sheet(item: $selectedNutrient) { nutrient in
-            NutrientDetailSheet(
-                nutrient: nutrient,
-                amount: nutrientAmount(for: nutrient),
-                onDismiss: { selectedNutrient = nil }
-            )
-            .presentationDetents([.medium, .large])
-            .presentationCornerRadius(GlowbiteSpacing.cardCornerRadiusLarge)
-            .presentationDragIndicator(.visible)
-        }
-    }
-
-    private func nutrientAmount(for nutrient: NutrientType) -> Double {
-        switch nutrient {
-        case .protein: return foodScan.protein
-        case .fat: return foodScan.fat
-        case .carbs: return foodScan.carbs
-        case .fiber: return foodScan.fiber
-        case .sugar: return foodScan.sugar
-        case .sodium: return foodScan.sodium
         }
     }
 }
@@ -223,29 +186,22 @@ private struct MacroPill: View {
     let value: Double
     let label: String
     let color: Color
-    var onTap: (() -> Void)?
 
     var body: some View {
-        Button {
-            HapticManager.impact(.medium)
-            onTap?()
-        } label: {
-            HStack(spacing: 2) {
-                Text(String(format: "%.0fg", value))
-                    .fontWeight(.heavy)
-                Text(label)
-            }
-            .font(.gbCaption)
-            .foregroundStyle(color)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 3)
-            .background(color.opacity(0.12))
-            .overlay(
-                Capsule()
-                    .stroke(color.opacity(0.3), lineWidth: 1)
-            )
-            .clipShape(Capsule())
+        HStack(spacing: 2) {
+            Text(String(format: "%.0fg", value))
+                .fontWeight(.heavy)
+            Text(label)
         }
-        .buttonStyle(.plain)
+        .font(.gbCaption)
+        .foregroundStyle(color)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 3)
+        .background(color.opacity(0.12))
+        .overlay(
+            Capsule()
+                .stroke(color.opacity(0.3), lineWidth: 1)
+        )
+        .clipShape(Capsule())
     }
 }

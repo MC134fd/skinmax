@@ -1,18 +1,29 @@
 import SwiftUI
 import StoreKit
+import Kingfisher
 
 struct AccountView: View {
     @Environment(DataStore.self) private var dataStore
+    @Environment(AuthService.self) private var authService
     @State private var showProgress = false
     @State private var showHistory = false
     @State private var showNotifications = false
     @State private var showDataSettings = false
     @State private var showAbout = false
     @State private var showAppearance = false
+    @State private var showSignOutConfirm = false
+    @State private var showDeleteConfirm = false
 
     private var streak: Int { dataStore.calculateStreak() }
     private var totalScans: Int { dataStore.totalSkinScans() }
     private var totalMeals: Int { dataStore.totalFoodScans() }
+
+    private var userInitial: String {
+        let name = authService.currentUserName
+        if let first = name.first { return String(first).uppercased() }
+        if let first = authService.currentUserEmail.first { return String(first).uppercased() }
+        return "U"
+    }
 
     private var memberSince: String {
         guard let date = dataStore.firstActivityDate() else { return "Today" }
@@ -46,19 +57,34 @@ struct AccountView: View {
     // MARK: - Profile Header
     private var profileHeader: some View {
         VStack(spacing: 8) {
-            Circle()
-                .fill(GlowbiteColors.peachLight)
-                .frame(width: 80, height: 80)
-                .overlay(
-                    Text("U")
-                        .font(.gbDisplayM)
-                        .tracking(-0.5)
-                        .foregroundStyle(.white)
-                )
+            if let avatarURLString = authService.currentUserAvatarURL,
+               let avatarURL = URL(string: avatarURLString) {
+                KFImage(avatarURL)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 80, height: 80)
+                    .clipShape(Circle())
+            } else {
+                Circle()
+                    .fill(GlowbiteColors.peachLight)
+                    .frame(width: 80, height: 80)
+                    .overlay(
+                        Text(userInitial)
+                            .font(.gbDisplayM)
+                            .tracking(-0.5)
+                            .foregroundStyle(.white)
+                    )
+            }
 
-            Text("User")
+            Text(authService.currentUserName.isEmpty ? "User" : authService.currentUserName)
                 .font(.gbTitleM)
                 .foregroundStyle(GlowbiteColors.darkBrown)
+
+            if !authService.currentUserEmail.isEmpty {
+                Text(authService.currentUserEmail)
+                    .font(.gbCaption)
+                    .foregroundStyle(GlowbiteColors.mediumTaupe)
+            }
 
             Text("Member since \(memberSince)")
                 .font(.gbBodyM)
@@ -119,10 +145,58 @@ struct AccountView: View {
                     AppStore.requestReview(in: scene)
                 }
             }
+            Divider().foregroundStyle(GlowbiteColors.softTan)
+            menuRow(icon: "rectangle.portrait.and.arrow.right", label: "Sign Out") {
+                HapticManager.impact(.medium)
+                showSignOutConfirm = true
+            }
+            Divider().foregroundStyle(GlowbiteColors.softTan)
+            Button {
+                HapticManager.impact(.heavy)
+                showDeleteConfirm = true
+            } label: {
+                HStack(spacing: 12) {
+                    Image(systemName: "trash.fill")
+                        .font(.gbTitleM)
+                        .foregroundStyle(GlowbiteColors.redAlert)
+                        .frame(width: 24)
+                    Text("Delete Account")
+                        .font(.gbBodyM)
+                        .foregroundStyle(GlowbiteColors.redAlert)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.gbCaption)
+                        .foregroundStyle(GlowbiteColors.lightTaupe)
+                }
+                .padding(.horizontal, 16)
+                .frame(height: 56)
+            }
         }
         .background(GlowbiteColors.white)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(color: GlowbiteColors.cardShadowColor, radius: 12, x: 0, y: 4)
+        .alert("Sign Out", isPresented: $showSignOutConfirm) {
+            Button("Cancel", role: .cancel) { }
+            Button("Sign Out", role: .destructive) {
+                Task {
+                    dataStore.deleteAllData()
+                    await authService.signOut()
+                }
+            }
+        } message: {
+            Text("Your data stays safe in the cloud. You can sign back in anytime.")
+        }
+        .alert("Delete Account", isPresented: $showDeleteConfirm) {
+            Button("Cancel", role: .cancel) { }
+            Button("Delete Everything", role: .destructive) {
+                Task {
+                    dataStore.deleteAllData()
+                    await authService.deleteAccount()
+                }
+            }
+        } message: {
+            Text("This permanently deletes all your scans, photos, and account data. This cannot be undone.")
+        }
     }
 
     private func menuRow(icon: String, label: String, action: @escaping () -> Void) -> some View {
@@ -154,7 +228,7 @@ struct AccountView: View {
             Text("Glowbite v1.0")
                 .font(.gbCaption)
                 .foregroundStyle(GlowbiteColors.lightTaupe)
-            Text("Data stored for 90 days")
+            Text("Synced to cloud")
                 .font(.gbCaption)
                 .foregroundStyle(GlowbiteColors.lightTaupe)
         }

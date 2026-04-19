@@ -214,6 +214,18 @@ final class HomeViewModel {
         var signatureColor: Color { config.signatureColor }
         var signatureLightColor: Color { config.signatureLightColor }
         var barColor: Color { config.signatureColor }
+
+        var nutrientType: NutrientType? {
+            switch config.label {
+            case "PROTEIN": return .protein
+            case "CARBS": return .carbs
+            case "FAT": return .fat
+            case "FIBER": return .fiber
+            case "SUGAR": return .sugar
+            case "SODIUM": return .sodium
+            default: return nil
+            }
+        }
     }
 
     var nutrientPages: [[NutrientDisplayData]] {
